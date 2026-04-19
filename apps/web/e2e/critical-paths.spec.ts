@@ -21,9 +21,9 @@ test.describe('Critical User Paths', () => {
   test('User can view homepage', async ({ page }) => {
     await page.goto(BASE_URL);
     
-    // Verify key elements are visible - use specific selectors
-    await expect(page.locator('a:has-text("Finventory")').first()).toBeVisible();
-    await expect(page.locator('a:has-text("Marketplace")')).toBeVisible();
+    // Verify key elements are visible - use specific selectors with exact matching
+    await expect(page.getByRole('link', { name: 'Finventory' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Marketplace', exact: true })).toBeVisible();
     
     // Take screenshot for verification
     await page.screenshot({ path: 'test-results/homepage.png' });
