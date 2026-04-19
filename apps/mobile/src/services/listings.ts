@@ -123,6 +123,20 @@ function applyClientFilters(
 }
 
 /**
+ * Fetch a single listing by Firestore document ID.
+ */
+export async function fetchListingById(listingId: string): Promise<Listing | null> {
+  try {
+    const doc = await firestore().collection('listings').doc(listingId).get();
+    if (!doc.exists) return null;
+    return { id: doc.id, ...doc.data() } as Listing;
+  } catch (err) {
+    console.error('Error fetching listing:', err);
+    return null;
+  }
+}
+
+/**
  * Subscribe to live inventory updates from Realtime Database
  */
 export function subscribeToLiveInventory(

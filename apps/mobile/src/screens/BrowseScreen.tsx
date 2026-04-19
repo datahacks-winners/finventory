@@ -16,7 +16,9 @@ import { ListingCard } from '../components/ListingCard';
 import { ListingCardSkeleton } from '../components/ListingCardSkeleton';
 import { FilterSheet } from '../components/FilterSheet';
 import { ListingMap } from '../components/ListingMap';
+import { SustainabilityRecommendations } from '../components/SustainabilityRecommendations';
 import { useAuth } from '../hooks/useAuth';
+import { useSustainabilityRecommendations } from '../hooks/useINaturalist';
 
 const COMMON_FAVORITES = new Set<string>(); // In real app, fetch from Firestore
 
@@ -28,6 +30,13 @@ export default function BrowseScreen() {
 
   const [filterVisible, setFilterVisible] = useState(false);
   const [favorites, setFavorites] = useState<Set<string>>(COMMON_FAVORITES);
+
+  const { recommendations, loading: recLoading } = useSustainabilityRecommendations(listings);
+
+  const handleSpeciesFilter = (species: string) => {
+    // Tapping a recommendation card filters browse by that species
+    useBrowseStore.getState().setFilters({ species: [species] });
+  };
 
   const handleFavoritePress = (listingId: string) => {
     if (isAnonymous) {
@@ -101,6 +110,15 @@ export default function BrowseScreen() {
             Enable location to see listings near you
           </Text>
         </View>
+      )}
+
+      {/* Sustainability Recommendations */}
+      {viewMode === 'grid' && (
+        <SustainabilityRecommendations
+          recommendations={recommendations}
+          loading={recLoading}
+          onSpeciesPress={handleSpeciesFilter}
+        />
       )}
 
       {/* Content */}
