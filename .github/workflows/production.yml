@@ -138,7 +138,7 @@ jobs:
     needs: [test, build]
     environment:
       name: production
-      url: https://finventory.app
+      url: https://finventory-prod.web.app
     steps:
       - uses: actions/checkout@v4
 
@@ -180,4 +180,4 @@ jobs:
           echo "### Deployments" >> $GITHUB_STEP_SUMMARY
           echo "- Firebase rules deployed to finventory-prod" >> $GITHUB_STEP_SUMMARY
           echo "- Functions deployed to finventory-prod" >> $GITHUB_STEP_SUMMARY
-          echo "- Frontend deployed to https://finventory.app" >> $GITHUB_STEP_SUMMARY
+          echo "- Frontend deployed to https://finventory-prod.web.app" >> $GITHUB_STEP_SUMMARY
