@@ -101,7 +101,7 @@ export default function Auth() {
             ))}
           </div>
 
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center justify-end">
             <button
               onClick={() => setTab('login')}
               className={`text-slate-600 font-medium px-6 py-2 hover:scale-[1.02] transition-transform hover:text-sky-800 ${tab === 'login' ? 'text-sky-700 font-bold' : ''}`}
