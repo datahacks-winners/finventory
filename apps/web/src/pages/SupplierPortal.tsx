@@ -60,7 +60,7 @@ export default function SupplierPortal() {
   })
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !db) {
       setLoading(false)
       return
     }

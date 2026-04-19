@@ -121,8 +121,12 @@ export function subscribeToMyOrders(
   userId: string,
   callback: (orders: Order[]) => void
 ): () => void {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+  const firestore = db
   const q = query(
-    collection(db, 'orders'),
+    collection(firestore, 'orders'),
     where('buyerId', '==', userId),
     orderBy('createdAt', 'desc')
   )
@@ -137,7 +141,7 @@ export function subscribeToMyOrders(
 
       const ordersWithListings = await Promise.all(
         orders.map(async (order) => {
-          const listingDoc = await getDoc(doc(db, 'listings', order.listingId))
+          const listingDoc = await getDoc(doc(firestore, 'listings', order.listingId))
           if (listingDoc.exists()) {
             const listingData = listingDoc.data()
             order.listing = {
@@ -166,8 +170,12 @@ export function subscribeToSellerOrders(
   sellerId: string,
   callback: (orders: Order[]) => void
 ): () => void {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+  const firestore = db
   const q = query(
-    collection(db, 'orders'),
+    collection(firestore, 'orders'),
     where('sellerId', '==', sellerId),
     where('status', '==', 'pending'),
     orderBy('createdAt', 'desc')
@@ -183,7 +191,7 @@ export function subscribeToSellerOrders(
 
       const ordersWithListings = await Promise.all(
         orders.map(async (order) => {
-          const listingDoc = await getDoc(doc(db, 'listings', order.listingId))
+          const listingDoc = await getDoc(doc(firestore, 'listings', order.listingId))
           if (listingDoc.exists()) {
             const listingData = listingDoc.data()
             order.listing = {

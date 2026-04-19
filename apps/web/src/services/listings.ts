@@ -73,6 +73,10 @@ export function subscribeToListings(
   userLocation: { latitude: number; longitude: number } | null,
   callback: (listings: ListingWithDistance[]) => void
 ): () => void {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
+
   const now = Timestamp.now()
 
   let q = query(
@@ -143,6 +147,9 @@ export function subscribeToListings(
 }
 
 export async function fetchListingById(id: string): Promise<Listing | null> {
+  if (!db) {
+    throw new Error('Firebase not initialized')
+  }
   const docRef = doc(db, 'listings', id)
   const docSnap = await getDoc(docRef)
   if (!docSnap.exists()) return null
