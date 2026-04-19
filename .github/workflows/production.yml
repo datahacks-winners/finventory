@@ -119,6 +119,12 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCLOUD_AUTH_KEY }}
+
       - name: Install and build functions
         run: |
           cd functions
@@ -131,6 +137,7 @@ jobs:
       - name: Deploy Cloud Functions
         run: firebase deploy --only functions --project finventory-prod
         env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
   deploy-hosting:

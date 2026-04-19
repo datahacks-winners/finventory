@@ -67,8 +67,7 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
-          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}'
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
@@ -118,8 +117,7 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
-          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}'
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
@@ -130,7 +128,7 @@ jobs:
 
       - name: Trigger Terraform Apply
         run: |
-          gh workflow run terraform-apply.yml --ref develop
+          gh workflow run terraform-apply.yml --ref main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
