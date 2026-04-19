@@ -197,7 +197,7 @@ function ProductCard({
 export default function Marketplace() {
   const [selectedGrades, setSelectedGrades] = useState<string[]>([])
   const [selectedSpecies, setSelectedSpecies] = useState<string[]>([])
-  const [maxDistance, setMaxDistance] = useState(50)
+  const [maxDistance, setMaxDistance] = useState(100)
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState<'distance' | 'price' | 'freshness'>('distance')
   const [cart, setCart] = useState<CartItem[]>([])
