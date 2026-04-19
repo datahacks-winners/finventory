@@ -15,10 +15,17 @@ Outputs (see ``output_paths.py``):
   - ``json/timesfm_holdout_summary.json``
   - ``figures/timesfm_anchor_forecasts.png``
 
+Optional checkpoint for ``calcofi-api``::
+
+    --save-model [--save-model-dir DIR]
+
+  Writes ``timesfm_state.pt`` + ``timesfm_manifest.json`` after ``compile()`` (same pretrained weights as binned script).
+
 Requires: ``pip install -e vendor/timesfm[torch]`` (see repo README).
 """
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import sys
@@ -47,6 +54,53 @@ MIN_CONTEXT = 30  # need enough history before holdout for a meaningful forecast
 MAX_CONTEXT = 1024  # TimesFM 2.5 default context cap (annual series is shorter)
 
 
+def save_timesfm_checkpoint(
+    model,
+    *,
+    torch_module,
+    dest_dir: Path,
+    holdout_years: int,
+    max_context: int,
+) -> tuple[Path, Path]:
+    """Persist compiled TimesFM weights + manifest for ``calcofi_inference`` runtime."""
+    dest_dir = dest_dir.resolve()
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    state_path = dest_dir / "timesfm_state.pt"
+    manifest_path = dest_dir / "timesfm_manifest.json"
+
+    inner = getattr(model, "model", None)
+    if inner is None or not hasattr(inner, "state_dict"):
+        raise RuntimeError(
+            "TimesFM wrapper has no .model submodule with state_dict() — cannot checkpoint."
+        )
+    torch_module.save(inner.state_dict(), str(state_path))
+
+    fc = {
+        "max_context": min(max_context, 1024),
+        "max_horizon": max(holdout_years, 256),
+        "normalize_inputs": True,
+        "use_continuous_quantile_head": True,
+        "force_flip_invariance": True,
+        "infer_is_positive": True,
+        "fix_quantile_crossing": True,
+        "per_core_batch_size": 8,
+    }
+    manifest = {
+        "hf_model_id": "google/timesfm-2.5-200m-pytorch",
+        "forecast_config": fc,
+        "notes": (
+            "Exported from notebooks/timesfm_larvae_forecast.py after compile(); "
+            "weights match HF pretrained (same checkpoint as binned export)."
+        ),
+        "series": "annual",
+        "holdout_years": holdout_years,
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2))
+    print(f"\n  [checkpoint] wrote {state_path}")
+    print(f"  [checkpoint] wrote {manifest_path}")
+    return state_path, manifest_path
+
+
 def dense_annual_series(
     annual: pd.DataFrame, species: str
 ) -> tuple[np.ndarray, np.ndarray]:
@@ -64,6 +118,20 @@ def dense_annual_series(
 
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--save-model",
+        action="store_true",
+        help="Write timesfm_state.pt + timesfm_manifest.json for services/calcofi-api (after compile)",
+    )
+    ap.add_argument(
+        "--save-model-dir",
+        type=Path,
+        default=None,
+        help="Checkpoint directory (default: <repo>/services/calcofi-api/models)",
+    )
+    args = ap.parse_args()
+
     torch = None
     timesfm = None
     try:
@@ -100,6 +168,18 @@ def main():
             per_core_batch_size=8,
         )
     )
+
+    if args.save_model:
+        ckpt_dir = args.save_model_dir
+        if ckpt_dir is None:
+            ckpt_dir = ROOT / "services" / "calcofi-api" / "models"
+        save_timesfm_checkpoint(
+            model,
+            torch_module=torch,
+            dest_dir=ckpt_dir,
+            holdout_years=HOLDOUT_YEARS,
+            max_context=MAX_CONTEXT,
+        )
 
     rows = []
     plot_specs: list[tuple[str, np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = []
@@ -192,6 +272,7 @@ def main():
     plt.close(fig)
 
     print(f"\nwrote {TBL / 'timesfm_holdout_metrics.csv'}")
+    print(f"wrote {JSN / 'timesfm_holdout_summary.json'}")
     print(f"wrote {FIG / 'timesfm_anchor_forecasts.png'}")
 
 

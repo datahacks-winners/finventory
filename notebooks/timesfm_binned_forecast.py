@@ -20,6 +20,12 @@ Outputs (see ``output_paths.py``):
   - ``json/timesfm_binned_{span}yr_holdout_summary.json``
   - ``figures/timesfm_binned_{span}yr_anchor_forecasts.png``
 
+Optional API checkpoint (same layout as ``calcofi-api`` runtime; avoids a separate long train script)::
+
+    --save-model [--save-model-dir DIR]
+
+  Writes ``timesfm_state.pt`` + ``timesfm_manifest.json`` (PyTorch ``state_dict`` + metadata).
+
 Requires: ``pip install -e vendor/timesfm[torch]``
 """
 from __future__ import annotations
@@ -62,6 +68,57 @@ def load_binned_table(span: int) -> pd.DataFrame:
     return br.aggregate_bins(df, span, yr0)
 
 
+def save_timesfm_checkpoint(
+    model,
+    *,
+    torch_module,
+    dest_dir: Path,
+    span: int,
+    holdout_bins: int,
+    max_context: int,
+) -> tuple[Path, Path]:
+    """Persist compiled TimesFM weights + manifest for ``calcofi_inference`` runtime.
+
+    Saves ``timesfm_state.pt`` (``state_dict``) and ``timesfm_manifest.json``.
+    """
+    dest_dir = dest_dir.resolve()
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    state_path = dest_dir / "timesfm_state.pt"
+    manifest_path = dest_dir / "timesfm_manifest.json"
+
+    inner = getattr(model, "model", None)
+    if inner is None or not hasattr(inner, "state_dict"):
+        raise RuntimeError(
+            "TimesFM wrapper has no .model submodule with state_dict() — cannot checkpoint."
+        )
+    torch_module.save(inner.state_dict(), str(state_path))
+
+    fc = {
+        "max_context": min(max_context, 1024),
+        "max_horizon": max(holdout_bins, 256),
+        "normalize_inputs": True,
+        "use_continuous_quantile_head": True,
+        "force_flip_invariance": True,
+        "infer_is_positive": True,
+        "fix_quantile_crossing": True,
+        "per_core_batch_size": 8,
+    }
+    manifest = {
+        "hf_model_id": "google/timesfm-2.5-200m-pytorch",
+        "forecast_config": fc,
+        "notes": (
+            "Exported from notebooks/timesfm_binned_forecast.py after compile(); "
+            "weights match HF pretrained."
+        ),
+        "binned_span_years": span,
+        "holdout_bins": holdout_bins,
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2))
+    print(f"\n  [checkpoint] wrote {state_path}")
+    print(f"  [checkpoint] wrote {manifest_path}")
+    return state_path, manifest_path
+
+
 def dense_bin_series(
     binned: pd.DataFrame, species: str
 ) -> tuple[np.ndarray, np.ndarray]:
@@ -82,6 +139,17 @@ def main():
         default=5,
         choices=[5, 10],
         help="non-overlapping bin width in calendar years (default: 5)",
+    )
+    ap.add_argument(
+        "--save-model",
+        action="store_true",
+        help="Write timesfm_state.pt + timesfm_manifest.json for services/calcofi-api (after compile)",
+    )
+    ap.add_argument(
+        "--save-model-dir",
+        type=Path,
+        default=None,
+        help="Checkpoint directory (default: <repo>/services/calcofi-api/models)",
     )
     args = ap.parse_args()
     span = args.span
@@ -125,6 +193,19 @@ def main():
             per_core_batch_size=8,
         )
     )
+
+    if args.save_model:
+        ckpt_dir = args.save_model_dir
+        if ckpt_dir is None:
+            ckpt_dir = ROOT / "services" / "calcofi-api" / "models"
+        save_timesfm_checkpoint(
+            model,
+            torch_module=torch,
+            dest_dir=ckpt_dir,
+            span=span,
+            holdout_bins=HOLDOUT_BINS,
+            max_context=MAX_CONTEXT,
+        )
 
     rows = []
     plot_specs: list[
