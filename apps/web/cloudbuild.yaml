@@ -5,8 +5,9 @@ steps:
       - '-c'
       - |
         docker build \
-          --build-arg VITE_FIREBASE_API_KEY="$$FIREBASE_API_KEY" \
-          --build-arg VITE_FIREBASE_AUTH_DOMAIN="$$FIREBASE_AUTH_DOMAIN" \
+          --no-cache \
+          --build-arg VITE_FIREBASE_API_KEY="$$FIRE..._KEY" \
+          --build-arg VITE_FIREBASE_AUTH_DOMAIN="$$FIRE...MAIN" \
           --build-arg VITE_FIREBASE_PROJECT_ID="$$FIREBASE_PROJECT_ID" \
           --build-arg VITE_FIREBASE_STORAGE_BUCKET="$$FIREBASE_STORAGE_BUCKET" \
           --build-arg VITE_FIREBASE_MESSAGING_SENDER_ID="$$FIREBASE_MESSAGING_SENDER_ID" \
@@ -29,7 +30,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'web'
+      - 'finventory-web'
       - '--image'
       - 'us-central1-docker.pkg.dev/finventory-1776558252/web-images/web:latest'
       - '--region'
