@@ -3,6 +3,7 @@ name: Production Deploy
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
 
 concurrency:
   group: production-deploy
