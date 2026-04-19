@@ -90,7 +90,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            VITE_UNSPLASH_ACCESS_KEY=${{ secrets.VITE_UNSPLASH_ACCESS_KEY_PROD }}
+            VITE_PEXELS_API_KEY=${{ secrets.VITE_PEXELS_API_KEY_PROD }}
 
   deploy-cloud-run:
     name: Deploy to Cloud Run

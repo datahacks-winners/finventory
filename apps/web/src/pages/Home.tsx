@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import OceanCanvas from '../components/OceanCanvas'
-import { UnsplashImage } from '../components/UnsplashImage'
-import { useUnsplashBatch, useUnsplash } from '../hooks/useUnsplash'
+import { PexelsImage } from '../components/PexelsImage'
+import { usePexelsBatch, usePexels } from '../hooks/usePexels'
 
 const WHY_CARDS = [
   { icon: 'set_meal', bg: '#0077B6', textClass: 'text-white', title: 'Rescue the catch', desc: 'List bycatch and unsold hauls in seconds. Move surplus before it spoils.' },
@@ -20,24 +20,24 @@ const FISH_QUERY_MAP: Record<string, string> = {
   hero: 'fishing boat harbor sunset ocean',
   dock: 'fishing dock pier boats harbor',
   chef: 'chef preparing seafood kitchen',
-  market: 'fish market seafood display ice',
+  market: 'fish market seafood display',
 }
 
 export default function Home() {
-  const { url: heroUrl, alt: heroAlt } = useUnsplash({
+  const { url: heroUrl, alt: heroAlt } = usePexels({
     query: FISH_QUERY_MAP.hero,
-    quality: 'max',
+    quality: 'large2x',
     fallbackQuery: 'hero',
   })
 
-  const { images: cardImages } = useUnsplashBatch({
+  const { images: cardImages } = usePexelsBatch({
     queries: [FISH_QUERY_MAP.dock, FISH_QUERY_MAP.chef],
-    quality: 'high',
+    quality: 'large2x',
   })
 
-  const { url: fishDisplayUrl, alt: fishDisplayAlt } = useUnsplash({
+  const { url: fishDisplayUrl, alt: fishDisplayAlt } = usePexels({
     query: FISH_QUERY_MAP.market,
-    quality: 'high',
+    quality: 'large2x',
     fallbackQuery: 'market',
   })
 
@@ -47,11 +47,10 @@ export default function Home() {
       <section className="relative min-h-[921px] flex flex-col justify-center text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           {heroUrl && (
-            <UnsplashImage
+            <PexelsImage
               src={heroUrl}
               alt={heroAlt || 'California harbor at sunset'}
               className="w-full h-full"
-              quality="max"
               lazy={false}
             />
           )}
@@ -169,11 +168,10 @@ export default function Home() {
               <div key={card.tag} className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-black/5 flex flex-col h-full">
                 <div className="h-[400px] relative overflow-hidden">
                   {card.img && (
-                    <UnsplashImage
+                    <PexelsImage
                       src={card.img}
                       alt={card.imgAlt}
                       className="w-full h-full"
-                      quality="high"
                     />
                   )}
                 </div>
@@ -228,14 +226,13 @@ export default function Home() {
 
             <div className="relative">
               <div className="rounded-[3rem] overflow-hidden shadow-2xl">
-                {fishDisplayUrl && (
-                  <UnsplashImage
-                    src={fishDisplayUrl}
-                    alt={fishDisplayAlt || 'Fresh fish display'}
-                    className="w-full aspect-[4/3]"
-                    quality="high"
-                  />
-                )}
+              {fishDisplayUrl && (
+                <PexelsImage
+                  src={fishDisplayUrl}
+                  alt={fishDisplayAlt || 'Fresh fish display'}
+                  className="w-full aspect-[4/3]"
+                />
+              )}
               </div>
               <div className="absolute -bottom-10 -left-10 bg-white p-8 rounded-[2rem] shadow-2xl border border-black/5 max-w-[280px]">
                 <div className="bg-sky-100 text-primary w-10 h-10 rounded-lg flex items-center justify-center mb-6">

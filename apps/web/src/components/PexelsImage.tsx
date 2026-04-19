@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import type { UnsplashImage as UnsplashImageType } from '../services/unsplash'
+import type { PexelsPhoto as PexelsPhotoType } from '../services/pexels'
 
-interface UnsplashImageProps {
+interface PexelsImageProps {
   src: string
   alt: string
   className?: string
-  quality?: 'max' | 'high' | 'medium'
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
   onLoad?: () => void
   onError?: () => void
@@ -13,7 +12,7 @@ interface UnsplashImageProps {
   sizes?: string
 }
 
-export function UnsplashImage({
+export function PexelsImage({
   src,
   alt,
   className = '',
@@ -22,7 +21,7 @@ export function UnsplashImage({
   onError,
   lazy = true,
   sizes,
-}: UnsplashImageProps) {
+}: PexelsImageProps) {
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState(false)
 
@@ -73,25 +72,19 @@ export function UnsplashImage({
   )
 }
 
-interface UnsplashGalleryProps {
-  images: UnsplashImageType[]
+interface PexelsGalleryProps {
+  photos: PexelsPhotoType[]
   className?: string
-  quality?: 'max' | 'high' | 'medium'
+  quality?: 'original' | 'large2x' | 'large'
   columns?: 2 | 3 | 4
 }
 
-export function UnsplashGallery({
-  images,
+export function PexelsGallery({
+  photos,
   className = '',
-  quality = 'high',
+  quality = 'large2x',
   columns = 3,
-}: UnsplashGalleryProps) {
-  const get4KUrl = (image: UnsplashImageType): string => {
-    const w = quality === 'max' ? 3840 : quality === 'high' ? 2560 : 1920
-    const q = quality === 'max' ? 80 : 85
-    return `${image.urls.raw}&w=${w}&q=${q}&fm=webp&fit=max`
-  }
-
+}: PexelsGalleryProps) {
   const gridCols = {
     2: 'grid-cols-1 md:grid-cols-2',
     3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
@@ -100,19 +93,19 @@ export function UnsplashGallery({
 
   return (
     <div className={`grid ${gridCols[columns]} gap-4 ${className}`}>
-      {images.map((image) => (
+      {photos.map((photo) => (
         <div
-          key={image.id}
+          key={photo.id}
           className="relative aspect-[4/3] rounded-2xl overflow-hidden group"
         >
-          <UnsplashImage
-            src={get4KUrl(image)}
-            alt={image.alt_description || image.description || 'Unsplash image'}
+          <PexelsImage
+            src={photo.src[quality]}
+            alt={photo.alt || 'Pexels image'}
             className="group-hover:scale-105 transition-transform duration-700"
           />
           <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
             <p className="text-white text-sm font-medium truncate">
-              Photo by {image.user.name}
+              Photo by {photo.photographer}
             </p>
           </div>
         </div>
@@ -121,13 +114,13 @@ export function UnsplashGallery({
   )
 }
 
-interface UnsplashAttributionProps {
+interface PexelsAttributionProps {
   photographer: string
   link: string
   className?: string
 }
 
-export function UnsplashAttribution({ photographer, link, className = '' }: UnsplashAttributionProps) {
+export function PexelsAttribution({ photographer, link, className = '' }: PexelsAttributionProps) {
   return (
     <a
       href={link}
@@ -135,7 +128,7 @@ export function UnsplashAttribution({ photographer, link, className = '' }: Unsp
       rel="noopener noreferrer"
       className={`text-xs text-outline hover:text-primary transition-colors ${className}`}
     >
-      Photo by {photographer} on Unsplash
+      Photo by {photographer} on Pexels
     </a>
   )
 }

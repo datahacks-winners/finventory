@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { UnsplashImage } from '../components/UnsplashImage'
-import { getFallbackUrl } from '../services/unsplash'
+import { PexelsImage } from '../components/PexelsImage'
+import { getFallbackUrl } from '../services/pexels'
 
 const FILTER_TAGS = ['All', 'Bycatch', 'Surplus', 'Off-cut', 'Whole']
 
@@ -173,15 +173,14 @@ export default function Marketplace() {
 
           {/* Crate Cards */}
           <div className="flex flex-col gap-6 overflow-y-auto pb-12 pr-2">
-            {CRATES.map(crate => (
-              <Link key={crate.id} to={`/marketplace/${crate.id}`} className="bg-surface-container-lowest rounded-lg overflow-hidden ocean-shadow border border-outline-variant/10 group block">
-                <div className="relative h-48">
-                  <UnsplashImage
-                    src={crate.img}
-                    alt={crate.alt}
-                    className="transition-transform duration-500 group-hover:scale-105"
-                    quality="high"
-                  />
+          {CRATES.map(crate => (
+            <Link key={crate.id} to={`/marketplace/${crate.id}`} className="bg-surface-container-lowest rounded-lg overflow-hidden ocean-shadow border border-outline-variant/10 group block">
+              <div className="relative h-48">
+                <PexelsImage
+                  src={crate.img}
+                  alt={crate.alt}
+                  className="transition-transform duration-500 group-hover:scale-105"
+                />
                   {crate.badge && (
                     <div className={`absolute top-4 left-4 ${crate.badgeBg} text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg`}>
                       {crate.badge}
