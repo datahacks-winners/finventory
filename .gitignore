@@ -57,3 +57,6 @@ tmp/
 
 # Git worktrees
 .worktrees/
+
+# Firebase Functions compiled output
+functions/lib/
