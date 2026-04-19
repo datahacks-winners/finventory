@@ -8,6 +8,7 @@
     "dev:firebase": "firebase emulators:start --only functions,firestore,auth,storage,database",
     "build": "npm run build --workspaces --if-present",
     "deploy": "npm run deploy --workspaces --if-present",
+    "test": "npm run lint  # TODO: Add actual test suite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepare": "husky githooks"

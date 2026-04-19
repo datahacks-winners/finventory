@@ -30,7 +30,7 @@ jobs:
       - run: npm run lint
 
       - name: Type Check
-        run: npx tsc --noEmit || true
+        run: npx tsc --noEmit
 
   deploy-staging:
     name: Deploy to Staging
@@ -60,7 +60,7 @@ jobs:
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@v2.6.0
         with:
-          args: deploy --only functions,firestore:rules,storage --project finventory-dev
+          args: deploy --only functions,firestore:rules,storage:rules --project finventory-dev
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
@@ -100,7 +100,7 @@ jobs:
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@v2.6.0
         with:
-          args: deploy --only functions,firestore:rules,storage --project finventory-prod
+          args: deploy --only functions,firestore:rules,storage:rules --project finventory-prod
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
