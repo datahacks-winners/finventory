@@ -51,6 +51,10 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+      - name: Build Cloud Functions
+        working-directory: ./functions
+        run: npm run build
+
   deploy-firebase:
     name: Deploy Firebase Rules
     runs-on: ubuntu-latest
