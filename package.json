@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm run dev --workspaces --if-present",
+    "dev:firebase": "firebase emulators:start --only functions,firestore,auth,storage,database",
     "build": "npm run build --workspaces --if-present",
     "deploy": "npm run deploy --workspaces --if-present",
     "lint": "eslint .",
