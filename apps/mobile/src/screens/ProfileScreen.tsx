@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '800',
     color: colors.primary,
-    fontFamily: 'Caveat',
+    letterSpacing: -0.5,
   },
   statIcon: {
     fontSize: 24,
