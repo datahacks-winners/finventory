@@ -1,11 +1,17 @@
+import imgBass from '../assets/fish/bass.jpg'
 import imgBluefin from '../assets/fish/bluefin.jpeg'
+import imgCabezon from '../assets/fish/cabezon.jpg'
 import imgCrab from '../assets/fish/dungeness-crab.jpg'
 import imgHalibut from '../assets/fish/halibut.jpg'
 import imgLeopard from '../assets/fish/leopard.jpeg'
 import imgRockfish from '../assets/fish/rockfish.jpg'
 import imgSalmon from '../assets/fish/salmon.jpg'
 import imgSanddabs from '../assets/fish/sanddabs.jpg'
+import imgSeaUrchin from '../assets/fish/sea-urchin.jpg'
+import imgShrimp from '../assets/fish/shrimp.jpg'
 import imgSockeye from '../assets/fish/sockeye.jpg'
+import imgSpotPrawns from '../assets/fish/spot-prawns.jpg'
+import imgSturgeon from '../assets/fish/sturgeon.jpg'
 import imgYellowfin from '../assets/fish/yellowfin.jpeg'
 
 const PEXELS_API = 'https://api.pexels.com/v1'
@@ -220,12 +226,12 @@ export function getFallbackUrl(query: string): string {
     'red snapper': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
 
     // ═══════════════════════════════════════════════════════════════
-    // BASS - Striped bass and sea bass
+    // BASS - Using local image instead of broken external URL
     // ═══════════════════════════════════════════════════════════════
-    bass: 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
-    'striped bass': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
-    'sea bass': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
-    'chilean sea bass': 'https://images.unsplash.com/photo-1606850780554-b55ea6863e85?w=800&auto=format&fit=crop&q=80',
+    bass: imgBass,
+    'striped bass': imgBass,
+    'sea bass': imgBass,
+    'chilean sea bass': imgHalibut,
 
     // ═══════════════════════════════════════════════════════════════
     // TROUT - Freshwater trout (sometimes anadromous)
@@ -239,6 +245,12 @@ export function getFallbackUrl(query: string): string {
     // ═══════════════════════════════════════════════════════════════
     'leopard shark': imgLeopard,
     shark: imgLeopard,
+
+    // ═══════════════════════════════════════════════════════════════
+    // STURGEON - Using local image
+    // ═══════════════════════════════════════════════════════════════
+    sturgeon: imgSturgeon,
+    'white sturgeon': imgSturgeon,
 
     // ═══════════════════════════════════════════════════════════════
     // SMALL PELAGICS - Sardines, anchovies, mackerel
@@ -257,21 +269,22 @@ export function getFallbackUrl(query: string): string {
     octopus: 'https://images.pexels.com/photos/361184/asparagus-squid-octopus-361184.jpeg?auto=compress&cs=tinysrgb&w=800',
 
     // ═══════════════════════════════════════════════════════════════
-    // CABEZON - California bottom fish
+    // CABEZON - California bottom fish - using local image
     // ═══════════════════════════════════════════════════════════════
-    cabezon: 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+    cabezon: imgCabezon,
 
     // ═══════════════════════════════════════════════════════════════
-    // SHELLFISH - Shrimp, oysters, urchins
+    // SHELLFISH - Using local images instead of external URLs
     // ═══════════════════════════════════════════════════════════════
-    shrimp: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800&auto=format&fit=crop&q=80',
-    prawn: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800&auto=format&fit=crop&q=80',
-    oyster: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
-    'sea urchin': 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
-    uni: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
-    geoduck: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
-    clam: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
-    mussel: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    shrimp: imgShrimp,
+    prawn: imgShrimp,
+    'spot prawns': imgSpotPrawns,
+    oyster: imgHalibut,
+    'sea urchin': imgSeaUrchin,
+    uni: imgSeaUrchin,
+    geoduck: imgHalibut,
+    clam: imgHalibut,
+    mussel: imgHalibut,
 
     // ═══════════════════════════════════════════════════════════════
     // SCENES/CONTEXT - Hero images, fishing boats, markets

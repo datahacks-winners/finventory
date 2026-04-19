@@ -83,59 +83,64 @@ export default function Checkout() {
     setError(null)
     const orderIds: string[] = []
     const invalidItems: CartItem[] = []
+    const failedItems: { item: CartItem; error: string }[] = []
 
-    try {
-      for (const item of cart) {
-        try {
-          console.log('Creating order for listing:', item.listing.id, 'weight:', item.weight)
-          const result = await createOrder(
-            item.listing.id,
-            item.weight,
-            item.deliveryOption
-          )
-          console.log('Order result:', result)
-          if (result.success) {
-            orderIds.push(result.orderId)
-          }
-        } catch (err: any) {
-          console.error('Order error:', err)
-          const msg = err?.message || ''
-          const code = err?.code || ''
-          // Check for not-found error (Firebase callable returns this as 'not-found' code)
-          if (msg.toLowerCase().includes('not found') || 
-              msg.toLowerCase().includes('not-found') ||
-              code === 'not-found' ||
-              code === 'not_found' ||
-              err?.details?.includes('Listing not found')) {
-            invalidItems.push(item)
-          } else {
-            throw err // Re-throw other errors
-          }
+    for (const item of cart) {
+      try {
+        console.log('Creating order for listing:', item.listing.id)
+        const result = await createOrder(
+          item.listing.id,
+          item.weight,
+          item.deliveryOption
+        )
+        console.log('Order result:', result)
+        if (result.success) {
+          orderIds.push(result.orderId)
+        }
+      } catch (err: any) {
+        console.error('Order error for item', item.listing.id, ':', err)
+        const msg = (err?.message || '').toLowerCase()
+        const code = (err?.code || '').toLowerCase()
+        
+        // Check for "not found" error - this means the listing doesn't exist
+        if (msg.includes('not found') || 
+            msg.includes('not-found') || 
+            code.includes('not-found') ||
+            code.includes('not_found')) {
+          invalidItems.push(item)
+        } else {
+          // Other errors - collect them
+          failedItems.push({ item, error: err?.message || 'Unknown error' })
         }
       }
+    }
 
-      // Remove invalid items from cart
-      if (invalidItems.length > 0) {
-        const invalidIds = new Set(invalidItems.map(i => i.listing.id))
-        setCart(prev => {
-          const updated = prev.filter(item => !invalidIds.has(item.listing.id))
-          localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updated))
-          return updated
-        })
-        setError(`${invalidItems.length} item(s) no longer available and removed from cart`)
-        setLoading(false)
-        return
-      }
+    // Remove invalid items from cart
+    if (invalidItems.length > 0) {
+      const invalidIds = new Set(invalidItems.map(i => i.listing.id))
+      setCart(prev => {
+        const updated = prev.filter(item => !invalidIds.has(item.listing.id))
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updated))
+        return updated
+      })
+      setError(`${invalidItems.length} item(s) no longer available - removed from cart. Refreshing marketplace data...`)
+      setLoading(false)
+      return
+    }
 
-      if (orderIds.length > 0) {
-        setPlacedOrders(orderIds)
-        setSuccess(true)
-        clearCart()
-      }
-    } catch (err) {
-      console.error('Place order failed:', err)
-      setError(err instanceof Error ? err.message : 'Failed to place order')
-    } finally {
+    // Show other errors
+    if (failedItems.length > 0) {
+      setError(`Failed: ${failedItems.map(f => `${f.item.listing.species}: ${f.error}`).join(', ')}`)
+      setLoading(false)
+      return
+    }
+
+    if (orderIds.length > 0) {
+      setPlacedOrders(orderIds)
+      setSuccess(true)
+      clearCart()
+    } else if (cart.length > 0 && invalidItems.length === 0) {
+      setError('Could not place order. Please try again.')
       setLoading(false)
     }
   }
