@@ -1,5 +1,5 @@
 import { db } from '../firebase'
-import { collection, query, where, orderBy, onSnapshot, doc, getDoc, Timestamp, getFirestore } from 'firebase/firestore'
+import { collection, query, where, orderBy, onSnapshot, doc, getDoc, Timestamp } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import { httpsCallable, getFunctions, connectFunctionsEmulator } from 'firebase/functions'
 import { getApp } from 'firebase/app'
