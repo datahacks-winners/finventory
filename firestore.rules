@@ -1,9 +1,76 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow all access for emulator testing
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isSeller() {
+      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVendor == true;
+    }
+
+    function isBuyer() {
+      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isBuyer == true;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isSellerOwner(listingId) {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/listings/$(listingId)).data.sellerId == request.auth.uid;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      // Allow read if authenticated
+      allow read: if isAuthenticated();
+      // Allow create/update if owner or new user
+      allow create, update: if isOwner(userId) ||
+        (isAuthenticated() && !exists(/databases/$(database)/documents/users/$(userId)));
+    }
+
+    // Listings collection
+    match /listings/{listingId} {
+      // Anyone can read active listings
+      allow read: if resource.data.status == 'active' ||
+        isAuthenticated(); // Sellers see all their own listings in portal
+
+      // Sellers can create listings for themselves only
+      allow create: if isSeller() && request.auth.uid == request.resource.data.sellerId;
+
+      // Sellers can update/delete their own listings
+      allow update, delete: if isSeller() && isSellerOwner(listingId);
+    }
+
+    // Orders collection
+    match /orders/{orderId} {
+      // Buyers see their own orders, Sellers see orders for their listings
+      allow read: if isAuthenticated() &&
+        (resource.data.buyerId == request.auth.uid ||
+         resource.data.sellerId == request.auth.uid);
+
+      // Buyers create orders, must include their ID
+      allow create: if isBuyer() && request.auth.uid == request.resource.data.buyerId;
+
+      // Buyers/sellers can update their own orders
+      allow update: if isAuthenticated() &&
+        (resource.data.buyerId == request.auth.uid ||
+         resource.data.sellerId == request.auth.uid);
+    }
+
+    // Standing orders (buyer subscriptions)
+    match /standingOrders/{orderId} {
+      // Buyers see their own standing orders
+      allow read, write: if isBuyer() && isOwner(resource.data.buyerId);
+    }
+
+    // Default deny
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if false;
     }
   }
 }

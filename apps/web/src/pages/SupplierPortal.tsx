@@ -135,13 +135,10 @@ export default function SupplierPortal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // DEBUG: Auth check bypassed temporarily
-    /*
     if (!user) {
-      navigate('/auth', { state: { from: '/suppliers' } })
+      _navigate('/auth', { state: { from: '/suppliers' } })
       return
     }
-    */
 
     if (!formData.species || !formData.weight || !formData.price) {
       alert('Please fill in all required fields')
@@ -193,25 +190,20 @@ export default function SupplierPortal() {
     }
   }
 
-  // DEBUG MODE: Bypass auth check temporarily
-   
-  const _debugBypassAuth = true
-
-  /* Original auth guard - re-enable after debugging
+  // Auth guard - redirect to login if not authenticated
   if (!user) {
     return (
       <div className="text-on-surface min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fff8f5' }}>
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Supplier Portal</h1>
           <p className="text-outline mb-6">Please sign in to access your dashboard</p>
-          <button onClick={() => navigate('/auth')} className="bg-primary text-white px-8 py-3 rounded-full font-bold">
+          <button onClick={() => _navigate('/auth')} className="bg-primary text-white px-8 py-3 rounded-full font-bold">
             Sign In
           </button>
         </div>
       </div>
     )
   }
-  */
 
   return (
     <div className="text-on-surface" style={{ backgroundColor: '#fff8f5' }}>
