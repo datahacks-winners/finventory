@@ -61,6 +61,51 @@ resource "google_project_iam_member" "cloud_run_firestore" {
   member  = "serviceAccount:${google_service_account.cloud_run_invoker.email}"
 }
 
+# Service Account: GitHub Actions (for CI/CD deployments)
+resource "google_service_account" "github_actions" {
+  account_id   = "github-actions-sa"
+  display_name = "GitHub Actions Service Account"
+  description  = "Service account for GitHub Actions to deploy to GCP"
+}
+
+# IAM: GitHub Actions permissions
+resource "google_project_iam_member" "github_actions_artifact_registry" {
+  project = var.project_id
+  role    = "roles/artifactregistry.writer"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+resource "google_project_iam_member" "github_actions_cloud_run" {
+  project = var.project_id
+  role    = "roles/run.admin"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+resource "google_project_iam_member" "github_actions_storage" {
+  project = var.project_id
+  role    = "roles/storage.objectAdmin"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+resource "google_project_iam_member" "github_actions_cloud_functions" {
+  project = var.project_id
+  role    = "roles/cloudfunctions.developer"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+resource "google_project_iam_member" "github_actions_firebase" {
+  project = var.project_id
+  role    = "roles/firebase.admin"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+# Create service account key for GitHub Actions
+resource "google_service_account_key" "github_actions" {
+  service_account_id = google_service_account.github_actions.name
+  key_algorithm        = "KEY_ALG_RSA_2048"
+  private_key_type     = "TYPE_GOOGLE_CREDENTIALS_FILE"
+}
+
 resource "google_project_iam_member" "cloud_run_storage" {
   project = var.project_id
   role    = "roles/storage.objectViewer"
