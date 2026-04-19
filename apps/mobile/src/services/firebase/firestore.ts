@@ -105,7 +105,7 @@ export class FirestoreService {
     });
   }
 
-  static async markMessageAsRead(messageId: string, userId: string): Promise<void> {
+  static async markMessageAsRead(messageId: string, _userId: string): Promise<void> {
     await firestore().collection('messages').doc(messageId).update({
       read: true,
     });

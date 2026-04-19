@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+import { onDocumentCreated } from 'firebase-functions/v2/firestore'
 import * as admin from 'firebase-admin'
 import { db, rtdb } from '../config.js'
 import { distanceInMiles } from '../utils/geohash.js'
@@ -9,39 +9,40 @@ import { notifyStandingOrderMatch } from '../utils/notifications.js'
  * - Updates real-time inventory
  * - Finds matching standing orders and notifies buyers
  */
-export const onListingCreated = functions.firestore
-  .document('listings/{listingId}')
-  .onCreate(async (snap, context) => {
-    const listing = snap.data()!
-    const listingId = context.params.listingId
+export const onListingCreated = onDocumentCreated('listings/{listingId}', async (event) => {
+  const snap = event.data
+  if (!snap) return
 
-    // Update real-time inventory
-    await rtdb.ref(`live_inventory/${listingId}`).set({
-      count: listing.quantity,
-      status: listing.status,
-      lastUpdated: admin.database.ServerValue.TIMESTAMP
-    })
+  const listing = snap.data()!
+  const listingId = event.params.listingId
 
-    // Find matching standing orders
-    const matchingOrders = await findMatchingStandingOrders(listing)
-
-    // Notify matching buyers
-    for (const order of matchingOrders) {
-      await notifyStandingOrderMatch(
-        order.buyerId,
-        listingId,
-        listing.species,
-        listing.grade
-      )
-
-      // Update last matched timestamp
-      await db.collection('standingOrders').doc(order.id).update({
-        lastMatchedAt: admin.firestore.FieldValue.serverTimestamp()
-      })
-    }
-
-    console.log(`Processed new listing ${listingId}, found ${matchingOrders.length} matches`)
+  // Update real-time inventory
+  await rtdb.ref(`live_inventory/${listingId}`).set({
+    count: listing.quantity,
+    status: listing.status,
+    lastUpdated: admin.database.ServerValue.TIMESTAMP
   })
+
+  // Find matching standing orders
+  const matchingOrders = await findMatchingStandingOrders(listing)
+
+  // Notify matching buyers
+  for (const order of matchingOrders) {
+    await notifyStandingOrderMatch(
+      order.buyerId,
+      listingId,
+      listing.species,
+      listing.grade
+    )
+
+    // Update last matched timestamp
+    await db.collection('standingOrders').doc(order.id).update({
+      lastMatchedAt: admin.firestore.FieldValue.serverTimestamp()
+    })
+  }
+
+  console.log(`Processed new listing ${listingId}, found ${matchingOrders.length} matches`)
+})
 
 interface StandingOrderMatch {
   id: string

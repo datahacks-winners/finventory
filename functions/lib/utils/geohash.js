@@ -1,4 +1,4 @@
-import * as geohash from 'ngeohash';
+import geohash from 'ngeohash';
 export function encodeGeohash(lat, lng, precision = 9) {
     return geohash.encode(lat, lng, precision);
 }

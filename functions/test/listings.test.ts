@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import * as admin from 'firebase-admin';
+import admin from 'firebase-admin';
 import { setupTestEnv, cleanupTestEnv, clearFirestore, getAdminFirestore } from './helper.js';
 
 describe('createListing integration', () => {
@@ -7,6 +7,15 @@ describe('createListing integration', () => {
   let adminFirestore: admin.firestore.Firestore;
 
   before(async function() {
+    // Initialize admin BEFORE importing the function
+    // This ensures config.ts doesn't try to initialize with wrong credentials
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.applicationDefault(),
+        projectId: 'finventory-func-test'
+      });
+    }
+
     testEnv = await setupTestEnv();
     adminFirestore = getAdminFirestore();
   });

@@ -4,7 +4,13 @@ import tsEslint from "typescript-eslint";
 
 export default [
   {
-    ignores: ["node_modules/**", "dist/**", "build/**", "*.config.js"],
+    ignores: [
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      "**/*.config.js",
+      "apps/mobile/scripts/**",
+    ],
   },
   ...tsEslint.configs.recommended,
   {
