@@ -58,7 +58,7 @@ export default function Impact() {
           </div>
         </section>
 
-        {/* ── Chart ── */}
+        {/* ── Charts ── */}
         <section className="px-12 py-20 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="mb-10">
@@ -68,8 +68,18 @@ export default function Impact() {
                 CalCOFI larval egg surveys show egg density declining sharply beyond 14°C. As the Pacific warms, spawning success falls — making every rescued pound of existing catch more critical than ever.
               </p>
             </div>
-            <div className="bg-surface-container-low p-6 md:p-10 rounded-2xl border border-outline-variant/20">
-              <TempBinsChart className="w-full" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/20">
+                <p className="text-xs font-bold uppercase tracking-widest text-outline mb-4">Egg Density vs. Surface Temperature</p>
+                <TempBinsChart className="w-full" />
+              </div>
+              {/* ImpactLineChart temporarily disabled */}
+              {/*
+              <div className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/20">
+                <p className="text-xs font-bold uppercase tracking-widest text-outline mb-4">CO₂ Tons & Revenue Trends</p>
+                <ImpactLineChart className="w-full" />
+              </div>
+              */}
             </div>
           </div>
         </section>
