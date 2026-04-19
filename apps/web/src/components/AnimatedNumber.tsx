@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import CountUp from 'react-countup'
 
 interface AnimatedNumberProps {
@@ -21,25 +21,55 @@ export function AnimatedNumber({
   separator = ',',
 }: AnimatedNumberProps) {
   const [isVisible, setIsVisible] = useState(false)
+  const [hasAnimated, setHasAnimated] = useState(false)
   const ref = useRef<HTMLSpanElement>(null)
+  const observerRef = useRef<IntersectionObserver | null>(null)
+
+  const startAnimation = useCallback(() => {
+    if (!hasAnimated) {
+      setIsVisible(true)
+      setHasAnimated(true)
+    }
+  }, [hasAnimated])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.3 }
-    )
+    const element = ref.current
+    if (!element) return
 
-    if (ref.current) {
-      observer.observe(ref.current)
+    // Check if already visible
+    const rect = element.getBoundingClientRect()
+    const isInViewport = rect.top < window.innerHeight && rect.bottom > 0
+    
+    if (isInViewport) {
+      startAnimation()
+      return
     }
 
-    return () => observer.disconnect()
-  }, [])
+    // Set up intersection observer
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          startAnimation()
+          observerRef.current?.disconnect()
+        }
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    )
+
+    observerRef.current.observe(element)
+
+    return () => {
+      observerRef.current?.disconnect()
+    }
+  }, [startAnimation])
+
+  // Format the static display value
+  const formatStaticValue = () => {
+    if (decimals > 0) {
+      return `${prefix}${(0).toFixed(decimals)}${suffix}`
+    }
+    return `${prefix}0${suffix}`
+  }
 
   return (
     <span ref={ref} className={className}>
@@ -61,7 +91,7 @@ export function AnimatedNumber({
           }}
         />
       ) : (
-        `${prefix}0${suffix}`
+        formatStaticValue()
       )}
     </span>
   )
