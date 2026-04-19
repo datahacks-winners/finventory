@@ -35,7 +35,7 @@ RUN npm run build -w apps/web
 FROM nginx:alpine
 
 COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Install curl for healthcheck (alpine doesn't have wget by default)
 RUN apk add --no-cache curl
