@@ -11,6 +11,7 @@
     "test": "npm run lint  # TODO: Add actual test suite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "test": "npm run lint",
     "prepare": "husky githooks"
   },
   "dependencies": {
