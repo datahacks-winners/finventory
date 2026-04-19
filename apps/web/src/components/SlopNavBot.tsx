@@ -112,10 +112,10 @@ export default function SlopNavBot() {
   ]
 
   return (
-    <div ref={containerRef} className="fixed bottom-6 right-6 z-50">
-      {/* Chat Window */}
+    <div ref={containerRef} className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+      {/* Chat Window - positioned absolutely above button */}
       {isOpen && (
-        <div className="mb-4 w-96 max-w-[calc(100vw-3rem)] bg-surface rounded-2xl shadow-2xl border border-surface-variant overflow-hidden flex flex-col" style={{ height: '500px', maxHeight: 'calc(100vh - 120px)' }}>
+        <div className="absolute bottom-full right-0 mb-4 w-96 max-w-[calc(100vw-3rem)] bg-surface rounded-2xl shadow-2xl border border-surface-variant overflow-hidden flex flex-col" style={{ height: '500px', maxHeight: 'calc(100vh - 120px)' }}>
           {/* Header */}
           <div className="bg-primary px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -250,7 +250,7 @@ export default function SlopNavBot() {
       {/* Floating Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-4 py-3 rounded-full shadow-xl transition-all hover:scale-105 hover:shadow-2xl w-[180px] self-end ${
+        className={`flex items-center gap-2 px-4 py-3 rounded-full shadow-xl transition-all hover:scale-105 hover:shadow-2xl w-[180px] ${
           isOpen ? 'bg-on-surface text-white' : 'bg-primary text-white'
         }`}
       >
