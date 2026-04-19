@@ -116,9 +116,9 @@ resource "google_secret_manager_secret_iam_member" "stripe_api_key_cf" {
 
 resource "google_secret_manager_secret_iam_member" "apple_secrets_cf" {
   for_each = {
-    apple_key_id       = google_secret_manager_secret.apple_key_id.id
-    apple_private_key  = google_secret_manager_secret.apple_private_key.id
-    apple_team_id      = google_secret_manager_secret.apple_team_id.id
+    apple_key_id      = google_secret_manager_secret.apple_key_id.id
+    apple_private_key = google_secret_manager_secret.apple_private_key.id
+    apple_team_id     = google_secret_manager_secret.apple_team_id.id
   }
 
   secret_id = each.value
@@ -135,9 +135,9 @@ resource "google_secret_manager_secret_iam_member" "stripe_api_key_cr" {
 
 resource "google_secret_manager_secret_iam_member" "apple_secrets_cr" {
   for_each = {
-    apple_key_id       = google_secret_manager_secret.apple_key_id.id
-    apple_private_key  = google_secret_manager_secret.apple_private_key.id
-    apple_team_id      = google_secret_manager_secret.apple_team_id.id
+    apple_key_id      = google_secret_manager_secret.apple_key_id.id
+    apple_private_key = google_secret_manager_secret.apple_private_key.id
+    apple_team_id     = google_secret_manager_secret.apple_team_id.id
   }
 
   secret_id = each.value
