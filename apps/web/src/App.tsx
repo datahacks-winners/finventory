@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import SlopNavBot from './components/SlopNavBot'
 import Home from './pages/Home'
 import Marketplace from './pages/Marketplace'
 import CrateDetail from './pages/CrateDetail'
@@ -37,6 +38,7 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
+      <SlopNavBot />
       <AuthProvider>
         <AppRoutes />
       </AuthProvider>

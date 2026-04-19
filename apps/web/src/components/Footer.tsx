@@ -1,7 +1,20 @@
-const FOOTER_COLS: Record<string, string[]> = {
-  Marketplace: ["Today's Catch", 'Harbors & Ports', 'Suppliers List'],
-  Company: ['Sustainability', 'Impact Report', 'About'],
-  Legal: ['Privacy Policy', 'Terms of Service'],
+import { Link } from 'react-router-dom'
+
+const FOOTER_LINKS: Record<string, { label: string; to: string }[]> = {
+  Marketplace: [
+    { label: "Today's Catch", to: '/marketplace' },
+    { label: 'Harbors & Ports', to: '/marketplace' },
+    { label: 'Suppliers List', to: '/suppliers' },
+  ],
+  Company: [
+    { label: 'Sustainability', to: '/impact' },
+    { label: 'Impact Report', to: '/impact' },
+    { label: 'About', to: '/about' },
+  ],
+  Legal: [
+    { label: 'Privacy Policy', to: '#' },
+    { label: 'Terms of Service', to: '#' },
+  ],
 }
 
 export default function Footer() {
@@ -15,15 +28,18 @@ export default function Footer() {
           </p>
         </div>
 
-        {Object.entries(FOOTER_COLS).map(([col, links]) => (
+        {Object.entries(FOOTER_LINKS).map(([col, links]) => (
           <div key={col}>
             <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-sm">{col}</h4>
             <ul className="space-y-4">
-              {links.map(link => (
-                <li key={link}>
-                  <a href="#" className="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block">
-                    {link}
-                  </a>
+              {links.map(({ label, to }) => (
+                <li key={label}>
+                  <Link 
+                    to={to} 
+                    className="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block"
+                  >
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>

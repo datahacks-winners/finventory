@@ -1,5 +1,5 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
-import { getAuth, type Auth } from 'firebase/auth'
+import { getAuth, type Auth, connectAuthEmulator } from 'firebase/auth'
 import { getFirestore, type Firestore } from 'firebase/firestore'
 
 // TODO: Replace with your Firebase config from console
@@ -23,6 +23,12 @@ if (isValidConfig) {
     app = initializeApp(firebaseConfig)
     auth = getAuth(app)
     db = getFirestore(app)
+    
+    // Connect to Firebase Auth Emulator in development
+    if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+      connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
+      console.log('[Firebase] Using Auth Emulator at localhost:9099')
+    }
   } catch (err) {
     console.error('Firebase init error:', err)
   }
