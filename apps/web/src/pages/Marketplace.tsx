@@ -52,10 +52,7 @@ function ProductCard({
 }) {
   const [weight, setWeight] = useState(5)
   
-  const photoUrl = listing.photos?.[0]
-  const photo = photoUrl && !photoUrl.includes('storage.googleapis.com/finventory-listings') 
-    ? photoUrl 
-    : getFallbackUrl(listing.species.toLowerCase())
+  const photo = getFallbackUrl(listing.species.toLowerCase())
   const grade = GRADES.find(g => g.value === listing.grade) || GRADES[1]
   const hoursLeft = Math.floor((listing.expiresAt.toDate().getTime() - Date.now()) / (1000 * 60 * 60))
   const isUrgent = hoursLeft < 4
