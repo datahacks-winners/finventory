@@ -1,12 +1,44 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 type Tab = 'login' | 'signup'
 type Role = 'logistician' | 'vendor'
 
 export default function Auth() {
+  const navigate = useNavigate()
   const [tab, setTab] = useState<Tab>('login')
   const [role, setRole] = useState<Role>('logistician')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || 'Authentication failed')
+      }
+
+      const data = await res.json()
+      localStorage.setItem('token', data.token)
+      navigate('/dashboard')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="bg-[#F2EDE4] text-slate-900 min-h-screen flex flex-col">
@@ -95,14 +127,23 @@ export default function Auth() {
                   </div>
                 </div>
 
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleLogin}>
+                  {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-full text-sm font-medium text-center">
+                      {error}
+                    </div>
+                  )}
                   <div>
                     <label className="block text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-2 px-1">
                       Organization Email
                     </label>
                     <input
                       type="email"
+                      name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@company.com"
+                      required
                       className="w-full bg-white border border-stone-200 rounded-full py-4 px-6 text-sm transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
@@ -113,15 +154,20 @@ export default function Auth() {
                     </div>
                     <input
                       type="password"
+                      name="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
+                      required
                       className="w-full bg-white border border-stone-200 rounded-full py-4 px-6 text-sm transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-4 bg-primary text-white rounded-full font-bold text-sm hover:bg-primary-container transition-all shadow-lg shadow-primary/20 mt-4 uppercase tracking-widest"
+                    disabled={loading}
+                    className="w-full py-4 bg-primary text-white rounded-full font-bold text-sm hover:bg-primary-container transition-all shadow-lg shadow-primary/20 mt-4 uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Enter Portal
+                    {loading ? 'Entering...' : 'Enter Portal'}
                   </button>
                 </form>
               </div>
