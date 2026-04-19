@@ -1,6 +1,5 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { AuthContext } from '../context/AuthContext';
 import { useAuth } from './useAuth';
 
 export function useRequireAuth() {
