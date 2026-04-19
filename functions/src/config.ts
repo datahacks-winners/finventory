@@ -1,9 +1,7 @@
-import * as admin from 'firebase-admin'
+import admin from 'firebase-admin'
 
-// Initialize Firebase Admin - works in both emulator and production
-if (!admin.apps.length) {
-  admin.initializeApp()
-}
+// Initialize Firebase Admin
+admin.initializeApp()
 
 export const db = admin.firestore()
 export const auth = admin.auth()

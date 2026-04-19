@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import SlopNavBot from './SlopNavBot'
 
 const NAV_LINKS = [
   { to: '/marketplace', label: 'Marketplace' },
@@ -57,6 +58,7 @@ export default function Navbar() {
 
         {/* Right: Auth buttons - pushed to right by justify-between */}
         <div className="flex gap-4 items-center">
+          <SlopNavBot />
           {user ? (
             <>
               <span className="text-slate-600 text-sm hidden lg:inline">{user.displayName || user.email}</span>
