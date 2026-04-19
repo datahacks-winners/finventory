@@ -84,8 +84,8 @@ export default function Impact() {
                 Source: Jacox et al., PMC8618751 — Climate forcing of Pacific fish populations
               </a>
             </div>
-            <div className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/20">
-              <p className="text-xs font-bold uppercase tracking-widest text-outline mb-4">Egg Density vs. Surface Temperature</p>
+            <div className="bg-surface-container-low rounded-2xl border border-outline-variant/20 overflow-hidden">
+              <p className="text-xs font-bold uppercase tracking-widest text-outline p-6 pb-0">Egg Density vs. Surface Temperature</p>
               <TempBinsChart className="w-full" />
             </div>
           </div>
