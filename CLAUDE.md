@@ -126,10 +126,21 @@ Cloud Function `matchStandingOrders` runs on schedule, queries new listings, mat
 ```
 finventory/
 ├── package.json
-├── CLAUDE.md           # This file
+├── CLAUDE.md           # This file - high-level overview
 ├── firebase.json       # Firebase config
 ├── firestore.rules     # Firestore security rules
 ├── storage.rules       # Cloud Storage security rules
+├── docs/               # Comprehensive documentation
+│   ├── README.md       # Documentation index
+│   ├── ARCHITECTURE.md # System architecture, data flow
+│   ├── DEVELOPMENT.md  # Local dev setup, conventions
+│   ├── API.md          # REST API reference
+│   ├── MOBILE.md       # React Native app guide
+│   ├── SECURITY.md     # Auth, security model
+│   ├── DEPLOYMENT.md   # Deploy procedures
+│   └── superpowers/    # AI-generated implementation plans
+│       ├── plans/
+│       └── specs/
 ├── packages/           # Shared packages
 │   └── shared/         # Shared types, utilities
 ├── apps/               # Applications
@@ -148,6 +159,19 @@ finventory/
     │   └── stripeWebhook.ts
     └── package.json
 ```
+
+---
+
+## Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | System architecture, data flow, scaling strategy |
+| [docs/DEVELOPMENT.md](./docs/DEVELOPMENT.md) | Local development setup, coding conventions |
+| [docs/API.md](./docs/API.md) | Complete REST API reference |
+| [docs/MOBILE.md](./docs/MOBILE.md) | Mobile app structure, navigation, components |
+| [docs/SECURITY.md](./docs/SECURITY.md) | Authentication, authorization, data protection |
+| [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) | GCP deployment, CI/CD, infrastructure |
 
 ---
 
