@@ -5,11 +5,13 @@ import { encodeGeohash } from '../utils/geohash.js';
 /**
  * Create a new standing order
  */
-export const createStandingOrder = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
+export const createStandingOrder = functions.https.onCall(async (request) => {
+    const data = request.data;
+    const context = request;
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
-    const userId = context.auth.uid;
+    const userId = request.auth.uid;
     // Validate inputs
     if (!data.name || data.name.trim().length === 0) {
         throw new functions.https.HttpsError('invalid-argument', 'Name is required');
@@ -62,12 +64,14 @@ export const createStandingOrder = functions.https.onCall(async (data, context) 
 /**
  * Update a standing order
  */
-export const updateStandingOrder = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
+export const updateStandingOrder = functions.https.onCall(async (request) => {
+    const data = request.data;
+    const context = request;
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
     const { standingOrderId, updates } = data;
-    const userId = context.auth.uid;
+    const userId = request.auth.uid;
     // Get standing order
     const soRef = db.collection('standingOrders').doc(standingOrderId);
     const soDoc = await soRef.get();
@@ -99,12 +103,14 @@ export const updateStandingOrder = functions.https.onCall(async (data, context) 
 /**
  * Delete a standing order
  */
-export const deleteStandingOrder = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
+export const deleteStandingOrder = functions.https.onCall(async (request) => {
+    const data = request.data;
+    const context = request;
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
     const { standingOrderId } = data;
-    const userId = context.auth.uid;
+    const userId = request.auth.uid;
     // Get standing order
     const soRef = db.collection('standingOrders').doc(standingOrderId);
     const soDoc = await soRef.get();
@@ -128,11 +134,11 @@ export const deleteStandingOrder = functions.https.onCall(async (data, context) 
 /**
  * Get user's standing orders
  */
-export const getMyStandingOrders = functions.https.onCall(async (_data, context) => {
-    if (!context.auth) {
+export const getMyStandingOrders = functions.https.onCall(async (request) => {
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
-    const userId = context.auth.uid;
+    const userId = request.auth.uid;
     try {
         const snapshot = await db
             .collection('standingOrders')

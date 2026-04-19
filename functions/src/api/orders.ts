@@ -40,12 +40,12 @@ export interface Order {
  * Create a new order
  */
 export const createOrder = functions.https.onCall(
-  async (data: CreateOrderRequest, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<CreateOrderRequest>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Verify buyer ID
     if (data.buyerId !== userId) {
@@ -152,8 +152,8 @@ export const createOrder = functions.https.onCall(
  * Confirm order pickup (QR code scan)
  */
 export const confirmPickup = functions.https.onCall(
-  async (data: { orderId: string; qrCode: string; scannerRole: 'buyer' | 'seller' }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ orderId: string; qrCode: string; scannerRole: 'buyer' | 'seller' }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
@@ -175,7 +175,7 @@ export const confirmPickup = functions.https.onCall(
     }
 
     // Verify user is either buyer or seller
-    const userId = context.auth.uid
+    const userId = request.auth.uid
     const isBuyer = userId === order.buyerId
     const isSeller = userId === order.sellerId
 
@@ -221,13 +221,13 @@ export const confirmPickup = functions.https.onCall(
  * Cancel an order
  */
 export const cancelOrder = functions.https.onCall(
-  async (data: { orderId: string }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ orderId: string }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     const { orderId } = data
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Get order
     const orderRef = db.collection('orders').doc(orderId)

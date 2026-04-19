@@ -48,16 +48,16 @@ export interface Listing {
  * Create a new listing
  */
 export const createListing = functions.https.onCall(
-  async (data: CreateListingRequest, context) => {
+  async (request: functions.https.CallableRequest<CreateListingRequest>) => { const data = request.data; const context = request;
     // Verify authentication
-    if (!context.auth) {
+    if (!request.auth) {
       throw new functions.https.HttpsError(
         'unauthenticated',
         'User must be authenticated'
       )
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Verify user is the seller
     if (data.sellerId !== userId) {
@@ -162,8 +162,8 @@ export const createListing = functions.https.onCall(
  * Update a listing
  */
 export const updateListing = functions.https.onCall(
-  async (data: { listingId: string; updates: Partial<Listing> }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ listingId: string; updates: Partial<Listing> }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
@@ -180,7 +180,7 @@ export const updateListing = functions.https.onCall(
     const listing = listingDoc.data() as Listing
 
     // Verify ownership
-    if (listing.sellerId !== context.auth.uid) {
+    if (listing.sellerId !== request.auth.uid) {
       throw new functions.https.HttpsError('permission-denied', 'Not your listing')
     }
 
@@ -222,8 +222,8 @@ export const updateListing = functions.https.onCall(
  * Delete a listing
  */
 export const deleteListing = functions.https.onCall(
-  async (data: { listingId: string }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ listingId: string }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
@@ -240,7 +240,7 @@ export const deleteListing = functions.https.onCall(
     const listing = listingDoc.data() as Listing
 
     // Verify ownership
-    if (listing.sellerId !== context.auth.uid) {
+    if (listing.sellerId !== request.auth.uid) {
       throw new functions.https.HttpsError('permission-denied', 'Not your listing')
     }
 

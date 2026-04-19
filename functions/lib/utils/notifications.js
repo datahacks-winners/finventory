@@ -41,7 +41,7 @@ export async function sendPushNotification(userId, title, body, data) {
         tokens: fcmTokens
     };
     try {
-        const response = await admin.messaging().sendMulticast(message);
+        const response = await admin.messaging().sendEachForMulticast(message);
         // Clean up invalid tokens
         if (response.failureCount > 0) {
             const invalidTokens = [];
