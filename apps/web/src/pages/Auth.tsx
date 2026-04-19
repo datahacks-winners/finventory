@@ -1,6 +1,5 @@
 import { useState, FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
 
 const NAV_LINKS = [
   { to: '/marketplace', label: 'Marketplace' },
@@ -20,7 +19,6 @@ type Role = 'buyer' | 'supplier'
 
 export default function Auth() {
   const navigate = useNavigate()
-  const { signIn, signUp, error: authError } = useAuth()
   const [tab, setTab] = useState<Tab>('login')
   const [role, setRole] = useState<Role>('buyer')
   const [email, setEmail] = useState('')
@@ -35,7 +33,8 @@ export default function Auth() {
     setLoading(true)
 
     try {
-      await signIn(email, password)
+      // TODO: Integrate with Firebase Auth when config is available
+      console.log('Login:', email, password)
       navigate('/suppliers')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
@@ -50,7 +49,8 @@ export default function Auth() {
     setLoading(true)
 
     try {
-      await signUp(email, password, displayName || email.split('@')[0])
+      // TODO: Integrate with Firebase Auth when config is available
+      console.log('Signup:', email, password, displayName)
       navigate('/suppliers')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed')
@@ -142,9 +142,9 @@ export default function Auth() {
               </div>
 
               <form className="space-y-5" onSubmit={handleLogin}>
-                {(error || authError) && (
+                {error && (
                   <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium text-center">
-                    {error || authError}
+                    {error}
                   </div>
                 )}
                 <div>
@@ -222,9 +222,9 @@ export default function Auth() {
               </div>
 
               <form className="space-y-5" onSubmit={handleSignup}>
-                {(error || authError) && (
+                {error && (
                   <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium text-center">
-                    {error || authError}
+                    {error}
                   </div>
                 )}
 
