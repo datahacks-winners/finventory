@@ -134,13 +134,13 @@ export function getFallbackUrl(query: string): string {
     'yellowfin tuna': 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
 
     // ═══════════════════════════════════════════════════════════════
-    // CRAB - Dungeness and other crabs
+    // CRAB - Dungeness and other crabs (live crab on beach)
     // ═══════════════════════════════════════════════════════════════
-    crab: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
-    'dungeness crab': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
-    'red rock crab': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
-    'snow crab': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
-    'king crab': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+    crab: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
+    'dungeness crab': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
+    'red rock crab': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
+    'snow crab': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
+    'king crab': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
 
     // ═══════════════════════════════════════════════════════════════
     // LOBSTER - Fresh Maine/California lobster
@@ -230,9 +230,9 @@ export function getFallbackUrl(query: string): string {
     // ═══════════════════════════════════════════════════════════════
     // CEPHALOPODS - Squid and octopus
     // ═══════════════════════════════════════════════════════════════
-    squid: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
-    'market squid': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
-    'humboldt squid': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+    squid: 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=800&auto=format&fit=crop&q=80',
+    'market squid': 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=800&auto=format&fit=crop&q=80',
+    'humboldt squid': 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=800&auto=format&fit=crop&q=80',
     octopus: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
 
     // ═══════════════════════════════════════════════════════════════

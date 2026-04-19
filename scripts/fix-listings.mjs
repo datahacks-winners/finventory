@@ -109,7 +109,7 @@ const listings = [
       longitude: -122.4177
     },
     deliveryAvailable: false,
-    photos: ["https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800"],
+    photos: ["https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800"],
     status: "active",
     createdAt: new Date(),
     updatedAt: new Date()
