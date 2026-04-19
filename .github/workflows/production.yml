@@ -36,7 +36,9 @@ jobs:
 
       - name: Test Cloud Functions
         working-directory: ./functions
-        run: npm test
+        run: |
+          npm ci
+          npm test
 
   build:
     name: Build
