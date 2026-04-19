@@ -13,20 +13,33 @@ Configure this in **Settings > Secrets and variables > Actions**:
 
 | Secret | Description | Required For |
 |--------|-------------|--------------|
-| `GCLOUD_AUTH_KEY` | GCP service account JSON key | Cloud Run + Firebase rules deploy |
+| `GCLOUD_AUTH_KEY` | GCP service account JSON key | Firebase rules & indexes deploy |
+| `FIREBASE_TOKEN` | Firebase CI token | Cloud Functions deploy |
 
 ### Getting GCLOUD_AUTH_KEY
 
 1. Create a service account in GCP with roles:
-   - `Cloud Run Admin`
-   - `Artifact Registry Writer`
-   - `Service Account User`
    - `Firebase Rules Admin` (for Firestore/Storage rules)
+   - `Firebase Management Agent` (for indexes)
 
 2. Create and download a JSON key
 3. Add the entire JSON content as `GCLOUD_AUTH_KEY` secret
 
-The service account handles both Cloud Run deployment and Firebase rules deployment via Application Default Credentials (ADC).
+The service account handles Firebase rules and indexes deployment via Application Default Credentials (ADC).
+
+### Getting FIREBASE_TOKEN
+
+The Firebase token is required for Cloud Functions deployment:
+
+```bash
+firebase login:ci
+```
+
+1. Run the command locally - it will open a browser for OAuth
+2. Copy the generated token
+3. Add it as `FIREBASE_TOKEN` secret in GitHub Actions
+
+The token expires and must be refreshed periodically.
 
 ## Environment Protection
 
@@ -42,22 +55,35 @@ Production deployments require manual approval via GitHub Environments:
 - Installs dependencies
 - Runs ESLint
 - Type checks (non-blocking)
+- Runs Cloud Functions tests
 
 ### Build
 - Builds all workspaces
+- Builds Cloud Functions
 - Must pass before deployment
 
 ### Deploy Firebase Rules
 - Deploys `firestore.rules` if present
 - Deploys `storage.rules` if present
+- Uses GCLOUD_AUTH_KEY for authentication
 
-### Deploy Cloud Run
-- Builds Docker image from `apps/api/Dockerfile`
-- Pushes to Artifact Registry
-- Deploys to Cloud Run
-- Only runs if `apps/api/Dockerfile` exists
+### Deploy Firestore Indexes
+- Deploys `firestore.indexes.json` if present
+- Uses GCLOUD_AUTH_KEY for authentication
+
+### Deploy Cloud Functions
+- Builds and deploys functions from `functions/` directory
+- Uses FIREBASE_TOKEN for authentication
+- Deploys all functions to the Firebase project
 
 ## Concurrency
 
 - **Staging**: Cancels in-progress runs (latest code takes priority)
 - **Production**: Queues runs (no cancellation, deploys complete in order)
+
+## Deployment Targets
+
+| Environment | Firebase Project | Functions URL |
+|-------------|------------------|---------------|
+| Staging | finventory-dev | https://us-central1-finventory-dev.cloudfunctions.net |
+| Production | finventory-prod | https://us-central1-finventory-prod.cloudfunctions.net |

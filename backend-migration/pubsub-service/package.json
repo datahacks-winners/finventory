@@ -1,0 +1,25 @@
+{
+  "name": "finventory-pubsub-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "build": "tsc",
+    "start": "node dist/push.js",
+    "dev": "tsc && node dist/push.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^7.3.0",
+    "@google-cloud/pubsub": "^4.0.0",
+    "firebase-admin": "^13.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": "20"
+  }
+}
