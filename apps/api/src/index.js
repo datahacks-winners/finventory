@@ -110,13 +110,12 @@ app.post('/api/listings', verifyAuth, async (req, res) => {
   }
 });
 
-// Get listings (with filters)
+// Get listings (with filters) - simplified to avoid index requirements
 app.get('/api/listings', async (req, res) => {
   try {
+    // Simple query without compound filters to avoid index requirements
     let query = db.collection('listings')
       .where('status', '==', 'active')
-      .where('expiresAt', '>', admin.firestore.Timestamp.now())
-      .orderBy('expiresAt', 'asc')
       .limit(100);
 
     const { grade, species, lat, lng, radius } = req.query;
@@ -131,7 +130,16 @@ app.get('/api/listings', async (req, res) => {
       ...doc.data()
     }));
 
-    // Client-side filtering for species and location
+    // Client-side filtering for species, expiry, and location
+    const now = new Date();
+    listings = listings.filter(l => {
+      // Check expiry
+      if (l.expiresAt?.toDate) {
+        return l.expiresAt.toDate() > now;
+      }
+      return true;
+    });
+
     if (species) {
       const speciesLower = species.toLowerCase();
       listings = listings.filter(l => l.species.includes(speciesLower));
@@ -140,12 +148,12 @@ app.get('/api/listings', async (req, res) => {
     if (lat && lng && radius) {
       const centerLat = parseFloat(lat);
       const centerLng = parseFloat(lng);
-      const radiusKm = parseFloat(radius) * 1.60934; // miles to km
+      const radiusKm = parseFloat(radius) * 1.60934;
 
       listings = listings.filter(l => {
         if (!l.location?.latitude || !l.location?.longitude) return false;
         const dist = calculateDistance(centerLat, centerLng, l.location.latitude, l.location.longitude);
-        l.distance = dist / 1.60934; // store in miles
+        l.distance = dist / 1.60934;
         return dist <= radiusKm;
       }).sort((a, b) => a.distance - b.distance);
     }

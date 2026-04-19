@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ImpactBarChart from '../components/ImpactBarChart'
 import ImpactLineChart from '../components/ImpactLineChart'
+import { AnimatedNumber } from '../components/AnimatedNumber'
 
 const ACCORDION_ITEMS = [
   {
@@ -36,12 +37,20 @@ export default function Impact() {
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-white/20 pt-12">
               {[
-                { value: '184,200 lb', label: 'Rescued Surplus', color: 'text-primary-fixed' },
-                { value: '92 Tons', label: 'CO2 emissions avoided', color: 'text-secondary-fixed' },
-                { value: '$420,000', label: 'Direct Fisher Revenue', color: 'text-tertiary-fixed' },
+                { value: 184200, suffix: ' lb', label: 'Rescued Surplus', color: 'text-primary-fixed' },
+                { value: 92, suffix: ' Tons', label: 'CO2 emissions avoided', color: 'text-secondary-fixed' },
+                { value: 420000, prefix: '$', suffix: '', label: 'Direct Fisher Revenue', color: 'text-tertiary-fixed' },
               ].map(s => (
                 <div key={s.label}>
-                  <div className={`text-5xl font-black mb-2 ${s.color}`}>{s.value}</div>
+                  <div className={`text-5xl font-black mb-2 ${s.color}`}>
+                    <AnimatedNumber
+                      value={s.value}
+                      suffix={s.suffix}
+                      prefix={s.prefix}
+                      separator=","
+                      duration={2.5}
+                    />
+                  </div>
                   <div className="text-sm font-bold uppercase tracking-[0.2em] text-slate-300">{s.label}</div>
                 </div>
               ))}
@@ -78,19 +87,19 @@ export default function Impact() {
                   icon: 'eco', iconBg: 'bg-primary/10', iconColor: 'text-primary',
                   title: 'Ocean Conservation',
                   desc: 'By redirecting surplus catch before it hits landfills, we maintain the delicate nitrogen balance of coastal shelf ecosystems.',
-                  metric: '82%', metricLabel: 'Efficiency Increase', metricColor: 'text-primary',
+                  metric: 82, suffix: '%', metricLabel: 'Efficiency Increase', metricColor: 'text-primary',
                 },
                 {
                   icon: 'distance', iconBg: 'bg-secondary/10', iconColor: 'text-secondary',
                   title: 'Logistics Precision',
                   desc: 'Our routing algorithms eliminate cold-chain gaps, reducing the average transport distance by 314 miles per shipment.',
-                  metric: '314mi', metricLabel: 'Avg. Saved per Haul', metricColor: 'text-secondary',
+                  metric: 314, suffix: 'mi', metricLabel: 'Avg. Saved per Haul', metricColor: 'text-secondary',
                 },
                 {
                   icon: 'payments', iconBg: 'bg-tertiary/10', iconColor: 'text-tertiary',
                   title: 'Community Capital',
                   desc: 'Profit redirection back to independent fishers, ensuring the survival of heritage fishing fleets across New England.',
-                  metric: '+14%', metricLabel: 'Net Margin Increase', metricColor: 'text-tertiary',
+                  metric: 14, prefix: '+', suffix: '%', metricLabel: 'Net Margin Increase', metricColor: 'text-tertiary',
                 },
               ].map(card => (
                 <div key={card.title} className="bg-surface-container-low p-10 rounded-2xl flex flex-col justify-between h-full border border-outline-variant/30">
@@ -102,7 +111,14 @@ export default function Impact() {
                     <p className="text-on-surface-variant leading-relaxed">{card.desc}</p>
                   </div>
                   <div className="mt-8 pt-6 border-t border-outline-variant/30">
-                    <span className={`text-3xl font-black ${card.metricColor}`}>{card.metric}</span>
+                    <span className={`text-3xl font-black ${card.metricColor}`}>
+                      <AnimatedNumber
+                        value={card.metric}
+                        prefix={card.prefix}
+                        suffix={card.suffix}
+                        duration={2}
+                      />
+                    </span>
                     <span className="text-sm font-bold text-outline block mt-1">{card.metricLabel}</span>
                   </div>
                 </div>

@@ -1,4 +1,5 @@
 import { httpsCallable, getFunctions } from 'firebase/functions'
+import { getAuth } from 'firebase/auth'
 
 export interface CreateListingRequest {
   species: string
@@ -25,11 +26,21 @@ const functions = getFunctions()
 export async function createListing(
   data: CreateListingRequest
 ): Promise<{ success: boolean; listingId: string }> {
-  const createListingCallable = httpsCallable<CreateListingRequest, { success: boolean; listingId: string }>(
+  const auth = getAuth()
+  const user = auth.currentUser
+  
+  if (!user) {
+    throw new Error('Must be authenticated to create listing')
+  }
+  
+  const createListingCallable = httpsCallable<CreateListingRequest & { sellerId: string }, { success: boolean; listingId: string }>(
     functions,
     'createListing'
   )
 
-  const result = await createListingCallable(data)
+  const result = await createListingCallable({
+    ...data,
+    sellerId: user.uid
+  })
   return result.data
 }

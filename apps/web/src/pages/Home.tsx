@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import OceanCanvas from '../components/OceanCanvas'
 import { PexelsImage } from '../components/PexelsImage'
 import { usePexelsBatch, usePexels } from '../hooks/usePexels'
+import { AnimatedNumber } from '../components/AnimatedNumber'
 
 const WHY_CARDS = [
   { icon: 'set_meal', bg: '#0077B6', textClass: 'text-white', title: 'Rescue the catch', desc: 'List bycatch and unsold hauls in seconds. Move surplus before it spoils.' },
@@ -95,12 +96,14 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-white/20">
             {[
-              { value: '18k+', label: 'LBS RESCUED' },
-              { value: '240t', label: 'CO₂ SAVED' },
-              { value: '120+', label: 'COASTAL PARTNERS' },
+              { value: 18, suffix: 'k+', label: 'LBS RESCUED' },
+              { value: 240, suffix: 't', label: 'CO₂ SAVED' },
+              { value: 120, suffix: '+', label: 'COASTAL PARTNERS' },
             ].map(s => (
               <div key={s.label} className="flex flex-col">
-                <span className="italic-accent-caveat text-5xl text-sunset-yellow">{s.value}</span>
+                <span className="italic-accent-caveat text-5xl text-sunset-yellow">
+                  <AnimatedNumber value={s.value} suffix={s.suffix} duration={2} />
+                </span>
                 <span className="text-xs font-bold uppercase tracking-widest text-white/60">{s.label}</span>
               </div>
             ))}
@@ -109,8 +112,8 @@ export default function Home() {
       </section>
 
       {/* ── Why Finventory ── */}
-      <section className="py-24 bg-[#FAF9F6]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
+      <section className="py-24 bg-surface">
+        <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 text-center">
           <span className="italic-accent-caveat text-primary text-3xl mb-4 block">why finventory</span>
           <h2 className="text-5xl lg:text-6xl font-black text-on-background tracking-tight mb-6">
             A tide that lifts every boat
@@ -142,7 +145,7 @@ export default function Home() {
       </section>
 
       {/* ── For Suppliers / For Buyers ── */}
-      <section className="py-12 bg-[#FAF9F6]">
+      <section className="py-12 bg-surface">
         <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {[
@@ -201,8 +204,8 @@ export default function Home() {
       </section>
 
       {/* ── How it works ── */}
-      <section className="py-32 bg-[#FAF9F6]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="py-32 bg-surface">
+        <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div>
               <span className="italic-accent-caveat text-[#F4743B] text-3xl mb-4 block">how it works</span>
@@ -247,7 +250,7 @@ export default function Home() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="py-24 max-w-screen-2xl mx-auto px-6 lg:px-12">
         <div className="relative bg-gradient-to-br from-[#00ACC1] to-[#007C91] rounded-[3rem] p-12 lg:p-24 overflow-hidden shadow-2xl">
           <div className="absolute -right-20 -top-20 w-[400px] h-[400px] bg-white/10 rounded-full blur-3xl" />
           <div className="relative z-10 max-w-3xl">

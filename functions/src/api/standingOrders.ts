@@ -35,6 +35,9 @@ export interface CreateStandingOrderRequest {
  * Create a new standing order
  */
 export const createStandingOrder = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     const data = request.data as CreateStandingOrderRequest
 
@@ -108,6 +111,9 @@ export const createStandingOrder = onCall(
  * Update a standing order
  */
 export const updateStandingOrder = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError('unauthenticated', 'User must be authenticated')
@@ -156,6 +162,9 @@ export const updateStandingOrder = onCall(
  * Delete a standing order
  */
 export const deleteStandingOrder = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError('unauthenticated', 'User must be authenticated')
@@ -194,6 +203,9 @@ export const deleteStandingOrder = onCall(
  * Get user's standing orders
  */
 export const getMyStandingOrders = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError('unauthenticated', 'User must be authenticated')

@@ -40,6 +40,9 @@ export interface Order {
  * Create a new order
  */
 export const createOrder = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     const data = request.data as CreateOrderRequest
 
@@ -154,6 +157,9 @@ export const createOrder = onCall(
  * Confirm order pickup (QR code scan)
  */
 export const confirmPickup = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError('unauthenticated', 'User must be authenticated')
@@ -224,6 +230,9 @@ export const confirmPickup = onCall(
  * Cancel an order
  */
 export const cancelOrder = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError('unauthenticated', 'User must be authenticated')

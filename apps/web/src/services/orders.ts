@@ -1,6 +1,7 @@
 import { db } from '../firebase'
 import { collection, query, where, orderBy, onSnapshot, doc, getDoc, Timestamp } from 'firebase/firestore'
 import { httpsCallable, getFunctions } from 'firebase/functions'
+import { getAuth } from 'firebase/auth'
 
 export interface Order {
   id: string
@@ -36,6 +37,13 @@ export async function createOrder(
   deliveryOption: 'pickup' | 'delivery' = 'pickup',
   deliveryAddress?: { street: string; city: string; state: string; zipCode: string }
 ): Promise<{ success: boolean; orderId: string; pickupQRCode: string }> {
+  const auth = getAuth()
+  const user = auth.currentUser
+  
+  if (!user) {
+    throw new Error('Must be authenticated to create order')
+  }
+  
   const createOrderCallable = httpsCallable(functions, 'createOrder')
 
   const result = await createOrderCallable({
@@ -43,6 +51,7 @@ export async function createOrder(
     quantity,
     deliveryOption,
     deliveryAddress,
+    buyerId: user.uid
   })
 
   return result.data as { success: boolean; orderId: string; pickupQRCode: string }

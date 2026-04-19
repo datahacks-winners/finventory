@@ -48,6 +48,9 @@ export interface Listing {
  * Create a new listing
  */
 export const createListing = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     const data = request.data as CreateListingRequest
 
@@ -164,6 +167,9 @@ export const createListing = onCall(
  * Update a listing
  */
 export const updateListing = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError('unauthenticated', 'User must be authenticated')
@@ -225,6 +231,9 @@ export const updateListing = onCall(
  * Delete a listing
  */
 export const deleteListing = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
   async (request) => {
     if (!request.auth) {
       throw new HttpsError('unauthenticated', 'User must be authenticated')
