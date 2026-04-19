@@ -84,7 +84,7 @@ export default function SlopNavBot() {
       {/* Search Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-ocean-600 hover:bg-ocean-700 text-white rounded-full transition-colors"
+        className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/80 text-white rounded-full transition-colors"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -94,9 +94,9 @@ export default function SlopNavBot() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 max-w-[90vw] bg-surface-800 border border-surface-700 rounded-lg shadow-2xl z-50 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-96 max-w-[90vw] bg-surface border border-outline-variant rounded-lg shadow-2xl z-50 overflow-hidden">
           {/* Input Area */}
-          <div className="p-4 border-b border-surface-700">
+          <div className="p-4 border-b border-outline-variant">
             <form onSubmit={handleSearch} className="relative">
               <input
                 ref={inputRef}
@@ -104,12 +104,12 @@ export default function SlopNavBot() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="What are you looking for?"
-                className="w-full px-4 py-3 bg-surface-900 border border-surface-600 rounded-lg text-on-surface placeholder-surface-500 focus:outline-none focus:border-ocean-500"
+                className="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-lg text-on-surface placeholder:text-outline focus:outline-none focus:border-primary"
               />
               <button
                 type="submit"
                 disabled={loading || !query.trim()}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-ocean-600 hover:bg-ocean-700 disabled:bg-surface-600 text-white rounded-md transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-primary hover:bg-primary/80 disabled:bg-surface-container-high text-white rounded-md transition-colors"
               >
                 {loading ? (
                   <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">

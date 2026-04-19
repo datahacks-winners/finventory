@@ -1,5 +1,6 @@
 import { useState, FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const NAV_LINKS = [
   { to: '/marketplace', label: 'Marketplace' },
@@ -19,13 +20,19 @@ type Role = 'buyer' | 'supplier'
 
 export default function Auth() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { signIn, signUp, error: authError, loading: _authLoading } = useAuth()
   const [tab, setTab] = useState<Tab>('login')
   const [role, setRole] = useState<Role>('buyer')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [displayName, setDisplayName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  // Get redirect path from location state or default to /suppliers
+  const from = (location.state as { from?: string })?.from || '/suppliers'
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault()
@@ -33,9 +40,8 @@ export default function Auth() {
     setLoading(true)
 
     try {
-      // TODO: Integrate with Firebase Auth when config is available
-      console.log('Login:', email, password)
-      navigate('/suppliers')
+      await signIn(email, password)
+      navigate(from, { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
     } finally {
@@ -46,12 +52,24 @@ export default function Auth() {
   const handleSignup = async (e: FormEvent) => {
     e.preventDefault()
     setError(null)
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters')
+      return
+    }
+
     setLoading(true)
 
     try {
-      // TODO: Integrate with Firebase Auth when config is available
-      console.log('Signup:', email, password, displayName)
-      navigate('/suppliers')
+      await signUp(email, password, displayName)
+      navigate(from, { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed')
     } finally {
@@ -142,9 +160,9 @@ export default function Auth() {
               </div>
 
               <form className="space-y-5" onSubmit={handleLogin}>
-                {error && (
+                {(error || authError) && (
                   <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium text-center">
-                    {error}
+                    {error || authError}
                   </div>
                 )}
                 <div>
@@ -222,9 +240,9 @@ export default function Auth() {
               </div>
 
               <form className="space-y-5" onSubmit={handleSignup}>
-                {error && (
+                {(error || authError) && (
                   <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium text-center">
-                    {error}
+                    {error || authError}
                   </div>
                 )}
 
@@ -291,7 +309,14 @@ export default function Auth() {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Confirm</label>
-                    <input type="password" placeholder="••••••••" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 px-4 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="••••••••"
+                      required
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 px-4 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    />
                   </div>
                 </div>
                 <div className="pt-4">

@@ -156,12 +156,15 @@ async function generateAIResponse(query: string, listings: typeof MOCK_INVENTORY
         model: 'gemma-3-12b-it',
         messages: [
           {
-            role: 'system',
-            content: 'You are a helpful fish market assistant. Help buyers find what they need from the available inventory. Always cite specific listings using markdown links like [item description](url). Be concise but friendly.'
-          },
-          {
             role: 'user',
-            content: `Available inventory:\n${context}\n\nBuyer asks: ${query}\n\nRespond helpfully, citing relevant listings with [description](url) links. If nothing matches, say so clearly.`
+            content: `You are a helpful fish market assistant. Help buyers find what they need from the available inventory. Always cite specific listings using markdown links like [item description](url). Be concise but friendly.
+
+Available inventory:
+${context}
+
+Buyer asks: ${query}
+
+Respond helpfully, citing relevant listings with [description](url) links. If nothing matches, say so clearly.`
           }
         ],
         max_tokens: 500,

@@ -477,7 +477,7 @@ export default function Marketplace() {
 
         {/* Sidebar */}
         <aside className="flex flex-col h-full">
-          <div className="sticky top-28 z-40 bg-surface pb-6 flex flex-col gap-4">
+          <div className="sticky top-28 z-40 bg-surface py-6 flex flex-col gap-4">
             {/* Search */}
             <div className="relative group">
               <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">
