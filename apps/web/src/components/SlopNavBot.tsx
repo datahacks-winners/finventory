@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
-import { getFunctions, httpsCallable } from 'firebase/functions'
+import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions'
+import { getApp } from 'firebase/app'
 import ReactMarkdown from 'react-markdown'
 
 interface SearchResult {
@@ -50,7 +51,14 @@ export default function SlopNavBot() {
     setResult(null)
 
     try {
-      const functions = getFunctions()
+      const app = getApp()
+      const functions = getFunctions(app)
+      
+      // Use emulator in development
+      if (window.location.hostname === 'localhost') {
+        connectFunctionsEmulator(functions, 'localhost', 5001)
+      }
+      
       const ragSearch = httpsCallable(functions, 'ragSearch')
       const response = await ragSearch({ query: query.trim(), limit: 5 })
       setResult(response.data as SearchResult)

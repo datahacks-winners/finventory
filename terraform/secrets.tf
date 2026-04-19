@@ -107,6 +107,30 @@ resource "google_secret_manager_secret_version" "apple_team_id" {
   }
 }
 
+# Secret: Gemini AI Studio API key
+resource "google_secret_manager_secret" "gemini_api_key" {
+  secret_id = "gemini-api-key"
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+
+  labels = {
+    environment = "production"
+    service     = "ai"
+  }
+}
+
+resource "google_secret_manager_secret_version" "gemini_api_key" {
+  secret      = google_secret_manager_secret.gemini_api_key.id
+  secret_data = "AIzaSyCSUazUCkFmRyqZTPdVGDBTX0T8__DkC4s"
+
+  lifecycle {
+    ignore_changes = [secret_data]
+  }
+}
+
 # IAM: Cloud Functions access to secrets
 resource "google_secret_manager_secret_iam_member" "stripe_api_key_cf" {
   secret_id = google_secret_manager_secret.stripe_api_key.id
@@ -129,6 +153,12 @@ resource "google_secret_manager_secret_iam_member" "apple_secrets_cf" {
 # IAM: Cloud Run access to secrets
 resource "google_secret_manager_secret_iam_member" "stripe_api_key_cr" {
   secret_id = google_secret_manager_secret.stripe_api_key.id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.cloud_run_invoker.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "gemini_api_key_cr" {
+  secret_id = google_secret_manager_secret.gemini_api_key.id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${google_service_account.cloud_run_invoker.email}"
 }

@@ -3,6 +3,7 @@ import * as admin from 'firebase-admin'
 import { db, rtdb } from '../config.js'
 import { distanceInMiles } from '../utils/geohash.js'
 import { notifyStandingOrderMatch } from '../utils/notifications.js'
+import { indexListing } from '../gemini/ragSearch.js'
 import type { Listing } from '../api/listings.js'
 
 /**
@@ -23,6 +24,27 @@ export const onListingCreated = onDocumentCreated('listings/{listingId}', async 
     status: listing.status,
     lastUpdated: admin.database.ServerValue.TIMESTAMP
   })
+
+  // Index for vector search
+  try {
+    // Get seller name from user profile
+    const sellerDoc = await db.collection('users').doc(listing.sellerId).get()
+    const sellerName = sellerDoc.exists ? (sellerDoc.data()?.displayName || 'Unknown') : 'Unknown'
+
+    await indexListing(listingId, {
+      species: listing.species,
+      grade: listing.grade,
+      quantity: listing.quantity,
+      unit: listing.unit,
+      location: `${listing.location.latitude.toFixed(2)}, ${listing.location.longitude.toFixed(2)}`,
+      sellerName: sellerName,
+      price: listing.pricePerUnit,
+      url: `https://finventory.app/marketplace/${listingId}`
+    })
+    console.log(`Indexed listing ${listingId} for vector search`)
+  } catch (err) {
+    console.error(`Failed to index listing ${listingId}:`, err)
+  }
 
   // Find matching standing orders
   const matchingOrders = await findMatchingStandingOrders(listing)
