@@ -99,9 +99,9 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Configure Docker for GCR
+      - name: Configure Docker for Artifact Registry
         run: |
-          gcloud auth configure-docker gcr.io --quiet
+          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
 
       - name: Build and Push Web Image
         uses: docker/build-push-action@v5
@@ -109,8 +109,8 @@ jobs:
           context: ./apps/web
           push: true
           tags: |
-            gcr.io/${{ env.GCP_PROJECT_ID }}/web:${{ github.sha }}
-            gcr.io/${{ env.GCP_PROJECT_ID }}/web:latest
+            us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }}
+            us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -141,6 +141,6 @@ jobs:
         run: |
           echo "## Staging Deployment" >> $GITHUB_STEP_SUMMARY
           echo "- Functions built" >> $GITHUB_STEP_SUMMARY
-          echo "- Web image: gcr.io/${{ env.GCP_PROJECT_ID }}/web:${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Web image: us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- Terraform will deploy all changes" >> $GITHUB_STEP_SUMMARY
           echo "- URL: https://${{ env.GCP_PROJECT_ID }}-web.a.run.app" >> $GITHUB_STEP_SUMMARY
