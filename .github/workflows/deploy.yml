@@ -52,7 +52,7 @@ jobs:
       - name: Install and build functions
         run: |
           cd functions
-          npm ci
+          npm install
           npm run build
 
       - name: Install Firebase CLI
@@ -92,7 +92,7 @@ jobs:
       - name: Install and build functions
         run: |
           cd functions
-          npm ci
+          npm install
           npm run build
 
       - name: Install Firebase CLI
