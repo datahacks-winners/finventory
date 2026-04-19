@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import OceanCanvas from '../components/OceanCanvas'
+import { UnsplashImage } from '../components/UnsplashImage'
+import { useUnsplashBatch, useUnsplash } from '../hooks/useUnsplash'
 
 const WHY_CARDS = [
   { icon: 'set_meal', bg: '#0077B6', textClass: 'text-white', title: 'Rescue the catch', desc: 'List bycatch and unsold hauls in seconds. Move surplus before it spoils.' },
@@ -14,17 +16,45 @@ const HOW_STEPS = [
   { n: '4', title: 'Impact', desc: 'Every transaction logs lbs saved & CO₂ avoided to your dashboard.' },
 ]
 
+const FISH_QUERY_MAP: Record<string, string> = {
+  hero: 'fishing boat harbor sunset ocean',
+  dock: 'fishing dock pier boats harbor',
+  chef: 'chef preparing seafood kitchen',
+  market: 'fish market seafood display ice',
+}
+
 export default function Home() {
+  const { url: heroUrl, alt: heroAlt } = useUnsplash({
+    query: FISH_QUERY_MAP.hero,
+    quality: 'max',
+    fallbackQuery: 'hero',
+  })
+
+  const { images: cardImages } = useUnsplashBatch({
+    queries: [FISH_QUERY_MAP.dock, FISH_QUERY_MAP.chef],
+    quality: 'high',
+  })
+
+  const { url: fishDisplayUrl, alt: fishDisplayAlt } = useUnsplash({
+    query: FISH_QUERY_MAP.market,
+    quality: 'high',
+    fallbackQuery: 'market',
+  })
+
   return (
     <div className="bg-surface font-body text-on-surface">
       {/* ── Hero ── */}
       <section className="relative min-h-[921px] flex flex-col justify-center text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img
-            alt="California harbor at sunset"
-            className="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi-fsi92T1H_WYYT4E6mH96FqNDDGgRIF1a4omXMacnO9pYKHXUy57vEuugaDD86sjm_gxAAFNUg4nBbHHIu2aJNgqYN3aaCDuUbGZAYhHKAKYzcvAuBJk9FHFIdfPEyDwxKa0Lm3C5jDrr4JUlLcolbVdXyWsd_rrQIijTjqyZIPN9HfWZJaT1XuA6_bK9HC4LBE0OKhl8aIqUdlfoQKeiP5lWqH2GAkBcQQHarXN3EpAzpvhsJIXWcwUB-muSXuL9u5QwFN-0tI"
-          />
+          {heroUrl && (
+            <UnsplashImage
+              src={heroUrl}
+              alt={heroAlt || 'California harbor at sunset'}
+              className="w-full h-full"
+              quality="max"
+              lazy={false}
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
@@ -123,22 +153,29 @@ export default function Home() {
                 items: ['List a crate in under 60 seconds', 'Set your own price and pickup window', 'Get paid the day after pickup'],
                 cta: 'Open supplier portal',
                 to: '/suppliers',
-                img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC76gpFUr9abSlJnNkPRhpiYfCLN2F9CmxTdq5Rlz8WjVIo0rtJFYlJyR1TdhVMuZYcEZifIZ_C6NU5Y_JCvZcTpWehALYcBi6eUzCpVjYHnqHkxTN0mOwY9b0SQMfWFmllvnjBFMk4FZmsyYlxEWqYrOYwS94fm-WLhTg-qjhhWHBLF7pb1ohGWMO9TcKeqc_f0zMyr999sVqMegLIdLT1-bLYoBAaUjTw-OE1-YI8AS4tkgdL9TFaloj8muO3Ljt7uWVnQkJL-h8',
-                imgAlt: 'Fisherman on a boat',
+                img: cardImages[0]?.url,
+                imgAlt: cardImages[0]?.alt || 'Fisherman on a boat',
               },
               {
                 tag: 'FOR CHEFS & BUYERS',
                 title: "Source the day's freshest finds",
-                items: ['Browse a live map of nearby crates', 'Save 30–60% vs. wholesale prices', 'Build relationships with local boats'],
+                items: ['Browse a map of nearby crates', 'Save 30–60% vs. wholesale prices', 'Build relationships with local boats'],
                 cta: 'Open marketplace',
                 to: '/marketplace',
-                img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCVAQT8Can7rhbLiW1HqS5gOWKg4E-MA3umh4rAKw_H8Vo9K4qj75n_xYosKq2z6hKQQBmuUawrrLMyQSuckyFrN6P9AZlcMtahu0NWfodhp3WQYdCk0CPbfXr3D6FQgI98zR1xztrtpvUslDl6GsuOGzjPPnvg-8dcrtve3K-XESj1XwfRQOJMzTKRUyUmgGWP-SPpi6fYI6Uxb-7adxzgQwvBNw-tT6Q8cNhafCE5yaeqLwxkxD6tCIfNwkgbyjDXhRHtKxs5UYc',
-                imgAlt: 'Chef preparing fresh seafood',
+                img: cardImages[1]?.url,
+                imgAlt: cardImages[1]?.alt || 'Chef preparing fresh seafood',
               },
             ].map(card => (
               <div key={card.tag} className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-black/5 flex flex-col h-full">
                 <div className="h-[400px] relative overflow-hidden">
-                  <img alt={card.imgAlt} className="w-full h-full object-cover" src={card.img} />
+                  {card.img && (
+                    <UnsplashImage
+                      src={card.img}
+                      alt={card.imgAlt}
+                      className="w-full h-full"
+                      quality="high"
+                    />
+                  )}
                 </div>
                 <div className="p-10 lg:p-12 flex flex-col flex-grow">
                   <span className="text-sm font-bold uppercase tracking-widest text-[#F4743B] mb-4">{card.tag}</span>
@@ -191,11 +228,14 @@ export default function Home() {
 
             <div className="relative">
               <div className="rounded-[3rem] overflow-hidden shadow-2xl">
-                <img
-                  alt="Fresh fish display"
-                  className="w-full aspect-[4/3] object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9Oi58bzNvfddOcDOyHU1OHBIR-wgUQylOCCiPyhuEnoz9fDbUwegpGXauu8kZEkgXzecAVQiwTdt9gVeEVxM57uRiAQNxHMpDet9ht0szR2PpKz4WMt8TrDWF2XKlzGW3a8TnT11ymtydIS2tireoHSNHFuaKQM2uiUhfwUt4XlBwvHFvchnWYJJSw65CQK3WLK2Aotgym4i7upw127unF6Ac6OjCFx0ZK1Zw5tfVJimt9HTE5g4u3iQXW6Y98D4-PlIyzzuVQCg"
-                />
+                {fishDisplayUrl && (
+                  <UnsplashImage
+                    src={fishDisplayUrl}
+                    alt={fishDisplayAlt || 'Fresh fish display'}
+                    className="w-full aspect-[4/3]"
+                    quality="high"
+                  />
+                )}
               </div>
               <div className="absolute -bottom-10 -left-10 bg-white p-8 rounded-[2rem] shadow-2xl border border-black/5 max-w-[280px]">
                 <div className="bg-sky-100 text-primary w-10 h-10 rounded-lg flex items-center justify-center mb-6">
