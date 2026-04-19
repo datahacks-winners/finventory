@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SparklineChart from '../components/SparklineChart'
 import OceanCanvas from '../components/OceanCanvas'
+import PhotoAnalysis from '../components/PhotoAnalysis'
 import { useAuth } from '../context/AuthContext'
 import { createListing } from '../services/createListing'
 import { subscribeToSellerOrders, type Order } from '../services/orders'
@@ -84,6 +85,9 @@ export default function SupplierPortal() {
     }
   }, [user])
 
+  const [showPhotoAnalysis, setShowPhotoAnalysis] = useState(false)
+  const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState('')
+
   const handlePhotoUpload = () => {
     const input = fileInputRef.current
     if (!input) return
@@ -94,14 +98,35 @@ export default function SupplierPortal() {
       if (file) {
         const reader = new FileReader()
         reader.onload = (e) => {
+          const photoUrl = e.target?.result as string
           setFormData((prev) => ({
             ...prev,
-            photos: [e.target?.result as string],
+            photos: [photoUrl],
           }))
+          // Show AI analysis option for uploaded photos
+          setUploadedPhotoUrl(photoUrl)
+          setShowPhotoAnalysis(true)
         }
         reader.readAsDataURL(file)
       }
     }
+  }
+
+  const handleAnalysisComplete = (data: {
+    species: string
+    grade: 'sushi' | 'A' | 'B'
+    estimatedWeight: { value: number; unit: 'lb' | 'kg' }
+    description: string
+    suggestedPrice: { min: number; max: number }
+  }) => {
+    setFormData((prev) => ({
+      ...prev,
+      species: data.species,
+      grade: data.grade,
+      weight: data.estimatedWeight.value.toString(),
+      price: ((data.suggestedPrice.min + data.suggestedPrice.max) / 2).toFixed(2),
+    }))
+    setShowPhotoAnalysis(false)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -338,7 +363,19 @@ export default function SupplierPortal() {
             </div>
 
             <div className="mt-8">
-              <label className="block text-xs font-bold text-outline uppercase tracking-widest mb-4">Photo</label>
+              <div className="flex items-center justify-between mb-4">
+                <label className="block text-xs font-bold text-outline uppercase tracking-widest">Photo</label>
+                {formData.photos.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPhotoAnalysis(!showPhotoAnalysis)}
+                    className="text-xs font-bold text-primary hover:text-primary-container flex items-center gap-1"
+                  >
+                    <span className="material-symbols-outlined text-sm">auto_awesome</span>
+                    {showPhotoAnalysis ? 'Hide AI Analysis' : 'Analyze with AI'}
+                  </button>
+                )}
+              </div>
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" />
               <div
                 onClick={handlePhotoUpload}
@@ -357,6 +394,16 @@ export default function SupplierPortal() {
                   </>
                 )}
               </div>
+
+              {showPhotoAnalysis && uploadedPhotoUrl && (
+                <div className="mt-6">
+                  <PhotoAnalysis
+                    photoUrl={uploadedPhotoUrl}
+                    onAnalysisComplete={handleAnalysisComplete}
+                    onCancel={() => setShowPhotoAnalysis(false)}
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end pt-6">

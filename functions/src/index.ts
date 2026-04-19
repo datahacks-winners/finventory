@@ -20,6 +20,7 @@ export {
 
 // Gemini AI Functions
 export { analyzeFishPhoto } from './gemini/analyzePhoto.js'
+export { ragSearch } from './gemini/ragSearch.js'
 
 // Firestore Triggers
 export {
