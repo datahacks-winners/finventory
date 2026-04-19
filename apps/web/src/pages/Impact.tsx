@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ImpactBarChart from '../components/ImpactBarChart'
+import TempBinsChart from '../components/TempBinsChart'
 import ImpactLineChart from '../components/ImpactLineChart'
 import { AnimatedNumber } from '../components/AnimatedNumber'
 import CalcofiInference from '../components/CalcofiInference'
@@ -59,17 +59,20 @@ export default function Impact() {
           </div>
         </section>
 
-        {/* ── D3 Charts ── */}
+        {/* ── Charts ── */}
         <section className="px-12 py-20 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="mb-10">
-              <span className="italic-accent-caveat text-primary text-2xl block mb-2">Monthly Metrics</span>
-              <h2 className="text-4xl font-black tracking-tight text-on-surface">Impact by the Numbers</h2>
+              <span className="italic-accent-caveat text-primary text-2xl block mb-2">CalCOFI Survey Data</span>
+              <h2 className="text-4xl font-black tracking-tight text-on-surface">Warming Oceans, Fewer Fish</h2>
+              <p className="text-on-surface-variant mt-4 max-w-2xl">
+                CalCOFI larval egg surveys show egg density declining sharply beyond 14°C. As the Pacific warms, spawning success falls — making every rescued pound of existing catch more critical than ever.
+              </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/20">
-                <p className="text-xs font-bold uppercase tracking-widest text-outline mb-4">Monthly Lbs Rescued</p>
-                <ImpactBarChart className="w-full" />
+                <p className="text-xs font-bold uppercase tracking-widest text-outline mb-4">Egg Density vs. Surface Temperature</p>
+                <TempBinsChart className="w-full" />
               </div>
               <div className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/20">
                 <p className="text-xs font-bold uppercase tracking-widest text-outline mb-4">CO₂ Tons & Revenue Trends</p>
