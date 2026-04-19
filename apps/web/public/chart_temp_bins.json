@@ -1,12 +1,11 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
-  "width": 1100,
-  "height": 350,
+  "width": "container",
+  "height": 400,
   "config": {
     "view": {
       "fill": "#f0ebe4",
-      "strokeWidth": 0,
-      "continuousWidth": "container"
+      "strokeWidth": 0
     },
     "axis": {
       "domainColor": "#1b2b3a",
