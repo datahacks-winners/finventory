@@ -24,17 +24,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [firebaseReady, setFirebaseReady] = useState(false)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
+    // Check if Firebase auth is properly initialized
+    if (!auth) {
+      console.warn('Firebase Auth not initialized - running in demo mode')
       setLoading(false)
-    })
-    return unsubscribe
+      setFirebaseReady(false)
+      return
+    }
+
+    try {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUser(user)
+        setLoading(false)
+        setFirebaseReady(true)
+      }, (err) => {
+        console.error('Auth state error:', err)
+        setError('Authentication service unavailable')
+        setLoading(false)
+      })
+      return unsubscribe
+    } catch (err) {
+      console.error('Failed to initialize auth:', err)
+      setError('Authentication service unavailable')
+      setLoading(false)
+      return
+    }
   }, [])
 
   const signIn = async (email: string, password: string) => {
     setError(null)
+    if (!auth || !firebaseReady) {
+      setError('Authentication service unavailable')
+      throw new Error('Firebase not initialized')
+    }
     try {
       await signInWithEmailAndPassword(auth, email, password)
     } catch (err) {
@@ -45,6 +70,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, displayName: string) => {
     setError(null)
+    if (!auth || !firebaseReady) {
+      setError('Authentication service unavailable')
+      throw new Error('Firebase not initialized')
+    }
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       await updateProfile(userCredential.user, { displayName })
@@ -56,6 +85,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     setError(null)
+    if (!auth || !firebaseReady) {
+      setError('Authentication service unavailable')
+      throw new Error('Firebase not initialized')
+    }
     try {
       await signOut(auth)
     } catch (err) {
