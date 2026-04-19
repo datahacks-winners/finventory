@@ -8,7 +8,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "test": "mocha --require ts-node/register tests/**/*.test.ts",
+    "test:watch": "mocha --require ts-node/register --watch --watch-files tests/**/*.test.ts"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -43,9 +45,15 @@
     "react-native-worklets": "0.5.1"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^3.0.2",
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
     "@types/react": "~19.1.0",
+    "chai": "^4.4.1",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.2",
     "typescript": "~5.9.2"
   },
   "private": true
