@@ -203,10 +203,10 @@ Respond helpfully, citing relevant listings with [description](url) links. If no
 
 export const ragSearch = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://finventory-web-593576627371.us-central1.run.app'],
+    cors: true,  // Allow all origins - super slop mode
     timeoutSeconds: 30,
     memory: '256MiB',
-    secrets: ['GEMINI_API_KEY']
+    secrets: ['gemini-api-key']
   },
   async (request): Promise<RagSearchResult> => {
     const { query, limit = 5 } = request.data as RagSearchRequest

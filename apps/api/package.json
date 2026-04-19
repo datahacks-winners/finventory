@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "mocha test/**/*.test.js --timeout 30000",
+    "test:watch": "mocha test/**/*.test.js --timeout 30000 --watch",
+    "test:emulator": "firebase emulators:exec 'npm test' --only firestore,database,auth"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -15,7 +18,10 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "mocha": "^10.2.0",
+    "chai": "^5.1.0",
+    "supertest": "^6.3.4"
   },
   "engines": {
     "node": "20"

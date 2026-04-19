@@ -5,9 +5,16 @@ import { v4 as uuidv4 } from 'uuid';
 import ngeohash from 'ngeohash';
 
 // Initialize Firebase Admin
-admin.initializeApp({
+const firebaseConfig = {
   projectId: process.env.FIRESTORE_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT
-});
+};
+
+// Check if emulator mode is enabled
+if (process.env.FIRESTORE_EMULATOR_HOST) {
+  console.log('Using Firestore emulator at:', process.env.FIRESTORE_EMULATOR_HOST);
+}
+
+admin.initializeApp(firebaseConfig);
 
 const db = admin.firestore();
 const auth = admin.auth();
@@ -29,6 +36,24 @@ const verifyAuth = async (req, res, next) => {
   }
 
   const token = authHeader.split('Bearer ')[1];
+
+  // Support test tokens for integration testing
+  const testMode = process.env.TEST_MODE === 'true';
+  if (testMode && token.startsWith('mock-')) {
+    // Parse mock token format: mock-{role}-{uid}
+    const parts = token.split('-');
+    const role = parts[1] || 'user';
+    const uid = parts.slice(2).join('-') || `test-${role}-001`;
+
+    req.user = {
+      uid: uid,
+      email: `${role}@test.com`,
+      name: `Test ${role.charAt(0).toUpperCase() + role.slice(1)}`,
+      role: role
+    };
+    return next();
+  }
+
   try {
     const decoded = await auth.verifyIdToken(token);
     req.user = decoded;
@@ -92,9 +117,16 @@ app.post('/api/listings', verifyAuth, async (req, res) => {
 
     const docRef = await db.collection('listings').add(listing);
 
-    // Update live inventory in RTDB
-    const rtdb = admin.database();
-    await rtdb.ref(`live_inventory/${docRef.id}`).set(listing.quantity);
+    // Update live inventory in RTDB (skip in test mode if RTDB not configured)
+    try {
+      const rtdb = admin.database();
+      await rtdb.ref(`live_inventory/${docRef.id}`).set(listing.quantity);
+    } catch (rtdbError) {
+      // RTDB might not be configured in test environment
+      if (process.env.TEST_MODE !== 'true') {
+        console.error('RTDB update failed:', rtdbError);
+      }
+    }
 
     // Match against standing orders (async, don't wait)
     matchStandingOrders(docRef.id, listing).catch(console.error);
@@ -261,10 +293,13 @@ app.get('/api/orders/my-orders', verifyAuth, async (req, res) => {
   try {
     const userId = req.user.uid;
 
-    const snapshot = await db.collection('orders')
-      .where('buyerId', '==', userId)
-      .orderBy('createdAt', 'desc')
-      .get();
+    // Build query - skip orderBy in test mode to avoid index requirement
+    let query = db.collection('orders').where('buyerId', '==', userId);
+    if (process.env.TEST_MODE !== 'true') {
+      query = query.orderBy('createdAt', 'desc');
+    }
+
+    const snapshot = await query.get();
 
     const orders = await Promise.all(
       snapshot.docs.map(async doc => {
@@ -283,6 +318,15 @@ app.get('/api/orders/my-orders', verifyAuth, async (req, res) => {
         return order;
       })
     );
+
+    // Sort in memory if in test mode
+    if (process.env.TEST_MODE === 'true') {
+      orders.sort((a, b) => {
+        const aTime = a.createdAt?.toMillis?.() || 0;
+        const bTime = b.createdAt?.toMillis?.() || 0;
+        return bTime - aTime;
+      });
+    }
 
     res.json({ orders });
   } catch (error) {

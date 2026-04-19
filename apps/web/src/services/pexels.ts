@@ -118,10 +118,18 @@ export const FISH_QUERIES = {
 export function getFallbackUrl(query: string): string {
   const fallbacks: Record<string, string> = {
     salmon: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
+    'pink salmon': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
     crab: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800',
+    'snow crab': 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800',
+    'dungeness crab': 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800',
+    'red rock crab': 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800',
     rockfish: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
     'vermillion rockfish': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
+    'california sheephead': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
+    sheephead: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
     tuna: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
+    'albacore tuna': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
+    'bluefin tuna': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
     lobster: 'https://images.unsplash.com/photo-1551248429-40975aa4de74?w=800',
     hero: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200',
     chef: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800',
@@ -140,7 +148,15 @@ export function getFallbackUrl(query: string): string {
     squid: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
     octopus: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
     'sea urchin': 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800',
+    geoduck: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800',
     uni: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800',
+    sablefish: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
+    cabezon: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
+    'petrale sole': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
+    sole: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
+    cod: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
+    snapper: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
+    trout: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
   }
   return fallbacks[query] || fallbacks.ocean
 }
