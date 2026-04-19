@@ -61,6 +61,7 @@ describe('data structures and utilities', () => {
     it('merges two objects', () => {
       const obj1 = { a: 1, b: 2 };
       const obj2 = { c: 3, d: 4 };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const merged = mergeObjects(obj1 as any, obj2 as any);
       expect(merged).to.deep.equal({ a: 1, b: 2, c: 3, d: 4 });
     });
@@ -244,7 +245,7 @@ describe('data structures and utilities', () => {
       expect(isPlainObject({ a: 1 } as object)).to.be.true;
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       expect(isPlainObject([1, 2] as object)).to.be.false;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/no-explicit-any
       expect(isPlainObject(null as any)).to.be.false;
     });
 
@@ -326,7 +327,9 @@ function mergeObjects<T>(obj1: T, obj2: T): T {
   return { ...obj1, ...obj2 };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function pickProperties<T extends Record<string, any>>(obj: T, keys: string[]): Partial<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any = {};
   keys.forEach(key => {
     if (key in obj) result[key] = obj[key];
@@ -336,10 +339,12 @@ function pickProperties<T extends Record<string, any>>(obj: T, keys: string[]): 
 
 function omitProperties<T>(obj: T, keys: string[]): Partial<T> {
   const result = { ...obj };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   keys.forEach(key => delete (result as any)[key]);
   return result;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getNestedProperty(obj: any, path: string): any {
   return path.split('.').reduce((current, prop) => current?.[prop], obj);
 }
@@ -411,10 +416,12 @@ function partition<T>(arr: T[], predicate: (item: T) => boolean): [T[], T[]] {
   return [arr.filter(predicate), arr.filter(item => !predicate(item))];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isDefined(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isEmpty(value: any): boolean {
   if (Array.isArray(value)) return value.length === 0;
   if (typeof value === 'object') return Object.keys(value).length === 0;
@@ -434,18 +441,22 @@ function any<T>(arr: T[], predicate: (item: T) => boolean): boolean {
   return arr.some(predicate);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isArray(value: any): boolean {
   return Array.isArray(value);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isPlainObject(value: any): boolean {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isNumber(value: any): boolean {
   return typeof value === 'number' && !isNaN(value);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isString(value: any): boolean {
   return typeof value === 'string';
 }

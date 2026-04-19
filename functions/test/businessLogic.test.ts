@@ -263,14 +263,17 @@ function getFrequencyInterval(frequency: string): number {
   return (intervals[frequency] || 1) * 24 * 60 * 60 * 1000;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function filterBySpecies(listings: any[], species: string): any[] {
   return listings.filter(l => l.species === species);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function filterByGrade(listings: any[], grade: string): any[] {
   return listings.filter(l => l.grade === grade);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function filterByPriceRange(listings: any[], min: number, max: number): any[] {
   return listings.filter(l => l.price >= min && l.price <= max);
 }
@@ -283,6 +286,7 @@ function milesToDegrees(miles: number): number {
   return miles / 69.0;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function calculateBoundingBox(lat: number, lng: number, radiusMiles: number): any {
   const degrees = milesToDegrees(radiusMiles);
   return {

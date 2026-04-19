@@ -273,26 +273,28 @@ class InventoryManager {
 }
 
 class AuditLogger {
-  private logs: Array<{ userId: string; resourceId: string; action: string; timestamp: Date; data?: any }> = [];
+  private logs: Array<{ userId: string; resourceId: string; action: string; timestamp: Date; data?: unknown }> = [];
 
   logAccess(userId: string, resourceId: string, action: string): void {
     this.logs.push({ userId, resourceId, action, timestamp: new Date() });
   }
 
-  logModification(userId: string, resourceId: string, action: string, data: any): void {
+  logModification(userId: string, resourceId: string, action: string, data: unknown): void {
     this.logs.push({ userId, resourceId, action, timestamp: new Date(), data });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getLogsForUser(userId: string): any[] {
     return this.logs.filter(l => l.userId === userId);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getLogsForResource(resourceId: string): any[] {
     return this.logs.filter(l => l.resourceId === resourceId);
   }
 }
 
-function isAuthenticated(auth: any): boolean {
+function isAuthenticated(auth: unknown): boolean {
   return auth !== undefined && auth !== null;
 }
 
@@ -328,10 +330,12 @@ function isValidZipCode(zip: string): boolean {
   return /^\d{5}$/.test(zip);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function canCreateListing(user: any): boolean {
   return user.role === 'seller' || user.role === 'admin';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function canCreateOrder(user: any): boolean {
   return user.role === 'buyer' || user.role === 'admin';
 }
@@ -340,6 +344,7 @@ function canBuyFromSeller(buyerId: string, sellerId: string): boolean {
   return buyerId !== sellerId;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function sanitizeForLogging(data: any): any {
   const sanitized = { ...data };
   if (sanitized.password) delete sanitized.password;

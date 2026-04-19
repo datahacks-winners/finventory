@@ -49,7 +49,7 @@ interface StandingOrderMatch {
   buyerId: string
 }
 
-async function findMatchingStandingOrders(listing: any): Promise<StandingOrderMatch[]> {
+async function findMatchingStandingOrders(listing: Listing): Promise<StandingOrderMatch[]> {
   // Get all active standing orders
   const snapshot = await db
     .collection('standingOrders')

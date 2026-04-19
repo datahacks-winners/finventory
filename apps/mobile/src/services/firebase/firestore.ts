@@ -13,8 +13,8 @@ export class FirestoreService {
       email: profile.email || '',
       photoURL: profile.photoURL,
       phone: profile.phone,
-      createdAt: firestore.FieldValue.serverTimestamp() as any,
-      updatedAt: firestore.FieldValue.serverTimestamp() as any,
+      createdAt: firestore.FieldValue.serverTimestamp() as FirebaseFirestore.Timestamp,
+      updatedAt: firestore.FieldValue.serverTimestamp() as FirebaseFirestore.Timestamp,
       providers: profile.providers || [],
       isAnonymous: profile.isAnonymous || false,
       notificationPreferences: {
@@ -57,7 +57,7 @@ export class FirestoreService {
       .delete();
   }
 
-  static async getFavorites(userId: string): Promise<any[]> {
+  static async getFavorites(userId: string): Promise<Array<{id: string; listingRef: FirebaseFirestore.DocumentReference; createdAt: FirebaseFirestore.Timestamp}>> {
     const snapshot = await firestore()
       .collection('users')
       .doc(userId)
@@ -73,7 +73,7 @@ export class FirestoreService {
 
   static listenToUserMessages(
     userId: string,
-    callback: (messages: any[]) => void
+    callback: (messages: Array<{id: string} & FirebaseFirestore.DocumentData>) => void
   ): () => void {
     return firestore()
       .collection('messages')

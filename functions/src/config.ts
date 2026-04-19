@@ -6,7 +6,7 @@ import admin from 'firebase-admin'
 try {
   if (!admin.apps || !admin.apps.length) {
     const databaseUrl = process.env.FIREBASE_DATABASE_URL || 'https://finventory-default-rtdb.firebaseio.com'
-    const config: any = {
+    const config: admin.AppOptions = {
       credential: admin.credential.applicationDefault(),
       databaseURL: databaseUrl
     }

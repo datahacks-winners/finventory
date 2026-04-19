@@ -3,6 +3,7 @@ import admin from 'firebase-admin';
 import { setupTestEnv, cleanupTestEnv, clearFirestore, getAdminFirestore } from './helper.js';
 
 describe('createListing integration', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let testEnv: any;
   let adminFirestore: admin.firestore.Firestore;
 

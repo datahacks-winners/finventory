@@ -80,7 +80,19 @@ export const matchStandingOrders = onSchedule(
   }
 )
 
-function checkMatch(listing: any, order: any): boolean {
+interface StandingOrder {
+  species: string[]
+  minGrade: string
+  maxPricePerUnit?: number
+  location: {
+    latitude: number
+    longitude: number
+  }
+  maxDistance: number
+  lastMatchedAt?: admin.firestore.Timestamp
+}
+
+function checkMatch(listing: Listing, order: StandingOrder): boolean {
   // Check species match
   const speciesMatch = order.species.includes('*') || order.species.includes(listing.species)
   if (!speciesMatch) return false
