@@ -16,7 +16,7 @@ const SPECIES_LIST = [
 ]
 
 const ITEMS_PER_PAGE = 12
-const _CART_STORAGE_KEY = 'finventory-cart'
+const CART_STORAGE_KEY = 'finventory-cart'
 
 interface CartItem {
   listing: ListingWithDistance
@@ -222,8 +222,6 @@ function ProductCard({
   )
 }
 
-const ITEMS_PER_PAGE = 12
-
 export default function Marketplace() {
   const [selectedGrades, setSelectedGrades] = useState<string[]>([])
   const [selectedSpecies, setSelectedSpecies] = useState<string[]>([])
@@ -233,6 +231,27 @@ export default function Marketplace() {
   const [cart, setCart] = useState<CartItem[]>([])
   const [showCart, setShowCart] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem(CART_STORAGE_KEY)
+    if (savedCart) {
+      try {
+        setCart(JSON.parse(savedCart))
+      } catch {
+        localStorage.removeItem(CART_STORAGE_KEY)
+      }
+    }
+  }, [])
+
+  // Persist cart to localStorage when it changes
+  useEffect(() => {
+    if (cart.length > 0) {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart))
+    } else {
+      localStorage.removeItem(CART_STORAGE_KEY)
+    }
+  }, [cart])
 
   const filters = useMemo(() => ({
     species: selectedSpecies,
@@ -296,7 +315,7 @@ export default function Marketplace() {
             : item
         )
       }
-      return [...prev, { listing, weight }]
+      return [...prev, { listing, weight, deliveryOption: 'pickup' as const }]
     })
   }
 
