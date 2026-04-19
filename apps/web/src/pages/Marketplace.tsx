@@ -16,7 +16,7 @@ const SPECIES_LIST = [
 ]
 
 const ITEMS_PER_PAGE = 12
-const CART_STORAGE_KEY = 'finventory-cart'
+const _CART_STORAGE_KEY = 'finventory-cart'
 
 interface CartItem {
   listing: ListingWithDistance
@@ -234,12 +234,12 @@ export default function Marketplace() {
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem(CART_STORAGE_KEY)
+    const savedCart = localStorage.getItem(_CART_STORAGE_KEY)
     if (savedCart) {
       try {
         setCart(JSON.parse(savedCart))
       } catch {
-        localStorage.removeItem(CART_STORAGE_KEY)
+        localStorage.removeItem(_CART_STORAGE_KEY)
       }
     }
   }, [])
@@ -247,9 +247,9 @@ export default function Marketplace() {
   // Persist cart to localStorage when it changes
   useEffect(() => {
     if (cart.length > 0) {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart))
+      localStorage.setItem(_CART_STORAGE_KEY, JSON.stringify(cart))
     } else {
-      localStorage.removeItem(CART_STORAGE_KEY)
+      localStorage.removeItem(_CART_STORAGE_KEY)
     }
   }, [cart])
 

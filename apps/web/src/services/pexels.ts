@@ -117,46 +117,191 @@ export const FISH_QUERIES = {
 
 export function getFallbackUrl(query: string): string {
   const fallbacks: Record<string, string> = {
-    salmon: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    'pink salmon': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    crab: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800',
-    'snow crab': 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800',
-    'dungeness crab': 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800',
-    'red rock crab': 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800',
-    rockfish: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    'vermillion rockfish': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    'california sheephead': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    sheephead: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    tuna: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    'albacore tuna': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    'bluefin tuna': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    lobster: 'https://images.unsplash.com/photo-1551248429-40975aa4de74?w=800',
-    hero: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200',
-    chef: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800',
-    market: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800',
-    ocean: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200',
-    dock: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    shrimp: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800',
-    oyster: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800',
-    bass: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    'striped bass': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    'leopard shark': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    halibut: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    sardine: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    anchovy: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    mackerel: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    squid: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    octopus: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    'sea urchin': 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800',
-    geoduck: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800',
-    uni: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800',
-    sablefish: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    cabezon: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    'petrale sole': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    sole: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    cod: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    snapper: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
-    trout: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
+    // ═══════════════════════════════════════════════════════════════
+    // SALMON - Fresh whole salmon on ice
+    // ═══════════════════════════════════════════════════════════════
+    salmon: 'https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=800&auto=format&fit=crop&q=80',
+    'pink salmon': 'https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=800&auto=format&fit=crop&q=80',
+    'chinook salmon': 'https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=800&auto=format&fit=crop&q=80',
+    'coho salmon': 'https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // TUNA - Fresh bluefin tuna steaks and whole fish
+    // ═══════════════════════════════════════════════════════════════
+    tuna: 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
+    'albacore tuna': 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
+    'bluefin tuna': 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800&auto=format&fit=crop&q=80',
+    'yellowfin tuna': 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // CRAB - Dungeness and other crabs
+    // ═══════════════════════════════════════════════════════════════
+    crab: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+    'dungeness crab': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+    'red rock crab': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+    'snow crab': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+    'king crab': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // LOBSTER - Fresh Maine/California lobster
+    // ═══════════════════════════════════════════════════════════════
+    lobster: 'https://images.unsplash.com/photo-1551248429-40975aa4de74?w=800&auto=format&fit=crop&q=80',
+    'spiny lobster': 'https://images.unsplash.com/photo-1551248429-40975aa4de74?w=800&auto=format&fit=crop&q=80',
+    'maine lobster': 'https://images.unsplash.com/photo-1551248429-40975aa4de74?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // ROCKFISH - California rockfish species
+    // ═══════════════════════════════════════════════════════════════
+    rockfish: 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+    'vermillion rockfish': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+    'bocaccio rockfish': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+    'canary rockfish': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // SHEEPHEAD - California sheephead (wrasse family)
+    // ═══════════════════════════════════════════════════════════════
+    sheephead: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
+    'california sheephead': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // HALIBUT - Pacific halibut flatfish
+    // ═══════════════════════════════════════════════════════════════
+    halibut: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
+    'pacific halibut': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
+    'california halibut': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // SABLEFISH / BLACK COD - Deep water fish
+    // ═══════════════════════════════════════════════════════════════
+    sablefish: 'https://images.unsplash.com/photo-1606850780554-b55ea6863e85?w=800&auto=format&fit=crop&q=80',
+    'black cod': 'https://images.unsplash.com/photo-1606850780554-b55ea6863e85?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // SOLE / FLOUNDER - Flatfish species
+    // ═══════════════════════════════════════════════════════════════
+    sole: 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
+    'petrale sole': 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
+    'dover sole': 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
+    'english sole': 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
+    flounder: 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // COD - Pacific cod
+    // ═══════════════════════════════════════════════════════════════
+    cod: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    'pacific cod': 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    'atlantic cod': 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // SNAPPER - Red snapper and varieties
+    // ═══════════════════════════════════════════════════════════════
+    snapper: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
+    'red snapper': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // BASS - Striped bass and sea bass
+    // ═══════════════════════════════════════════════════════════════
+    bass: 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+    'striped bass': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+    'sea bass': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+    'chilean sea bass': 'https://images.unsplash.com/photo-1606850780554-b55ea6863e85?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // TROUT - Freshwater trout (sometimes anadromous)
+    // ═══════════════════════════════════════════════════════════════
+    trout: 'https://images.unsplash.com/photo-1599689018034-48f92d1c05f3?w=800&auto=format&fit=crop&q=80',
+    'steelhead trout': 'https://images.unsplash.com/photo-1599689018034-48f92d1c05f3?w=800&auto=format&fit=crop&q=80',
+    'rainbow trout': 'https://images.unsplash.com/photo-1599689018034-48f92d1c05f3?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // SHARKS
+    // ═══════════════════════════════════════════════════════════════
+    'leopard shark': 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=800&auto=format&fit=crop&q=80',
+    shark: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // SMALL PELAGICS - Sardines, anchovies, mackerel
+    // ═══════════════════════════════════════════════════════════════
+    sardine: 'https://images.unsplash.com/photo-1518649922019-557cc57c63a1?w=800&auto=format&fit=crop&q=80',
+    'pacific sardine': 'https://images.unsplash.com/photo-1518649922019-557cc57c63a1?w=800&auto=format&fit=crop&q=80',
+    anchovy: 'https://images.unsplash.com/photo-1518649922019-557cc57c63a1?w=800&auto=format&fit=crop&q=80',
+    mackerel: 'https://images.unsplash.com/photo-1534939561126-855b8675edd7?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // CEPHALOPODS - Squid and octopus
+    // ═══════════════════════════════════════════════════════════════
+    squid: 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+    'market squid': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+    'humboldt squid': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&auto=format&fit=crop&q=80',
+    octopus: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // CABEZON - California bottom fish
+    // ═══════════════════════════════════════════════════════════════
+    cabezon: 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // SHELLFISH - Shrimp, oysters, urchins
+    // ═══════════════════════════════════════════════════════════════
+    shrimp: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800&auto=format&fit=crop&q=80',
+    prawn: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800&auto=format&fit=crop&q=80',
+    oyster: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    'sea urchin': 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    uni: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    geoduck: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    clam: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    mussel: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // SCENES/CONTEXT - Hero images, fishing boats, markets
+    // ═══════════════════════════════════════════════════════════════
+    hero: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&fit=crop&q=80',
+    'fishing boat': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
+    'fishing harbor': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
+    ocean: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&auto=format&fit=crop&q=80',
+    dock: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
+    'fishing pier': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
+    chef: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&auto=format&fit=crop&q=80',
+    market: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    'fish market': 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
+    seafood: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800&auto=format&fit=crop&q=80',
   }
-  return fallbacks[query] || fallbacks.ocean
+
+  // Try direct lookup first
+  if (fallbacks[query]) {
+    return fallbacks[query]
+  }
+
+  // Try normalized version (lowercase, trimmed)
+  const normalized = query.toLowerCase().trim()
+  if (fallbacks[normalized]) {
+    return fallbacks[normalized]
+  }
+
+  // Try to match partial species names
+  if (normalized.includes('salmon')) return fallbacks.salmon
+  if (normalized.includes('tuna')) return fallbacks.tuna
+  if (normalized.includes('crab')) return fallbacks.crab
+  if (normalized.includes('lobster')) return fallbacks.lobster
+  if (normalized.includes('rockfish')) return fallbacks.rockfish
+  if (normalized.includes('sheephead')) return fallbacks.sheephead
+  if (normalized.includes('halibut')) return fallbacks.halibut
+  if (normalized.includes('sablefish') || normalized.includes('black cod')) return fallbacks.sablefish
+  if (normalized.includes('sole') || normalized.includes('flounder')) return fallbacks.sole
+  if (normalized.includes('cod')) return fallbacks.cod
+  if (normalized.includes('snapper')) return fallbacks.snapper
+  if (normalized.includes('bass')) return fallbacks.bass
+  if (normalized.includes('trout')) return fallbacks.trout
+  if (normalized.includes('shark')) return fallbacks.shark
+  if (normalized.includes('sardine')) return fallbacks.sardine
+  if (normalized.includes('anchovy')) return fallbacks.anchovy
+  if (normalized.includes('mackerel')) return fallbacks.mackerel
+  if (normalized.includes('squid')) return fallbacks.squid
+  if (normalized.includes('octopus')) return fallbacks.octopus
+  if (normalized.includes('shrimp') || normalized.includes('prawn')) return fallbacks.shrimp
+  if (normalized.includes('oyster')) return fallbacks.oyster
+  if (normalized.includes('urchin') || normalized.includes('uni')) return fallbacks.uni
+
+  // Default fallback - beautiful ocean scene
+  return fallbacks.ocean
 }

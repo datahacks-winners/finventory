@@ -253,7 +253,7 @@ function AIDemoSection() {
                   <div className={`absolute inset-0 transition-all duration-700 ${step === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
                     <div className="h-64 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-2xl flex items-center justify-center mb-4">
                       <img
-                        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&auto=format&fit=crop"
+                        src="https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=400&auto=format&fit=crop&q=80"
                         alt="Fresh salmon"
                         className="w-full h-full object-cover rounded-2xl"
                       />
@@ -270,7 +270,7 @@ function AIDemoSection() {
                   <div className={`absolute inset-0 transition-all duration-700 ${step === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
                     <div className="h-64 rounded-2xl overflow-hidden mb-4 relative">
                       <img
-                        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&auto=format&fit=crop"
+                        src="https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=400&auto=format&fit=crop&q=80"
                         alt="Analyzing"
                         className="w-full h-full object-cover"
                       />
@@ -296,7 +296,7 @@ function AIDemoSection() {
                   <div className={`absolute inset-0 transition-all duration-700 ${step === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
                     <div className="h-40 rounded-2xl overflow-hidden mb-4">
                       <img
-                        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&auto=format&fit=crop"
+                        src="https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=400&auto=format&fit=crop&q=80"
                         alt="Salmon"
                         className="w-full h-full object-cover"
                       />
@@ -335,7 +335,7 @@ function AIDemoSection() {
                       <div className="w-full bg-white rounded-xl p-4 shadow-lg">
                         <div className="flex gap-3">
                           <img
-                            src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=100&auto=format&fit=crop"
+                            src="https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=100&auto=format&fit=crop&q=80"
                             alt="Salmon"
                             className="w-16 h-16 rounded-lg object-cover"
                           />
