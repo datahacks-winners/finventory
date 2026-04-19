@@ -13,7 +13,7 @@ steps:
           --build-arg VITE_FIREBASE_MESSAGING_SENDER_ID="$$FIREBASE_MESSAGING_SENDER_ID" \
           --build-arg VITE_FIREBASE_APP_ID="$$FIREBASE_APP_ID" \
           --build-arg VITE_API_URL="${_API_URL}" \
-          -t us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:latest \
+          -t us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:chart-fix-21-bins-v2 \
           -f apps/web/Dockerfile \
           .
     dir: '.'
@@ -32,7 +32,7 @@ steps:
       - 'deploy'
       - 'web'
       - '--image'
-      - 'us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:latest'
+      - 'us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:chart-fix-21-bins-v2'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -57,7 +57,7 @@ availableSecrets:
       env: 'FIREBASE_APP_ID'
 
 images:
-  - 'us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:latest'
+  - 'us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:chart-fix-21-bins-v2'
 
 options:
   logging: CLOUD_LOGGING_ONLY
