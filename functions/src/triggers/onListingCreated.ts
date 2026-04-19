@@ -1,54 +1,78 @@
-import * as functions from 'firebase-functions'
+import { onDocumentCreated } from 'firebase-functions/v2/firestore'
 import * as admin from 'firebase-admin'
 import { db, rtdb } from '../config.js'
 import { distanceInMiles } from '../utils/geohash.js'
 import { notifyStandingOrderMatch } from '../utils/notifications.js'
+import { indexListing } from '../gemini/ragSearch.js'
+import type { Listing } from '../api/listings.js'
 
 /**
  * Triggered when a new listing is created
  * - Updates real-time inventory
  * - Finds matching standing orders and notifies buyers
  */
-export const onListingCreated = functions.firestore
-  .document('listings/{listingId}')
-  .onCreate(async (snap, context) => {
-    const listing = snap.data()!
-    const listingId = context.params.listingId
+export const onListingCreated = onDocumentCreated('listings/{listingId}', async (event) => {
+  const snap = event.data
+  if (!snap) return
 
-    // Update real-time inventory
-    await rtdb.ref(`live_inventory/${listingId}`).set({
-      count: listing.quantity,
-      status: listing.status,
-      lastUpdated: admin.database.ServerValue.TIMESTAMP
-    })
+  const listing = snap.data()! as Listing
+  const listingId = event.params.listingId
 
-    // Find matching standing orders
-    const matchingOrders = await findMatchingStandingOrders(listing)
-
-    // Notify matching buyers
-    for (const order of matchingOrders) {
-      await notifyStandingOrderMatch(
-        order.buyerId,
-        listingId,
-        listing.species,
-        listing.grade
-      )
-
-      // Update last matched timestamp
-      await db.collection('standingOrders').doc(order.id).update({
-        lastMatchedAt: admin.firestore.FieldValue.serverTimestamp()
-      })
-    }
-
-    console.log(`Processed new listing ${listingId}, found ${matchingOrders.length} matches`)
+  // Update real-time inventory
+  await rtdb().ref(`live_inventory/${listingId}`).set({
+    count: listing.quantity,
+    status: listing.status,
+    lastUpdated: admin.database.ServerValue.TIMESTAMP
   })
+
+  // Index for vector search
+  try {
+    // Get seller name from user profile
+    const sellerDoc = await db.collection('users').doc(listing.sellerId).get()
+    const sellerName = sellerDoc.exists ? (sellerDoc.data()?.displayName || 'Unknown') : 'Unknown'
+
+    await indexListing(listingId, {
+      species: listing.species,
+      grade: listing.grade,
+      quantity: listing.quantity,
+      unit: listing.unit,
+      location: `${listing.location.latitude.toFixed(2)}, ${listing.location.longitude.toFixed(2)}`,
+      sellerName: sellerName,
+      price: listing.pricePerUnit,
+      url: `https://finventory.app/marketplace/${listingId}`
+    })
+    console.log(`Indexed listing ${listingId} for vector search`)
+  } catch (err) {
+    console.error(`Failed to index listing ${listingId}:`, err)
+  }
+
+  // Find matching standing orders
+  const matchingOrders = await findMatchingStandingOrders(listing)
+
+  // Notify matching buyers
+  for (const order of matchingOrders) {
+    await notifyStandingOrderMatch(
+      order.buyerId,
+      listingId,
+      listing.species,
+      listing.grade
+    )
+
+    // Update last matched timestamp
+    await db.collection('standingOrders').doc(order.id).update({
+      lastMatchedAt: admin.firestore.FieldValue.serverTimestamp()
+    })
+  }
+
+  console.log(`Processed new listing ${listingId}, found ${matchingOrders.length} matches`)
+})
 
 interface StandingOrderMatch {
   id: string
   buyerId: string
 }
 
-async function findMatchingStandingOrders(listing: any): Promise<StandingOrderMatch[]> {
+async function findMatchingStandingOrders(listing: Listing): Promise<StandingOrderMatch[]> {
   // Get all active standing orders
   const snapshot = await db
     .collection('standingOrders')

@@ -14,7 +14,8 @@ export class AuthService {
 
   static async signInWithGoogle() {
     GoogleSignin.configure({
-      webClientId: '__YOUR_WEB_CLIENT_ID__',
+      webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '',
+      iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
     });
 
     await GoogleSignin.hasPlayServices();
@@ -42,7 +43,7 @@ export class AuthService {
     await auth().signOut();
   }
 
-  static async linkAnonymousAccount(provider: 'email' | 'google' | 'apple', credential?: any) {
+  static async linkAnonymousAccount(provider: 'email' | 'google' | 'apple', credential?: FirebaseAuthTypes.AuthCredential) {
     const user = auth().currentUser;
     if (!user || !user.isAnonymous) {
       throw new Error('No anonymous user to link');

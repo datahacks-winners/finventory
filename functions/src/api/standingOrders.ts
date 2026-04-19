@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+import { onCall, HttpsError } from 'firebase-functions/v2/https'
 import * as admin from 'firebase-admin'
 import { db } from '../config.js'
 import { encodeGeohash } from '../utils/geohash.js'
@@ -34,29 +34,34 @@ export interface CreateStandingOrderRequest {
 /**
  * Create a new standing order
  */
-export const createStandingOrder = functions.https.onCall(
-  async (data: CreateStandingOrderRequest, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
+export const createStandingOrder = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
+  async (request) => {
+    const data = request.data as CreateStandingOrderRequest
+
+    if (!request.auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Validate inputs
     if (!data.name || data.name.trim().length === 0) {
-      throw new functions.https.HttpsError('invalid-argument', 'Name is required')
+      throw new HttpsError('invalid-argument', 'Name is required')
     }
 
     if (!data.species || data.species.length === 0) {
-      throw new functions.https.HttpsError('invalid-argument', 'At least one species is required')
+      throw new HttpsError('invalid-argument', 'At least one species is required')
     }
 
     if (data.maxDistance <= 0) {
-      throw new functions.https.HttpsError('invalid-argument', 'Max distance must be positive')
+      throw new HttpsError('invalid-argument', 'Max distance must be positive')
     }
 
     if (data.maxPricePerUnit !== undefined && data.maxPricePerUnit <= 0) {
-      throw new functions.https.HttpsError('invalid-argument', 'Max price must be positive')
+      throw new HttpsError('invalid-argument', 'Max price must be positive')
     }
 
     // Validate coordinates
@@ -66,7 +71,7 @@ export const createStandingOrder = functions.https.onCall(
       data.longitude < -180 ||
       data.longitude > 180
     ) {
-      throw new functions.https.HttpsError('invalid-argument', 'Invalid coordinates')
+      throw new HttpsError('invalid-argument', 'Invalid coordinates')
     }
 
     // Normalize species to lowercase
@@ -97,7 +102,7 @@ export const createStandingOrder = functions.https.onCall(
       }
     } catch (error) {
       console.error('Error creating standing order:', error)
-      throw new functions.https.HttpsError('internal', 'Failed to create standing order')
+      throw new HttpsError('internal', 'Failed to create standing order')
     }
   }
 )
@@ -105,33 +110,37 @@ export const createStandingOrder = functions.https.onCall(
 /**
  * Update a standing order
  */
-export const updateStandingOrder = functions.https.onCall(
-  async (data: { standingOrderId: string; updates: Partial<StandingOrder> }, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
+export const updateStandingOrder = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated')
     }
 
+    const data = request.data as { standingOrderId: string; updates: Partial<StandingOrder> }
     const { standingOrderId, updates } = data
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Get standing order
     const soRef = db.collection('standingOrders').doc(standingOrderId)
     const soDoc = await soRef.get()
 
     if (!soDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Standing order not found')
+      throw new HttpsError('not-found', 'Standing order not found')
     }
 
     const so = soDoc.data()!
 
     // Verify ownership
     if (so.buyerId !== userId) {
-      throw new functions.https.HttpsError('permission-denied', 'Not your standing order')
+      throw new HttpsError('permission-denied', 'Not your standing order')
     }
 
     // Don't allow changing buyerId
     if (updates.buyerId !== undefined) {
-      throw new functions.https.HttpsError('invalid-argument', 'Cannot change buyer')
+      throw new HttpsError('invalid-argument', 'Cannot change buyer')
     }
 
     // Validate species if provided
@@ -144,7 +153,7 @@ export const updateStandingOrder = functions.https.onCall(
       return { success: true }
     } catch (error) {
       console.error('Error updating standing order:', error)
-      throw new functions.https.HttpsError('internal', 'Failed to update standing order')
+      throw new HttpsError('internal', 'Failed to update standing order')
     }
   }
 )
@@ -152,28 +161,32 @@ export const updateStandingOrder = functions.https.onCall(
 /**
  * Delete a standing order
  */
-export const deleteStandingOrder = functions.https.onCall(
-  async (data: { standingOrderId: string }, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
+export const deleteStandingOrder = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated')
     }
 
+    const data = request.data as { standingOrderId: string }
     const { standingOrderId } = data
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Get standing order
     const soRef = db.collection('standingOrders').doc(standingOrderId)
     const soDoc = await soRef.get()
 
     if (!soDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Standing order not found')
+      throw new HttpsError('not-found', 'Standing order not found')
     }
 
     const so = soDoc.data()!
 
     // Verify ownership
     if (so.buyerId !== userId) {
-      throw new functions.https.HttpsError('permission-denied', 'Not your standing order')
+      throw new HttpsError('permission-denied', 'Not your standing order')
     }
 
     try {
@@ -181,7 +194,7 @@ export const deleteStandingOrder = functions.https.onCall(
       return { success: true }
     } catch (error) {
       console.error('Error deleting standing order:', error)
-      throw new functions.https.HttpsError('internal', 'Failed to delete standing order')
+      throw new HttpsError('internal', 'Failed to delete standing order')
     }
   }
 )
@@ -189,13 +202,16 @@ export const deleteStandingOrder = functions.https.onCall(
 /**
  * Get user's standing orders
  */
-export const getMyStandingOrders = functions.https.onCall(
-  async (_data: unknown, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
+export const getMyStandingOrders = onCall(
+  {
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+  },
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     try {
       const snapshot = await db
@@ -213,7 +229,7 @@ export const getMyStandingOrders = functions.https.onCall(
       return { standingOrders }
     } catch (error) {
       console.error('Error getting standing orders:', error)
-      throw new functions.https.HttpsError('internal', 'Failed to get standing orders')
+      throw new HttpsError('internal', 'Failed to get standing orders')
     }
   }
 )

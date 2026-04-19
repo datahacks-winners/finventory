@@ -1,10 +1,8 @@
 const TEAM = [
-  { name: 'Elias Thorne', role: 'Founder & CEO', harbor: 'Portland, ME', fun: 'Once spent a month on a research vessel in the Arctic.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkGmjH2-4wpMMdthks0GokGMClhhiRrwIXcPKeYQbcDHFyFOGd0WMyv85L9owBtc3BRD7O2QjEBkXW6RGr8wE70UiS9g4u4EsPsRdQKau7Pt3DBFAEfRltPpeQjN3ZF8zwEaSTpJawNjcKKCi2IwJKOHF6XY4Nk_6dzfoA66vO2zB3xZh3sizwqEttodQW0bfE1M25AZOICO0PS2t3FbTYX0fuaJ03Sw3EYQfzuhfm3DcWaAPymo-9pDgow7OPNzko-wESaOZgNRM' },
-  { name: 'Sarah Chen', role: 'Operations Lead', harbor: 'Gloucester, MA', fun: 'Collects vintage sea charts from the 1800s.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDHuVL6s4Q1h9l-6ItBKwGNJHGfkRDoLSg-Eo1PDZWOuHiSzqb7jAXnVdaFp4De71XvxGsBKHaxg7skAwO0tDyBb_pW7rQBadW6CHIzAnPzuzyU1VOQszMHbq0kHOcP7G8XLDaQQkZyGtGf1YEP3oep-vx8PihbtpJFBPCAURCCFq7gXcdDwLSq_tXybkJ_9-RQkjMyiJLCtNDpcP-iwG9AqqAbvPbaWyeY-u3LQpaxlJYbVwGNfUj-HtiYdGbXLWcMfbOobZiY4Rs' },
-  { name: 'Marcus Bell', role: 'Head of Logistics', harbor: 'New Bedford, MA', fun: 'Champion oyster shucker (3rd place, 2021).', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBxVkuPfquor5dnyItHUeq81liGPthCLyPnMnDdn--OCVl1sgWzIjh5kB_FvyrW3h7o5iydbUa9LYl8TfuU9ROlQ-As3N3OzoBute1c1pywL2u7X1UhNGoojfn_Bj_6J6rV2IqqROlUGpXto4hcGeXXQep5ua_1M9_L_d1jIy17xZxryxquGM3w7v9_5GlOJUHuI5PuPRax3XwXq-TJLyDnGsiuOYFeOa6WCn_wQWGzHnUldi6rpxPNMIUCWdOzizZ4y33rQtU8adc' },
-  { name: 'Dr. Lena Voss', role: 'Sustainability Director', harbor: 'Woods Hole, MA', fun: 'Can identify any Atlantic fish by its scales.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCDyW7s5Gdjoebo4j58oR0uiulHf4NbPM9CzOwd7dzJTEDsF8qdXayh99AWbgj418eEw-X_SV7IKS5FRnQO3zrSWZrrHJbQcbbPmFOkHWuGZ7kBhC0iNv_wXuxr-cQeJdshy5guWf54j4Emr8NbDmcNTMklyP1-u0wQ1NSNkP4yXpnsM8TJXeotbJOls7yrxNEEWzK0clWuCwFWxijoQFIVRM4qFb4v61HW_WaOe61nnLv99NFX-sR6pRXqWbsWktO91CwYUkTk858' },
-  { name: 'Julian Rossi', role: 'CTO', harbor: 'Narragansett, RI', fun: 'Owns a restored 1974 wooden dory.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAIte7qL8CKAABHv5Y4bqdZ1AJ8g6eknabi61oZ9TnJ_V8NXhTPASVyqHYOU8TPvUaReZqfaGeAOqioWqN5A4JfJpOu-60xxvrwVL5ZMoo3oiS_23641OlU79_oK8NRH6IAaL0xpenYQIcJoybXrehuL4mkBEL4dI1v1rvw7y16QwFiftBp5mUvkTPFeqcVx48vOH3MU7hrNrpzZgCkMlNHdpIoe_vDy3Z739oEyRtmkpZaOkrp6EE0ajbR62j8mmjynvXPmNRJH8' },
-  { name: 'Clara Dun', role: 'Community Outreach', harbor: 'Rockport, MA', fun: 'Speaks three languages and knows maritime law.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBfOmsvAC6VbQRv4BsBiLRDWG56TPpZJnCjF9o5Q4zqDOQVaeyP1CHLDtaQ06g8fQpqUzGuM8-EQX_tsPFTiZg65ayvNIfz7vFb_gWUhM-STDQZ1csJwOfxkRNSwC_ndwzpvpirKmOCime_pkJRUmUP4bggPwynfCrQ7bFnQ5HCCpH2ZMeZWu-LvaIeEaZceWDRG1GN_oq1fWnaqXU2ecivyTChIwhVDEwZGPK8vwxuqr6Jljmr-YTrU8pc5DdRG4uTA8HreN7qcXU' },
+  { name: 'Justin Lo', role: 'Founder & CEO', harbor: 'Portland, ME', fun: 'Once spent a month on a research vessel in the Arctic.' },
+  { name: 'Mikey Nguyen', role: 'Operations Lead', harbor: 'Gloucester, MA', fun: 'Collects vintage sea charts from the 1800s.' },
+  { name: 'Govind Sriram', role: 'Head of Logistics', harbor: 'New Bedford, MA', fun: 'Champion oyster shucker (3rd place, 2021).' },
+  { name: 'Steven Ngo', role: 'Sustainability Director', harbor: 'Woods Hole, MA', fun: 'Can identify any Atlantic fish by its scales.' },
 ]
 
 const VALUES = [
@@ -126,18 +124,14 @@ export default function About() {
               <h2 className="text-5xl font-extrabold tracking-tighter mb-4">Meet the Crew</h2>
               <p className="text-on-surface-variant">The navigators behind the marketplace.</p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {TEAM.map(member => (
                 <div
                   key={member.name}
                   className="group relative bg-white p-8 rounded-lg text-center shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
                 >
                   <div className="relative w-32 h-32 mx-auto mb-6">
-                    <img
-                      className="w-full h-full object-cover rounded-full"
-                      alt={member.name}
-                      src={member.img}
-                    />
+                    <div className="w-full h-full rounded-full bg-primary-container" />
                     <div className="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full text-white p-4 text-xs font-medium">
                       "{member.fun}"
                     </div>

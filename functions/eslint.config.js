@@ -1,27 +1,51 @@
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import typescriptParser from "@typescript-eslint/parser";
+import tseslint from "typescript-eslint";
+import globals from "globals";
 
-export default [
+export default tseslint.config(
   {
-    ignores: ["node_modules/**", "lib/**", "dist/**", "*.config.js"],
+    ignores: ["node_modules/**", "lib/**", "dist/**", "coverage/**", "*.config.js", "jest.config.cjs"],
   },
+  tseslint.configs.recommended,
   {
-    files: ["**/*.ts"],
+    files: ["src/**/*.ts"],
     languageOptions: {
-      parser: typescriptParser,
+      parser: tseslint.parser,
       parserOptions: {
+        project: "./tsconfig.json",
         ecmaVersion: 2022,
         sourceType: "module",
       },
+      globals: {
+        ...globals.node,
+      },
     },
     plugins: {
-      "@typescript-eslint": typescriptEslint,
+      "@typescript-eslint": tseslint.plugin,
     },
     rules: {
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
       "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/prefer-nullish-coalescing": "off",
+      "@typescript-eslint/strict-boolean-expressions": "off",
       "no-console": "off",
-      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
-];
+  {
+    files: ["src/**/__tests__/**/*.ts", "src/**/*.test.ts", "src/**/*.spec.ts"],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: "./tsconfig.spec.json",
+        ecmaVersion: 2022,
+        sourceType: "module",
+      },
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  }
+);
