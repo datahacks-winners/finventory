@@ -50,7 +50,16 @@ Repeat for `production` environment, then add protection rules:
 5. Status checks: Select `test`
 6. Click "Create"
 
-## Step 5: Verify Workflow
+## Step 5: Create develop Branch
+
+The workflow requires a `develop` branch for staging deployments:
+
+```bash
+git checkout -b develop
+git push -u origin develop
+```
+
+## Step 6: Verify Workflow
 
 Push to `develop` branch to trigger staging deployment:
 
