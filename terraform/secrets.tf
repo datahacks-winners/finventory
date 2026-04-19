@@ -174,3 +174,192 @@ resource "google_secret_manager_secret_iam_member" "apple_secrets_cr" {
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${google_service_account.cloud_run_invoker.email}"
 }
+
+# Firebase Web Config Secrets (for Cloud Build)
+resource "google_secret_manager_secret" "firebase_api_key" {
+  secret_id = "firebase-api-key"
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+
+  labels = {
+    environment = "production"
+    service     = "firebase"
+    type        = "web-config"
+  }
+}
+
+resource "google_secret_manager_secret_version" "firebase_api_key" {
+  secret      = google_secret_manager_secret.firebase_api_key.id
+  secret_data = "placeholder-update-with-actual-firebase-api-key"
+
+  lifecycle {
+    ignore_changes = [secret_data]
+  }
+}
+
+resource "google_secret_manager_secret" "firebase_auth_domain" {
+  secret_id = "firebase-auth-domain"
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+
+  labels = {
+    environment = "production"
+    service     = "firebase"
+    type        = "web-config"
+  }
+}
+
+resource "google_secret_manager_secret_version" "firebase_auth_domain" {
+  secret      = google_secret_manager_secret.firebase_auth_domain.id
+  secret_data = "${var.project_id}.firebaseapp.com"
+
+  lifecycle {
+    ignore_changes = [secret_data]
+  }
+}
+
+resource "google_secret_manager_secret" "firebase_project_id" {
+  secret_id = "firebase-project-id"
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+
+  labels = {
+    environment = "production"
+    service     = "firebase"
+    type        = "web-config"
+  }
+}
+
+resource "google_secret_manager_secret_version" "firebase_project_id" {
+  secret      = google_secret_manager_secret.firebase_project_id.id
+  secret_data = var.project_id
+
+  lifecycle {
+    ignore_changes = [secret_data]
+  }
+}
+
+resource "google_secret_manager_secret" "firebase_storage_bucket" {
+  secret_id = "firebase-storage-bucket"
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+
+  labels = {
+    environment = "production"
+    service     = "firebase"
+    type        = "web-config"
+  }
+}
+
+resource "google_secret_manager_secret_version" "firebase_storage_bucket" {
+  secret      = google_secret_manager_secret.firebase_storage_bucket.id
+  secret_data = "${var.project_id}.appspot.com"
+
+  lifecycle {
+    ignore_changes = [secret_data]
+  }
+}
+
+resource "google_secret_manager_secret" "firebase_messaging_sender_id" {
+  secret_id = "firebase-messaging-sender-id"
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+
+  labels = {
+    environment = "production"
+    service     = "firebase"
+    type        = "web-config"
+  }
+}
+
+resource "google_secret_manager_secret_version" "firebase_messaging_sender_id" {
+  secret      = google_secret_manager_secret.firebase_messaging_sender_id.id
+  secret_data = "593576627371"  # Project number
+
+  lifecycle {
+    ignore_changes = [secret_data]
+  }
+}
+
+resource "google_secret_manager_secret" "firebase_app_id" {
+  secret_id = "firebase-app-id"
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+
+  labels = {
+    environment = "production"
+    service     = "firebase"
+    type        = "web-config"
+  }
+}
+
+resource "google_secret_manager_secret_version" "firebase_app_id" {
+  secret      = google_secret_manager_secret.firebase_app_id.id
+  secret_data = "placeholder-update-with-actual-app-id"
+
+  lifecycle {
+    ignore_changes = [secret_data]
+  }
+}
+
+resource "google_secret_manager_secret" "pexels_api_key" {
+  secret_id = "pexels-api-key"
+  project   = var.project_id
+
+  replication {
+    auto {}
+  }
+
+  labels = {
+    environment = "production"
+    service     = "images"
+  }
+}
+
+resource "google_secret_manager_secret_version" "pexels_api_key" {
+  secret      = google_secret_manager_secret.pexels_api_key.id
+  secret_data = "placeholder-update-with-actual-pexels-key"
+
+  lifecycle {
+    ignore_changes = [secret_data]
+  }
+}
+
+# IAM: Cloud Build access to Firebase web config secrets
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+resource "google_secret_manager_secret_iam_member" "firebase_config_cloudbuild" {
+  for_each = {
+    api_key               = google_secret_manager_secret.firebase_api_key.id
+    auth_domain           = google_secret_manager_secret.firebase_auth_domain.id
+    project_id            = google_secret_manager_secret.firebase_project_id.id
+    storage_bucket        = google_secret_manager_secret.firebase_storage_bucket.id
+    messaging_sender_id   = google_secret_manager_secret.firebase_messaging_sender_id.id
+    app_id                = google_secret_manager_secret.firebase_app_id.id
+    pexels_key            = google_secret_manager_secret.pexels_api_key.id
+  }
+
+  secret_id = each.value
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
