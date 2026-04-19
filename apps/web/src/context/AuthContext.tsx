@@ -26,6 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!auth) return
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
       setLoading(false)
@@ -34,6 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
+    if (!auth) throw new Error('Auth not initialized')
     setError(null)
     try {
       await signInWithEmailAndPassword(auth, email, password)
@@ -44,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signUp = async (email: string, password: string, displayName: string) => {
+    if (!auth) throw new Error('Auth not initialized')
     setError(null)
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
@@ -55,6 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const logout = async () => {
+    if (!auth) throw new Error('Auth not initialized')
     setError(null)
     try {
       await signOut(auth)
