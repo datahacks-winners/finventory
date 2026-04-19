@@ -158,19 +158,6 @@ resource "google_firestore_index" "users_buyer_id" {
   }
 }
 
-# IAM: Pub/Sub subscription access
-resource "google_pubsub_subscription_iam_member" "pubsub_invoker_subscription" {
-  subscription = google_pubsub_subscription.mobile_push.name
-  role         = "roles/pubsub.subscriber"
-  member       = "serviceAccount:${google_service_account.pubsub_invoker.email}"
-}
-
-resource "google_pubsub_subscription_iam_member" "pubsub_invoker_standing" {
-  subscription = google_pubsub_subscription.standing_order_matcher.name
-  role         = "roles/pubsub.subscriber"
-  member       = "serviceAccount:${google_service_account.pubsub_invoker.email}"
-}
-
 # IAM: Enable service account token creation
 resource "google_service_account_iam_member" "cloud_functions_token_creator" {
   service_account_id = google_service_account.cloud_functions.name
