@@ -93,15 +93,15 @@ resource "google_pubsub_schema" "order_update" {
 
 # Subscription: Mobile push notification service
 resource "google_pubsub_subscription" "mobile_push" {
-  name       = "mobile-push-subscription"
-  topic      = google_pubsub_topic.order_updates.name
+  name                 = "mobile-push-subscription"
+  topic                = google_pubsub_topic.order_updates.name
   ack_deadline_seconds = 600
 
   push_config {
-    push_endpoint = "${google_cloudfunctions2_function.send_push_notification.service_config[0].uri}/push"
+    push_endpoint = "${module.create_listing_function.uri}/push"
     oidc_token {
       service_account_email = google_service_account.pubsub_invoker.email
-      audience              = google_cloudfunctions2_function.send_push_notification.service_config[0].uri
+      audience              = module.create_listing_function.uri
     }
   }
 
@@ -119,10 +119,10 @@ resource "google_pubsub_subscription" "standing_order_matcher" {
   ack_deadline_seconds = 600
 
   push_config {
-    push_endpoint = "${google_cloudfunctions2_function.match_standing_orders.service_config[0].uri}/match"
+    push_endpoint = "${module.match_standing_orders_function.uri}/match"
     oidc_token {
       service_account_email = google_service_account.pubsub_invoker.email
-      audience              = google_cloudfunctions2_function.match_standing_orders.service_config[0].uri
+      audience              = module.match_standing_orders_function.uri
     }
   }
 

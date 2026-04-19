@@ -51,7 +51,7 @@ variable "min_instances" {
 
 variable "environment_variables" {
   description = "Environment variables"
-  type = map(string)
+  type        = map(string)
   default     = {}
 }
 
@@ -69,9 +69,9 @@ variable "source_object" {
 variable "event_triggers" {
   description = "Event triggers"
   type = list(object({
-    trigger     = string
+    trigger    = string
     event_type = string
-    resource    = string
+    resource   = string
   }))
   default = []
 }

@@ -7,7 +7,7 @@ output "firestore_database_id" {
 }
 
 output "functions_service_url" {
-  value = google_cloud_functions2_function.create_listing.service_config[0].uri
+  value = module.create_listing_function.uri
 }
 
 output "mobile_api_url" {

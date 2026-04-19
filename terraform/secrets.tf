@@ -16,7 +16,7 @@ resource "google_secret_manager_secret" "stripe_api_key" {
   project   = var.project_id
 
   replication {
-    automatic = true
+    auto {}
   }
 
   labels = {
@@ -41,7 +41,7 @@ resource "google_secret_manager_secret" "apple_key_id" {
   project   = var.project_id
 
   replication {
-    automatic = true
+    auto {}
   }
 
   labels = {
@@ -65,7 +65,7 @@ resource "google_secret_manager_secret" "apple_private_key" {
   project   = var.project_id
 
   replication {
-    automatic = true
+    auto {}
   }
 
   labels = {
@@ -89,7 +89,7 @@ resource "google_secret_manager_secret" "apple_team_id" {
   project   = var.project_id
 
   replication {
-    automatic = true
+    auto {}
   }
 
   labels = {

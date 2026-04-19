@@ -42,3 +42,8 @@ resource "google_project_service" "storage" {
   project = google_project.default.project_id
   service = "storage.googleapis.com"
 }
+
+resource "google_project_service" "compute" {
+  project = google_project.default.project_id
+  service = "compute.googleapis.com"
+}

@@ -26,8 +26,20 @@ variable "google_oauth_client_id" {
   sensitive   = true
 }
 
+variable "google_oauth_client_secret" {
+  description = "Google OAuth client secret"
+  type        = string
+  sensitive   = true
+}
+
 variable "apple_sign_in_client_id" {
   description = "Apple Sign In client ID"
+  type        = string
+  sensitive   = true
+}
+
+variable "apple_sign_in_client_secret" {
+  description = "Apple Sign In client secret"
   type        = string
   sensitive   = true
 }

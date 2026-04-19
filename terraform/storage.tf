@@ -3,9 +3,9 @@
 
 # Bucket: Listing photos (public read, authenticated write)
 resource "google_storage_bucket" "listing_photos" {
-  name          = "${var.project_id}-listing-photos"
-  location      = var.region
-  force_destroy = false
+  name                        = "${var.project_id}-listing-photos"
+  location                    = var.region
+  force_destroy               = false
   uniform_bucket_level_access = true
 
   website {
@@ -45,9 +45,9 @@ resource "google_storage_bucket" "listing_photos" {
 
 # Bucket: Sushi certificates (private, authenticated access)
 resource "google_storage_bucket" "certificates" {
-  name          = "${var.project_id}-certificates"
-  location      = var.region
-  force_destroy = false
+  name                        = "${var.project_id}-certificates"
+  location                    = var.region
+  force_destroy               = false
   uniform_bucket_level_access = true
 
   versioning {
@@ -66,9 +66,9 @@ resource "google_storage_bucket" "certificates" {
 
 # Bucket: Profile photos (public read, owner write)
 resource "google_storage_bucket" "profile_photos" {
-  name          = "${var.project_id}-profile-photos"
-  location      = var.region
-  force_destroy = false
+  name                        = "${var.project_id}-profile-photos"
+  location                    = var.region
+  force_destroy               = false
   uniform_bucket_level_access = true
 
   cors {
@@ -94,9 +94,9 @@ resource "google_storage_bucket" "profile_photos" {
 
 # Bucket: Application logs (centralized logging)
 resource "google_storage_bucket" "logs" {
-  name          = "${var.project_id}-logs"
-  location      = var.region
-  force_destroy = false
+  name                        = "${var.project_id}-logs"
+  location                    = var.region
+  force_destroy               = false
   uniform_bucket_level_access = true
 
   lifecycle_rule {

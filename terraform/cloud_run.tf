@@ -46,9 +46,9 @@ resource "google_cloud_run_v2_service" "mobile_api" {
       # Health checks
       startup_probe {
         initial_delay_seconds = 0
-        timeout_seconds      = 30
-        period_seconds       = 10
-        failure_threshold    = 3
+        timeout_seconds       = 30
+        period_seconds        = 10
+        failure_threshold     = 3
         http_get {
           path = "/health"
         }
@@ -62,10 +62,7 @@ resource "google_cloud_run_v2_service" "mobile_api" {
     }
 
     # Service account
-    service_account_name = google_service_account.cloud_run_invoker.email
-
-    # Timeout
-    timeout_seconds = 300
+    service_account = google_service_account.cloud_run_invoker.email
   }
 
   # Traffic configuration
@@ -135,7 +132,7 @@ resource "google_compute_backend_service" "cloud_run" {
   health_checks = [google_compute_health_check.cloud_run.id]
 
   backend {
-    group = google_compute_network_endpoint_group.cloud_run.id
+    group = google_compute_region_network_endpoint_group.cloud_run.id
   }
 
   depends_on = [
@@ -144,7 +141,7 @@ resource "google_compute_backend_service" "cloud_run" {
 }
 
 # Network endpoint group for Cloud Run
-resource "google_compute_network_endpoint_group" "cloud_run" {
+resource "google_compute_region_network_endpoint_group" "cloud_run" {
   name                  = "${var.project_id}-cloud-run-neg"
   project               = var.project_id
   network_endpoint_type = "SERVERLESS"
@@ -161,8 +158,8 @@ resource "google_compute_network_endpoint_group" "cloud_run" {
 
 # URL map for load balancer
 resource "google_compute_url_map" "main" {
-  name     = "${var.project_id}-url-map"
-  project  = var.project_id
+  name    = "${var.project_id}-url-map"
+  project = var.project_id
 
   default_service = google_compute_backend_service.cloud_run.id
 }
@@ -177,10 +174,10 @@ resource "google_compute_target_https_proxy" "main" {
 
 # Global forwarding rule (HTTPS)
 resource "google_compute_global_forwarding_rule" "https" {
-  name       = "${var.project_id}-https-forwarding-rule"
-  project    = var.project_id
-  target     = google_compute_target_https_proxy.main.id
-  port_range = "443"
+  name        = "${var.project_id}-https-forwarding-rule"
+  project     = var.project_id
+  target      = google_compute_target_https_proxy.main.id
+  port_range  = "443"
   ip_protocol = "TCP"
 
   load_balancing_scheme = "EXTERNAL"
@@ -198,9 +195,9 @@ resource "google_compute_global_address" "main" {
 output "dns_a_record_config" {
   description = "DNS A record configuration"
   value = {
-    type    = "A"
-    name    = var.domain_name
-    value   = google_compute_global_address.main.address
-    ttl     = 300
+    type  = "A"
+    name  = var.domain_name
+    value = google_compute_global_address.main.address
+    ttl   = 300
   }
 }
