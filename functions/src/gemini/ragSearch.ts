@@ -148,7 +148,7 @@ export const ragSearch = onCall(
 
         answer = `Found **${listings.length} listing${listings.length > 1 ? 's' : ''}** for "${query}" with ~${totalAvailable} lb total available:\n\n`
         answer += listings.map(l => {
-          const meta = l.metadata as Record<string, string>
+          const meta = l.metadata as Record<string, unknown>
           return `- **[${meta.species || 'Fish'} - ${meta.grade || 'Unknown'} grade](${l.url})**\n  ${meta.quantity || ''} from ${meta.seller || 'Unknown'} in ${meta.location || 'Unknown'}${meta.price ? ` at **$${meta.price}/lb**` : ''}`
         }).join('\n\n')
       }
