@@ -18,7 +18,7 @@ steps:
       - '--build-arg'
       - 'VITE_PEXELS_API_KEY=$${PEXELS_API_KEY}'
       - '--build-arg'
-      - 'VITE_API_URL=$${_API_URL}'
+      - 'VITE_API_URL=${_API_URL}'
       - '-t'
       - 'us-central1-docker.pkg.dev/finventory-1776558252/web-images/web:latest'
       - '.'
