@@ -1,720 +1,563 @@
-import { useState, useMemo, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { useListings } from '../hooks/useListings'
-import { PexelsImage } from '../components/PexelsImage'
 import { getFallbackUrl } from '../services/pexels'
 import type { ListingWithDistance } from '../services/listings'
-import { useAuth } from '../context/AuthContext'
 
 const GRADES = [
-  { value: 'sushi', label: 'Sushi', color: 'bg-blue-500', icon: 'restaurant' },
-  { value: 'A', label: 'Grade A', color: 'bg-emerald-500', icon: 'star' },
-  { value: 'B', label: 'Grade B', color: 'bg-amber-500', icon: 'check_circle' },
+  { value: 'sushi', label: 'Sushi', color: 'bg-blue-500', textColor: 'text-blue-600' },
+  { value: 'A', label: 'Grade A', color: 'bg-emerald-500', textColor: 'text-emerald-600' },
+  { value: 'B', label: 'Grade B', color: 'bg-amber-500', textColor: 'text-amber-600' },
 ]
 
-const SPECIES = ['Salmon', 'Tuna', 'Cod', 'Halibut', 'Crab', 'Lobster', 'Sardines', 'Mackerel']
+const SPECIES_LIST = [
+  'Salmon', 'Tuna', 'Cod', 'Halibut', 'Crab', 'Lobster', 
+  'Sardines', 'Mackerel', 'Shrimp', 'Snapper', 'Sea Bass', 'Trout'
+]
 
-const FEATURED_PIER = {
-  name: 'Bodega Bay Terminal',
-  activeBoats: 12,
-  cratesListed: 47,
-  avgPrice: '$8.50/lb',
+interface CartItem {
+  listing: ListingWithDistance
+  weight: number
 }
 
 function formatDistance(miles: number | undefined): string {
-  if (miles === undefined) return 'Unknown'
+  if (miles === undefined) return ''
   if (miles < 0.1) return '< 0.1 mi'
   return `${miles.toFixed(1)} mi`
 }
 
-function formatPickupTime(expiresAt: { toDate: () => Date }): string {
-  const expiry = expiresAt.toDate()
-  const now = new Date()
-  const hoursUntil = Math.floor((expiry.getTime() - now.getTime()) / (1000 * 60 * 60))
-
-  if (hoursUntil < 1) return 'Expires soon'
-  if (hoursUntil < 24) return `${hoursUntil}h left`
-  return `${Math.floor(hoursUntil / 24)}d left`
+function formatTimeLeft(expiresAt: { toDate: () => Date }): string {
+  const hours = Math.floor((expiresAt.toDate().getTime() - Date.now()) / (1000 * 60 * 60))
+  if (hours < 1) return 'Expires soon'
+  if (hours < 24) return `${hours}h left`
+  return `${Math.floor(hours / 24)}d left`
 }
 
-function getUrgencyColor(hoursLeft: number): string {
-  if (hoursLeft < 4) return 'text-red-500'
-  if (hoursLeft < 12) return 'text-amber-500'
-  return 'text-emerald-500'
-}
-
-function getBadge(listing: ListingWithDistance): { text: string; bg: string; icon: string; pulse?: boolean } | null {
-  const hoursLeft = Math.floor(
-    (listing.expiresAt.toDate().getTime() - new Date().getTime()) / (1000 * 60 * 60)
-  )
-
-  if (listing.grade === 'sushi') {
-    return { text: 'SUSHI GRADE', bg: 'bg-blue-500', icon: 'restaurant', pulse: true }
-  }
-  if (hoursLeft < 4) {
-    return { text: 'SUNSET SPECIAL', bg: 'bg-orange-500', icon: 'wb_twilight', pulse: true }
-  }
-  if (listing.quantity < 10) {
-    return { text: 'LOW STOCK', bg: 'bg-amber-500', icon: 'inventory_2' }
-  }
-  if (listing.deliveryAvailable) {
-    return { text: 'DELIVERY', bg: 'bg-emerald-500', icon: 'local_shipping' }
-  }
-  return null
-}
-
-// Animated wave component
-function OceanWaves() {
-  return (
-    <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-0">
-      <svg
-        className="relative block w-full h-24 animate-pulse"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1200 120"
-        preserveAspectRatio="none"
-      >
-        <path
-          d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C58.05,117.26,132.89,121.23,196.41,114.33Z"
-          className="fill-primary/10"
-        />
-      </svg>
-    </div>
-  )
-}
-
-// Floating marker component
-function MapMarker({
-  listing,
-  index,
-}: {
+function ProductCard({ 
+  listing, 
+  cartItem,
+  onAddToCart,
+  onUpdateWeight,
+  onRemove
+}: { 
   listing: ListingWithDistance
-  index: number
+  cartItem?: CartItem
+  onAddToCart: (listing: ListingWithDistance, weight: number) => void
+  onUpdateWeight: (id: string, weight: number) => void
+  onRemove: (id: string) => void
 }) {
-  const [isHovered, setIsHovered] = useState(false)
-  const hoursLeft = Math.floor(
-    (listing.expiresAt.toDate().getTime() - new Date().getTime()) / (1000 * 60 * 60)
-  )
+  const [weight, setWeight] = useState(5)
+  
+  const photo = listing.photos?.[0] || getFallbackUrl(listing.species.toLowerCase())
+  const grade = GRADES.find(g => g.value === listing.grade) || GRADES[1]
+  const hoursLeft = Math.floor((listing.expiresAt.toDate().getTime() - Date.now()) / (1000 * 60 * 60))
+  const isUrgent = hoursLeft < 4
+  
+  const totalPrice = listing.pricePerUnit * weight
+  const inCart = !!cartItem
 
   return (
-    <div
-      className="absolute animate-bounce"
-      style={{
-        top: `${15 + (index * 12) % 60}%`,
-        left: `${20 + (index * 15) % 60}%`,
-        animationDelay: `${index * 0.5}s`,
-        animationDuration: '3s',
-      }}
+    <div 
+      className={`group bg-white rounded-2xl overflow-hidden border transition-all duration-300 ${
+        inCart ? 'border-primary ring-2 ring-primary/20' : 'border-slate-200 hover:border-primary/50 hover:shadow-xl'
+      } ${isUrgent ? 'ring-1 ring-orange-400' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link to={`/marketplace/${listing.id}`}>
-        <div
-          className={`relative flex flex-col items-center transition-all duration-300 ${
-            isHovered ? 'scale-125 z-50' : ''
-          }`}
-        >
-          {/* Price bubble */}
-          <div
-            className={`px-3 py-2 rounded-full font-bold shadow-xl flex items-center gap-1 cursor-pointer ${
-              hoursLeft < 4
-                ? 'bg-orange-500 text-white animate-pulse'
-                : 'bg-primary text-white'
-            }`}
-          >
-            <span className="text-xs">$</span>
-            {listing.pricePerUnit.toFixed(2)}
+      {/* Image */}
+      <div className="relative aspect-square overflow-hidden bg-slate-100">
+        <img 
+          src={photo} 
+          alt={listing.species}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          <span className={`${grade.color} text-white px-3 py-1 rounded-full text-xs font-bold uppercase`}>
+            {grade.label}
+          </span>
+          {isUrgent && (
+            <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+              Sunset Special
+            </span>
+          )}
+          {listing.deliveryAvailable && (
+            <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+              <span className="material-symbols-outlined text-xs">local_shipping</span>
+              Delivery
+            </span>
+          )}
+        </div>
+
+        {/* Distance badge */}
+        {listing.distance !== undefined && (
+          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-slate-700">
+            <span className="material-symbols-outlined text-xs align-middle mr-1">location_on</span>
+            {formatDistance(listing.distance)}
+          </div>
+        )}
+
+        {/* Time left overlay */}
+        <div className={`absolute bottom-0 left-0 right-0 px-3 py-2 text-xs font-bold ${
+          isUrgent ? 'bg-orange-500 text-white' : 'bg-black/60 text-white'
+        }`}>
+          <span className="material-symbols-outlined text-xs align-middle mr-1">schedule</span>
+          {formatTimeLeft(listing.expiresAt)}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4">
+        <div className="flex items-start justify-between mb-2">
+          <h3 className="text-lg font-bold text-slate-900 capitalize">{listing.species}</h3>
+          <span className="text-2xl font-black text-primary">
+            ${listing.pricePerUnit.toFixed(2)}
+            <span className="text-sm font-medium text-slate-500">/lb</span>
+          </span>
+        </div>
+
+        <p className="text-sm text-slate-500 mb-3">
+          <span className="material-symbols-outlined text-xs align-middle mr-1">anchor</span>
+          {listing.sellerName || 'Local Fisher'} • {listing.location.address?.split(',')[0] || 'Local Harbor'}
+        </p>
+
+        <div className="flex items-center gap-2 text-xs text-slate-400 mb-4">
+          <span className="material-symbols-outlined text-sm">scale</span>
+          {listing.quantity} lbs available
+        </div>
+
+        {/* Weight Selector */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-slate-600">Quantity:</span>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setWeight(w => Math.max(1, w - 1))}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 font-bold"
+              >
+                -
+              </button>
+              <div className="flex items-baseline gap-1">
+                <input
+                  type="number"
+                  value={weight}
+                  onChange={(e) => setWeight(Math.max(1, Math.min(listing.quantity, parseInt(e.target.value) || 1)))}
+                  className="w-16 text-center font-bold text-lg border-b-2 border-slate-200 focus:border-primary outline-none"
+                  min={1}
+                  max={listing.quantity}
+                />
+                <span className="text-sm text-slate-500">lbs</span>
+              </div>
+              <button 
+                onClick={() => setWeight(w => Math.min(listing.quantity, w + 1))}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 font-bold"
+              >
+                +
+              </button>
+            </div>
           </div>
 
-          {/* Hover tooltip */}
-          {isHovered && (
-            <div className="absolute bottom-full mb-2 bg-white rounded-xl p-3 shadow-2xl border border-outline-variant/20 w-48 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
-              <p className="font-bold capitalize text-primary">{listing.species}</p>
-              <p className="text-xs text-outline">{listing.grade} Grade • {listing.quantity} lbs</p>
-              <p className={`text-xs font-bold mt-1 ${getUrgencyColor(hoursLeft)}`}>
-                {hoursLeft < 1 ? '⚠️ Expires in minutes!' : `⏰ ${hoursLeft}h left`}
-              </p>
+          {/* Total price */}
+          <div className="flex items-center justify-between py-2 border-t border-slate-100">
+            <span className="text-sm text-slate-500">Total:</span>
+            <span className="text-xl font-black text-slate-900">${totalPrice.toFixed(2)}</span>
+          </div>
+
+          {/* Add to Cart Button */}
+          {inCart ? (
+            <div className="flex gap-2">
+              <button
+                onClick={() => onUpdateWeight(listing.id, weight)}
+                className="flex-1 bg-primary text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2"
+              >
+                <span className="material-symbols-outlined">update</span>
+                Update ({cartItem?.weight} lbs)
+              </button>
+              <button
+                onClick={() => onRemove(listing.id)}
+                className="px-4 bg-red-100 text-red-600 rounded-xl font-bold hover:bg-red-200"
+              >
+                <span className="material-symbols-outlined">delete</span>
+              </button>
             </div>
+          ) : (
+            <button
+              onClick={() => onAddToCart(listing, weight)}
+              className="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined">add_shopping_cart</span>
+              Add to Cart
+            </button>
           )}
-
-          {/* Anchor point */}
-          <div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[10px] border-t-primary mt-1" />
         </div>
-      </Link>
-    </div>
-  )
-}
-
-// Live activity indicator
-function LiveIndicator({ count }: { count: number }) {
-  return (
-    <div className="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
-      <span className="relative flex h-3 w-3">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
-      </span>
-      <span className="text-xs font-bold text-emerald-700">
-        {count} active {count === 1 ? 'listing' : 'listings'}
-      </span>
-    </div>
-  )
-}
-
-// Empty state with CTA
-function EmptyState({ isAuthenticated }: { isAuthenticated: boolean }) {
-  const navigate = useNavigate()
-
-  return (
-    <div className="text-center py-16 bg-surface-container rounded-2xl border-2 border-dashed border-outline-variant/30">
-      <div className="relative inline-block mb-6">
-        <span className="material-symbols-outlined text-6xl text-outline/40">waves</span>
-        <span className="material-symbols-outlined text-4xl text-primary absolute -bottom-2 -right-2 animate-bounce">
-          search_off
-        </span>
       </div>
-      <h3 className="text-xl font-bold text-on-surface mb-2">The waters are calm...</h3>
-      <p className="text-outline mb-6 max-w-xs mx-auto">
-        No crates match your search right now. Try adjusting your filters or be the first to list!
-      </p>
-
-      {isAuthenticated ? (
-        <div className="flex flex-col gap-3 items-center">
-          <button
-            onClick={() => navigate('/suppliers')}
-            className="bg-primary text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2"
-          >
-            <span className="material-symbols-outlined">add</span>
-            List Your First Crate
-          </button>
-          <button
-            onClick={() => window.location.reload()}
-            className="text-primary font-bold hover:underline flex items-center gap-1"
-          >
-            <span className="material-symbols-outlined text-sm">refresh</span>
-            Refresh Search
-          </button>
-        </div>
-      ) : (
-        <button
-          onClick={() => navigate('/auth')}
-          className="bg-secondary text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform"
-        >
-          Sign In to Browse
-        </button>
-      )}
     </div>
   )
 }
 
 export default function Marketplace() {
-  const { user } = useAuth()
   const [selectedGrades, setSelectedGrades] = useState<string[]>([])
   const [selectedSpecies, setSelectedSpecies] = useState<string[]>([])
-  const [maxDistance, setMaxDistance] = useState(25)
+  const [maxDistance, setMaxDistance] = useState(50)
   const [searchQuery, setSearchQuery] = useState('')
-  const [viewMode, setViewMode] = useState<'map' | 'list'>('map')
-  const [animatedCount, setAnimatedCount] = useState(0)
+  const [sortBy, setSortBy] = useState<'distance' | 'price' | 'freshness'>('distance')
+  const [cart, setCart] = useState<CartItem[]>([])
+  const [showCart, setShowCart] = useState(false)
 
-  const filters = useMemo(
-    () => ({
-      species: selectedSpecies,
-      grades: selectedGrades,
-      priceRange: [0, 100] as [number, number],
-      distance: maxDistance,
-    }),
-    [selectedSpecies, selectedGrades, maxDistance]
-  )
+  const filters = useMemo(() => ({
+    species: selectedSpecies,
+    grades: selectedGrades,
+    priceRange: [0, 1000] as [number, number],
+    distance: maxDistance,
+  }), [selectedSpecies, selectedGrades, maxDistance])
 
-  const userLocation = useMemo(
-    () => ({
-      latitude: 37.7749,
-      longitude: -122.4194,
-    }),
-    []
-  )
+  const userLocation = useMemo(() => ({
+    latitude: 37.7749,
+    longitude: -122.4194,
+  }), [])
 
-  const { listings, loading, error } = useListings(filters, userLocation)
-
-  // Animate the count when listings change
-  useEffect(() => {
-    const target = listings.length
-    const duration = 500
-    const steps = 20
-    const increment = target / steps
-    let current = 0
-
-    const timer = setInterval(() => {
-      current += increment
-      if (current >= target) {
-        setAnimatedCount(target)
-        clearInterval(timer)
-      } else {
-        setAnimatedCount(Math.floor(current))
-      }
-    }, duration / steps)
-
-    return () => clearInterval(timer)
-  }, [listings.length])
+  const { listings, loading } = useListings(filters, userLocation)
 
   const filteredListings = useMemo(() => {
-    if (!searchQuery) return listings
-    return listings.filter((l) => l.species.toLowerCase().includes(searchQuery.toLowerCase()))
-  }, [listings, searchQuery])
+    let filtered = listings
+    
+    if (searchQuery) {
+      filtered = filtered.filter(l => 
+        l.species.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        l.sellerName?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+
+    // Sort
+    switch (sortBy) {
+      case 'price':
+        filtered = [...filtered].sort((a, b) => a.pricePerUnit - b.pricePerUnit)
+        break
+      case 'freshness':
+        filtered = [...filtered].sort((a, b) => a.expiresAt.toDate().getTime() - b.expiresAt.toDate().getTime())
+        break
+      default:
+        // Already sorted by distance from useListings
+        break
+    }
+
+    return filtered
+  }, [listings, searchQuery, sortBy])
+
+  const addToCart = (listing: ListingWithDistance, weight: number) => {
+    setCart(prev => {
+      const existing = prev.find(item => item.listing.id === listing.id)
+      if (existing) {
+        return prev.map(item => 
+          item.listing.id === listing.id 
+            ? { ...item, weight }
+            : item
+        )
+      }
+      return [...prev, { listing, weight }]
+    })
+  }
+
+  const updateCartWeight = (id: string, weight: number) => {
+    setCart(prev => prev.map(item => 
+      item.listing.id === id ? { ...item, weight } : item
+    ))
+  }
+
+  const removeFromCart = (id: string) => {
+    setCart(prev => prev.filter(item => item.listing.id !== id))
+  }
+
+  const cartTotal = cart.reduce((sum, item) => sum + (item.listing.pricePerUnit * item.weight), 0)
+  const cartWeight = cart.reduce((sum, item) => sum + item.weight, 0)
 
   const toggleGrade = (grade: string) => {
-    setSelectedGrades((prev) =>
-      prev.includes(grade) ? prev.filter((g) => g !== grade) : [...prev, grade]
+    setSelectedGrades(prev => 
+      prev.includes(grade) ? prev.filter(g => g !== grade) : [...prev, grade]
     )
   }
 
   const toggleSpecies = (species: string) => {
-    setSelectedSpecies((prev) =>
-      prev.includes(species) ? prev.filter((s) => s !== species) : [...prev, species]
+    setSelectedSpecies(prev => 
+      prev.includes(species) ? prev.filter(s => s !== species) : [...prev, species]
     )
   }
 
   const clearFilters = () => {
     setSelectedGrades([])
     setSelectedSpecies([])
-    setMaxDistance(25)
+    setMaxDistance(50)
     setSearchQuery('')
   }
 
-  const activeFiltersCount = selectedGrades.length + selectedSpecies.length
-
   return (
-    <div className="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-white min-h-screen">
-      {/* Header Section */}
-      <div className="bg-surface border-b border-outline-variant/10">
-        <div className="max-w-[1600px] mx-auto px-6 lg:px-12 py-6">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-3 mb-1">
-                <span className="italic-accent-caveat text-2xl text-secondary">Local Bounty</span>
-                <LiveIndicator count={listings.length} />
-              </div>
-              <h1 className="text-4xl lg:text-5xl font-black tracking-tighter text-primary">
-                Discover the Catch
-                <span className="material-symbols-outlined text-3xl text-secondary ml-2 animate-bounce">waves</span>
-              </h1>
+    <div className="min-h-screen bg-slate-50">
+      {/* Header */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+            {/* Title & Count */}
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-black text-slate-900">Fish Market</h1>
+              <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-bold">
+                {filteredListings.length} available
+              </span>
             </div>
 
-            <div className="flex items-center gap-4">
-              {/* View Toggle */}
-              <div className="flex bg-surface-container-high rounded-full p-1 border border-outline-variant/20">
-                <button
-                  onClick={() => setViewMode('map')}
-                  className={`px-4 py-2 rounded-full font-bold text-sm transition-all flex items-center gap-1 ${
-                    viewMode === 'map'
-                      ? 'bg-primary text-white shadow-md'
-                      : 'text-on-surface-variant hover:text-on-surface'
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-sm">map</span>
-                  Map
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`px-4 py-2 rounded-full font-bold text-sm transition-all flex items-center gap-1 ${
-                    viewMode === 'list'
-                      ? 'bg-primary text-white shadow-md'
-                      : 'text-on-surface-variant hover:text-on-surface'
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-sm">view_list</span>
-                  List
-                </button>
-              </div>
-
-              {/* Radius Control */}
-              <div className="flex items-center gap-4 bg-surface-container-low p-3 px-5 rounded-xl border border-outline-variant/15 shadow-sm">
-                <div className="flex flex-col gap-1 min-w-[180px]">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold uppercase tracking-widest text-outline">Search Radius</span>
-                    <span className="italic-accent-caveat text-xl text-primary">{maxDistance} mi</span>
-                  </div>
-                  <input
-                    type="range"
-                    className="w-full h-2 bg-outline-variant/30 rounded-lg appearance-none cursor-pointer accent-primary"
-                    value={maxDistance}
-                    onChange={(e) => setMaxDistance(Number(e.target.value))}
-                    min={1}
-                    max={100}
-                  />
-                </div>
-              </div>
-
-              {/* Count Badge */}
-              <div className="bg-primary text-white px-5 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg">
-                <span className="material-symbols-outlined text-lg">package_2</span>
-                {loading ? (
-                  <span className="animate-pulse">...</span>
-                ) : (
-                  <span>{animatedCount} crates</span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <main className="max-w-[1600px] mx-auto px-6 lg:px-12 py-8 grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8">
-        {/* Map/List View Section */}
-        <section className="relative flex flex-col gap-4">
-          {/* Featured Pier Card */}
-          <div className="bg-secondary-container/50 p-4 rounded-xl border border-outline-variant/20 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-md">
-                <span className="material-symbols-outlined text-on-secondary">anchor</span>
-              </div>
-              <div>
-                <p className="text-xs text-outline font-bold uppercase tracking-tighter">Active Pier</p>
-                <p className="font-bold text-on-surface text-lg">{FEATURED_PIER.name}</p>
-              </div>
-            </div>
-            <div className="flex gap-6 text-sm">
-              <div className="text-center">
-                <p className="font-black text-primary text-xl">{FEATURED_PIER.activeBoats}</p>
-                <p className="text-outline text-xs">boats</p>
-              </div>
-              <div className="text-center">
-                <p className="font-black text-secondary text-xl">{FEATURED_PIER.cratesListed}</p>
-                <p className="text-outline text-xs">crates</p>
-              </div>
-              <div className="text-center">
-                <p className="font-black text-tertiary text-xl">{FEATURED_PIER.avgPrice}</p>
-                <p className="text-outline text-xs">avg</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Map / List Container */}
-          <div className="relative w-full flex-grow rounded-2xl overflow-hidden bg-surface border border-outline-variant/10 ocean-shadow min-h-[600px]">
-            {viewMode === 'map' ? (
-              <>
-                {/* Animated Background */}
-                <div className="absolute inset-0 map-grid opacity-30" />
-
-                {/* Animated Waves SVG */}
-                <svg
-                  className="absolute inset-0 w-full h-full opacity-10 animate-pulse"
-                  preserveAspectRatio="none"
-                  viewBox="0 0 800 600"
-                >
-                  <path d="M0,100 Q200,50 400,100 T800,100" fill="none" stroke="#1e78b4" strokeWidth="2">
-                    <animate
-                      attributeName="d"
-                      dur="4s"
-                      repeatCount="indefinite"
-                      values="M0,100 Q200,50 400,100 T800,100;M0,100 Q200,150 400,100 T800,100;M0,100 Q200,50 400,100 T800,100"
-                    />
-                  </path>
-                  <path d="M0,200 Q200,150 400,200 T800,200" fill="none" stroke="#1e78b4" strokeWidth="1.5" opacity="0.6">
-                    <animate
-                      attributeName="d"
-                      dur="5s"
-                      repeatCount="indefinite"
-                      values="M0,200 Q200,150 400,200 T800,200;M0,200 Q200,250 400,200 T800,200;M0,200 Q200,150 400,200 T800,200"
-                    />
-                  </path>
-                  <path d="M0,300 Q200,250 400,300 T800,300" fill="none" stroke="#1e78b4" strokeWidth="1" opacity="0.4">
-                    <animate
-                      attributeName="d"
-                      dur="6s"
-                      repeatCount="indefinite"
-                      values="M0,300 Q200,250 400,300 T800,300;M0,300 Q200,350 400,300 T800,300;M0,300 Q200,250 400,300 T800,300"
-                    />
-                  </path>
-                </svg>
-
-                {/* User Location Pulse */}
-                <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 z-10">
-                  <div className="relative flex items-center justify-center">
-                    <div className="absolute w-40 h-40 border-2 border-dashed border-primary/40 rounded-full animate-spin" style={{ animationDuration: '8s' }} />
-                    <div className="absolute w-32 h-32 border border-primary/30 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
-                    <div className="w-4 h-4 bg-primary rounded-full border-4 border-white shadow-xl z-10" />
-                  </div>
-                </div>
-
-                {/* Listing Markers */}
-                {!loading &&
-                  filteredListings.map((listing, i) => <MapMarker key={listing.id} listing={listing} index={i} />)}
-
-                {/* Ocean Waves at Bottom */}
-                <OceanWaves />
-              </>
-            ) : (
-              /* List View */
-              <div className="absolute inset-0 overflow-y-auto p-6">
-                {filteredListings.length === 0 ? (
-                  <EmptyState isAuthenticated={!!user} />
-                ) : (
-                  <div className="grid grid-cols-2 gap-4">
-                    {filteredListings.map((listing) => (
-                      <ListingCard key={listing.id} listing={listing} />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Active Filters Display */}
-            {activeFiltersCount > 0 && (
-              <div className="absolute top-4 left-4 flex items-center gap-2">
-                <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-white/30 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-sm">filter_list</span>
-                  <span className="font-bold text-sm">{activeFiltersCount} filter{activeFiltersCount > 1 ? 's' : ''}</span>
-                  <button
-                    onClick={clearFilters}
-                    className="ml-1 text-outline hover:text-error transition-colors"
-                  >
-                    <span className="material-symbols-outlined text-sm">close</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* Sidebar */}
-        <aside className="flex flex-col h-full">
-          <div className="sticky top-28 z-40 bg-surface py-6 flex flex-col gap-4">
             {/* Search */}
-            <div className="relative group">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">
+            <div className="flex-1 max-w-xl relative">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                 search
               </span>
               <input
                 type="text"
-                placeholder="Search species, harbor, or boat..."
+                placeholder="Search fish, harbor, or seller..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-surface-container-low border-2 border-transparent focus:border-primary/30 rounded-xl py-4 pl-12 pr-10 focus:ring-0 placeholder:text-outline/50 font-medium outline-none transition-all"
+                className="w-full bg-slate-100 border-0 rounded-full py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all"
               />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-error"
-                >
-                  <span className="material-symbols-outlined">close</span>
-                </button>
-              )}
             </div>
 
-            {/* Grade Filters */}
-            <div className="flex gap-2 flex-wrap">
-              {GRADES.map((grade) => {
-                const isActive = selectedGrades.includes(grade.value)
-                return (
-                  <button
-                    key={grade.value}
-                    onClick={() => toggleGrade(grade.value)}
-                    className={`px-4 py-2.5 rounded-full font-bold text-sm transition-all flex items-center gap-1.5 ${
-                      isActive
-                        ? `${grade.color} text-white shadow-lg scale-105`
-                        : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-high'
-                    }`}
-                  >
-                    <span className="material-symbols-outlined text-sm">{grade.icon}</span>
-                    {grade.label}
-                  </button>
-                )
-              })}
-            </div>
+            {/* Sort & Cart */}
+            <div className="flex items-center gap-3">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as 'distance' | 'price' | 'freshness')}
+                className="bg-slate-100 border-0 rounded-full py-3 px-4 font-medium focus:ring-2 focus:ring-primary/20"
+              >
+                <option value="distance">Nearest First</option>
+                <option value="price">Best Price</option>
+                <option value="freshness">Freshness</option>
+              </select>
 
-            {/* Species Filters */}
-            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-              {SPECIES.map((species) => (
-                <button
-                  key={species}
-                  onClick={() => toggleSpecies(species)}
-                  className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all flex items-center gap-1 ${
-                    selectedSpecies.includes(species)
-                      ? 'bg-secondary text-white shadow-md scale-105'
-                      : 'bg-surface-container-highest text-on-surface-variant hover:bg-surface-container-high'
-                  }`}
-                >
-                  {selectedSpecies.includes(species) && (
-                    <span className="material-symbols-outlined text-sm">check</span>
-                  )}
-                  {species}
-                </button>
-              ))}
-            </div>
-
-            {/* Results Header */}
-            <div className="flex justify-between items-center px-2 pt-2 border-t border-outline-variant/10">
-              <span className="text-sm font-bold text-outline uppercase tracking-widest">
-                {filteredListings.length} results
-              </span>
-              <button className="flex items-center gap-1 text-sm font-bold text-primary hover:gap-2 transition-all">
-                Sort: Distance
-                <span className="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+              <button
+                onClick={() => setShowCart(!showCart)}
+                className={`relative px-4 py-3 rounded-full font-bold flex items-center gap-2 transition-colors ${
+                  cart.length > 0 ? 'bg-primary text-white' : 'bg-slate-100 text-slate-700'
+                }`}
+              >
+                <span className="material-symbols-outlined">shopping_cart</span>
+                <span className="hidden sm:inline">
+                  {cart.length > 0 ? `${cart.length} items` : 'Cart'}
+                </span>
+                {cart.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {cart.length}
+                  </span>
+                )}
               </button>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Listings Cards */}
-          <div className="flex flex-col gap-5 overflow-y-auto pb-12 pr-2">
-            {loading && (
-              <div className="text-center py-16">
-                <div className="relative">
-                  <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mx-auto" />
-                  <span className="material-symbols-outlined text-primary text-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse">
-                    waves
-                  </span>
-                </div>
-                <p className="text-outline mt-4 animate-pulse">Scanning the horizon...</p>
-              </div>
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar Filters */}
+          <aside className="lg:w-64 space-y-6">
+            {/* Clear filters */}
+            {(selectedGrades.length > 0 || selectedSpecies.length > 0 || searchQuery) && (
+              <button
+                onClick={clearFilters}
+                className="w-full text-sm text-primary font-bold hover:underline flex items-center justify-center gap-1 py-2"
+              >
+                <span className="material-symbols-outlined text-sm">close</span>
+                Clear all filters
+              </button>
             )}
 
-            {error && (
-              <div className="text-center py-12 bg-red-50 rounded-xl border border-red-200">
-                <span className="material-symbols-outlined text-4xl text-red-500 mb-2">error</span>
-                <p className="text-red-700 font-medium">Error loading listings</p>
-                <button onClick={() => window.location.reload()} className="text-red-500 text-sm hover:underline mt-2">
-                  Try again
+            {/* Grade Filter */}
+            <div>
+              <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">stars</span>
+                Quality Grade
+              </h3>
+              <div className="space-y-2">
+                {GRADES.map(grade => (
+                  <label 
+                    key={grade.value}
+                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors ${
+                      selectedGrades.includes(grade.value) 
+                        ? 'bg-primary/10 border-2 border-primary' 
+                        : 'bg-white border-2 border-transparent hover:bg-slate-100'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedGrades.includes(grade.value)}
+                      onChange={() => toggleGrade(grade.value)}
+                      className="hidden"
+                    />
+                    <span className={`w-4 h-4 rounded-full ${grade.color}`} />
+                    <span className="font-medium">{grade.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Species Filter */}
+            <div>
+              <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">set_meal</span>
+                Species
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {SPECIES_LIST.map(species => (
+                  <button
+                    key={species}
+                    onClick={() => toggleSpecies(species)}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      selectedSpecies.includes(species)
+                        ? 'bg-primary text-white'
+                        : 'bg-white border border-slate-200 hover:border-primary'
+                    }`}
+                  >
+                    {species}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Distance */}
+            <div>
+              <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">near_me</span>
+                Max Distance
+              </h3>
+              <div className="bg-white p-4 rounded-xl">
+                <div className="flex justify-between mb-2">
+                  <span className="text-sm text-slate-500">Within</span>
+                  <span className="font-bold text-primary">{maxDistance} mi</span>
+                </div>
+                <input
+                  type="range"
+                  min={5}
+                  max={100}
+                  step={5}
+                  value={maxDistance}
+                  onChange={(e) => setMaxDistance(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary"
+                />
+                <div className="flex justify-between mt-1 text-xs text-slate-400">
+                  <span>5 mi</span>
+                  <span>100 mi</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* Product Grid */}
+          <main className="flex-1">
+            {loading ? (
+              <div className="flex items-center justify-center h-96">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+              </div>
+            ) : filteredListings.length === 0 ? (
+              <div className="text-center py-16">
+                <span className="material-symbols-outlined text-6xl text-slate-300">search_off</span>
+                <h3 className="text-xl font-bold text-slate-700 mt-4">No fish found</h3>
+                <p className="text-slate-500 mt-2">Try adjusting your filters</p>
+                <button
+                  onClick={clearFilters}
+                  className="mt-4 bg-primary text-white px-6 py-2 rounded-full font-bold"
+                >
+                  Clear Filters
                 </button>
               </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredListings.map(listing => (
+                  <ProductCard
+                    key={listing.id}
+                    listing={listing}
+                    cartItem={cart.find(item => item.listing.id === listing.id)}
+                    onAddToCart={addToCart}
+                    onUpdateWeight={updateCartWeight}
+                    onRemove={removeFromCart}
+                  />
+                ))}
+              </div>
             )}
+          </main>
 
-            {!loading && filteredListings.length === 0 && <EmptyState isAuthenticated={!!user} />}
+          {/* Cart Sidebar */}
+          {showCart && (
+            <aside className="lg:w-80 bg-white rounded-2xl border border-slate-200 p-6 h-fit sticky top-24">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-black text-slate-900 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">shopping_bag</span>
+                  Your Cart
+                </h2>
+                <button 
+                  onClick={() => setShowCart(false)}
+                  className="lg:hidden text-slate-400 hover:text-slate-600"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
 
-            {!loading &&
-              filteredListings.map((listing) => <ListingListItem key={listing.id} listing={listing} />)}
-          </div>
-        </aside>
-      </main>
+              {cart.length === 0 ? (
+                <div className="text-center py-8">
+                  <span className="material-symbols-outlined text-4xl text-slate-300">shopping_cart_off</span>
+                  <p className="text-slate-500 mt-2">Your cart is empty</p>
+                  <p className="text-sm text-slate-400">Add some fresh fish!</p>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
+                    {cart.map(item => (
+                      <div key={item.listing.id} className="flex gap-3 p-3 bg-slate-50 rounded-xl">
+                        <img 
+                          src={item.listing.photos?.[0] || getFallbackUrl(item.listing.species.toLowerCase())}
+                          alt={item.listing.species}
+                          className="w-16 h-16 rounded-lg object-cover"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-slate-900 capitalize truncate">{item.listing.species}</h4>
+                          <p className="text-sm text-slate-500">{item.weight} lbs</p>
+                          <p className="text-sm font-bold text-primary">
+                            ${(item.listing.pricePerUnit * item.weight).toFixed(2)}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => removeFromCart(item.listing.id)}
+                          className="text-slate-400 hover:text-red-500"
+                        >
+                          <span className="material-symbols-outlined">delete</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="border-t border-slate-200 pt-4 space-y-3">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-500">Total Weight:</span>
+                      <span className="font-bold">{cartWeight} lbs</span>
+                    </div>
+                    <div className="flex justify-between items-end">
+                      <span className="text-slate-500">Total:</span>
+                      <span className="text-2xl font-black text-slate-900">${cartTotal.toFixed(2)}</span>
+                    </div>
+                    
+                    <Link
+                      to="/checkout"
+                      className="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
+                    >
+                      Checkout
+                      <span className="material-symbols-outlined">arrow_forward</span>
+                    </Link>
+                    
+                    <p className="text-xs text-slate-400 text-center">
+                      Pickup at harbor or delivery where available
+                    </p>
+                  </div>
+                </>
+              )}
+            </aside>
+          )}
+        </div>
+      </div>
     </div>
-  )
-}
-
-// Compact card for grid view
-function ListingCard({ listing }: { listing: ListingWithDistance }) {
-  const badge = getBadge(listing)
-  const photo = listing.photos?.[0] || getFallbackUrl(listing.species.toLowerCase())
-  const hoursLeft = Math.floor((listing.expiresAt.toDate().getTime() - new Date().getTime()) / (1000 * 60 * 60))
-
-  return (
-    <Link
-      to={`/marketplace/${listing.id}`}
-      className="bg-surface-container-lowest rounded-xl overflow-hidden ocean-shadow border border-outline-variant/10 group hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-    >
-      <div className="relative h-40">
-        <PexelsImage
-          src={photo}
-          alt={`${listing.species} - ${listing.grade} grade`}
-          className="transition-transform duration-500 group-hover:scale-110"
-        />
-        {badge && (
-          <div
-            className={`absolute top-3 left-3 ${badge.bg} text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 ${badge.pulse ? 'animate-pulse' : ''}`}
-          >
-            <span className="material-symbols-outlined text-xs">{badge.icon}</span>
-            {badge.text}
-          </div>
-        )}
-        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold border border-white/50 uppercase text-primary">
-          {listing.grade}
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-3">
-          <div className="flex justify-between items-end">
-            <span className="text-white font-bold capitalize">{listing.species}</span>
-            <span className={`font-bold ${getUrgencyColor(hoursLeft)}`}>
-              {hoursLeft < 1 ? '⚠️ Expiring!' : `${hoursLeft}h left`}
-            </span>
-          </div>
-        </div>
-      </div>
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-2xl font-black text-primary">
-            ${listing.pricePerUnit.toFixed(2)}
-            <span className="text-sm text-outline font-normal">/lb</span>
-          </span>
-          <span className="text-sm text-outline">{listing.quantity} {listing.unit}</span>
-        </div>
-        <button className="w-full bg-primary text-white py-2 rounded-full font-bold text-sm shadow-md group-hover:shadow-lg transition-all group-hover:scale-[1.02]">
-          Claim Now
-        </button>
-      </div>
-    </Link>
-  )
-}
-
-// List item for sidebar
-function ListingListItem({ listing }: { listing: ListingWithDistance }) {
-  const badge = getBadge(listing)
-  const photo = listing.photos?.[0] || getFallbackUrl(listing.species.toLowerCase())
-
-  return (
-    <Link
-      to={`/marketplace/${listing.id}`}
-      className="bg-surface-container-lowest rounded-xl overflow-hidden ocean-shadow border border-outline-variant/10 group block hover:shadow-lg transition-all duration-300"
-    >
-      <div className="relative h-44">
-        <PexelsImage
-          src={photo}
-          alt={`${listing.species} - ${listing.grade} grade`}
-          className="transition-transform duration-500 group-hover:scale-105"
-        />
-        {badge && (
-          <div
-            className={`absolute top-4 left-4 ${badge.bg} text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5 ${badge.pulse ? 'animate-pulse' : ''}`}
-          >
-            <span className="material-symbols-outlined text-sm">{badge.icon}</span>
-            {badge.text}
-          </div>
-        )}
-        <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-bold border border-white/30 uppercase">
-          {listing.grade} GRADE
-        </div>
-
-        {/* Distance overlay */}
-        {listing.distance !== undefined && (
-          <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-bold">
-            <span className="material-symbols-outlined text-sm mr-1">location_on</span>
-            {formatDistance(listing.distance)}
-          </div>
-        )}
-      </div>
-      <div className="p-5">
-        <div className="flex justify-between items-start mb-3">
-          <div>
-            <h3 className="text-xl font-bold tracking-tight text-primary capitalize">{listing.species}</h3>
-            <p className="text-sm text-outline">Fresh from local waters</p>
-          </div>
-          <div className="text-right">
-            <div className="text-2xl font-black text-primary">
-              <span className="text-sm">$</span>
-              {listing.pricePerUnit.toFixed(2)}
-            </div>
-            <div className="text-xs text-outline">per lb</div>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2 mb-5">
-          {[
-            { icon: 'scale', label: `${listing.quantity} ${listing.unit}` },
-            { icon: 'distance', label: formatDistance(listing.distance) },
-            { icon: 'schedule', label: formatPickupTime(listing.expiresAt) },
-          ].map((tag) => (
-            <span
-              key={tag.label}
-              className="px-3 py-1.5 bg-surface-container-low text-outline-variant text-[10px] font-bold rounded-full uppercase tracking-widest border border-outline-variant/10 flex items-center gap-1.5"
-            >
-              <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>
-                {tag.icon}
-              </span>
-              {tag.label}
-            </span>
-          ))}
-        </div>
-
-        <button className="w-full bg-primary text-white py-3 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
-          <span className="material-symbols-outlined">shopping_basket</span>
-          Claim Crate
-        </button>
-      </div>
-    </Link>
   )
 }
