@@ -1,43 +1,44 @@
-import * as functions from 'firebase-functions';
+import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 import { db } from '../config.js';
 import { addGeoIndex, removeGeoIndex } from '../utils/geohash.js';
 /**
  * Create a new listing
  */
-export const createListing = functions.https.onCall(async (data, context) => {
+export const createListing = onCall(async (request) => {
+    const data = request.data;
     // Verify authentication
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'User must be authenticated');
     }
-    const userId = context.auth.uid;
+    const userId = request.auth.uid;
     // Verify user is the seller
     if (data.sellerId !== userId) {
-        throw new functions.https.HttpsError('permission-denied', 'Cannot create listing for another user');
+        throw new HttpsError('permission-denied', 'Cannot create listing for another user');
     }
     // Validate sushi grade requirements
     if (data.grade === 'sushi' && (!data.sushiCertNumber || !data.sushiCertExpiry)) {
-        throw new functions.https.HttpsError('invalid-argument', 'Sushi grade requires certificate number and expiry');
+        throw new HttpsError('invalid-argument', 'Sushi grade requires certificate number and expiry');
     }
     // Validate quantity
     if (data.quantity <= 0) {
-        throw new functions.https.HttpsError('invalid-argument', 'Quantity must be positive');
+        throw new HttpsError('invalid-argument', 'Quantity must be positive');
     }
     // Validate price
     if (data.pricePerUnit <= 0) {
-        throw new functions.https.HttpsError('invalid-argument', 'Price must be positive');
+        throw new HttpsError('invalid-argument', 'Price must be positive');
     }
     // Validate coordinates
     if (data.latitude < -90 ||
         data.latitude > 90 ||
         data.longitude < -180 ||
         data.longitude > 180) {
-        throw new functions.https.HttpsError('invalid-argument', 'Invalid coordinates');
+        throw new HttpsError('invalid-argument', 'Invalid coordinates');
     }
     // Validate expiry date
     const now = admin.firestore.Timestamp.now();
     if (data.expiresAt < now) {
-        throw new functions.https.HttpsError('invalid-argument', 'Expiry date must be in the future');
+        throw new HttpsError('invalid-argument', 'Expiry date must be in the future');
     }
     try {
         // Create geohash
@@ -74,27 +75,28 @@ export const createListing = functions.https.onCall(async (data, context) => {
     }
     catch (error) {
         console.error('Error creating listing:', error);
-        throw new functions.https.HttpsError('internal', 'Failed to create listing');
+        throw new HttpsError('internal', 'Failed to create listing');
     }
 });
 /**
  * Update a listing
  */
-export const updateListing = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+export const updateListing = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'User must be authenticated');
     }
+    const data = request.data;
     const { listingId, updates } = data;
     // Get listing
     const listingRef = db.collection('listings').doc(listingId);
     const listingDoc = await listingRef.get();
     if (!listingDoc.exists) {
-        throw new functions.https.HttpsError('not-found', 'Listing not found');
+        throw new HttpsError('not-found', 'Listing not found');
     }
     const listing = listingDoc.data();
     // Verify ownership
-    if (listing.sellerId !== context.auth.uid) {
-        throw new functions.https.HttpsError('permission-denied', 'Not your listing');
+    if (listing.sellerId !== request.auth.uid) {
+        throw new HttpsError('permission-denied', 'Not your listing');
     }
     // Don't allow changing seller or critical fields
     const allowedUpdates = [
@@ -106,7 +108,7 @@ export const updateListing = functions.https.onCall(async (data, context) => {
     ];
     const invalidUpdates = Object.keys(updates).filter((key) => !allowedUpdates.includes(key));
     if (invalidUpdates.length > 0) {
-        throw new functions.https.HttpsError('invalid-argument', `Cannot update: ${invalidUpdates.join(', ')}`);
+        throw new HttpsError('invalid-argument', `Cannot update: ${invalidUpdates.join(', ')}`);
     }
     try {
         await listingRef.update({
@@ -117,31 +119,32 @@ export const updateListing = functions.https.onCall(async (data, context) => {
     }
     catch (error) {
         console.error('Error updating listing:', error);
-        throw new functions.https.HttpsError('internal', 'Failed to update listing');
+        throw new HttpsError('internal', 'Failed to update listing');
     }
 });
 /**
  * Delete a listing
  */
-export const deleteListing = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+export const deleteListing = onCall(async (request) => {
+    if (!request.auth) {
+        throw new HttpsError('unauthenticated', 'User must be authenticated');
     }
+    const data = request.data;
     const { listingId } = data;
     // Get listing
     const listingRef = db.collection('listings').doc(listingId);
     const listingDoc = await listingRef.get();
     if (!listingDoc.exists) {
-        throw new functions.https.HttpsError('not-found', 'Listing not found');
+        throw new HttpsError('not-found', 'Listing not found');
     }
     const listing = listingDoc.data();
     // Verify ownership
-    if (listing.sellerId !== context.auth.uid) {
-        throw new functions.https.HttpsError('permission-denied', 'Not your listing');
+    if (listing.sellerId !== request.auth.uid) {
+        throw new HttpsError('permission-denied', 'Not your listing');
     }
     // Only allow deleting active listings
     if (listing.status !== 'active') {
-        throw new functions.https.HttpsError('failed-precondition', 'Cannot delete listing with pending orders');
+        throw new HttpsError('failed-precondition', 'Cannot delete listing with pending orders');
     }
     try {
         // Remove from geo index
@@ -152,6 +155,6 @@ export const deleteListing = functions.https.onCall(async (data, context) => {
     }
     catch (error) {
         console.error('Error deleting listing:', error);
-        throw new functions.https.HttpsError('internal', 'Failed to delete listing');
+        throw new HttpsError('internal', 'Failed to delete listing');
     }
 });

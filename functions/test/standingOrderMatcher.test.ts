@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { distanceInMiles } from '../src/utils/geohash.js';
 
 // Test the matching logic directly (extracted from standingOrderMatcher.ts)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function checkMatch(listing: any, order: any): boolean {
   // Check species match
   const speciesMatch = order.species.includes('*') || order.species.includes(listing.species);

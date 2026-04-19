@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+import { onSchedule } from 'firebase-functions/v2/scheduler'
 import * as admin from 'firebase-admin'
 import { db } from '../config.js'
 import { distanceInMiles } from '../utils/geohash.js'
@@ -8,9 +8,9 @@ import { notifyStandingOrderMatch } from '../utils/notifications.js'
  * Scheduled function - runs every 5 minutes
  * Finds active listings that match standing orders and notifies buyers
  */
-export const matchStandingOrders = functions.pubsub
-  .schedule('every 5 minutes')
-  .onRun(async (_context) => {
+export const matchStandingOrders = onSchedule(
+  { schedule: 'every 5 minutes' },
+  async () => {
     const now = admin.firestore.Timestamp.now()
 
     // Get all active listings
@@ -22,7 +22,7 @@ export const matchStandingOrders = functions.pubsub
 
     if (listingsSnapshot.empty) {
       console.log('No active listings found')
-      return null
+      return
     }
 
     // Get all active standing orders
@@ -33,7 +33,7 @@ export const matchStandingOrders = functions.pubsub
 
     if (standingOrdersSnapshot.empty) {
       console.log('No active standing orders found')
-      return null
+      return
     }
 
     let matchCount = 0
@@ -77,10 +77,22 @@ export const matchStandingOrders = functions.pubsub
     }
 
     console.log(`Standing order matcher completed: ${matchCount} matches found`)
-    return null
-  })
+  }
+)
 
-function checkMatch(listing: any, order: any): boolean {
+interface StandingOrder {
+  species: string[]
+  minGrade: string
+  maxPricePerUnit?: number
+  location: {
+    latitude: number
+    longitude: number
+  }
+  maxDistance: number
+  lastMatchedAt?: admin.firestore.Timestamp
+}
+
+function checkMatch(listing: Listing, order: StandingOrder): boolean {
   // Check species match
   const speciesMatch = order.species.includes('*') || order.species.includes(listing.species)
   if (!speciesMatch) return false

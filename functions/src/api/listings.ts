@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+import { onCall, HttpsError } from 'firebase-functions/v2/https'
 import * as admin from 'firebase-admin'
 import { db } from '../config.js'
 import { addGeoIndex, removeGeoIndex } from '../utils/geohash.js'
@@ -47,21 +47,23 @@ export interface Listing {
 /**
  * Create a new listing
  */
-export const createListing = functions.https.onCall(
-  async (data: CreateListingRequest, context) => {
+export const createListing = onCall(
+  async (request) => {
+    const data = request.data as CreateListingRequest
+
     // Verify authentication
-    if (!context.auth) {
-      throw new functions.https.HttpsError(
+    if (!request.auth) {
+      throw new HttpsError(
         'unauthenticated',
         'User must be authenticated'
       )
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Verify user is the seller
     if (data.sellerId !== userId) {
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         'permission-denied',
         'Cannot create listing for another user'
       )
@@ -69,7 +71,7 @@ export const createListing = functions.https.onCall(
 
     // Validate sushi grade requirements
     if (data.grade === 'sushi' && (!data.sushiCertNumber || !data.sushiCertExpiry)) {
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         'invalid-argument',
         'Sushi grade requires certificate number and expiry'
       )
@@ -77,7 +79,7 @@ export const createListing = functions.https.onCall(
 
     // Validate quantity
     if (data.quantity <= 0) {
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         'invalid-argument',
         'Quantity must be positive'
       )
@@ -85,7 +87,7 @@ export const createListing = functions.https.onCall(
 
     // Validate price
     if (data.pricePerUnit <= 0) {
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         'invalid-argument',
         'Price must be positive'
       )
@@ -98,7 +100,7 @@ export const createListing = functions.https.onCall(
       data.longitude < -180 ||
       data.longitude > 180
     ) {
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         'invalid-argument',
         'Invalid coordinates'
       )
@@ -107,7 +109,7 @@ export const createListing = functions.https.onCall(
     // Validate expiry date
     const now = admin.firestore.Timestamp.now()
     if (data.expiresAt < now) {
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         'invalid-argument',
         'Expiry date must be in the future'
       )
@@ -150,7 +152,7 @@ export const createListing = functions.https.onCall(
       }
     } catch (error) {
       console.error('Error creating listing:', error)
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         'internal',
         'Failed to create listing'
       )
@@ -161,12 +163,13 @@ export const createListing = functions.https.onCall(
 /**
  * Update a listing
  */
-export const updateListing = functions.https.onCall(
-  async (data: { listingId: string; updates: Partial<Listing> }, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
+export const updateListing = onCall(
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated')
     }
 
+    const data = request.data as { listingId: string; updates: Partial<Listing> }
     const { listingId, updates } = data
 
     // Get listing
@@ -174,14 +177,14 @@ export const updateListing = functions.https.onCall(
     const listingDoc = await listingRef.get()
 
     if (!listingDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Listing not found')
+      throw new HttpsError('not-found', 'Listing not found')
     }
 
     const listing = listingDoc.data() as Listing
 
     // Verify ownership
-    if (listing.sellerId !== context.auth.uid) {
-      throw new functions.https.HttpsError('permission-denied', 'Not your listing')
+    if (listing.sellerId !== request.auth.uid) {
+      throw new HttpsError('permission-denied', 'Not your listing')
     }
 
     // Don't allow changing seller or critical fields
@@ -198,7 +201,7 @@ export const updateListing = functions.https.onCall(
     )
 
     if (invalidUpdates.length > 0) {
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         'invalid-argument',
         `Cannot update: ${invalidUpdates.join(', ')}`
       )
@@ -213,7 +216,7 @@ export const updateListing = functions.https.onCall(
       return { success: true }
     } catch (error) {
       console.error('Error updating listing:', error)
-      throw new functions.https.HttpsError('internal', 'Failed to update listing')
+      throw new HttpsError('internal', 'Failed to update listing')
     }
   }
 )
@@ -221,12 +224,13 @@ export const updateListing = functions.https.onCall(
 /**
  * Delete a listing
  */
-export const deleteListing = functions.https.onCall(
-  async (data: { listingId: string }, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
+export const deleteListing = onCall(
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated')
     }
 
+    const data = request.data as { listingId: string }
     const { listingId } = data
 
     // Get listing
@@ -234,19 +238,19 @@ export const deleteListing = functions.https.onCall(
     const listingDoc = await listingRef.get()
 
     if (!listingDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Listing not found')
+      throw new HttpsError('not-found', 'Listing not found')
     }
 
     const listing = listingDoc.data() as Listing
 
     // Verify ownership
-    if (listing.sellerId !== context.auth.uid) {
-      throw new functions.https.HttpsError('permission-denied', 'Not your listing')
+    if (listing.sellerId !== request.auth.uid) {
+      throw new HttpsError('permission-denied', 'Not your listing')
     }
 
     // Only allow deleting active listings
     if (listing.status !== 'active') {
-      throw new functions.https.HttpsError(
+      throw new HttpsError(
         'failed-precondition',
         'Cannot delete listing with pending orders'
       )
@@ -262,7 +266,7 @@ export const deleteListing = functions.https.onCall(
       return { success: true }
     } catch (error) {
       console.error('Error deleting listing:', error)
-      throw new functions.https.HttpsError('internal', 'Failed to delete listing')
+      throw new HttpsError('internal', 'Failed to delete listing')
     }
   }
 )

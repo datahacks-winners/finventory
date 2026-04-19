@@ -42,7 +42,7 @@ export class AuthService {
     await auth().signOut();
   }
 
-  static async linkAnonymousAccount(provider: 'email' | 'google' | 'apple', credential?: any) {
+  static async linkAnonymousAccount(provider: 'email' | 'google' | 'apple', credential?: FirebaseAuthTypes.AuthCredential) {
     const user = auth().currentUser;
     if (!user || !user.isAnonymous) {
       throw new Error('No anonymous user to link');

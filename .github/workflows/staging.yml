@@ -28,7 +28,8 @@ jobs:
       - run: npm run lint
 
       - name: Type Check
-        run: npx tsc --noEmit || true
+        run: npx tsc --noEmit || echo "Type check failed, continuing..."
+        continue-on-error: true
 
       - name: Test Cloud Functions
         working-directory: ./functions
@@ -78,19 +79,19 @@ jobs:
         run: npm install -g firebase-tools@13.14.0
 
       - name: Deploy Firestore Rules
-        if: hashFiles('firestore.rules') != ''
+        if: ${{ hashFiles('firestore.rules') != '' }}
         run: firebase deploy --only firestore:rules --project finventory-dev
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
       - name: Deploy Storage Rules
-        if: hashFiles('storage.rules') != ''
+        if: ${{ hashFiles('storage.rules') != '' }}
         run: firebase deploy --only storage --project finventory-dev
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
       - name: Deploy Firestore Indexes
-        if: hashFiles('firestore.indexes.json') != ''
+        if: ${{ hashFiles('firestore.indexes.json') != '' }}
         run: firebase deploy --only firestore:indexes --project finventory-dev
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
@@ -99,7 +100,7 @@ jobs:
     name: Deploy Cloud Functions (Staging)
     runs-on: ubuntu-latest
     needs: [test, build]
-    if: hashFiles('functions/package.json') != ''
+    if: ${{ hashFiles('functions/package.json') != '' }}
     environment: staging
     steps:
       - uses: actions/checkout@v4

@@ -1,13 +1,14 @@
-import * as functions from 'firebase-functions';
+import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 import * as admin from 'firebase-admin';
 import { rtdb } from '../config.js';
 /**
  * Triggered when a new order is created
  * - Updates real-time inventory count
  */
-export const onOrderCreated = functions.firestore
-    .document('orders/{orderId}')
-    .onCreate(async (snap, _context) => {
+export const onOrderCreated = onDocumentCreated('orders/{orderId}', async (event) => {
+    const snap = event.data;
+    if (!snap)
+        return;
     const order = snap.data();
     // Get listing to update inventory
     const listingDoc = await admin.firestore().collection('listings').doc(order.listingId).get();
