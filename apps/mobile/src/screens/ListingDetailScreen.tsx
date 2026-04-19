@@ -15,6 +15,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useAuth } from '../hooks/useAuth';
 import { ListingWithDistance } from '../types/listing';
 import { FirestoreService } from '../services/firebase/firestore';
+import { INaturalistPanel } from '../components/INaturalistPanel';
+import { fetchSustainabilityInfo } from '../services/inaturalist';
+import { SustainabilityInfo } from '../types/inaturalist';
 
 const { width } = Dimensions.get('window');
 
@@ -55,6 +58,16 @@ export default function ListingDetailScreen() {
   const [purchaseQty, setPurchaseQty] = useState(1);
   const [purchasing, setPurchasing] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [sustainabilityInfo, setSustainabilityInfo] = useState<SustainabilityInfo>({
+    taxon: null,
+    level: 'unknown',
+    score: 0,
+    statusLabel: 'Loading…',
+    statusColor: '#9CA3AF',
+    iucnCode: 'NE',
+    loading: true,
+    error: null,
+  });
 
   useEffect(() => {
     loadListing();
@@ -64,6 +77,7 @@ export default function ListingDetailScreen() {
     try {
       const data = await FirestoreService.getListing(id);
       setListing(data as ListingWithDistance);
+      fetchSustainabilityInfo(data.species).then(setSustainabilityInfo);
     } catch {
       Alert.alert('Error', 'Failed to load listing');
     } finally {
@@ -267,8 +281,11 @@ export default function ListingDetailScreen() {
             </View>
           )}
 
+          {/* More about this fish */}
+          <INaturalistPanel speciesName={listing.species} info={sustainabilityInfo} />
+
           {/* Purchase Section */}
-          <View style={styles.purchaseCard}>
+          <View style={[styles.purchaseCard, { marginTop: 20 }]}>
             <Text style={styles.purchaseTitle}>Purchase</Text>
 
             {/* Quantity Selector */}

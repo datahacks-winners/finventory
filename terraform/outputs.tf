@@ -23,3 +23,9 @@ output "web_domain" {
   description = "Web app custom domain"
   value       = google_cloud_run_domain_mapping.web.name
 }
+
+# Output the GitHub Actions service account key (sensitive - save to GitHub secrets)
+output "github_actions_sa_key" {
+  value     = google_service_account_key.github_actions.private_key
+  sensitive = true
+}

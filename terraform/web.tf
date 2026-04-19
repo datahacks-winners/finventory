@@ -20,7 +20,7 @@ resource "google_cloud_run_v2_service" "web" {
     }
 
     containers {
-      image = "gcr.io/${var.project_id}/web:${var.web_image_tag}"
+      image = "us-central1-docker.pkg.dev/${var.project_id}/web-images/web:${var.web_image_tag}"
 
       resources {
         cpu_idle = true

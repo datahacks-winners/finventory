@@ -1,9 +1,25 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { UnsplashImage } from '../components/UnsplashImage'
+import { getFallbackUrl } from '../services/unsplash'
 
 const FILTER_TAGS = ['All', 'Bycatch', 'Surplus', 'Off-cut', 'Whole']
 
-const CRATES = [
+interface Crate {
+  id: string
+  name: string
+  price: number
+  weight: number
+  distance: number
+  pickup: string
+  badge: string | null
+  badgeBg: string | null
+  tag: string | null
+  img: string
+  alt: string
+}
+
+const CRATES: Crate[] = [
   {
     id: '1',
     name: 'Wild King Salmon',
@@ -14,7 +30,7 @@ const CRATES = [
     badge: 'SUNSET DISCOUNT',
     badgeBg: 'bg-secondary',
     tag: 'WILD CAUGHT',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA30stG08LgmrXLrDFv3Fro5ra3FqzlssNTOc6oxSNOrWzr0JplkVajr6aWCFDGMUZRzObRTO-FyyyogLDWMRLSBA6g3KDrFC8pY2QTQPSXUSztpKryEQX0WBR4Czx_XJeJuLrKXqZSqsAMJLMvEKr8iRVM2-H7Xl8A-Yl_JF4f4jO6t7W-PfGuYv3tzSr7g7xGLoUb3EXSTtR2pxbwyc-jkboZ5LWQQ3sdQU1eJyCzmDs189sv95ISLIPKdbfGI4pS_zvQO7eND7U',
+    img: getFallbackUrl('salmon'),
     alt: 'fresh wild king salmon fillets on ice',
   },
   {
@@ -25,8 +41,9 @@ const CRATES = [
     distance: 0.8,
     pickup: 'Ready Now',
     badge: null,
+    badgeBg: null,
     tag: 'BYCATCH',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZZ-YX7eWKqJG4q2Xo8FPZWbGXwYt2JDnZ3G3a1c8qhUCA0sPabO8UOXx0d1o_xvhzENMEHZRmhXLqUhvzP4i5i6kylAWCOQxsEd76EtfAsuUNZhmF5x1kbm2kdqrLzND5RpSdAL3zxe8KbrG-uXHbvohNd-wdaxrKHgNHjA3JCbZ83oJF55vmLsaV4AAQiDwbdnbRRsW3PVzJLYJ8RJIsFNaILwgEjsyTS6QRyIuELWKUp5pdQ43BhfSsivMh_YYs3uKAypp6hcg',
+    img: getFallbackUrl('crab'),
     alt: 'fresh dungeness crab in a blue crate',
   },
   {
@@ -39,7 +56,7 @@ const CRATES = [
     badge: 'SURPLUS',
     badgeBg: 'bg-secondary',
     tag: null,
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDQdYo5Bu93SgR6w5IzeL338cKTw3VjYXSLJk6nH3mJNuQFPe86DzztG5Xj3m0MaIJ-gB7JeNDa-BBABsr58b4WD8FQn4TufoWNt49J3KzeZIaW5als58S989PGMT0WHuQQ6g1SQHaBXrz9IGTQvYk3ePkqEbPfpvEowfnJw9bGT1VF9RgKj9V7d369YkYu5UskW9DoWiZwWKK0ODIkGTgbvmI6eGK-4IpmyTrFxj0rNjJn89CuoFpzmNsLXliHwNRZ5xkwd9lTw7k',
+    img: getFallbackUrl('lobster'),
     alt: 'piles of fresh rockfish in a white container',
   },
 ]
@@ -159,10 +176,11 @@ export default function Marketplace() {
             {CRATES.map(crate => (
               <Link key={crate.id} to={`/marketplace/${crate.id}`} className="bg-surface-container-lowest rounded-lg overflow-hidden ocean-shadow border border-outline-variant/10 group block">
                 <div className="relative h-48">
-                  <img
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    alt={crate.alt}
+                  <UnsplashImage
                     src={crate.img}
+                    alt={crate.alt}
+                    className="transition-transform duration-500 group-hover:scale-105"
+                    quality="high"
                   />
                   {crate.badge && (
                     <div className={`absolute top-4 left-4 ${crate.badgeBg} text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg`}>

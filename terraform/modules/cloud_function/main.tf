@@ -24,8 +24,9 @@ resource "google_cloudfunctions2_function" "function" {
   dynamic "event_trigger" {
     for_each = var.event_triggers
     content {
-      trigger     = event_trigger.trigger
-      event_type = event_trigger.event_type
+      event_type   = event_trigger.value.event_type
+      pubsub_topic = event_trigger.value.resource
+      retry_policy = "RETRY_POLICY_RETRY"
     }
   }
 }

@@ -20,9 +20,9 @@ permissions:
   pull-requests: write
 
 env:
-  TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
+  TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
   TF_VAR_region: us-central1
-  TF_VAR_domain_name: ${{ vars.GCP_PROJECT_ID }}.web.app
+  TF_VAR_domain_name: ${{ secrets.GCP_PROJECT_ID }}.web.app
   TF_VAR_web_image_tag: ${{ github.event.client_payload.web_image_tag || 'latest' }}
 
 jobs:
@@ -91,6 +91,9 @@ jobs:
       - name: Comment PR with plan
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_EVENT: ${{ github.event_name }}
         with:
           script: |
             const fs = require('fs');
@@ -106,7 +109,7 @@ jobs:
 
             </details>
 
-            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }\`*`;
+            *Pushed by: @${process.env.GITHUB_ACTOR}, Action: \`${process.env.GITHUB_EVENT}\`*`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,

@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/finventory-1776558252/web:latest'
+      - '-f'
+      - 'Dockerfile'
+      - '.'
+    dir: 'apps/web'
+
+images:
+  - 'gcr.io/finventory-1776558252/web:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

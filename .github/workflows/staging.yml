@@ -8,9 +8,13 @@ concurrency:
   group: staging-deploy
   cancel-in-progress: true
 
+permissions:
+  contents: write
+  actions: write
+
 env:
   NODE_VERSION: '20'
-  GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_REGION: us-central1
 
 jobs:
@@ -57,6 +61,22 @@ jobs:
           npm ci
           npm run build
 
+      - name: Package Functions for Terraform
+        working-directory: ./functions
+        run: zip -r ../terraform/function-source.zip lib/ package.json
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Upload to GCS
+        run: |
+          gcloud storage cp terraform/function-source.zip gs://${{ secrets.GCP_PROJECT_ID }}-function-sources/function-source.zip
+
   build-web:
     name: Build Web Container
     runs-on: ubuntu-latest
@@ -67,6 +87,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Validate GCP_PROJECT_ID
+        run: |
+          if [ -z "${{ env.GCP_PROJECT_ID }}" ]; then
+            echo "ERROR: GCP_PROJECT_ID is not set (check secrets.GCP_PROJECT_ID)"
+            exit 1
+          fi
+          echo "Project ID: ${{ env.GCP_PROJECT_ID }}"
+
       - name: Configure GCP credentials
         uses: google-github-actions/auth@v2
         with:
@@ -75,9 +103,9 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Configure Docker for GCR
+      - name: Configure Docker for Artifact Registry
         run: |
-          gcloud auth configure-docker gcr.io --quiet
+          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
 
       - name: Build and Push Web Image
         uses: docker/build-push-action@v5
@@ -85,8 +113,8 @@ jobs:
           context: ./apps/web
           push: true
           tags: |
-            gcr.io/${{ env.GCP_PROJECT_ID }}/web:${{ github.sha }}
-            gcr.io/${{ env.GCP_PROJECT_ID }}/web:latest
+            us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }}
+            us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -98,6 +126,7 @@ jobs:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v3
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           event-type: terraform-apply
           client-payload: |
             {
@@ -116,6 +145,6 @@ jobs:
         run: |
           echo "## Staging Deployment" >> $GITHUB_STEP_SUMMARY
           echo "- Functions built" >> $GITHUB_STEP_SUMMARY
-          echo "- Web image: gcr.io/${{ env.GCP_PROJECT_ID }}/web:${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Web image: us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- Terraform will deploy all changes" >> $GITHUB_STEP_SUMMARY
           echo "- URL: https://${{ env.GCP_PROJECT_ID }}-web.a.run.app" >> $GITHUB_STEP_SUMMARY
