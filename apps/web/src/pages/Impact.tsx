@@ -37,9 +37,9 @@ export default function Impact() {
             </h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-white/20 pt-12">
               {[
-                { value: 184200, suffix: ' lb', label: 'Rescued Surplus', color: 'text-primary-fixed' },
-                { value: 92, suffix: ' Tons', label: 'CO2 emissions avoided', color: 'text-secondary-fixed' },
-                { value: 420000, prefix: '$', suffix: '', label: 'Direct Fisher Revenue', color: 'text-tertiary-fixed' },
+                { value: 35, suffix: '%', label: 'Global Harvest Lost or Wasted', color: 'text-primary-fixed', source: 'Source: FAO State of World Fisheries' },
+                { value: 0.86, decimals: 2, suffix: ' kg', label: 'CO2e Emitted per kg Landfilled', color: 'text-secondary-fixed', source: 'Source: EPA Methane Impact Study' },
+                { value: 36.6, decimals: 1, suffix: '%', label: 'Fisher Share of Consumer Value', color: 'text-tertiary-fixed', source: 'Source: NOAA Economic Data' },
               ].map(s => (
                 <div key={s.label}>
                   <div className={`text-5xl font-black mb-2 ${s.color}`}>
@@ -47,11 +47,15 @@ export default function Impact() {
                       value={s.value}
                       suffix={s.suffix}
                       prefix={s.prefix}
+                      decimals={s.decimals}
                       separator=","
                       duration={2.5}
                     />
                   </div>
-                  <div className="text-sm font-bold uppercase tracking-[0.2em] text-slate-300">{s.label}</div>
+                  <div className="text-sm font-bold uppercase tracking-[0.2em] text-slate-300 mb-6">{s.label}</div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 border-t border-white/10 pt-4">
+                    {s.source}
+                  </div>
                 </div>
               ))}
             </div>
