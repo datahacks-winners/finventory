@@ -2,6 +2,7 @@ import { useState } from 'react'
 import ImpactBarChart from '../components/ImpactBarChart'
 import ImpactLineChart from '../components/ImpactLineChart'
 import { AnimatedNumber } from '../components/AnimatedNumber'
+import CalcofiInference from '../components/CalcofiInference'
 
 const ACCORDION_ITEMS = [
   {
@@ -28,7 +29,7 @@ export default function Impact() {
               className="w-full h-full object-cover opacity-60"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXGiSpzMu24sR6o-OzVoND0MXkdB3zGhvPf1Nj1iveYKwiBECCg9SuToln5pokYCc7YCQtH99DxtEpa5Z2pE558jrsOHq7BhGhIdct2h9JUVcqVpwNICSKyM8OCcPmIG0hlcSKjyZDA0HhtevXsj2c5tkpRuxH3qhcVSNuLIgfuqaRXNgOm5ixQ_RdjzaI3E5_fGp1c0JYK1qyJmhY5KNugO_N-UvRLO2J175Oo9GSof1YlL55eJwFoicmHWYM_TuMbiODeFWtvRI"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/50" />
+            <div className="absolute inset-0 bg-slate-900/70" />
           </div>
           <div className="relative z-10 px-12 max-w-7xl mx-auto w-full pt-20">
             <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-16 max-w-4xl" style={{ letterSpacing: '-0.02em', lineHeight: 1.2 }}>
@@ -75,6 +76,21 @@ export default function Impact() {
                 <ImpactLineChart className="w-full" />
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* ── CalCOFI ML Inference ── */}
+        <section className="px-12 py-20 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-10">
+              <span className="italic-accent-caveat text-primary text-2xl block mb-2">ML-Powered</span>
+              <h2 className="text-4xl font-black tracking-tight text-on-surface">Ocean Health Predictions</h2>
+              <p className="text-on-surface-variant mt-4 max-w-2xl">
+                Using CalCOFI survey data and machine learning models (XGBoost, OLS, TimesFM) 
+                to predict larval fish density from oceanographic features.
+              </p>
+            </div>
+            <CalcofiInference />
           </div>
         </section>
 

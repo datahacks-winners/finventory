@@ -55,8 +55,8 @@ export default function Home() {
               lazy={false}
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-black/70" />
+          <div className="absolute inset-0 bg-black/60" />
         </div>
 
         {/* Three.js ocean overlay */}
@@ -251,7 +251,7 @@ export default function Home() {
 
       {/* ── CTA ── */}
       <section className="py-24 max-w-screen-2xl mx-auto px-6 lg:px-12">
-        <div className="relative bg-gradient-to-br from-[#00ACC1] to-[#007C91] rounded-[3rem] p-12 lg:p-24 overflow-hidden shadow-2xl">
+        <div className="relative bg-[#00ACC1] rounded-[3rem] p-12 lg:p-24 overflow-hidden shadow-2xl">
           <div className="absolute -right-20 -top-20 w-[400px] h-[400px] bg-white/10 rounded-full blur-3xl" />
           <div className="relative z-10 max-w-3xl">
             <span className="italic-accent-caveat text-sunset-yellow text-4xl mb-6 block">join the movement</span>

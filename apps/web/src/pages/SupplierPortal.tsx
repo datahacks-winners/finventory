@@ -209,7 +209,7 @@ export default function SupplierPortal() {
             alt="busy harbor at sunrise"
             src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1200&auto=format&fit=crop"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/60 to-transparent" />
+          <div className="absolute inset-0 bg-primary/60" />
         </div>
         <OceanCanvas className="absolute inset-0 z-[1] pointer-events-none opacity-20" />
         <div className="relative z-10 px-12 max-w-7xl mx-auto w-full">
@@ -410,7 +410,7 @@ export default function SupplierPortal() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="bg-gradient-to-r from-primary to-primary-container text-white px-10 py-4 rounded-full font-bold text-lg shadow-xl hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="bg-primary text-white px-10 py-4 rounded-full font-bold text-lg shadow-xl hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {submitting ? (
                   <>

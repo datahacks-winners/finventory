@@ -51,13 +51,16 @@ const generateEmbedding = async (text: string): Promise<number[]> => {
     throw new Error('GEMINI_API_KEY not configured')
   }
   
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key=${apiKey}`
+  // Use the batchEmbedContents endpoint which works with text-embedding-004
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:batchEmbedContents?key=${apiKey}`
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'models/embedding-001',
-      content: { parts: [{ text }] }
+      requests: [{
+        model: 'models/text-embedding-004',
+        content: { parts: [{ text }] }
+      }]
     })
   })
   
@@ -66,8 +69,8 @@ const generateEmbedding = async (text: string): Promise<number[]> => {
     throw new Error(`Embedding API error: ${response.status} ${response.statusText} - ${err}`)
   }
   
-  const data = await response.json() as { embedding?: { values?: number[] } }
-  return data.embedding?.values || []
+  const data = await response.json() as { embeddings?: Array<{ values?: number[] }> }
+  return data.embeddings?.[0]?.values || []
 }
 
 export const ragSearch = onCall(

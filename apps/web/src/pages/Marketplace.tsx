@@ -49,16 +49,16 @@ function getBadge(listing: ListingWithDistance): { text: string; bg: string; ico
   )
 
   if (listing.grade === 'sushi') {
-    return { text: 'SUSHI GRADE', bg: 'bg-gradient-to-r from-blue-600 to-blue-400', icon: 'restaurant', pulse: true }
+    return { text: 'SUSHI GRADE', bg: 'bg-blue-500', icon: 'restaurant', pulse: true }
   }
   if (hoursLeft < 4) {
-    return { text: 'SUNSET SPECIAL', bg: 'bg-gradient-to-r from-orange-500 to-red-500', icon: 'wb_twilight', pulse: true }
+    return { text: 'SUNSET SPECIAL', bg: 'bg-orange-500', icon: 'wb_twilight', pulse: true }
   }
   if (listing.quantity < 10) {
-    return { text: 'LOW STOCK', bg: 'bg-gradient-to-r from-amber-500 to-yellow-400', icon: 'inventory_2' }
+    return { text: 'LOW STOCK', bg: 'bg-amber-500', icon: 'inventory_2' }
   }
   if (listing.deliveryAvailable) {
-    return { text: 'DELIVERY', bg: 'bg-gradient-to-r from-emerald-500 to-teal-400', icon: 'local_shipping' }
+    return { text: 'DELIVERY', bg: 'bg-emerald-500', icon: 'local_shipping' }
   }
   return null
 }
@@ -117,8 +117,8 @@ function MapMarker({
           <div
             className={`px-3 py-2 rounded-full font-bold shadow-xl flex items-center gap-1 cursor-pointer ${
               hoursLeft < 4
-                ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white animate-pulse'
-                : 'bg-gradient-to-r from-primary to-primary-container text-white'
+                ? 'bg-orange-500 text-white animate-pulse'
+                : 'bg-primary text-white'
             }`}
           >
             <span className="text-xs">$</span>
@@ -164,7 +164,7 @@ function EmptyState({ isAuthenticated }: { isAuthenticated: boolean }) {
   const navigate = useNavigate()
 
   return (
-    <div className="text-center py-16 bg-gradient-to-br from-surface-container-low to-surface-container rounded-2xl border-2 border-dashed border-outline-variant/30">
+    <div className="text-center py-16 bg-surface-container rounded-2xl border-2 border-dashed border-outline-variant/30">
       <div className="relative inline-block mb-6">
         <span className="material-symbols-outlined text-6xl text-outline/40">waves</span>
         <span className="material-symbols-outlined text-4xl text-primary absolute -bottom-2 -right-2 animate-bounce">
@@ -180,7 +180,7 @@ function EmptyState({ isAuthenticated }: { isAuthenticated: boolean }) {
         <div className="flex flex-col gap-3 items-center">
           <button
             onClick={() => navigate('/suppliers')}
-            className="bg-gradient-to-r from-primary to-primary-container text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2"
+            className="bg-primary text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2"
           >
             <span className="material-symbols-outlined">add</span>
             List Your First Crate
@@ -196,7 +196,7 @@ function EmptyState({ isAuthenticated }: { isAuthenticated: boolean }) {
       ) : (
         <button
           onClick={() => navigate('/auth')}
-          className="bg-gradient-to-r from-secondary to-secondary-container text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform"
+          className="bg-secondary text-white px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform"
         >
           Sign In to Browse
         </button>
@@ -284,7 +284,7 @@ export default function Marketplace() {
   return (
     <div className="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-white min-h-screen">
       {/* Header Section */}
-      <div className="bg-gradient-to-br from-surface-container-low via-surface to-surface-container-high border-b border-outline-variant/10">
+      <div className="bg-surface border-b border-outline-variant/10">
         <div className="max-w-[1600px] mx-auto px-6 lg:px-12 py-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -344,7 +344,7 @@ export default function Marketplace() {
               </div>
 
               {/* Count Badge */}
-              <div className="bg-gradient-to-r from-primary to-primary-container text-white px-5 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg">
+              <div className="bg-primary text-white px-5 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg">
                 <span className="material-symbols-outlined text-lg">package_2</span>
                 {loading ? (
                   <span className="animate-pulse">...</span>
@@ -361,7 +361,7 @@ export default function Marketplace() {
         {/* Map/List View Section */}
         <section className="relative flex flex-col gap-4">
           {/* Featured Pier Card */}
-          <div className="bg-gradient-to-r from-secondary-container/50 to-tertiary-container/50 p-4 rounded-xl border border-outline-variant/20 flex items-center justify-between">
+          <div className="bg-secondary-container/50 p-4 rounded-xl border border-outline-variant/20 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-md">
                 <span className="material-symbols-outlined text-on-secondary">anchor</span>
@@ -388,7 +388,7 @@ export default function Marketplace() {
           </div>
 
           {/* Map / List Container */}
-          <div className="relative w-full flex-grow rounded-2xl overflow-hidden ocean-gradient border border-outline-variant/10 ocean-shadow min-h-[600px]">
+          <div className="relative w-full flex-grow rounded-2xl overflow-hidden bg-surface border border-outline-variant/10 ocean-shadow min-h-[600px]">
             {viewMode === 'map' ? (
               <>
                 {/* Animated Background */}
@@ -616,7 +616,7 @@ function ListingCard({ listing }: { listing: ListingWithDistance }) {
         <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold border border-white/50 uppercase text-primary">
           {listing.grade}
         </div>
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+        <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-3">
           <div className="flex justify-between items-end">
             <span className="text-white font-bold capitalize">{listing.species}</span>
             <span className={`font-bold ${getUrgencyColor(hoursLeft)}`}>
@@ -633,7 +633,7 @@ function ListingCard({ listing }: { listing: ListingWithDistance }) {
           </span>
           <span className="text-sm text-outline">{listing.quantity} {listing.unit}</span>
         </div>
-        <button className="w-full bg-gradient-to-r from-primary to-primary-container text-white py-2 rounded-full font-bold text-sm shadow-md group-hover:shadow-lg transition-all group-hover:scale-[1.02]">
+        <button className="w-full bg-primary text-white py-2 rounded-full font-bold text-sm shadow-md group-hover:shadow-lg transition-all group-hover:scale-[1.02]">
           Claim Now
         </button>
       </div>
@@ -710,7 +710,7 @@ function ListingListItem({ listing }: { listing: ListingWithDistance }) {
           ))}
         </div>
 
-        <button className="w-full bg-gradient-to-r from-primary to-primary-container text-white py-3 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
+        <button className="w-full bg-primary text-white py-3 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
           <span className="material-symbols-outlined">shopping_basket</span>
           Claim Crate
         </button>
