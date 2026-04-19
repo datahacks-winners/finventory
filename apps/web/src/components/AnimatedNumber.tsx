@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import CountUp from 'react-countup'
 
 interface AnimatedNumberProps {
@@ -20,94 +20,30 @@ export function AnimatedNumber({
   className = '',
   separator = ',',
 }: AnimatedNumberProps) {
-  const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLSpanElement>(null)
-  const hasTriggered = useRef(false)
+  const [start, setStart] = useState(false)
 
   useEffect(() => {
-    if (hasTriggered.current) return
-
-    const element = ref.current
-    if (!element) return
-
-    // Trigger animation
-    const triggerAnimation = () => {
-      if (!hasTriggered.current) {
-        hasTriggered.current = true
-        setIsVisible(true)
-      }
-    }
-
-    // Check if in viewport immediately
-    const checkViewport = () => {
-      const rect = element.getBoundingClientRect()
-      return rect.top < window.innerHeight && rect.bottom > 0
-    }
-
-    // Try immediate check
-    if (checkViewport()) {
-      triggerAnimation()
-      return
-    }
-
-    // Set up intersection observer as backup
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          triggerAnimation()
-          observer.disconnect()
-        }
-      },
-      { threshold: 0, rootMargin: '100px' }
-    )
-
-    observer.observe(element)
-
-    // Fallback: trigger after 500ms if still not visible
-    const fallbackTimer = setTimeout(() => {
-      if (!hasTriggered.current) {
-        triggerAnimation()
-      }
-      observer.disconnect()
-    }, 500)
-
-    return () => {
-      observer.disconnect()
-      clearTimeout(fallbackTimer)
-    }
+    // Small delay to ensure DOM is ready, then animate
+    const timer = setTimeout(() => setStart(true), 100)
+    return () => clearTimeout(timer)
   }, [])
 
-  // Format the static display value
-  const formatStaticValue = () => {
-    if (decimals > 0) {
-      return `${prefix}${(0).toFixed(decimals)}${suffix}`
-    }
-    return `${prefix}0${suffix}`
+  if (!start) {
+    return <span className={className}>{prefix}0{suffix}</span>
   }
 
   return (
-    <span ref={ref} className={className}>
-      {isVisible ? (
-        <CountUp
-          start={0}
-          end={value}
-          duration={duration}
-          prefix={prefix}
-          suffix={suffix}
-          decimals={decimals}
-          separator={separator}
-          useEasing={true}
-          easingFn={(t, b, c, d) => {
-            // Ease out quart
-            t /= d
-            t--
-            return -c * (t * t * t * t - 1) + b
-          }}
-        />
-      ) : (
-        formatStaticValue()
-      )}
-    </span>
+    <CountUp
+      start={0}
+      end={value}
+      duration={duration}
+      prefix={prefix}
+      suffix={suffix}
+      decimals={decimals}
+      separator={separator}
+      className={className}
+      useEasing={true}
+    />
   )
 }
 
