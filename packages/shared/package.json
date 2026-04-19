@@ -1,0 +1,17 @@
+{
+  "name": "@finventory/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "mocha --require ts-node/register --experimental-loader=ts-node/esm test/**/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.10",
+    "chai": "^4.4.1",
+    "mocha": "^11.7.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  }
+}
