@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import CountUp from 'react-countup'
 
 interface AnimatedNumberProps {
@@ -21,47 +21,61 @@ export function AnimatedNumber({
   separator = ',',
 }: AnimatedNumberProps) {
   const [isVisible, setIsVisible] = useState(false)
-  const [hasAnimated, setHasAnimated] = useState(false)
   const ref = useRef<HTMLSpanElement>(null)
-  const observerRef = useRef<IntersectionObserver | null>(null)
-
-  const startAnimation = useCallback(() => {
-    if (!hasAnimated) {
-      setIsVisible(true)
-      setHasAnimated(true)
-    }
-  }, [hasAnimated])
+  const hasTriggered = useRef(false)
 
   useEffect(() => {
+    if (hasTriggered.current) return
+
     const element = ref.current
     if (!element) return
 
-    // Check if already visible
-    const rect = element.getBoundingClientRect()
-    const isInViewport = rect.top < window.innerHeight && rect.bottom > 0
-    
-    if (isInViewport) {
-      startAnimation()
+    // Trigger animation
+    const triggerAnimation = () => {
+      if (!hasTriggered.current) {
+        hasTriggered.current = true
+        setIsVisible(true)
+      }
+    }
+
+    // Check if in viewport immediately
+    const checkViewport = () => {
+      const rect = element.getBoundingClientRect()
+      return rect.top < window.innerHeight && rect.bottom > 0
+    }
+
+    // Try immediate check
+    if (checkViewport()) {
+      triggerAnimation()
       return
     }
 
-    // Set up intersection observer
-    observerRef.current = new IntersectionObserver(
+    // Set up intersection observer as backup
+    const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          startAnimation()
-          observerRef.current?.disconnect()
+          triggerAnimation()
+          observer.disconnect()
         }
       },
-      { threshold: 0.1, rootMargin: '50px' }
+      { threshold: 0, rootMargin: '100px' }
     )
 
-    observerRef.current.observe(element)
+    observer.observe(element)
+
+    // Fallback: trigger after 500ms if still not visible
+    const fallbackTimer = setTimeout(() => {
+      if (!hasTriggered.current) {
+        triggerAnimation()
+      }
+      observer.disconnect()
+    }, 500)
 
     return () => {
-      observerRef.current?.disconnect()
+      observer.disconnect()
+      clearTimeout(fallbackTimer)
     }
-  }, [startAnimation])
+  }, [])
 
   // Format the static display value
   const formatStaticValue = () => {
