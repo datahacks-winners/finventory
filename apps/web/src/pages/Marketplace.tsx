@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useListings } from '../hooks/useListings'
 import { getFallbackUrl } from '../services/pexels'
@@ -215,6 +215,8 @@ function ProductCard({
   )
 }
 
+const ITEMS_PER_PAGE = 12
+
 export default function Marketplace() {
   const [selectedGrades, setSelectedGrades] = useState<string[]>([])
   const [selectedSpecies, setSelectedSpecies] = useState<string[]>([])
@@ -223,6 +225,7 @@ export default function Marketplace() {
   const [sortBy, setSortBy] = useState<'distance' | 'price' | 'freshness'>('distance')
   const [cart, setCart] = useState<CartItem[]>([])
   const [showCart, setShowCart] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const filters = useMemo(() => ({
     species: selectedSpecies,
@@ -263,6 +266,18 @@ export default function Marketplace() {
 
     return filtered
   }, [listings, searchQuery, sortBy])
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredListings.length / ITEMS_PER_PAGE)
+  const paginatedListings = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE
+    return filteredListings.slice(start, start + ITEMS_PER_PAGE)
+  }, [filteredListings, currentPage])
+
+  // Reset to page 1 when filters/search change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery, selectedGrades, selectedSpecies, maxDistance, sortBy])
 
   const addToCart = (listing: ListingWithDistance, weight: number) => {
     setCart(prev => {
@@ -485,18 +500,77 @@ export default function Marketplace() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredListings.map(listing => (
-                  <ProductCard
-                    key={listing.id}
-                    listing={listing}
-                    cartItem={cart.find(item => item.listing.id === listing.id)}
-                    onAddToCart={addToCart}
-                    onUpdateWeight={updateCartWeight}
-                    onRemove={removeFromCart}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {paginatedListings.map(listing => (
+                    <ProductCard
+                      key={listing.id}
+                      listing={listing}
+                      cartItem={cart.find(item => item.listing.id === listing.id)}
+                      onAddToCart={addToCart}
+                      onUpdateWeight={updateCartWeight}
+                      onRemove={removeFromCart}
+                    />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="mt-8 flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-slate-100 hover:bg-slate-200 text-slate-700"
+                    >
+                      <span className="material-symbols-outlined text-sm align-middle">chevron_left</span>
+                      Prev
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum: number
+                        if (totalPages <= 5) {
+                          pageNum = i + 1
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i
+                        } else {
+                          pageNum = currentPage - 2 + i
+                        }
+
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`w-10 h-10 rounded-lg font-bold transition-colors ${
+                              currentPage === pageNum
+                                ? 'bg-primary text-white'
+                                : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        )
+                      })}
+                    </div>
+
+                    <button
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-slate-100 hover:bg-slate-200 text-slate-700"
+                    >
+                      Next
+                      <span className="material-symbols-outlined text-sm align-middle">chevron_right</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* Showing text */}
+                <p className="text-center text-sm text-slate-500 mt-4">
+                  Showing {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, filteredListings.length)} - {Math.min(currentPage * ITEMS_PER_PAGE, filteredListings.length)} of {filteredListings.length} listings
+                </p>
+              </>
             )}
           </main>
 

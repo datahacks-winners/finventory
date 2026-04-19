@@ -20,8 +20,8 @@ const HOW_STEPS = [
   { n: '4', title: 'Impact', desc: 'Every transaction logs lbs saved & CO₂ avoided to your dashboard.' },
 ]
 
-// Fresh Catch Marquee - horizontal scrolling listings
-function FreshCatchMarquee() {
+// Fresh Catch Grid - responsive grid layout
+function FreshCatchGrid() {
   const navigate = useNavigate()
   const filters = useMemo(() => ({
     species: [],
@@ -40,20 +40,17 @@ function FreshCatchMarquee() {
   const featured = useMemo(() => {
     return listings
       .sort((a, b) => a.expiresAt.toDate().getTime() - b.expiresAt.toDate().getTime())
-      .slice(0, 12)
+      .slice(0, 8)
   }, [listings])
 
   if (loading || featured.length === 0) {
     return null
   }
 
-  // Double the listings for seamless infinite scroll
-  const doubledListings = [...featured, ...featured]
-
   return (
-    <section className="py-16 bg-surface overflow-hidden">
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 mb-8">
-        <div className="flex items-center justify-between">
+    <section className="py-16 bg-surface">
+      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
+        <div className="flex items-center justify-between mb-8">
           <div>
             <span className="italic-accent-caveat text-primary text-3xl mb-2 block">fresh from the boats</span>
             <h2 className="text-4xl lg:text-5xl font-black text-on-background tracking-tight">
@@ -68,29 +65,20 @@ function FreshCatchMarquee() {
             <span className="material-symbols-outlined">arrow_forward</span>
           </Link>
         </div>
-      </div>
 
-      {/* Scrolling marquee container */}
-      <div className="relative">
-        {/* Left fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none" />
-        
-        {/* Right fade */}
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none" />
-
-        {/* Scrolling track */}
-        <div className="flex gap-6 animate-marquee hover:[animation-play-state:paused]">
-          {doubledListings.map((listing, idx) => {
+        {/* Grid layout */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {featured.map((listing) => {
             const photo = listing.photos?.[0] || getFallbackUrl(listing.species.toLowerCase())
             const hoursLeft = Math.floor((listing.expiresAt.toDate().getTime() - new Date().getTime()) / (1000 * 60 * 60))
             
             return (
               <div
-                key={`${listing.id}-${idx}`}
+                key={listing.id}
                 onClick={() => navigate(`/marketplace/${listing.id}`)}
-                className="flex-shrink-0 w-72 group cursor-pointer"
+                className="group cursor-pointer"
               >
-                <div className="relative h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
                   <img
                     src={photo}
                     alt={listing.species}
@@ -113,10 +101,10 @@ function FreshCatchMarquee() {
                   </div>
 
                   {/* Info overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <h3 className="text-white font-bold text-xl capitalize mb-1">{listing.species}</h3>
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
+                    <h3 className="text-white font-bold text-lg md:text-xl capitalize mb-1">{listing.species}</h3>
                     <div className="flex items-center justify-between text-white/90">
-                      <span className="text-2xl font-black">${listing.pricePerUnit.toFixed(0)}<span className="text-sm font-normal">/lb</span></span>
+                      <span className="text-xl md:text-2xl font-black">${listing.pricePerUnit.toFixed(0)}<span className="text-sm font-normal">/lb</span></span>
                       {listing.distance !== undefined && (
                         <span className="text-sm flex items-center gap-1">
                           <span className="material-symbols-outlined text-sm">location_on</span>
@@ -130,17 +118,17 @@ function FreshCatchMarquee() {
             )
           })}
         </div>
-      </div>
 
-      {/* Mobile CTA */}
-      <div className="md:hidden mt-8 text-center px-6">
-        <Link
-          to="/marketplace"
-          className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-bold"
-        >
-          Browse All Catches
-          <span className="material-symbols-outlined">arrow_forward</span>
-        </Link>
+        {/* Mobile CTA */}
+        <div className="md:hidden mt-8 text-center">
+          <Link
+            to="/marketplace"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-bold"
+          >
+            Browse All Catches
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </Link>
+        </div>
       </div>
     </section>
   )
@@ -500,7 +488,7 @@ export default function Home() {
       </section>
 
       {/* ── Today's Fresh Catch ── */}
-      <FreshCatchMarquee />
+      <FreshCatchGrid />
 
       {/* ── AI Demo ── */}
       <AIDemoSection />
