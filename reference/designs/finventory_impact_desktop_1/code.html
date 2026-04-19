@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Caveat:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#4e3e00",
+                    "outline": "#707881",
+                    "on-secondary-container": "#773e01",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#ebd6c9",
+                    "surface-container-high": "#f9e4d7",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#004a75",
+                    "surface-bright": "#fff8f5",
+                    "background": "#fff8f5",
+                    "inverse-surface": "#3a2e25",
+                    "tertiary": "#725c07",
+                    "on-primary-container": "#f7f9ff",
+                    "inverse-primary": "#95ccff",
+                    "surface-container-low": "#fff1e9",
+                    "on-surface-variant": "#404750",
+                    "secondary-fixed-dim": "#ffb77d",
+                    "on-background": "#241911",
+                    "on-primary-fixed": "#001d32",
+                    "surface-tint": "#00639a",
+                    "secondary-fixed": "#ffdcc3",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-tertiary-fixed": "#231b00",
+                    "tertiary-container": "#c5a952",
+                    "on-primary": "#ffffff",
+                    "surface": "#fff8f5",
+                    "tertiary-fixed": "#ffe085",
+                    "outline-variant": "#c0c7d1",
+                    "on-error": "#ffffff",
+                    "on-surface": "#241911",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#f3dfd1",
+                    "surface-variant": "#f3dfd1",
+                    "inverse-on-surface": "#ffede2",
+                    "primary-fixed-dim": "#95ccff",
+                    "primary": "#005f93",
+                    "surface-container": "#ffeadc",
+                    "primary-fixed": "#cde5ff",
+                    "secondary": "#8c4f14",
+                    "tertiary-fixed-dim": "#e2c46a",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#6e3900",
+                    "secondary-container": "#fdac6a",
+                    "primary-container": "#1e78b4",
+                    "on-secondary-fixed": "#2f1500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"],
+                    "accent": ["Caveat"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .italic-accent-caveat {
+            font-family: 'Caveat', cursive;
+        }
+        .text-editorial {
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        .map-texture {
+            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFUPmbfZ9yFz6B3cN0xfjyXB2nNi1PHKaHSVT-TQFKb_2twLVwRBjYaex43VoUxDKyNvBUTgpgxZwRdURgcfhsL-I54sJyfNfxQY2CYH6wsEEiUr-Ycz51AD4eTEd_oej0zlUl-ADZRUZvoEE9KxsSjqhwilNdWt6G3Hoq52vBx2sNo3KfAn6lZ7AufYQi0kMGp3pqhfz-PuM7Xnt7mWqYuFRh_IC5UIH5O3YlG9ohiTuELMyWDLGKuqXXwqtyG40GzJTUWHhWHMw');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<nav class="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-surface-container-high">
+<div class="flex justify-between items-center px-12 py-5 w-full max-w-screen-2xl mx-auto">
+<a class="text-2xl font-bold text-sky-900 italic-accent-caveat" href="#">Finventory</a>
+<div class="hidden md:flex gap-10 items-center">
+<a class="text-slate-600 hover:text-sky-800 font-medium tracking-tight transition-all" href="#">Marketplace</a>
+<a class="text-slate-600 hover:text-sky-800 font-medium tracking-tight transition-all" href="#">Suppliers</a>
+<a class="text-sky-700 font-bold border-b-2 border-sky-700 pb-1 tracking-tight" href="#">Impact</a>
+<a class="text-slate-600 hover:text-sky-800 font-medium tracking-tight transition-all" href="#">About</a>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-2.5 text-sky-800 font-medium hover:scale-[1.02] active:scale-95 transition-transform duration-300">Log in</button>
+<button class="px-8 py-2.5 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-transform duration-300">Sign up</button>
+</div>
+</div>
+</nav>
+<main>
+<section class="relative pt-24 pb-32 overflow-hidden bg-surface-bright">
+<div class="absolute inset-0 z-0 opacity-15">
+<img alt="Authentic harbor portrait" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDennEdCu-yALOE4q-0nZ-kRlyUtUtnDg4vr7GbOK6k7ex-A9TUWLlCwO_BVbHFzT4auJJiMlLKORilis3Vm41ak44IYGO_FCvIt7s_Ep7-TkDW9Vv4xm5tCizaUpoyl-3-xDgmDVuF8-WBklowqQv_wNCoD-ErsTNAQIj_TorE2EKwxOMNMsI3h8SCrwcwCyEGL18HYBTY8BrfEEA8Nx0VfTAw4B4-oA0JHWq870_X5Ngih2u6TRm1D9lSjri6Wmc_ZdLGEgLnCAg"/>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-12 text-center">
+<span class="italic-accent-caveat text-4xl text-primary mb-6 block" style="font-variation-settings: 'wght' 600;">Data-Driven Sustainability</span>
+<h1 class="text-6xl md:text-8xl font-black text-on-background tracking-tighter mb-16 text-editorial">
+                Impact <span class="text-primary italic">At Scale</span>
+</h1>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+<div class="flex flex-col items-center text-center p-10 bg-white rounded-2xl shadow-xl shadow-primary/5 border border-surface-container-high">
+<div class="relative w-48 h-48 mb-6">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+<circle class="text-outline/10" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="62.8" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-black text-primary">184.2k</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-outline">lb rescued</span>
+</div>
+</div>
+<h3 class="text-xl font-bold text-on-background">Waste Prevention</h3>
+<p class="text-on-surface-variant text-sm mt-2 font-medium">Sustainable surplus redirection preventing ecological decay.</p>
+</div>
+<div class="flex flex-col items-center text-center p-10 bg-white rounded-2xl shadow-xl shadow-secondary/5 border border-surface-container-high">
+<div class="relative w-48 h-48 mb-6">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+<circle class="text-outline/10" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary-container" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="100.5" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-black text-secondary">92t</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-outline">CO2 Avoided</span>
+</div>
+</div>
+<h3 class="text-xl font-bold text-on-background">Logistics Efficiency</h3>
+<p class="text-on-surface-variant text-sm mt-2 font-medium">Optimization reducing transport-related carbon emissions by 42%.</p>
+</div>
+<div class="flex flex-col items-center text-center p-10 bg-white rounded-2xl shadow-xl shadow-tertiary/5 border border-surface-container-high">
+<div class="relative w-48 h-48 mb-6">
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+<circle class="text-outline/10" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-tertiary-container" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="125.6" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-black text-tertiary">$420k</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-outline">Value Returned</span>
+</div>
+</div>
+<h3 class="text-xl font-bold text-on-background">Economic Resilience</h3>
+<p class="text-on-surface-variant text-sm mt-2 font-medium">Direct capital injection into small-scale artisanal fisheries.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="px-12 py-32 bg-white border-t border-surface-container-high">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+<div class="relative">
+<img alt="Harbor Master Portrait" class="w-full h-[650px] object-cover rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSgZbPh53GoGGiYBwEHTAdL-lkZDtzpkKR_L-_FkyHTxTGABoVUC9BS9AfNSiPU0Fa6QupEVsb57SooCz-ivBhJAGHXg3sWQ4q6I5FYUmPsvzmMx7ZP9jB9zk2Ox_a1XF-cX6kPgKix9NVnnpCvjz6KKMt-NSNvk5xb-HDnnI8DzqRpSq6BRxxj68k_xZghG12QqXiwm23QF_ifbY_plrNy1RmM3MqLxrHsW3j7MsLYzX01emNJYMJYHkLzNURkz8I-YOTM8o2U1k"/>
+<div class="absolute -bottom-8 -right-8 bg-primary p-10 rounded-2xl text-white max-w-sm shadow-2xl">
+<p class="italic-accent-caveat text-3xl leading-tight">"Finventory isn't just a tool; it's the partner that understands the physical demands of our harbor."</p>
+<div class="mt-6 flex items-center gap-4">
+<div class="w-12 h-0.5 bg-white/30"></div>
+<p class="font-bold uppercase tracking-widest text-xs">Capt. Silas Vance, Harbor Master</p>
+</div>
+</div>
+</div>
+<div>
+<span class="text-primary font-bold uppercase tracking-[0.2em] text-sm mb-6 block">Supplier Perspectives</span>
+<h2 class="text-5xl font-black text-on-surface mb-8 tracking-tight leading-none text-editorial">Modernizing Without <br/>Losing the Human Touch.</h2>
+<div class="space-y-6 text-xl text-on-surface-variant text-editorial font-medium">
+<p>We work directly with harbor masters and independent suppliers to ensure our technology supports their lifestyle, not the other way around. By replacing uncertainty with data, we allow them to focus on their craft.</p>
+<p>Every anecdotal win—from a boat owner paying off debt to a harbor upgrading its equipment—is tracked alongside our environmental stats.</p>
+</div>
+<div class="mt-12 flex gap-6">
+<button class="flex items-center gap-3 bg-on-background text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary transition-colors">
+                        View Supplier Stories
+                        <span class="material-symbols-outlined text-xl">person_pin_circle</span>
+</button>
+<button class="flex items-center gap-2 text-on-background font-bold text-lg border-b-2 border-primary pb-1">
+                        2024 Report
+                    </button>
+</div>
+</div>
+</div>
+</section>
+<section class="px-12 py-32 bg-surface-container-low">
+<div class="max-w-7xl mx-auto text-center mb-16">
+<h2 class="text-4xl font-black text-on-surface mb-4 text-editorial">Coastal Impact Distribution</h2>
+<p class="text-on-surface-variant font-medium max-w-xl mx-auto">Visualizing our network's reach and the real-world stories behind the data points.</p>
+</div>
+<div class="max-w-6xl mx-auto h-[600px] relative bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/50">
+<div class="absolute inset-0 opacity-20 map-texture grayscale"></div>
+<div class="absolute top-[20%] left-[75%] group">
+<div class="w-3 h-3 bg-secondary rounded-full relative z-10">
+<div class="absolute inset-0 bg-secondary rounded-full scale-150 blur-sm opacity-50"></div>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-64 bg-white p-5 rounded-2xl shadow-xl border border-surface-container-high opacity-100 pointer-events-auto">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-[10px] font-black uppercase tracking-widest text-secondary">Gloucester, MA</span>
+</div>
+<p class="text-sm font-medium italic text-on-surface">"Saved 4 tons of surplus cod during the October surge, returning $12k to local boat owners."</p>
+<p class="text-[10px] mt-2 font-bold text-outline uppercase">— Mike D., Supplier</p>
+</div>
+</div>
+<div class="absolute top-[10%] left-[80%] group">
+<div class="w-3 h-3 bg-primary rounded-full relative z-10">
+<div class="absolute inset-0 bg-primary rounded-full scale-150 blur-sm opacity-50"></div>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-64 bg-white p-5 rounded-2xl shadow-xl border border-surface-container-high opacity-100 pointer-events-auto">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-[10px] font-black uppercase tracking-widest text-primary">Portland, ME</span>
+</div>
+<p class="text-sm font-medium italic text-on-surface">"First fully-digital harbor audit completed. Efficiency increased by 65% in logistics handoffs."</p>
+<p class="text-[10px] mt-2 font-bold text-outline uppercase">— Sarah L., Harbor Admin</p>
+</div>
+</div>
+<div class="absolute bottom-[20%] left-[65%] group">
+<div class="w-3 h-3 bg-tertiary rounded-full relative z-10">
+<div class="absolute inset-0 bg-tertiary rounded-full scale-150 blur-sm opacity-50"></div>
+</div>
+<div class="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 bg-white p-5 rounded-2xl shadow-xl border border-surface-container-high opacity-100 pointer-events-auto">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-[10px] font-black uppercase tracking-widest text-tertiary">Miami, FL</span>
+</div>
+<p class="text-sm font-medium italic text-on-surface">"Carbon-neutral shipping lane established for tropical surplus, avoiding 15t of CO2 in 6 months."</p>
+<p class="text-[10px] mt-2 font-bold text-outline uppercase">— Diego R., Logistics Head</p>
+</div>
+</div>
+<div class="absolute bottom-10 left-10 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-outline-variant/20">
+<div class="space-y-3">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 bg-secondary rounded-full"></div>
+<span class="text-xs font-bold uppercase tracking-tight">Economic Gain</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 bg-primary rounded-full"></div>
+<span class="text-xs font-bold uppercase tracking-tight">Operations</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 bg-tertiary rounded-full"></div>
+<span class="text-xs font-bold uppercase tracking-tight">Environmental</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="px-12 py-32 bg-white">
+<div class="max-w-4xl mx-auto mb-24">
+<h3 class="text-4xl font-black text-on-surface mb-12 text-center text-editorial">Statistical Integrity</h3>
+<div class="space-y-4">
+<details class="group bg-surface-container-low rounded-2xl overflow-hidden border border-transparent hover:border-surface-container-high transition-all" open="">
+<summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl list-none">
+                        Waste Calculation Standard
+                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="p-8 pt-0 text-on-surface-variant font-medium leading-relaxed border-t border-surface-container-high mt-2">
+                        Our waste redirection is calculated using the NOAA Seafood Waste Metrics v2.4. We measure the difference between potential landfill contribution and actual redistribution through the Finventory network, accounting for shipping distance and packaging decay factors.
+                    </div>
+</details>
+<details class="group bg-surface-container-low rounded-2xl overflow-hidden border border-transparent hover:border-surface-container-high transition-all">
+<summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl list-none">
+                        Carbon Offset Validation
+                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="p-8 pt-0 text-on-surface-variant font-medium leading-relaxed border-t border-surface-container-high mt-2">
+                        Carbon avoidance is audited annually by independent third-party climate scientists. We use life-cycle analysis (LCA) to determine the net reduction in methane and transport-related CO2 across our logistics layer.
+                    </div>
+</details>
+</div>
+</div>
+<div class="max-w-7xl mx-auto border-t border-outline-variant/20 pt-24 text-center">
+<p class="text-outline font-bold uppercase tracking-widest text-xs mb-12">Proudly partnered with coastal stewards</p>
+<div class="flex flex-wrap justify-center items-center gap-16 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+<span class="text-3xl font-black tracking-tighter">OCEANIC+</span>
+<span class="text-3xl font-black tracking-tighter">HARBOR.CO</span>
+<span class="text-3xl font-black tracking-tighter">TIDEWATER</span>
+<span class="text-3xl font-black tracking-tighter">MARITIME.A</span>
+<span class="text-3xl font-black tracking-tighter">ECO-PORT</span>
+</div>
+</div>
+</section>
+</main>
+<footer class="w-full relative bg-slate-900 text-white">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-24 w-full max-w-7xl mx-auto">
+<div class="col-span-1">
+<a class="text-3xl font-black italic-accent-caveat block mb-6 text-white" href="#">Finventory</a>
+<p class="text-slate-400 font-medium">Data-first sustainability for the modern harbor.</p>
+</div>
+<div>
+<h4 class="font-bold mb-6 uppercase tracking-widest text-xs text-primary">Navigation</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-white transition-all block" href="#">Marketplace</a></li>
+<li><a class="text-slate-400 hover:text-white transition-all block" href="#">Suppliers</a></li>
+<li><a class="text-white font-bold transition-all block" href="#">Impact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6 uppercase tracking-widest text-xs text-primary">Company</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-white transition-all block" href="#">Sustainability</a></li>
+<li><a class="text-slate-400 hover:text-white transition-all block" href="#">Journal</a></li>
+<li><a class="text-slate-400 hover:text-white transition-all block" href="#">Privacy</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6 uppercase tracking-widest text-xs text-primary">Contact</h4>
+<p class="text-slate-400 font-medium mb-4">North Pier, 42nd Ave<br/>Portland, ME 04101</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">anchor</span>
+</a>
+<a class="w-10 h-10 rounded-full border border-slate-700 flex items-center justify-center hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">waves</span>
+</a>
+</div>
+</div>
+</div>
+<div class="border-t border-white/5 py-8 text-center text-slate-500 text-sm tracking-tight">
+        © 2024 Finventory. The pulse of the blue economy.
+    </div>
+</footer>
+
+</body></html>

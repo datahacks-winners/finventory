@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maritime Ledger - Seller Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-secondary-fixed": "#00201e",
+                "secondary-fixed": "#79f6ed",
+                "background": "#f7f9fb",
+                "tertiary-fixed": "#ffdbd0",
+                "primary-fixed": "#d3e4ff",
+                "inverse-on-surface": "#eff1f3",
+                "tertiary-container": "#882800",
+                "surface-container": "#eceef0",
+                "on-secondary-fixed-variant": "#00504c",
+                "on-background": "#191c1e",
+                "on-secondary-container": "#006f69",
+                "on-error-container": "#93000a",
+                "primary": "#003461",
+                "on-primary-container": "#8abcff",
+                "surface-container-high": "#e6e8ea",
+                "surface-bright": "#f7f9fb",
+                "secondary": "#006a65",
+                "tertiary-fixed-dim": "#ffb59d",
+                "on-error": "#ffffff",
+                "secondary-fixed-dim": "#59dad1",
+                "on-secondary": "#ffffff",
+                "tertiary": "#611a00",
+                "surface-tint": "#27609d",
+                "surface-container-highest": "#e0e3e5",
+                "on-tertiary-fixed": "#390c00",
+                "on-tertiary-fixed-variant": "#832600",
+                "surface-variant": "#e0e3e5",
+                "primary-container": "#004b87",
+                "surface-container-low": "#f2f4f6",
+                "surface-dim": "#d8dadc",
+                "secondary-container": "#76f3ea",
+                "on-tertiary": "#ffffff",
+                "inverse-primary": "#a3c9ff",
+                "on-surface": "#191c1e",
+                "outline-variant": "#c2c6d1",
+                "outline": "#727781",
+                "surface": "#f7f9fb",
+                "on-primary-fixed-variant": "#004882",
+                "error-container": "#ffdad6",
+                "on-tertiary-container": "#ffa182",
+                "primary-fixed-dim": "#a3c9ff",
+                "surface-container-lowest": "#ffffff",
+                "error": "#ba1a1a",
+                "on-surface-variant": "#424750",
+                "on-primary": "#ffffff",
+                "inverse-surface": "#2d3133",
+                "on-primary-fixed": "#001c38"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "fontFamily": {
+                "headline": ["Work Sans"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Work Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopNavBar (Shared Component) -->
+<header class="fixed top-0 z-50 w-full flex justify-between items-center px-8 h-16 bg-[#f7f9fb] dark:bg-[#191c1e] bg-[#eceef0] dark:bg-[#2d3133] shadow-sm">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black uppercase tracking-tighter text-[#003461] dark:text-[#ffffff]">Maritime Ledger</span>
+<nav class="hidden md:flex space-x-6 font-['Work_Sans'] font-bold tracking-tight">
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] transition-colors" href="#">Marketplace</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] transition-colors" href="#">Orders</a>
+<a class="text-[#003461] dark:text-[#79f6ed] border-b-2 border-[#003461] dark:border-[#79f6ed] pb-1" href="#">Inventory</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] transition-colors" href="#">Payouts</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-surface-container-high border-none rounded-sm px-4 py-2 text-sm focus:ring-2 focus:ring-primary w-64" placeholder="Search cargo..." type="text"/>
+</div>
+<button class="material-symbols-outlined p-2 hover:bg-[#eceef0] dark:hover:bg-[#424750] rounded-full text-[#003461]">notifications</button>
+<button class="material-symbols-outlined p-2 hover:bg-[#eceef0] dark:hover:bg-[#424750] rounded-full text-[#003461]">qr_code_scanner</button>
+<img alt="User profile" class="w-8 h-8 rounded-full bg-surface-container-highest" data-alt="close-up portrait of a professional maritime captain in uniform with a focused expression and ocean in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLde5AXwKLqhrlPFeZpWyAGV573vSzmrej4tfDbxlVJNI8DCrvSyEfV2RsTqlziPdtU31Ni2VK3ehyb0Ie8Z0LxR2TZGKxLTQHHb23Q7SZgfFB6CklFg91FMA9WqPJAjfnMY5lZWTPuaE5ZeZSzS7DkHdL1NdQBaJvWZYjnXj2OZy0cqxRYjwBxFmdaalR2Xb_OcAWv7bwnVwyg0Hs9saPv7JXxAiwS2Mwn3w2uziDbJqz0ar5XZXgCJ1X6Bfgcjl7ifwa2-2Qx4OB"/>
+</div>
+</header>
+<div class="flex pt-16 h-screen overflow-hidden">
+<!-- SideNavBar (Shared Component) -->
+<aside class="hidden md:flex flex-col h-full w-64 py-6 space-y-2 bg-[#eceef0] dark:bg-[#1d2023] font-['Inter'] text-sm font-medium">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 bg-primary text-white flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined">sailing</span>
+</div>
+<div>
+<h3 class="font-['Work_Sans'] font-bold text-[#003461]">Fleet Manager</h3>
+<p class="text-xs text-[#424750] opacity-80">Vessel ID: 882-Alpha</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">map</span> Discovery
+                </a>
+<a class="flex items-center gap-3 px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">anchor</span> Standing Orders
+                </a>
+<a class="flex items-center gap-3 px-6 py-3 bg-[#ffffff] dark:bg-[#004b87] text-[#003461] dark:text-white border-l-4 border-[#006a65]" href="#">
+<span class="material-symbols-outlined">sailing</span> Fleet Status
+                </a>
+<a class="flex items-center gap-3 px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span> Ledger
+                </a>
+<a class="flex items-center gap-3 px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">qr_code_2</span> Scanner
+                </a>
+<a class="flex items-center gap-3 px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+                </a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary text-white py-4 rounded-sm font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">add</span> Create Listing
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto p-4 md:p-8 bg-surface">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+<div class="space-y-1">
+<p class="text-secondary font-bold tracking-widest text-xs uppercase">Fleet Status Dashboard</p>
+<h1 class="text-4xl md:text-5xl font-black text-on-surface tracking-tighter">Vessel Ledger Overview</h1>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-lowest p-6 rounded-sm shadow-sm relative overflow-hidden group min-w-[300px]">
+<div class="absolute inset-0 bg-gradient-to-r from-primary to-primary-container opacity-0 group-hover:opacity-5 transition-opacity"></div>
+<div class="z-10">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-1">Available Payout</p>
+<p class="text-3xl font-black text-primary">$12,480.00</p>
+<button class="mt-2 text-secondary font-bold text-sm flex items-center gap-1">
+                            Release Funds <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="ml-auto material-symbols-outlined text-5xl text-primary opacity-10">account_balance_wallet</div>
+</div>
+</div>
+<!-- Bento Quick Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<div class="bg-surface-container-low p-8 relative flex flex-col justify-between h-48 border-l-4 border-primary">
+<span class="material-symbols-outlined text-primary-container text-4xl mb-4">payments</span>
+<div>
+<h4 class="text-xs uppercase tracking-widest font-bold text-on-surface-variant">Monthly Revenue</h4>
+<p class="text-4xl font-black text-on-surface">$42.8k</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-8 relative flex flex-col justify-between h-48 group overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary opacity-5 -mr-16 -mt-16 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+<span class="material-symbols-outlined text-secondary text-4xl mb-4">eco</span>
+<div>
+<h4 class="text-xs uppercase tracking-widest font-bold text-on-surface-variant">Seafood Rescued</h4>
+<p class="text-4xl font-black text-on-surface">1,240 <span class="text-xl font-normal text-on-surface-variant">kg</span></p>
+</div>
+</div>
+<div class="bg-primary text-white p-8 relative flex flex-col justify-between h-48 overflow-hidden">
+<div class="absolute bottom-0 right-0 p-2">
+<span class="material-symbols-outlined text-6xl opacity-20">inventory_2</span>
+</div>
+<div>
+<h4 class="text-xs uppercase tracking-widest font-bold text-primary-fixed opacity-70">Active Listings</h4>
+<p class="text-4xl font-black">18</p>
+</div>
+<div class="mt-4 flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-primary bg-secondary-fixed"></div>
+<div class="w-8 h-8 rounded-full border-2 border-primary bg-tertiary-fixed"></div>
+<div class="w-8 h-8 rounded-full border-2 border-primary bg-primary-fixed"></div>
+</div>
+</div>
+</div>
+<!-- Two Column Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Active Listings (Asymmetric Cards) -->
+<section class="lg:col-span-7 space-y-6">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-2xl font-bold tracking-tight">Active Listings</h2>
+<button class="text-primary text-sm font-bold border-b border-primary">View All</button>
+</div>
+<div class="space-y-4">
+<!-- Listing Card 1 -->
+<div class="flex bg-surface-container-lowest overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+<div class="w-1/3 relative overflow-hidden">
+<img alt="Yellowfin Tuna" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="close-up of fresh whole yellowfin tuna with glistening skin and deep red meat on crushed ice with professional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDagDFzaMwomP8WB6qibvZDUI7YoTXrIJMRonDiyyWv7hXKFqeT5s9FuYmNNI3Q-WFUxbyW0de-9BZM93ErTH7AHS_z0JrepTeGjAhs0Ut7R9sN5MbKXFZff45eZtFLNQ0yb6F8Yo13u_XtDifZwKxVrqYUXk8C8NZoh8mr_93eUy1mBVKszOpHP25sybTKkItGnpycMjdUBcAGV79YdRB_txigUBEOZdqGetiyAaH0rmfDKCzvbeWnwXme3yYnKgB8gBTc313CG19U"/>
+<div class="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-1 uppercase">Sushi Grade</div>
+</div>
+<div class="w-2/3 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="text-xl font-bold text-on-surface">Yellowfin Tuna</h3>
+<span class="text-lg font-black text-secondary">$14.50/lb</span>
+</div>
+<div class="mt-2 space-y-1">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-sm">weight</span> 420 kg Remaining
+                                        </div>
+<div class="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-sm">schedule</span> Caught 8h ago
+                                        </div>
+</div>
+</div>
+<div class="flex gap-2 mt-4">
+<button class="flex-1 bg-primary text-white py-2 text-xs font-bold uppercase tracking-wider hover:bg-primary-container transition-colors">Manage</button>
+<button class="p-2 bg-surface-container-high text-on-surface hover:bg-surface-container-highest"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+</div>
+</div>
+<!-- Listing Card 2 -->
+<div class="flex bg-surface-container-lowest overflow-hidden group hover:shadow-xl transition-shadow duration-300">
+<div class="w-1/3 relative overflow-hidden">
+<img alt="Blue Crab" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="vibrant blue crabs in a traditional wooden bushel basket on a dock at sunrise with misty water background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjBQN5pJEh1jpsqDGlSbSoxsTX1wujJBGl9fLostyLZsDjXNcxPS_e2jlyh2MpPLeKD6dtpN_oEbuDiLavRirt3Pmtuorzx_Cao0Zr4pP_ukiSrjWNmJjfhRh10C70NdLNAEgu6BuI_MjRj9ahKdBKiu9_j33EJ_TiTWp5LMJlnFR6krkbmyKa3YehFCm1Qvp-DYh1blEalThwQBtkby_r8mY1eJhEmEJ08hF6ipcbt8pi1Z_F8G4XTDP8RsDY1tGpZkF52lP1oLx7"/>
+<div class="absolute top-2 left-2 bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-1 uppercase">Grade A</div>
+</div>
+<div class="w-2/3 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="text-xl font-bold text-on-surface">Atlantic Blue Crab</h3>
+<span class="text-lg font-black text-secondary">$8.25/lb</span>
+</div>
+<div class="mt-2 space-y-1">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-sm">weight</span> 180 kg Remaining
+                                        </div>
+<div class="flex items-center gap-2 text-xs text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-sm">schedule</span> Caught 3h ago
+                                        </div>
+</div>
+</div>
+<div class="flex gap-2 mt-4">
+<button class="flex-1 bg-primary text-white py-2 text-xs font-bold uppercase tracking-wider hover:bg-primary-container transition-colors">Manage</button>
+<button class="p-2 bg-surface-container-high text-on-surface hover:bg-surface-container-highest"><span class="material-symbols-outlined text-sm">edit</span></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pending Pickups (List) -->
+<section class="lg:col-span-5 space-y-6">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-2xl font-bold tracking-tight">Pending Pickups</h2>
+<span class="bg-tertiary text-white text-[10px] font-black px-2 py-1 rounded-full uppercase">4 Action Required</span>
+</div>
+<div class="bg-surface-container-lowest shadow-sm overflow-hidden">
+<!-- Pickup Item 1 -->
+<div class="p-5 border-b border-outline-variant/15 hover:bg-surface-container-low transition-colors">
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-xs text-on-surface-variant font-bold tracking-widest uppercase mb-1">Order #MTL-9022</p>
+<h4 class="font-bold text-primary">Pacific Blue Fin Seafoods</h4>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface-variant">Window</p>
+<p class="text-xs font-black text-error">14:00 - 15:30</p>
+</div>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="text-xs font-medium text-on-surface-variant">
+                                    85kg • Dock A-12
+                                </div>
+<button class="bg-secondary text-white px-4 py-2 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span> Scan QR to Confirm
+                                </button>
+</div>
+</div>
+<!-- Pickup Item 2 -->
+<div class="p-5 border-b border-outline-variant/15 hover:bg-surface-container-low transition-colors">
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-xs text-on-surface-variant font-bold tracking-widest uppercase mb-1">Order #MTL-9025</p>
+<h4 class="font-bold text-primary">Coastal Culinary Group</h4>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface-variant">Window</p>
+<p class="text-xs font-black text-on-surface">16:30 - 18:00</p>
+</div>
+</div>
+<div class="flex items-center justify-between mt-4">
+<div class="text-xs font-medium text-on-surface-variant">
+                                    120kg • Dock B-04
+                                </div>
+<button class="bg-secondary text-white px-4 py-2 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span> Scan QR to Confirm
+                                </button>
+</div>
+</div>
+<!-- Pickup Item 3 -->
+<div class="p-5 hover:bg-surface-container-low transition-colors">
+<div class="flex justify-between items-start mb-3">
+<div>
+<p class="text-xs text-on-surface-variant font-bold tracking-widest uppercase mb-1">Order #MTL-9031</p>
+<h4 class="font-bold text-primary">Harbor Side Bistro</h4>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface-variant">Window</p>
+<p class="text-xs font-black text-on-surface">Tomorrow 08:00</p>
+</div>
+</div>
+<div class="flex items-center justify-between mt-4 opacity-50 pointer-events-none">
+<div class="text-xs font-medium text-on-surface-variant">
+                                    30kg • Dock A-12
+                                </div>
+<span class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Check-in Pending</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Bottom spacer for mobile nav -->
+<div class="h-24 md:hidden"></div>
+</main>
+</div>
+<!-- BottomNavBar (Shared Component - Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-16 bg-[#ffffff]/80 dark:bg-[#191c1e]/80 backdrop-blur-xl border-t border-[#c2c6d1]/15 shadow-[0_-4px_12px_rgba(0,52,97,0.08)]">
+<a class="flex flex-col items-center gap-1 text-[#424750] dark:text-[#c2c6d1]" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Buy</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#003461] dark:text-[#79f6ed] font-bold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sell</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Sell</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#424750] dark:text-[#c2c6d1]" href="#">
+<span class="material-symbols-outlined">center_focus_weak</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Scan</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#424750] dark:text-[#c2c6d1]" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Profile</span>
+</a>
+</nav>
+<!-- Contextual FAB (Mobile/Tablet Only) -->
+<button class="md:hidden fixed bottom-20 right-6 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl active:scale-90 transition-transform z-50">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>

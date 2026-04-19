@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finventory | Rescue the catch. Feed the coast.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&amp;family=Caveat:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#4e3e00",
+                        "outline": "#707881",
+                        "on-secondary-container": "#773e01",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#ebd6c9",
+                        "surface-container-high": "#f9e4d7",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#004a75",
+                        "surface-bright": "#fff8f5",
+                        "background": "#fff8f5",
+                        "inverse-surface": "#3a2e25",
+                        "tertiary": "#725c07",
+                        "on-primary-container": "#f7f9ff",
+                        "inverse-primary": "#95ccff",
+                        "surface-container-low": "#fff1e9",
+                        "on-surface-variant": "#404750",
+                        "secondary-fixed-dim": "#ffb77d",
+                        "on-background": "#241911",
+                        "on-primary-fixed": "#001d32",
+                        "surface-tint": "#00639a",
+                        "secondary-fixed": "#ffdcc3",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-tertiary-fixed": "#231b00",
+                        "tertiary-container": "#c5a952",
+                        "on-primary": "#ffffff",
+                        "surface": "#fff8f5",
+                        "tertiary-fixed": "#ffe085",
+                        "outline-variant": "#c0c7d1",
+                        "on-error": "#ffffff",
+                        "on-surface": "#241911",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#f3dfd1",
+                        "surface-variant": "#f3dfd1",
+                        "inverse-on-surface": "#ffede2",
+                        "primary-fixed-dim": "#95ccff",
+                        "primary": "#005f93",
+                        "surface-container": "#ffeadc",
+                        "primary-fixed": "#cde5ff",
+                        "secondary": "#8c4f14",
+                        "tertiary-fixed-dim": "#e2c46a",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "secondary-container": "#fdac6a",
+                        "primary-container": "#1e78b4",
+                        "on-secondary-fixed": "#2f1500",
+                        "sunset-yellow": "#FFCA4D",
+                        "vibrant-teal": "#00ACC1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"],
+                        "accent": ["Caveat"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .italic-accent-caveat {
+            font-family: 'Caveat', cursive;
+        }
+        .text-tight { letter-spacing: -0.02em; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
+<nav class="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-sm">
+<div class="flex justify-between items-center px-6 lg:px-12 py-5 w-full max-w-screen-2xl mx-auto">
+<div class="text-3xl font-bold text-sky-900 italic-accent-caveat">Finventory</div>
+<div class="hidden md:flex gap-10 items-center">
+<a class="text-sky-700 font-bold border-b-2 border-sky-700 pb-1 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] leading-relaxed transition-transform duration-300 hover:scale-[1.02]" href="#">Marketplace</a>
+<a class="text-slate-600 hover:text-sky-800 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] leading-relaxed transition-transform duration-300 hover:scale-[1.02]" href="#">Suppliers</a>
+<a class="text-slate-600 hover:text-sky-800 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] leading-relaxed transition-transform duration-300 hover:scale-[1.02]" href="#">Impact</a>
+<a class="text-slate-600 hover:text-sky-800 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] leading-relaxed transition-transform duration-300 hover:scale-[1.02]" href="#">About</a>
+</div>
+<div class="flex gap-4 items-center">
+<button class="text-slate-600 font-medium px-6 py-2 hover:scale-[1.02] transition-transform">Log in</button>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/10 hover:scale-[1.05] transition-all">Sign up</button>
+</div>
+</div>
+</nav>
+<section class="relative min-h-[921px] flex flex-col justify-center text-white overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="California harbor at sunset" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi-fsi92T1H_WYYT4E6mH96FqNDDGgRIF1a4omXMacnO9pYKHXUy57vEuugaDD86sjm_gxAAFNUg4nBbHHIu2aJNgqYN3aaCDuUbGZAYhHKAKYzcvAuBJk9FHFIdfPEyDwxKa0Lm3C5jDrr4JUlLcolbVdXyWsd_rrQIijTjqyZIPN9HfWZJaT1XuA6_bK9HC4LBE0OKhl8aIqUdlfoQKeiP5lWqH2GAkBcQQHarXN3EpAzpvhsJIXWcwUB-muSXuL9u5QwFN-0tI"/>
+<div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 w-full max-w-screen-2xl mx-auto px-6 lg:px-12 pt-20 pb-12">
+<div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 mb-8">
+<span class="material-symbols-outlined text-sunset-yellow text-sm" style="font-variation-settings: 'FILL' 1;">colors_spark</span>
+<span class="text-sm font-semibold tracking-wide">Now serving the California coast</span>
+</div>
+<h1 class="text-5xl lg:text-8xl font-extrabold leading-[1.05] mb-8 max-w-4xl tracking-tight">
+            Fresh from the coast, <span class="italic-accent-caveat text-sunset-yellow">never wasted.</span>
+</h1>
+<p class="text-lg lg:text-xl text-white/90 max-w-2xl mb-12 leading-relaxed">
+            Finventory is the B2B marketplace where fishers sell surplus catch, bycatch, and off-cuts to chefs and bulk buyers — at prices that keep boats running and oceans thriving.
+        </p>
+<div class="flex flex-wrap gap-6 mb-24">
+<button class="bg-sunset-yellow text-on-background px-10 py-5 rounded-full font-bold text-lg flex items-center gap-2 hover:scale-105 transition-transform">
+                Browse the catch
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-white/20 transition-all">
+                I'm a supplier
+            </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-white/20">
+<div class="flex flex-col">
+<span class="italic-accent-caveat text-5xl text-sunset-yellow">18k+</span>
+<span class="text-xs font-bold uppercase tracking-widest text-white/60">LBS RESCUED</span>
+</div>
+<div class="flex flex-col">
+<span class="italic-accent-caveat text-5xl text-sunset-yellow">240t</span>
+<span class="text-xs font-bold uppercase tracking-widest text-white/60">CO₂ SAVED</span>
+</div>
+<div class="flex flex-col">
+<span class="italic-accent-caveat text-5xl text-sunset-yellow">120+</span>
+<span class="text-xs font-bold uppercase tracking-widest text-white/60">COASTAL PARTNERS</span>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 bg-[#FAF9F6]">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 text-center">
+<span class="italic-accent-caveat text-primary text-3xl mb-4 block">why finventory</span>
+<h2 class="text-5xl lg:text-6xl font-black text-on-background tracking-tight mb-6">A tide that lifts every boat</h2>
+<p class="text-on-surface-variant text-lg max-w-2xl mx-auto mb-20">Built for the realities of perishable goods — speed, locality, and trust.</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-white p-10 rounded-3xl shadow-sm border border-black/5 text-left group hover:shadow-xl transition-all duration-500">
+<div class="w-16 h-16 bg-[#0077B6] rounded-2xl flex items-center justify-center mb-8 text-white">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">set_meal</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Rescue the catch</h3>
+<p class="text-on-surface-variant leading-relaxed">List bycatch and unsold hauls in seconds. Move surplus before it spoils.</p>
+</div>
+<div class="bg-white p-10 rounded-3xl shadow-sm border border-black/5 text-left group hover:shadow-xl transition-all duration-500">
+<div class="w-16 h-16 bg-[#F4743B] rounded-2xl flex items-center justify-center mb-8 text-white">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Local, by design</h3>
+<p class="text-on-surface-variant leading-relaxed">Map-first discovery shows what's available within miles, not days.</p>
+</div>
+<div class="bg-white p-10 rounded-3xl shadow-sm border border-black/5 text-left group hover:shadow-xl transition-all duration-500">
+<div class="w-16 h-16 bg-[#FFCA4D] rounded-2xl flex items-center justify-center mb-8 text-on-background">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Visible impact</h3>
+<p class="text-on-surface-variant leading-relaxed">Every order tracks pounds saved and emissions avoided — backed by CALCOFI data.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="py-12 bg-[#FAF9F6]">
+<div class="max-w-screen-2xl mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-black/5 flex flex-col h-full">
+<div class="h-[400px] relative">
+<img alt="Fisherman on a boat" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC76gpFUr9abSlJnNkPRhpiYfCLN2F9CmxTdq5Rlz8WjVIo0rtJFYlJyR1TdhVMuZYcEZifIZ_C6NU5Y_JCvZcTpWehALYcBi6eUzCpVjYHnqHkxTN0mOwY9b0SQMfWFmllvnjBFMk4FZmsyYlxEWqYrOYwS94fm-WLhTg-qjhhWHBLF7pb1ohGWMO9TcKeqc_f0zMyr999sVqMegLIdLT1-bLYoBAaUjTw-OE1-YI8AS4tkgdL9TFaloj8muO3Ljt7uWVnQkJL-h8"/>
+</div>
+<div class="p-10 lg:p-12 flex flex-col flex-grow">
+<span class="text-sm font-bold uppercase tracking-widest text-[#F4743B] mb-4">FOR SUPPLIERS</span>
+<h3 class="text-4xl font-black mb-8 tracking-tight">Turn surplus into revenue</h3>
+<ul class="space-y-4 mb-12 flex-grow">
+<li class="flex items-center gap-3 text-lg text-on-surface-variant">
+<span class="w-2 h-2 bg-[#0077B6] rounded-full"></span>
+                            List a crate in under 60 seconds
+                        </li>
+<li class="flex items-center gap-3 text-lg text-on-surface-variant">
+<span class="w-2 h-2 bg-[#0077B6] rounded-full"></span>
+                            Set your own price and pickup window
+                        </li>
+<li class="flex items-center gap-3 text-lg text-on-surface-variant">
+<span class="w-2 h-2 bg-[#0077B6] rounded-full"></span>
+                            Get paid the day after pickup
+                        </li>
+</ul>
+<button class="w-full lg:w-max bg-primary text-white px-10 py-5 rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
+                        Open supplier portal
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-black/5 flex flex-col h-full">
+<div class="h-[400px] relative">
+<img alt="Chef preparing fresh seafood" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVAQT8Can7rhbLiW1HqS5gOWKg4E-MA3umh4rAKw_H8Vo9K4qj75n_xYosKq2z6hKQQBmuUawrrLMyQSuckyFrN6P9AZlcMtahu0NWfodhp3WQYdCk0CPbfXr3D6FQgI98zR1xztrtpvUslDl6GsuOGzjPPnvg-8dcrtve3K-XESj1XwfRQOJMzTKRUyUmgGWP-SPpi6fYI6Uxb-7adxzgQwvBNw-tT6Q8cNhafCE5yaeqLwxkxD6tCIfNwkgbyjDXhRHtKxs5UYc"/>
+</div>
+<div class="p-10 lg:p-12 flex flex-col flex-grow">
+<span class="text-sm font-bold uppercase tracking-widest text-[#F4743B] mb-4">FOR CHEFS &amp; BUYERS</span>
+<h3 class="text-4xl font-black mb-8 tracking-tight">Source the day's freshest finds</h3>
+<ul class="space-y-4 mb-12 flex-grow">
+<li class="flex items-center gap-3 text-lg text-on-surface-variant">
+<span class="w-2 h-2 bg-[#0077B6] rounded-full"></span>
+                            Browse a live map of nearby crates
+                        </li>
+<li class="flex items-center gap-3 text-lg text-on-surface-variant">
+<span class="w-2 h-2 bg-[#0077B6] rounded-full"></span>
+                            Save 30–60% vs. wholesale prices
+                        </li>
+<li class="flex items-center gap-3 text-lg text-on-surface-variant">
+<span class="w-2 h-2 bg-[#0077B6] rounded-full"></span>
+                            Build relationships with local boats
+                        </li>
+</ul>
+<button class="w-full lg:w-max bg-primary text-white px-10 py-5 rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
+                        Open marketplace
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 bg-[#FAF9F6]">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+<div>
+<span class="italic-accent-caveat text-[#F4743B] text-3xl mb-4 block">how it works</span>
+<h2 class="text-6xl font-black text-on-background tracking-tight mb-16">From boat to kitchen, in hours.</h2>
+<div class="space-y-12">
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-sunset-yellow flex items-center justify-center font-bold text-xl">1</div>
+<div>
+<h4 class="text-2xl font-bold mb-2">List</h4>
+<p class="text-lg text-on-surface-variant">Suppliers post crates with weight, species, and pickup window.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-sunset-yellow flex items-center justify-center font-bold text-xl">2</div>
+<div>
+<h4 class="text-2xl font-bold mb-2">Discover</h4>
+<p class="text-lg text-on-surface-variant">Buyers spot deals on a map sorted by distance and freshness.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-sunset-yellow flex items-center justify-center font-bold text-xl">3</div>
+<div>
+<h4 class="text-2xl font-bold mb-2">Reserve</h4>
+<p class="text-lg text-on-surface-variant">One-tap reserve. Payment held until pickup confirms.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-sunset-yellow flex items-center justify-center font-bold text-xl">4</div>
+<div>
+<h4 class="text-2xl font-bold mb-2">Impact</h4>
+<p class="text-lg text-on-surface-variant">Every transaction logs lbs saved &amp; CO₂ avoided to your dashboard.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="rounded-[3rem] overflow-hidden shadow-2xl">
+<img alt="Fresh fish display" class="w-full aspect-[4/3] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9Oi58bzNvfddOcDOyHU1OHBIR-wgUQylOCCiPyhuEnoz9fDbUwegpGXauu8kZEkgXzecAVQiwTdt9gVeEVxM57uRiAQNxHMpDet9ht0szR2PpKz4WMt8TrDWF2XKlzGW3a8TnT11ymtydIS2tireoHSNHFuaKQM2uiUhfwUt4XlBwvHFvchnWYJJSw65CQK3WLK2Aotgym4i7upw127unF6Ac6OjCFx0ZK1Zw5tfVJimt9HTE5g4u3iQXW6Y98D4-PlIyzzuVQCg"/>
+</div>
+<div class="absolute -bottom-10 -left-10 bg-white p-8 rounded-[2rem] shadow-2xl border border-black/5 max-w-[280px]">
+<div class="bg-sky-100 text-primary w-10 h-10 rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-2xl">waves</span>
+</div>
+<div class="text-5xl font-black text-on-background mb-2 tracking-tighter">3.4 hrs</div>
+<p class="text-on-surface-variant leading-tight">Avg. time from listing to pickup</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 max-w-7xl mx-auto px-6 lg:px-12">
+<div class="relative bg-gradient-to-br from-[#00ACC1] to-[#007C91] rounded-[3rem] p-12 lg:p-24 overflow-hidden shadow-2xl">
+<div class="absolute -right-20 -top-20 w-[400px] h-[400px] bg-white/10 rounded-full blur-3xl"></div>
+<div class="relative z-10 max-w-3xl">
+<span class="italic-accent-caveat text-sunset-yellow text-4xl mb-6 block">join the movement</span>
+<h2 class="text-5xl lg:text-7xl font-black text-white leading-[1.1] tracking-tight mb-8">
+                Less waste. More flavor. Healthier coasts.
+            </h2>
+<p class="text-xl text-white/90 mb-12 max-w-xl leading-relaxed">
+                Join California's first B2B marketplace built around the rhythm of the tide.
+            </p>
+<div class="flex flex-wrap gap-6">
+<button class="bg-sunset-yellow text-on-background px-12 py-5 rounded-full font-bold text-xl shadow-xl hover:scale-105 transition-all">
+                    Create free account
+                </button>
+<button class="bg-transparent border-2 border-white text-white px-12 py-5 rounded-full font-bold text-xl hover:bg-white/10 transition-all">
+                    Explore marketplace
+                </button>
+</div>
+</div>
+</div>
+</section>
+<footer class="bg-slate-900 text-[#fff8f5] w-full relative pt-24 pb-12">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-6 lg:px-12 w-full max-w-7xl mx-auto font-['Plus_Jakarta_Sans'] tracking-tight">
+<div class="col-span-1 md:col-span-1">
+<div class="text-3xl font-black text-white mb-8 italic-accent-caveat">Finventory</div>
+<p class="text-slate-400 leading-relaxed">Curating the ocean’s bounty. Connecting harvesters and buyers for a waste-free coast.</p>
+</div>
+<div>
+<h4 class="font-bold text-white mb-6 uppercase tracking-widest text-sm">Marketplace</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Today's Catch</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Harbors &amp; Ports</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Suppliers List</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-white mb-6 uppercase tracking-widest text-sm">Company</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Sustainability</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Impact Report</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">About</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-white mb-6 uppercase tracking-widest text-sm">Legal</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Privacy Policy</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="px-6 lg:px-12 py-8 mt-16 border-t border-slate-800/50 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="text-slate-500 text-sm">© 2024 Finventory. Curating the ocean’s bounty.</span>
+<div class="flex gap-6">
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">waves</span></a>
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">anchor</span></a>
+</div>
+</div>
+</footer>
+
+</body></html>

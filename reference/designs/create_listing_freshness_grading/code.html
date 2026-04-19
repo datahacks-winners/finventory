@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maritime Ledger - Create Listing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700;800;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#00201e",
+                        "secondary-fixed": "#79f6ed",
+                        "background": "#f7f9fb",
+                        "tertiary-fixed": "#ffdbd0",
+                        "primary-fixed": "#d3e4ff",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-container": "#882800",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed-variant": "#00504c",
+                        "on-background": "#191c1e",
+                        "on-secondary-container": "#006f69",
+                        "on-error-container": "#93000a",
+                        "primary": "#003461",
+                        "on-primary-container": "#8abcff",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "secondary": "#006a65",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#59dad1",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#611a00",
+                        "surface-tint": "#27609d",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "surface-variant": "#e0e3e5",
+                        "primary-container": "#004b87",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-dim": "#d8dadc",
+                        "secondary-container": "#76f3ea",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#a3c9ff",
+                        "on-surface": "#191c1e",
+                        "outline-variant": "#c2c6d1",
+                        "outline": "#727781",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#004882",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffa182",
+                        "primary-fixed-dim": "#a3c9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#424750",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-fixed": "#001c38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Work Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        input[type="radio"]:checked + label {
+            background-color: #003461;
+            color: #ffffff;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #eceef0;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #003461;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<header class="bg-[#f7f9fb] dark:bg-[#191c1e] shadow-sm docked full-width top-0 z-50 flex justify-between items-center w-full px-8 h-16 bg-[#eceef0] dark:bg-[#2d3133] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.05)]">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black uppercase tracking-tighter text-[#003461] dark:text-[#ffffff] font-headline">Maritime Ledger</span>
+<nav class="hidden md:flex space-x-6 font-headline font-bold tracking-tight">
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] hover:bg-[#eceef0] dark:hover:bg-[#424750] transition-colors" href="#">Marketplace</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] hover:bg-[#eceef0] dark:hover:bg-[#424750] transition-colors" href="#">Orders</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] hover:bg-[#eceef0] dark:hover:bg-[#424750] transition-colors" href="#">Inventory</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] hover:bg-[#eceef0] dark:hover:bg-[#424750] transition-colors" href="#">Payouts</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container overflow-hidden">
+<img alt="User profile" data-alt="close-up portrait of a professional maritime officer in uniform against a blurred ship bridge background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB30itPbD6rjrlHtXxXW7Hb9_OW4Xfil9ICmJrZJuVhXODI5fYFoWxnKkxZQbU71P57Vo10qseNCftuH2N56U6J_BhEPSUnw_eab5CIpihIbV3wMEKm8icV6ajt2LjztFgcvPNAzQh6v4XAuTQlxYuQhplmVCkEkstTJP5LmwrWvURWlmlO7b0EN4yolQIN-Z3QCsXiTqDEj2RBvJLpJviyWJWgKyfXv8HbSlHTE3zBm4JbAcH7D_RIzbGaJJvtHWYL3TSSzzYL2gzd"/>
+</div>
+</div>
+</header>
+<main class="max-w-5xl mx-auto px-4 pt-12 pb-24">
+<div class="mb-12">
+<div class="flex justify-between items-end mb-4">
+<div>
+<span class="text-secondary font-bold font-label text-xs uppercase tracking-widest">Listing Process</span>
+<h1 class="text-4xl font-headline font-black text-primary tracking-tighter mt-1">Grade &amp; Freshness</h1>
+</div>
+<div class="text-right">
+<span class="text-on-surface-variant font-label text-sm">Step 2 of 4</span>
+</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest">
+<div class="w-1/2 h-full bg-primary transition-all duration-500"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<section class="lg:col-span-8 space-y-8">
+<div class="bg-surface-container-lowest p-8 shadow-[0px_4px_24px_rgba(0,52,97,0.04)] relative">
+<h2 class="text-lg font-headline font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="calendar_today">calendar_today</span>
+                        Catch Logistics
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Catch Date</label>
+<input class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm h-12 px-4 transition-all" type="date"/>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Landing Date</label>
+<input class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm h-12 px-4 transition-all" type="date"/>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Storage Method</label>
+<select class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm h-12 px-4 appearance-none">
+<option>Slurry Ice (RSW)</option>
+<option>Super Chilled (-2°C)</option>
+<option>Blast Frozen (-60°C)</option>
+<option>Live Well</option>
+</select>
+</div>
+<div class="space-y-2 relative">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Storage Temp</label>
+<input class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm h-12 px-4 transition-all" placeholder="-2.5" type="text"/>
+<span class="absolute right-4 bottom-3.5 text-xs text-on-surface-variant font-bold">°C</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-8 shadow-[0px_4px_24px_rgba(0,52,97,0.04)]">
+<h2 class="text-lg font-headline font-bold mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="verified">verified</span>
+                        Quality Grading
+                    </h2>
+<p class="text-on-surface-variant text-sm mb-6">Select the industry standard grade for this batch. Requirements must be verifiable.</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="relative group">
+<input checked="" class="hidden peer" id="grade-sushi" name="grade" type="radio"/>
+<label class="flex flex-col items-center justify-center p-6 bg-surface-container cursor-pointer border-none transition-all hover:bg-surface-container-highest peer-checked:bg-primary peer-checked:text-white h-full text-center" for="grade-sushi">
+<span class="text-2xl font-black font-headline mb-1">SUSHI</span>
+<span class="text-[10px] font-bold uppercase opacity-80">Grade</span>
+</label>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-3 bg-inverse-surface text-inverse-on-surface text-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                                Highest quality. Minimal fat distribution. Caught via Ike Jime. Temperature controlled since second 1.
+                            </div>
+</div>
+<div class="relative group">
+<input class="hidden peer" id="grade-a" name="grade" type="radio"/>
+<label class="flex flex-col items-center justify-center p-6 bg-surface-container cursor-pointer border-none transition-all hover:bg-surface-container-highest peer-checked:bg-primary peer-checked:text-white h-full text-center" for="grade-a">
+<span class="text-2xl font-black font-headline mb-1">A</span>
+<span class="text-[10px] font-bold uppercase opacity-80">Prime</span>
+</label>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-3 bg-inverse-surface text-inverse-on-surface text-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                                Excellent color and firmness. Suitable for white-tablecloth restaurants.
+                            </div>
+</div>
+<div class="relative group">
+<input class="hidden peer" id="grade-b" name="grade" type="radio"/>
+<label class="flex flex-col items-center justify-center p-6 bg-surface-container cursor-pointer border-none transition-all hover:bg-surface-container-highest peer-checked:bg-primary peer-checked:text-white h-full text-center" for="grade-b">
+<span class="text-2xl font-black font-headline mb-1">B</span>
+<span class="text-[10px] font-bold uppercase opacity-80">Standard</span>
+</label>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-3 bg-inverse-surface text-inverse-on-surface text-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                                Good commercial quality. Ideal for grilling or smoking applications.
+                            </div>
+</div>
+<div class="relative group">
+<input class="hidden peer" id="grade-c" name="grade" type="radio"/>
+<label class="flex flex-col items-center justify-center p-6 bg-surface-container cursor-pointer border-none transition-all hover:bg-surface-container-highest peer-checked:bg-primary peer-checked:text-white h-full text-center" for="grade-c">
+<span class="text-2xl font-black font-headline mb-1">C</span>
+<span class="text-[10px] font-bold uppercase opacity-80">Industrial</span>
+</label>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-3 bg-inverse-surface text-inverse-on-surface text-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                                Processing grade. Used for canning or high-volume industrial food prep.
+                            </div>
+</div>
+</div>
+<div class="mt-8 p-6 bg-primary-fixed-dim/20 border-l-4 border-primary space-y-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="font-headline font-bold text-sm uppercase text-primary">Sushi Certification Required</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="block text-[10px] font-black uppercase text-on-surface-variant">Flash Frozen Certificate</label>
+<div class="relative flex items-center justify-center h-24 border-2 border-dashed border-outline-variant hover:bg-surface-container transition-colors cursor-pointer">
+<div class="text-center">
+<span class="material-symbols-outlined text-outline" data-icon="upload_file">upload_file</span>
+<p class="text-[10px] text-outline font-medium">Click to upload PDF</p>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-[10px] font-black uppercase text-on-surface-variant">Lab ID / Lot Number</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-0 text-sm h-12 px-4" placeholder="FF-882-ALP-01" type="text"/>
+<p class="text-[10px] text-on-surface-variant">Enter the unique traceability ID from your lab report.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-8 shadow-[0px_4px_24px_rgba(0,52,97,0.04)]">
+<h2 class="text-lg font-headline font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="payments">payments</span>
+                        Pricing &amp; Quantity
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2 relative">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Price per kg</label>
+<div class="flex items-center">
+<span class="bg-surface-container-high h-12 px-4 flex items-center font-bold text-primary">$</span>
+<input class="flex-1 bg-surface-container-high border-none border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm h-12 px-2 transition-all font-bold" placeholder="42.50" type="number"/>
+</div>
+</div>
+<div class="space-y-2 relative">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">Total Quantity</label>
+<div class="flex items-center">
+<input class="flex-1 bg-surface-container-high border-none border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm h-12 px-4 transition-all font-bold" placeholder="1250" type="number"/>
+<span class="bg-surface-container-high h-12 px-4 flex items-center font-bold text-on-surface-variant">KG</span>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-8 border-t border-outline-variant/20 flex justify-between items-center">
+<div>
+<span class="text-[10px] font-bold uppercase text-on-surface-variant block">Estimated Value</span>
+<span class="text-3xl font-headline font-black text-primary">$53,125.00</span>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold uppercase text-on-surface-variant block">Market Average</span>
+<span class="text-sm font-bold text-secondary">+$2.40 above baseline</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-center pt-8">
+<button class="flex items-center gap-2 text-primary font-bold hover:bg-surface-container-high px-6 py-3 transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+                        Previous Step
+                    </button>
+<button class="bg-primary text-white font-headline font-black px-12 py-4 shadow-lg hover:shadow-primary/20 active:scale-95 transition-all">
+                        SAVE &amp; CONTINUE
+                    </button>
+</div>
+</section>
+<aside class="lg:col-span-4 space-y-6 sticky top-24">
+<div class="bg-primary p-6 text-white overflow-hidden relative">
+<div class="absolute top-0 right-0 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="anchor">anchor</span>
+</div>
+<h3 class="text-sm font-bold uppercase tracking-widest mb-4 opacity-80">Listing Summary</h3>
+<div class="space-y-4 relative z-10">
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-xs opacity-60">Species</span>
+<span class="text-sm font-bold">Bluefin Tuna (Otoro Selection)</span>
+</div>
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-xs opacity-60">Vessel</span>
+<span class="text-sm font-bold">882-Alpha (The Poseidon)</span>
+</div>
+<div class="flex justify-between border-b border-white/10 pb-2">
+<span class="text-xs opacity-60">Origin</span>
+<span class="text-sm font-bold">FAO Area 27 (North Sea)</span>
+</div>
+<div class="pt-4">
+<div class="bg-secondary p-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xs" data-icon="temp_preferences_custom">temp_preferences_custom</span>
+<span class="text-[10px] font-bold uppercase">Chain of Custody</span>
+</div>
+<span class="text-[10px] font-black bg-white text-secondary px-2 py-0.5">VERIFIED</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container p-6 space-y-4">
+<h4 class="text-xs font-black uppercase text-primary">Compliance Tip</h4>
+<p class="text-xs leading-relaxed text-on-surface-variant">
+                        For Sushi grade listings, our system automatically cross-references your <span class="font-bold">Landing Date</span> with satellite telemetry data to ensure transit times align with freshness claims.
+                    </p>
+<div class="flex gap-2">
+<div class="w-12 h-12 bg-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" data-icon="dock">dock</span>
+</div>
+<p class="text-[10px] italic opacity-60">Your current transit score: <span class="font-bold text-on-surface">9.8/10 (Exceptional)</span></p>
+</div>
+</div>
+<div class="relative h-48 group overflow-hidden">
+<img alt="Map of maritime routes" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="a stylized topographical maritime map with depth contours in shades of deep navy and glowing seafoam lines representing vessel paths" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBecK7VeZbcMenyEDGA3-lgOoeL85MoGnNnvQCfeCfYNwMdvPQHS51u9tprGiFQi9aO2KDX7hkay63fxMuKfFYv-ZyAlCu3SttvpCZvrfv7QuDp3g1oMjQ68wky5wQrh6V56vdtTVkMW-9DjSVaGS6b6kqHbpVzmPlugJJMSS-HuB3h7UP8JgjCnPxEGwG5GqyBT-Q2Aegv61_5vYtU_N95Z2HfeqLg02m_cbP7F3H1jiR_xx7SW1muF2hzwYi8ziEjxf8bXpRZ6x6A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<span class="text-[10px] font-black text-white/60 uppercase block">Last Ping Location</span>
+<span class="text-sm font-bold text-white tracking-tight">60°10′N 005°19′E</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<footer class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-16 bg-[#ffffff]/80 dark:bg-[#191c1e]/80 backdrop-blur-xl border-t border-[#c2c6d1]/15 shadow-[0_-4px_12px_rgba(0,52,97,0.08)]">
+<button class="flex flex-col items-center gap-1 text-[#424750] dark:text-[#c2c6d1]">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Buy</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#003461] dark:text-[#79f6ed] font-bold">
+<span class="material-symbols-outlined" data-icon="sell" style="font-variation-settings: 'FILL' 1;">sell</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Sell</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#424750] dark:text-[#c2c6d1]">
+<span class="material-symbols-outlined" data-icon="center_focus_weak">center_focus_weak</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Scan</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#424750] dark:text-[#c2c6d1]">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Profile</span>
+</button>
+</footer>
+</body></html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maritime Ledger - Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#00201e",
+                        "secondary-fixed": "#79f6ed",
+                        "background": "#f7f9fb",
+                        "tertiary-fixed": "#ffdbd0",
+                        "primary-fixed": "#d3e4ff",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-container": "#882800",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed-variant": "#00504c",
+                        "on-background": "#191c1e",
+                        "on-secondary-container": "#006f69",
+                        "on-error-container": "#93000a",
+                        "primary": "#003461",
+                        "on-primary-container": "#8abcff",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "secondary": "#006a65",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#59dad1",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#611a00",
+                        "surface-tint": "#27609d",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "surface-variant": "#e0e3e5",
+                        "primary-container": "#004b87",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-dim": "#d8dadc",
+                        "secondary-container": "#76f3ea",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#a3c9ff",
+                        "on-surface": "#191c1e",
+                        "outline-variant": "#c2c6d1",
+                        "outline": "#727781",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#004882",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffa182",
+                        "primary-fixed-dim": "#a3c9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#424750",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-fixed": "#001c38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Work Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar Shell -->
+<header class="bg-[#f7f9fb] dark:bg-[#191c1e] font-['Work_Sans'] font-bold tracking-tight docked full-width top-0 z-50 bg-[#eceef0] dark:bg-[#2d3133] shadow-sm flex justify-between items-center w-full px-8 h-16">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black uppercase tracking-tighter text-[#003461] dark:text-[#ffffff]">Maritime Ledger</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-[#003461] dark:text-[#79f6ed] border-b-2 border-[#003461] dark:border-[#79f6ed] pb-1 transition-colors duration-150" href="#">Marketplace</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] transition-colors duration-150" href="#">Orders</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] transition-colors duration-150" href="#">Inventory</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] transition-colors duration-150" href="#">Payouts</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center bg-surface-container-high px-3 py-1.5 rounded-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none text-sm focus:ring-0 w-48 text-on-surface" placeholder="Search marketplace..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-[#424750] dark:text-[#c2c6d1] hover:bg-[#eceef0] p-2 rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined text-[#424750] dark:text-[#c2c6d1] hover:bg-[#eceef0] p-2 rounded-full transition-colors">qr_code_scanner</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant/30 object-cover" data-alt="professional headshot of a commercial vessel fleet manager in a clean white uniform shirt against a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU7IWWanHa3cMfTgoZOjmUIeF-gF_sgf9I56SLIX191vmNkBEEV04FtUpb0iAVETIiqIQie_TkiG5B-BJSYtnGvkOn1IgHcIZw8-lX6LswzSv4DiO7DNpRT7bCxb6FQ9YYtkykKy9kedSKLMUgiES75k5QM9839jhf8HNizIrDY0ALp9DsY4sLuapvISjEFwwHR9ctLlkujhRtG-sSRsArNYvlGD5IAHqcTpKqIYteBXa7Oo5URgvgZaFQugZhdGOe-VYSJyIt0h1t"/>
+</div>
+</header>
+<main class="flex h-[calc(100vh-4rem)]">
+<!-- Filter Sidebar -->
+<aside class="hidden md:flex flex-col w-72 bg-surface-container border-r border-outline-variant/15 p-6 overflow-y-auto no-scrollbar">
+<div class="flex items-center justify-between mb-8">
+<h2 class="font-headline font-bold text-lg text-primary uppercase tracking-wider">Filters</h2>
+<button class="text-xs font-bold text-secondary uppercase hover:underline">Reset All</button>
+</div>
+<!-- Species -->
+<div class="mb-8">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-4">Species</label>
+<div class="space-y-3">
+<label class="flex items-center group cursor-pointer">
+<input checked="" class="w-4 h-4 rounded-sm border-outline text-primary focus:ring-primary" type="checkbox"/>
+<span class="ml-3 text-sm font-medium text-on-surface group-hover:text-primary transition-colors">Atlantic Salmon</span>
+</label>
+<label class="flex items-center group cursor-pointer">
+<input class="w-4 h-4 rounded-sm border-outline text-primary focus:ring-primary" type="checkbox"/>
+<span class="ml-3 text-sm font-medium text-on-surface group-hover:text-primary transition-colors">Bluefin Tuna</span>
+</label>
+<label class="flex items-center group cursor-pointer">
+<input class="w-4 h-4 rounded-sm border-outline text-primary focus:ring-primary" type="checkbox"/>
+<span class="ml-3 text-sm font-medium text-on-surface group-hover:text-primary transition-colors">Pacific Cod</span>
+</label>
+</div>
+</div>
+<!-- Grade -->
+<div class="mb-8">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-4">Grade Authority</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="px-3 py-2 bg-primary text-on-primary text-xs font-bold rounded-sm">Sushi</button>
+<button class="px-3 py-2 bg-surface-container-highest text-on-surface-variant text-xs font-bold rounded-sm hover:bg-outline-variant transition-colors">Grade A</button>
+<button class="px-3 py-2 bg-surface-container-highest text-on-surface-variant text-xs font-bold rounded-sm hover:bg-outline-variant transition-colors">Grade B</button>
+<button class="px-3 py-2 bg-surface-container-highest text-on-surface-variant text-xs font-bold rounded-sm hover:bg-outline-variant transition-colors">Grade C</button>
+</div>
+</div>
+<!-- Price Range -->
+<div class="mb-8">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-4">Price / kg (USD)</label>
+<div class="flex items-center gap-2">
+<input class="w-full bg-surface-container-high border-none rounded-sm text-sm p-2 focus:ring-0 focus:border-b-2 focus:border-primary" placeholder="Min" type="number"/>
+<span class="text-outline">/</span>
+<input class="w-full bg-surface-container-high border-none rounded-sm text-sm p-2 focus:ring-0 focus:border-b-2 focus:border-primary" placeholder="Max" type="number"/>
+</div>
+</div>
+<!-- Distance -->
+<div class="mb-8">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-4">Max Proximity (km)</label>
+<input class="w-full h-1 bg-outline-variant appearance-none rounded-full cursor-pointer accent-primary" max="500" min="0" type="range"/>
+<div class="flex justify-between mt-2 text-[10px] font-bold text-outline">
+<span>Local</span>
+<span>500 km</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<section class="flex-1 flex flex-col bg-surface overflow-hidden relative">
+<!-- Context Header -->
+<div class="flex items-center justify-between px-8 py-6 bg-surface-container-low shadow-[0px_1px_0px_0px_rgba(0,0,0,0.05)] z-10">
+<div>
+<h1 class="font-headline text-3xl font-black text-on-surface tracking-tighter">Marketplace Browse</h1>
+<p class="text-on-surface-variant text-sm mt-1">Found 142 fresh catch listings in your nautical sector.</p>
+</div>
+<div class="flex items-center bg-surface-container-highest rounded-sm p-1">
+<button class="flex items-center gap-2 px-4 py-1.5 bg-surface-container-lowest text-primary font-bold text-xs shadow-sm rounded-sm">
+<span class="material-symbols-outlined text-sm">grid_view</span> List
+                    </button>
+<button class="flex items-center gap-2 px-4 py-1.5 text-on-surface-variant font-bold text-xs hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">map</span> Map
+                    </button>
+</div>
+</div>
+<!-- Scrollable Feed -->
+<div class="flex-1 overflow-y-auto p-8 no-scrollbar">
+<!-- Bento Layout Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-8">
+<!-- Listing Card 1: Featured -->
+<div class="xl:col-span-2 group relative bg-surface-container-lowest overflow-hidden flex flex-col md:flex-row shadow-[0px_1px_3px_0px_rgba(0,52,97,0.1)] hover:shadow-xl transition-all duration-300">
+<div class="md:w-2/5 relative overflow-hidden">
+<img class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close up of fresh raw salmon fillets with deep orange color and white marbling resting on crushed ice with subtle blue lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJCBWzOOpuRj3LdCHpYB8XjSW3KJwq2p5_5gX83DJ6tMFdS_AkgSl2jut1SsE8DJ-OLE7pLaO00szBNWU_0qurW3UiwbPH_11woDSMsATFSUpXsv7_6qV2Q7vzaCk0bo-ap4PDF5hEG2M-BkxQ6tiivgEIRIesQHKdBZgJXTjViePaFqC-_5-4Evpg7qHaRTCxu0RubSSllhGOBShIrY2u_bc_1p2RNmOE7Si8Ee-Ov8f0L4vBeDqiX7zamQHdMbbidezJ6dZdRtqF"/>
+<div class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Sushi Grade</div>
+<div class="absolute bottom-4 left-4 flex items-center bg-surface-container-low/80 backdrop-blur-md px-3 py-1.5 rounded-sm">
+<span class="material-symbols-outlined text-secondary text-sm mr-1" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="text-xs font-bold text-on-surface">Freshness: 98</span>
+</div>
+</div>
+<div class="p-6 md:w-3/5 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline text-2xl font-bold text-on-surface leading-tight">Atlantic King Salmon</h3>
+<p class="text-sm font-medium text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs">location_on</span> Norwegian Sea, Sector 4B
+                                    </p>
+</div>
+<div class="text-right">
+<span class="block text-2xl font-black text-primary">$42.50</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">per kg</span>
+</div>
+</div>
+<div class="mt-auto flex flex-wrap gap-4 pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">sailing</span>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase leading-none">Vessel</p>
+<p class="text-xs font-bold">Nordic Pride</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">schedule</span>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase leading-none">Pickup Ends</p>
+<p class="text-xs font-bold text-tertiary">2h 45m</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-lg">radar</span>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase leading-none">Proximity</p>
+<p class="text-xs font-bold">12.4 km</p>
+</div>
+</div>
+</div>
+<button class="mt-6 w-full bg-primary text-on-primary py-3 font-bold uppercase tracking-widest text-xs hover:bg-primary-container transition-colors">Initiate Bid</button>
+</div>
+</div>
+<!-- Listing Card 2 -->
+<div class="bg-surface-container-lowest shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+<div class="h-48 relative">
+<img class="h-full w-full object-cover" data-alt="Whole bluefin tuna on professional stainless steel cleaning table at a maritime market with focused artificial lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCFzwIHn1yVir50pi-NEndrWFIofSGfGK-9zArkNTRHiYKlX-Zc41xoN5XMZx8J_SNAz01Pb00-zsPdDBplCGMiOiB_XVH8m7P89JC2aEfJw1lnoMZJ5DcH3rRE4VJmfX_z8huSkGR_PhzFvl-KXK59US876dEPz7PkEpDEqk7mUxGZk36dqqwUv8oe1VFuhQiw_YGAHVd3uZOdzhhbX4fhCkEewoxQw5_JfrmNOWpdN_Xve-JU_i7Fu2VP_XfJ2Hfh24OuqB4PjOV"/>
+<div class="absolute top-4 left-4 bg-secondary-container text-on-secondary-container px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Grade A</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline text-lg font-bold text-on-surface">Bluefin Tuna (Loin)</h3>
+<span class="text-lg font-black text-primary">$38.00<span class="text-[10px] text-on-surface-variant">/kg</span></span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container p-2 rounded-sm">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Freshness</p>
+<p class="text-sm font-bold text-secondary">92/100</p>
+</div>
+<div class="bg-surface-container p-2 rounded-sm">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Distance</p>
+<p class="text-sm font-bold text-on-surface">45.0 km</p>
+</div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-4">
+<span>Pickup Window</span>
+<span class="text-tertiary">Closing in 1h 15m</span>
+</div>
+<button class="w-full border-2 border-primary text-primary py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-surface-container transition-colors">Details</button>
+</div>
+</div>
+<!-- Listing Card 3 -->
+<div class="bg-surface-container-lowest shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+<div class="h-48 relative">
+<img class="h-full w-full object-cover" data-alt="Fresh white cod fillets arranged neatly on ice with lemon slices and parsley garnish, soft natural window light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDub2yGQYAyHU_7Lp6GPZ80BuBhL8t67PQmsEgTyWtD7C6S8-Savbc5SOU_dFN8DRRNG2F4P9oAYrdBM1MK_Flfe8WGqRwUm2CFbCT96LOpXHiAwuCr22mn4PUYaN1-qHQOIw0wVbX_e1ZyiEceSrZDGzEvwB1HRBBzbXKlD71iFvVtDZW3dfxiw65RpqBSrB6I9qYEQ5gxteougjzMGrSAMUd68Tv66r2ixLq7hBgDPGTi_0mdeVKYiXK_GIw-6exToJkSn1d90Qu3"/>
+<div class="absolute top-4 left-4 bg-surface-variant text-on-surface-variant px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Grade B</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline text-lg font-bold text-on-surface">Atlantic Cod</h3>
+<span class="text-lg font-black text-primary">$18.25<span class="text-[10px] text-on-surface-variant">/kg</span></span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container p-2 rounded-sm">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Freshness</p>
+<p class="text-sm font-bold text-on-surface">84/100</p>
+</div>
+<div class="bg-surface-container p-2 rounded-sm">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Distance</p>
+<p class="text-sm font-bold text-on-surface">5.2 km</p>
+</div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-4">
+<span>Pickup Window</span>
+<span class="text-on-surface">6h remaining</span>
+</div>
+<button class="w-full border-2 border-primary text-primary py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-surface-container transition-colors">Details</button>
+</div>
+</div>
+<!-- Listing Card 4 -->
+<div class="bg-surface-container-lowest shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+<div class="h-48 relative">
+<img class="h-full w-full object-cover" data-alt="Close up of raw sockeye salmon meat texture with vibrant deep red color and firm structure, macro photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEBRMbPWGQSIVv1V8M4c6IjCtJok86B2pH7ZY3ikxcI32ad7bjc6BhQCagIHCWJJlS4hPusmyGeafNniCRjwXu8OpTDLw-L61f53O5Wzvnh_Hj_5e2uKjvoChpQge2LcjK9BGqxOLT1ewUp2eI4YKCV9U68ByVYnJw8Fdx_HhkDu_YgyLqPrzAPozcfbQvCDxXgvKxRlx1gQ_i-1-3OZ3TVhogCKEDI-rxv5lJzBhKR9f9l5FTrY5l3KYZFLaTq4unNLsPV2iLBSgf"/>
+<div class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 text-[10px] font-bold uppercase tracking-widest">Sushi Grade</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline text-lg font-bold text-on-surface">Wild Sockeye Salmon</h3>
+<span class="text-lg font-black text-primary">$49.00<span class="text-[10px] text-on-surface-variant">/kg</span></span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container p-2 rounded-sm">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Freshness</p>
+<p class="text-sm font-bold text-secondary">99/100</p>
+</div>
+<div class="bg-surface-container p-2 rounded-sm">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase">Distance</p>
+<p class="text-sm font-bold text-on-surface">2.1 km</p>
+</div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-4">
+<span>Pickup Window</span>
+<span class="text-tertiary">30m remaining</span>
+</div>
+<button class="w-full border-2 border-primary text-primary py-2.5 font-bold uppercase tracking-widest text-xs hover:bg-surface-container transition-colors">Details</button>
+</div>
+</div>
+<!-- Map Inset (Simulated Bento Component) -->
+<div class="hidden xl:flex xl:col-span-2 bg-surface-container-high rounded-sm items-center justify-center relative overflow-hidden group">
+<img class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 transition-all duration-700" data-alt="Satellite style dark topographic map of a coastline with glowing blue route lines and glowing green data points" data-location="Norwegian Coast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmsmiQGMItZtDrYhCjb3VYk4r4Aiuz73T-_m7vmKO2etTXLeEn-u5GPokyVIlrY-MQqzrgHLn1cMQ9PhJt8zPbDMKkQ2n4R885adGH3AK6uu3zIOk08qkzEO8-uIa6FU20l99M7KixdjTljkMb4MSuNDZh7ZUL7EQhJTTIuN0e13C4QfwJ9Iff8SGdhnKj6yobEkHEo1s9fL9T0aIR8ZPdNNtF9sdxQ_G_vMUT98Zs2heMSts_-kr1ahZVVV91Sa9Xp6j6q_CnTT1F"/>
+<div class="absolute inset-0 bg-primary/10 pointer-events-none"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-surface-container-low/90 backdrop-blur-xl p-8 shadow-2xl border border-white/20 text-center">
+<span class="material-symbols-outlined text-4xl text-primary mb-2">explore</span>
+<h4 class="font-headline text-xl font-black text-on-surface uppercase tracking-tight">Expand Sector Map</h4>
+<p class="text-sm text-on-surface-variant mb-4">Visualize real-time vessel locations and catch points.</p>
+<button class="bg-primary text-on-primary px-6 py-2 font-bold text-xs uppercase tracking-widest">Open Interactive Map</button>
+</div>
+</div>
+<div class="absolute top-4 right-4 flex flex-col gap-2">
+<div class="bg-surface-container-lowest p-2 rounded-sm shadow-sm flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="text-[10px] font-bold uppercase">9 Vessels Active</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Shell (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-16 bg-[#ffffff]/80 dark:bg-[#191c1e]/80 backdrop-blur-xl border-t border-[#c2c6d1]/15 shadow-[0_-4px_12px_rgba(0,52,97,0.08)]">
+<button class="flex flex-col items-center justify-center text-[#003461] dark:text-[#79f6ed] font-bold">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-[10px] uppercase tracking-widest">Buy</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#424750] dark:text-[#c2c6d1]">
+<span class="material-symbols-outlined">sell</span>
+<span class="text-[10px] uppercase tracking-widest">Sell</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#424750] dark:text-[#c2c6d1]">
+<span class="material-symbols-outlined">center_focus_weak</span>
+<span class="text-[10px] uppercase tracking-widest">Scan</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#424750] dark:text-[#c2c6d1]">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] uppercase tracking-widest">Profile</span>
+</button>
+</nav>
+</body></html>

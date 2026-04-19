@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finventory | Rescue the catch. Feed the coast.</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&amp;family=Caveat:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#4e3e00",
+                        "outline": "#707881",
+                        "on-secondary-container": "#773e01",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#ebd6c9",
+                        "surface-container-high": "#f9e4d7",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#004a75",
+                        "surface-bright": "#fff8f5",
+                        "background": "#fff8f5",
+                        "inverse-surface": "#3a2e25",
+                        "tertiary": "#725c07",
+                        "on-primary-container": "#f7f9ff",
+                        "inverse-primary": "#95ccff",
+                        "surface-container-low": "#fff1e9",
+                        "on-surface-variant": "#404750",
+                        "secondary-fixed-dim": "#ffb77d",
+                        "on-background": "#241911",
+                        "on-primary-fixed": "#001d32",
+                        "surface-tint": "#00639a",
+                        "secondary-fixed": "#ffdcc3",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-tertiary-fixed": "#231b00",
+                        "tertiary-container": "#c5a952",
+                        "on-primary": "#ffffff",
+                        "surface": "#fff8f5",
+                        "tertiary-fixed": "#ffe085",
+                        "outline-variant": "#c0c7d1",
+                        "on-error": "#ffffff",
+                        "on-surface": "#241911",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#f3dfd1",
+                        "surface-variant": "#f3dfd1",
+                        "inverse-on-surface": "#ffede2",
+                        "primary-fixed-dim": "#95ccff",
+                        "primary": "#005f93",
+                        "surface-container": "#ffeadc",
+                        "primary-fixed": "#cde5ff",
+                        "secondary": "#8c4f14",
+                        "tertiary-fixed-dim": "#e2c46a",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "secondary-container": "#fdac6a",
+                        "primary-container": "#1e78b4",
+                        "on-secondary-fixed": "#2f1500"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"],
+                        "accent": ["Caveat"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .italic-accent-caveat {
+            font-family: 'Caveat', cursive;
+        }
+        .text-tight { letter-spacing: -0.02em; }
+        .no-border-tonal-transition-via-blur { border-bottom: none; }
+        .glass-card {
+            background: rgba(255, 248, 245, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,95,147,0.06)] no-border-tonal-transition-via-blur">
+<div class="flex justify-between items-center px-12 py-5 w-full max-w-screen-2xl mx-auto">
+<div class="text-2xl font-bold text-sky-900 dark:text-sky-100 italic-accent-caveat">Finventory</div>
+<div class="hidden md:flex gap-10 items-center">
+<a class="text-sky-700 dark:text-sky-300 font-bold border-b-2 border-sky-700 pb-1 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] leading-relaxed transition-transform duration-300 hover:scale-[1.02]" href="#">Marketplace</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] leading-relaxed transition-transform duration-300 hover:scale-[1.02]" href="#">Suppliers</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] leading-relaxed transition-transform duration-300 hover:scale-[1.02]" href="#">Impact</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] leading-relaxed transition-transform duration-300 hover:scale-[1.02]" href="#">About</a>
+</div>
+<div class="flex gap-4 items-center">
+<button class="text-slate-600 font-medium px-6 py-2 hover:scale-[1.02] transition-transform">Log in</button>
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/10 hover:scale-[1.05] transition-all">Sign up</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative px-12 py-20 lg:py-32 max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center overflow-hidden">
+<div class="z-10">
+<h1 class="text-6xl lg:text-8xl font-extrabold text-on-background leading-[1.1] text-tight mb-8">
+                Rescue the <span class="relative inline-block">catch<span class="absolute -bottom-2 left-0 w-full h-4 italic-accent-caveat text-primary opacity-60 text-4xl leading-none">~~~~~</span></span>.<br/>
+                Feed the coast.
+            </h1>
+<p class="text-xl text-on-surface-variant max-w-xl mb-12 leading-relaxed">
+                Connect directly with local fleets to source surplus seafood that would otherwise be lost. Fresh, fair, and focused on the future of our oceans.
+            </p>
+<div class="flex flex-wrap gap-6 mb-16">
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-10 py-5 rounded-full font-bold text-lg shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all">
+                    Browse the marketplace
+                </button>
+<button class="border-2 border-outline-variant/30 text-primary px-10 py-5 rounded-full font-bold text-lg hover:bg-surface-container-low transition-all">
+                    List your catch
+                </button>
+</div>
+<div class="flex gap-12 items-center">
+<div class="flex flex-col">
+<span class="font-accent text-3xl text-primary leading-none">12,400 lb</span>
+<span class="text-xs uppercase tracking-widest font-bold text-outline">rescued</span>
+</div>
+<div class="flex flex-col">
+<span class="font-accent text-3xl text-primary leading-none">180+</span>
+<span class="text-xs uppercase tracking-widest font-bold text-outline">harbors</span>
+</div>
+<div class="flex flex-col">
+<span class="font-accent text-3xl text-primary leading-none">32%</span>
+<span class="text-xs uppercase tracking-widest font-bold text-outline">savings</span>
+</div>
+</div>
+</div>
+<div class="relative group">
+<div class="rounded-xl overflow-hidden shadow-[0_40px_80px_rgba(0,95,147,0.12)] -rotate-1 group-hover:rotate-0 transition-transform duration-700">
+<img class="w-full h-[600px] object-cover" data-alt="Close-up portrait of a weathered fisherman on a wooden trawler at golden hour, warm sunset light hitting his face with sparkling ocean background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ4K1LPHs2VmVPeymdeARalBboz-AjIPthXXF4P9u_e-UDHwlsMX6LQmZTHPxyG_bteDXUHRTFcSrtzQ2D9qeGWPx_ociCD2DQcJ015A71mJzUwb7Hk8wkQQb7UVZcNLESMwlqz1agYVQAzVxWeVTSR3bRkmlifcVYj3vVFdMulUkJo_vWuvta1IyZc6tS9pYh8Nflzv3RU9evA9RPfPxcCtnh1XpH-WMfeJasW35NfaqHq-7rSOkOythU---AUbxfKU1sTNBP46g"/>
+</div>
+<!-- Glass Card Overlay -->
+<div class="glass-card absolute -bottom-10 -left-10 md:bottom-20 md:-left-20 p-8 rounded-lg shadow-2xl max-w-xs border border-white/20">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-2xl font-bold text-on-background">Wild King Salmon</h3>
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div class="space-y-2 mb-6">
+<div class="flex justify-between text-sm">
+<span class="text-outline">Weight</span>
+<span class="font-bold">22lb</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-outline">Origin</span>
+<span class="font-bold">Coos Bay, OR</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-3xl font-black text-primary">$8.40<span class="text-sm font-normal text-outline">/lb</span></span>
+<button class="bg-primary text-white p-2 rounded-full hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- How it works -->
+<section class="py-24 bg-surface-container-low relative">
+<div class="max-w-7xl mx-auto px-12">
+<div class="text-center mb-20">
+<span class="font-accent text-3xl text-primary">Simple &amp; Direct</span>
+<h2 class="text-5xl font-extrabold text-on-background text-tight mt-2">How it works</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Step 1 -->
+<div class="group">
+<div class="bg-white p-12 rounded-lg shadow-sm group-hover:shadow-xl transition-shadow duration-500 mb-8 aspect-square flex flex-col items-center justify-center text-center relative overflow-hidden">
+<div class="absolute -top-10 -right-10 text-9xl font-black text-surface-container-high opacity-40">01</div>
+<span class="material-symbols-outlined text-6xl text-primary mb-6" style="font-variation-settings: 'FILL' 0;">fluid</span>
+<h3 class="text-2xl font-bold mb-4">Suppliers list</h3>
+<p class="text-on-surface-variant">Captains post their surplus landing directly from the dock within minutes of mooring.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="group">
+<div class="bg-white p-12 rounded-lg shadow-sm group-hover:shadow-xl transition-shadow duration-500 mb-8 aspect-square flex flex-col items-center justify-center text-center relative overflow-hidden">
+<div class="absolute -top-10 -right-10 text-9xl font-black text-surface-container-high opacity-40">02</div>
+<span class="material-symbols-outlined text-6xl text-primary mb-6" style="font-variation-settings: 'FILL' 0;">smartphone</span>
+<h3 class="text-2xl font-bold mb-4">Buyers reserve</h3>
+<p class="text-on-surface-variant">Chefs and retailers browse live inventory and secure the freshest catch at surplus prices.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="group">
+<div class="bg-white p-12 rounded-lg shadow-sm group-hover:shadow-xl transition-shadow duration-500 mb-8 aspect-square flex flex-col items-center justify-center text-center relative overflow-hidden">
+<div class="absolute -top-10 -right-10 text-9xl font-black text-surface-container-high opacity-40">03</div>
+<span class="material-symbols-outlined text-6xl text-primary mb-6" style="font-variation-settings: 'FILL' 0;">local_shipping</span>
+<h3 class="text-2xl font-bold mb-4">Pickup same day</h3>
+<p class="text-on-surface-variant">Logistics are streamlined for local harbor pickup or direct-to-kitchen delivery by sundown.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Wavy Divider -->
+<div class="absolute -bottom-1 left-0 w-full overflow-hidden leading-[0]">
+<svg class="relative block w-full h-12" preserveaspectratio="none" viewbox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,85.3C672,75,768,85,864,96C960,107,1056,117,1152,112C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" fill="#fff8f5"></path>
+</svg>
+</div>
+</section>
+<!-- Two sides of the dock -->
+<section class="py-32 max-w-7xl mx-auto px-12">
+<div class="flex flex-col md:flex-row gap-8">
+<!-- Fishers Card -->
+<div class="flex-1 relative group cursor-pointer overflow-hidden rounded-xl bg-gradient-to-br from-primary to-primary-container p-12 text-white min-h-[500px] flex flex-col justify-end">
+<div class="absolute top-0 right-0 p-8 opacity-20 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[10rem]">anchor</span>
+</div>
+<div class="relative z-10">
+<h4 class="font-accent text-3xl mb-2">For Harvesters</h4>
+<h3 class="text-5xl font-black mb-6 text-tight">Stop the waste, boost the bottom line.</h3>
+<p class="text-lg opacity-90 max-w-md mb-8 leading-relaxed">Turn surplus bycatch or unsold inventory into profit. List your catch while still at sea and find buyers before you even hit the dock.</p>
+<div class="flex items-center gap-2 font-bold group/btn">
+<span>List Your Fleet</span>
+<span class="material-symbols-outlined group-hover/btn:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Chefs Card -->
+<div class="flex-1 relative group cursor-pointer overflow-hidden rounded-xl bg-gradient-to-br from-secondary to-secondary-container p-12 text-white min-h-[500px] flex flex-col justify-end">
+<div class="absolute top-0 right-0 p-8 opacity-20 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[10rem]">restaurant_menu</span>
+</div>
+<div class="relative z-10">
+<h4 class="font-accent text-3xl mb-2">For Chefs</h4>
+<h3 class="text-5xl font-black mb-6 text-tight">Artisan quality, ocean-positive pricing.</h3>
+<p class="text-lg opacity-90 max-w-md mb-8 leading-relaxed">Access seasonal delicacies that never hit the mass market. Cut your food costs while building a mission-driven menu for your guests.</p>
+<div class="flex items-center gap-2 font-bold group/btn">
+<span>Shop the Morning Catch</span>
+<span class="material-symbols-outlined group-hover/btn:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Today's catch horizontal strip -->
+<section class="py-24 bg-surface overflow-hidden">
+<div class="max-w-7xl mx-auto px-12 flex justify-between items-end mb-12">
+<div>
+<span class="font-accent text-3xl text-primary">Live Auction</span>
+<h2 class="text-5xl font-extrabold text-on-background text-tight mt-2">Today's catch</h2>
+</div>
+<a class="font-bold text-primary flex items-center gap-2 group" href="#">
+                View all inventory <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+<div class="flex gap-8 px-12 overflow-x-auto pb-12 snap-x no-scrollbar">
+<!-- CrateCard 1 -->
+<div class="min-w-[300px] snap-start bg-surface-container-lowest rounded-lg overflow-hidden group shadow-[0_10px_30px_rgba(0,95,147,0.04)] hover:shadow-2xl transition-all duration-500 border border-outline-variant/10">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Close up of fresh silver mackerel on a bed of crushed ice, morning market light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnt0yzDNFTPDGD6KkEu_ic2CVnFNdQ3AG7WAZ0qk2dVWh8EWTOMUAQtKdgooK7sR0tSvxFWxTYHUz0zfsA1CieyM0bJfA2--Ialv7TDzf55soSIRm-zLuHAxdQizrQiqn1GefYcyydMfwyyg71nLhKNtNpBsxB3bCyLzcaO63Isy8gpMXvJ_BHr2pmsEC_rwdBtLeeIwc7mlSvf068EnorUicu2r-ebrjGS8JgzUdqRT-G58tCgJoMbiorvA7oOEaRDyLTY1b9TZI"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold uppercase tracking-widest text-primary">Surplus</span>
+<span class="text-xs font-medium text-outline">2h ago</span>
+</div>
+<h4 class="text-xl font-bold mb-4">Silver Mackerel</h4>
+<div class="flex justify-between items-end">
+<div>
+<span class="block text-xs text-outline">Availability</span>
+<span class="font-bold text-on-surface">140 lb</span>
+</div>
+<div class="text-right">
+<span class="block text-xs text-outline">Price</span>
+<span class="text-2xl font-black text-primary">$4.50<span class="text-sm">/lb</span></span>
+</div>
+</div>
+</div>
+</div>
+<!-- CrateCard 2 -->
+<div class="min-w-[300px] snap-start bg-surface-container-lowest rounded-lg overflow-hidden group shadow-[0_10px_30px_rgba(0,95,147,0.04)] hover:shadow-2xl transition-all duration-500 border border-outline-variant/10">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Dungeness crab in a fisherman's crate, vibrant orange shells with salt crystals" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnSzdV_pIKU7JQy2NbawmE-6hebnn7WPLVutOd9Xemz9SL4_g_lbLe7NSH57FZUsTJDK9p8qmSdrqeshS915RH0fTjRys6xUKkDeo9EqE4EUfFXxL0kvtQGCX3ssSf4uEUlBO9KuKq7OG8QalZTAzW_bkPSwfKISQw3wOumAWE7pekbmXDE1QQbgFTNlW1UiwI_Yk2LiluPrscVbFQy22wyP2zp18vxqM_uCUYYODtgBQe4Pe_j8nrMXdaFT1FtD39gYo4G8mWdjg"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold uppercase tracking-widest text-secondary">Seasonal</span>
+<span class="text-xs font-medium text-outline">5h ago</span>
+</div>
+<h4 class="text-xl font-bold mb-4">Dungeness Crab</h4>
+<div class="flex justify-between items-end">
+<div>
+<span class="block text-xs text-outline">Availability</span>
+<span class="font-bold text-on-surface">80 lb</span>
+</div>
+<div class="text-right">
+<span class="block text-xs text-outline">Price</span>
+<span class="text-2xl font-black text-primary">$12.00<span class="text-sm">/lb</span></span>
+</div>
+</div>
+</div>
+</div>
+<!-- CrateCard 3 -->
+<div class="min-w-[300px] snap-start bg-surface-container-lowest rounded-lg overflow-hidden group shadow-[0_10px_30px_rgba(0,95,147,0.04)] hover:shadow-2xl transition-all duration-500 border border-outline-variant/10">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Fresh scallops in their shells, arranged on a rustic wooden table with sea salt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3fyT1qy1HzhrkS6RhOzGovvzNnLmo2H0QKhGl-YSUzOw7UR7TSDfTIoYf7YbKDgPN7YpQtPtzfiDsQmNEz1u4-q21XR0p8LyPGQoqT9_0MehnCb74OvKPIExqkD_bepWqAIkLN48Cd0BsZffkr2SLadhO2QfQqrxy6OGqkAvNN4nXAiEScROporpXN7yPEcKdtu90L_jurhpNeERMJ27GiBGL_COuM1NZynJcO5ipy-CLcV7BZu2ezLgCRZInQmco6KJo0ILCPss"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold uppercase tracking-widest text-primary">Day Boat</span>
+<span class="text-xs font-medium text-outline">1h ago</span>
+</div>
+<h4 class="text-xl font-bold mb-4">Diver Scallops</h4>
+<div class="flex justify-between items-end">
+<div>
+<span class="block text-xs text-outline">Availability</span>
+<span class="font-bold text-on-surface">45 lb</span>
+</div>
+<div class="text-right">
+<span class="block text-xs text-outline">Price</span>
+<span class="text-2xl font-black text-primary">$18.25<span class="text-sm">/lb</span></span>
+</div>
+</div>
+</div>
+</div>
+<!-- CrateCard 4 -->
+<div class="min-w-[300px] snap-start bg-surface-container-lowest rounded-lg overflow-hidden group shadow-[0_10px_30px_rgba(0,95,147,0.04)] hover:shadow-2xl transition-all duration-500 border border-outline-variant/10">
+<div class="h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Large tiger prawns on ice at a coastal seafood market, glistening wet textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKCNfE1cZEdY7yKssm2_-viEwEUHRKlCTKSvnClU8jxn8E5K8AFoOXevox1m6GKdfEU7mHLX97x9KRG2KXCdma6T4X3DEJk9Q3oFlBi7VDOSyL8CQ0ecVjGE6bNX-dYzBCwEqlTZsgdTKL4dr8xOjXvq__IIMKBNANECiPlDPkct-dtLAWPY8q60n_agS92Yb4MpxgpPp3c0BEMJggM8cYfP6XGPRQKLqL2_H1RMR9Ns3GBeZGAMpUpN5eFQDFfU8tT4gW6cmv_6g"/>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold uppercase tracking-widest text-primary">Limit-Out</span>
+<span class="text-xs font-medium text-outline">4h ago</span>
+</div>
+<h4 class="text-xl font-bold mb-4">Tiger Prawns</h4>
+<div class="flex justify-between items-end">
+<div>
+<span class="block text-xs text-outline">Availability</span>
+<span class="font-bold text-on-surface">210 lb</span>
+</div>
+<div class="text-right">
+<span class="block text-xs text-outline">Price</span>
+<span class="text-2xl font-black text-primary">$9.75<span class="text-sm">/lb</span></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Impact Teaser Band -->
+<section class="py-20 bg-gradient-to-r from-primary to-primary-container text-white overflow-hidden relative">
+<div class="max-w-7xl mx-auto px-12 grid grid-cols-1 md:grid-cols-3 gap-12 text-center items-center relative z-10">
+<div>
+<span class="font-accent text-7xl md:text-8xl lg:text-9xl block mb-2 leading-none">42,000+</span>
+<p class="text-xl uppercase tracking-widest font-bold opacity-80">Meals Provided</p>
+</div>
+<div>
+<span class="font-accent text-7xl md:text-8xl lg:text-9xl block mb-2 leading-none">14 Tons</span>
+<p class="text-xl uppercase tracking-widest font-bold opacity-80">Waste Diverted</p>
+</div>
+<div>
+<span class="font-accent text-7xl md:text-8xl lg:text-9xl block mb-2 leading-none">$1.2M</span>
+<p class="text-xl uppercase tracking-widest font-bold opacity-80">Harbor Revenue</p>
+</div>
+</div>
+<div class="absolute inset-0 opacity-10 pointer-events-none flex items-center justify-center">
+<span class="material-symbols-outlined text-[40rem]">tsunami</span>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-32 bg-surface">
+<div class="max-w-7xl mx-auto px-12">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="relative">
+<div class="rounded-lg overflow-hidden aspect-[4/5] shadow-2xl">
+<img class="w-full h-full object-cover" data-alt="A professional chef in a clean white apron preparing seafood in a modern sunlit kitchen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwLBMzdexhrssL17TocrSomBdfQB3DuBmAcvCFZDRLRbLckjUopE-_9Gixju4UoND0QULfyRyxR8yVUUCdJgpUFgvd6a3v3BVq6IVfcI755z1xg9p5vuUJ3WpP6OiANqL8jj9gwnhethIbelHKGsOFGeIuuxeD_7speqAcJP-3Dkk8JoeYaP0S1TC3bWZwABrd71uIIpUMj0S5S36HryrtmGv9Fqiu_PKVeX9jEIbVz2WzmZYqShJa79fAP9u4O4-xwjzTzRSiF_E"/>
+</div>
+<div class="absolute -bottom-8 -right-8 glass-card p-6 rounded-lg shadow-xl">
+<span class="material-symbols-outlined text-secondary text-5xl">format_quote</span>
+</div>
+</div>
+<div>
+<span class="font-accent text-3xl text-primary">Voices from the Shore</span>
+<h2 class="text-5xl font-extrabold text-on-background text-tight mt-4 mb-12">Building a resilient seafood network.</h2>
+<div class="space-y-12">
+<blockquote class="border-l-4 border-primary-container pl-8">
+<p class="text-2xl font-medium leading-relaxed italic text-on-surface-variant mb-6">
+                                "Finventory changed how I source. I'm getting fish that was caught 6 hours ago for a price that makes sense for my bistro. The story of rescue resonates with my customers."
+                            </p>
+<cite class="not-italic">
+<span class="block font-bold text-xl text-on-background">Chef Julian Rossi</span>
+<span class="text-outline">Founder, Salt &amp; Pine Bistro</span>
+</cite>
+</blockquote>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<button class="w-12 h-12 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-24 max-w-7xl mx-auto px-6 md:px-12 mb-24">
+<div class="bg-tertiary-fixed rounded-xl p-12 md:p-24 text-center relative overflow-hidden flex flex-col items-center">
+<div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+<svg height="100%" preserveaspectratio="none" viewbox="0 0 100 100" width="100%">
+<pattern height="10" id="grid" patternunits="userSpaceOnUse" width="10">
+<path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" stroke-width="0.5"></path>
+</pattern>
+<rect fill="url(#grid)" height="100" width="100"></rect>
+</svg>
+</div>
+<span class="font-accent text-4xl text-on-tertiary-fixed mb-4 relative z-10">The tide is turning</span>
+<h2 class="text-5xl md:text-7xl font-black text-on-tertiary-fixed text-tight mb-8 relative z-10">Join the coastal revolution.</h2>
+<p class="text-xl text-on-tertiary-fixed-variant max-w-2xl mb-12 relative z-10 leading-relaxed">Whether you have a boat or a kitchen, there's a place for you on the dock. Let's make sustainable seafood the standard, not the exception.</p>
+<div class="flex flex-col sm:flex-row gap-6 relative z-10">
+<button class="bg-primary text-white px-12 py-5 rounded-full font-bold text-xl shadow-xl hover:scale-105 transition-all">
+                    Get Started Free
+                </button>
+<button class="bg-white text-primary px-12 py-5 rounded-full font-bold text-xl shadow-lg hover:scale-105 transition-all">
+                    Contact Sales
+                </button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-slate-900 dark:bg-black text-[#fff8f5] w-full relative">
+<!-- Wavy Top Divider -->
+<div class="absolute -top-1 left-0 w-full overflow-hidden leading-[0] rotate-180">
+<svg class="relative block w-full h-12" preserveaspectratio="none" viewbox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,85.3C672,75,768,85,864,96C960,107,1056,117,1152,112C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" fill="#fff8f5"></path>
+</svg>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-24 w-full max-w-7xl mx-auto font-['Plus_Jakarta_Sans'] tracking-tight">
+<div class="col-span-1 md:col-span-1">
+<div class="text-3xl font-black text-white mb-8 italic-accent-caveat">Finventory</div>
+<p class="text-slate-400 leading-relaxed">Curating the ocean’s bounty. Connecting harvesters and buyers for a waste-free coast.</p>
+</div>
+<div>
+<h4 class="font-bold text-white mb-6 uppercase tracking-widest text-sm">Marketplace</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Today's Catch</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Harbors &amp; Ports</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Suppliers List</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Logistics Solutions</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-white mb-6 uppercase tracking-widest text-sm">Company</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Sustainability</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Impact Report</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Journal</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Careers</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-white mb-6 uppercase tracking-widest text-sm">Legal</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Privacy Policy</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Terms of Service</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Compliance</a></li>
+</ul>
+</div>
+</div>
+<div class="px-12 py-8 border-t border-slate-800/50 max-w-7xl mx-auto flex flex-col md:row justify-between items-center gap-4">
+<span class="text-slate-500">© 2024 Finventory. Curating the ocean’s bounty.</span>
+<div class="flex gap-6">
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">waves</span></a>
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">anchor</span></a>
+</div>
+</div>
+</footer>
+</body></html>

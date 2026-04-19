@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&amp;family=JetBrains+Mono:wght@400;700&amp;family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#005f93",
+                    "surface": "#ffffff",
+                    "border-util": "#241911",
+                    "industrial-bg": "#f4f4f4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "0px"
+            },
+            "fontFamily": {
+                    "mono": ["JetBrains Mono", "monospace"],
+                    "sans": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { 
+                @apply font-sans bg-white text-slate-900;
+            }
+            .industrial-mono {
+                font-family: 'JetBrains Mono', monospace;
+            }
+        }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .grid-line { border: 1px solid #000; }
+        .tech-table td, .tech-table th {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body class="selection:bg-primary selection:text-white">
+<nav class="sticky top-0 w-full z-50 bg-white border-b-2 border-black">
+<div class="flex items-center px-8 py-4 w-full mx-auto">
+<a class="industrial-mono text-2xl font-bold uppercase tracking-tighter mr-20" href="#">
+            FINVENTORY <span class="bg-black text-white px-1">COMMERCIAL</span>
+</a>
+<div class="flex gap-10 items-center">
+<a class="text-xs uppercase font-bold tracking-widest hover:underline" href="#">Global Market</a>
+<a class="text-xs uppercase font-bold tracking-widest hover:underline" href="#">Bulk Orders</a>
+<a class="text-xs uppercase font-bold tracking-widest hover:underline" href="#">Logistics</a>
+<a class="text-xs uppercase font-bold tracking-widest hover:underline" href="#">Compliance</a>
+</div>
+<div class="flex-grow"></div>
+<div class="flex items-center gap-6">
+<span class="industrial-mono text-[10px] text-slate-400">v4.2.0-COMM</span>
+<button class="text-sm font-bold uppercase hover:bg-black hover:text-white px-4 py-2 transition-colors">Log in</button>
+<button class="border-2 border-black bg-black text-white text-sm font-bold uppercase px-6 py-2">Account Setup</button>
+</div>
+</div>
+</nav>
+<main class="w-full mx-auto p-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 border-2 border-black">
+<div class="lg:col-span-6 border-b-2 lg:border-b-0 lg:border-r-2 border-black bg-industrial-bg">
+<img alt="Wild King Salmon" class="w-full h-full object-cover grayscale-[0.3] contrast-125" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeU-D9hp_SzUFPHyOhIFeS46v6BJaQOECFocD1tykBNvkFu1ieaLu34xIjQd62ea56U8ALD6-WaXkt8ZfQnchtys91PSCeB51nDj8Y5SChuqlheN7dKeH0u9gjyUcKAwZDdGX_O4Np1AAjcWHyGendXiJUc-IVrHhQExgtlNXCOyY-osEH98D8CulLOIDwLku_P72MR3ZpxZwXVgipTfiHxueeGbcYQuHrpfLynAnj_Zx90H6MMujGUxTL7redwmJoXmbFoA4CJD0"/>
+<div class="p-6 bg-black text-white industrial-mono text-xs leading-relaxed">
+                [LOG_ENTRY_BOD_662] Vessel: "Half Moon Pioneer" | Captain's Note: "High fat content. Troll-caught at 40 fathoms. Exceptional firmness for commercial processing."
+            </div>
+</div>
+<div class="lg:col-span-6 flex flex-col">
+<div class="p-8 border-b-2 border-black">
+<div class="flex justify-between items-start mb-6">
+<div>
+<span class="industrial-mono text-[10px] uppercase bg-blue-100 text-blue-900 px-2 py-0.5 border border-blue-900 font-bold">SKU: WKS-0924-BOD</span>
+<h1 class="text-5xl font-black uppercase tracking-tight mt-2 leading-none">Wild King Salmon</h1>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold industrial-mono">ORIGIN_CODE</span>
+<div class="text-2xl font-bold uppercase">Bodega Bay</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-0 border border-black industrial-mono">
+<div class="p-4 border-r border-black bg-slate-50">
+<span class="text-[10px] block font-bold text-slate-500 uppercase">Unit Price (High Vol)</span>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold">$8.40</span>
+<span class="text-sm font-medium text-slate-500">/lb</span>
+</div>
+<div class="text-[10px] line-through text-slate-400 mt-1">Consumer MSRP: $13.50/lb</div>
+</div>
+<div class="p-4 bg-white">
+<span class="text-[10px] block font-bold text-slate-500 uppercase">Batch Weight / Total</span>
+<div class="text-4xl font-bold">22<span class="text-sm">lbs</span></div>
+<div class="text-[10px] font-bold text-primary mt-1">EST. CRATE VAL: $184.80</div>
+</div>
+</div>
+</div>
+<div class="p-0 flex-grow grid grid-cols-1 md:grid-cols-2">
+<div class="p-6 border-b border-r border-slate-200">
+<span class="industrial-mono text-[10px] font-bold text-slate-500 uppercase block mb-3">Historical Pricing (30D)</span>
+<div class="flex flex-col gap-1 industrial-mono text-[10px]">
+<div class="flex justify-between border-b border-dotted border-slate-300 pb-1"><span>AVG</span><span>$11.20</span></div>
+<div class="flex justify-between border-b border-dotted border-slate-300 pb-1"><span>PEAK</span><span>$14.80</span></div>
+<div class="flex justify-between font-bold text-green-600"><span>CURRENT</span><span>-$2.80 vs AVG</span></div>
+</div>
+</div>
+<div class="p-6 border-b border-slate-200 bg-slate-50">
+<span class="industrial-mono text-[10px] font-bold text-slate-500 uppercase block mb-3">Landing Certifications</span>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+<span class="text-[10px] font-bold uppercase">MSC-C-5423 Sustainable</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">assignment_turned_in</span>
+<span class="text-[10px] font-bold uppercase">HACCP Compliance Certified</span>
+</div>
+</div>
+</div>
+<div class="p-6 border-r border-slate-200">
+<span class="industrial-mono text-[10px] font-bold text-slate-500 uppercase block mb-3">Logistics Meta</span>
+<div class="text-xs space-y-1">
+<p><span class="font-bold">LANDING:</span> SEPT 24 @ 05:20</p>
+<p><span class="font-bold">TEMP CONTROL:</span> CRUSHED ICE / BRINE</p>
+<p><span class="font-bold">GRADE:</span> A+ (PRIME WHOLE)</p>
+</div>
+</div>
+<div class="p-6">
+<span class="industrial-mono text-[10px] font-bold text-slate-500 uppercase block mb-3">Supplier Verification</span>
+<div class="flex items-center gap-4">
+<div class="bg-black text-white industrial-mono text-xs font-bold p-2">4.9 / 5.0</div>
+<div class="text-[10px] uppercase font-bold leading-tight">Half Moon Bay Seafoods<br/><span class="text-slate-400">Reg: #CA-88219</span></div>
+</div>
+</div>
+</div>
+<div class="p-8 border-t-2 border-black bg-white">
+<div class="flex items-center justify-between mb-6">
+<div class="flex gap-4">
+<div class="border border-black p-4 flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">QTY</span>
+<span class="text-xl font-bold">01</span>
+</div>
+<div class="text-xs">
+<p class="font-bold mb-1 uppercase">Commercial Pickup Window</p>
+<p class="text-slate-500">14:00 - 18:00 (Local Time)</p>
+<p class="text-slate-500">Bodega Bay Dock Side</p>
+</div>
+</div>
+<div class="text-right industrial-mono text-[10px]">
+                        STATUS: AVAILABLE<br/>REF_ID: 9811-002
+                    </div>
+</div>
+<button class="w-full py-6 bg-black text-white text-xl font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors flex items-center justify-center gap-4">
+                    Initialize Trade Reservation
+                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 border-2 border-black divide-x-2 divide-black">
+<div class="p-8 space-y-4">
+<h3 class="industrial-mono text-sm font-black uppercase border-b border-black pb-2">Sustainable Sourcing Protocol</h3>
+<p class="text-xs leading-relaxed text-slate-600">All inventory in the commercial trade variant is verified via the Troll-Caught standard. Zero bycatch. Minimal bruising. Flash-chilled within 15 minutes of landing to maintain enzymatic stability for restaurant-grade prep.</p>
+</div>
+<div class="p-8 space-y-4">
+<h3 class="industrial-mono text-sm font-black uppercase border-b border-black pb-2">Batch Logic &amp; Yield</h3>
+<p class="text-xs leading-relaxed text-slate-600">Calculated yield for this crate (approx 72% filet weight). Historical waste metrics for this supplier show 1,420 lbs rescued via commercial channels. Tier-2 pricing active for rapid turnover prior to next tide cycle.</p>
+</div>
+<div class="p-8 bg-industrial-bg relative flex flex-col justify-between">
+<div class="industrial-mono text-[10px] text-slate-400">DATASET_MANIFEST_V1</div>
+<div>
+<h4 class="text-xl font-black uppercase leading-tight mb-2">Harbor Bridge Network</h4>
+<p class="text-xs text-slate-500">Connecting fleet capacity directly to wholesale culinary procurement. Automated compliance tracking and logistics routing via harbor-node API.</p>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-black text-white mt-12 p-12 industrial-mono">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-screen-2xl mx-auto">
+<div class="md:col-span-1">
+<div class="text-xl font-bold mb-6">FINVENTORY_TRADE</div>
+<p class="text-[10px] text-slate-400 leading-relaxed">SYSTEM_STATUS: OPERATIONAL<br/>FLEET_SYNC: ACTIVE<br/>SECURE_SHELL_LINK: ESTABLISHED</p>
+</div>
+<div>
+<h4 class="text-xs font-bold mb-6 text-slate-400 uppercase tracking-widest">Nodes</h4>
+<ul class="space-y-2 text-[10px] uppercase font-bold">
+<li><a class="hover:text-slate-400" href="#">Market_API</a></li>
+<li><a class="hover:text-slate-400" href="#">Fleet_Log</a></li>
+<li><a class="hover:text-slate-400" href="#">Traceability</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-xs font-bold mb-6 text-slate-400 uppercase tracking-widest">Protocol</h4>
+<ul class="space-y-2 text-[10px] uppercase font-bold">
+<li><a class="hover:text-slate-400" href="#">Compliance</a></li>
+<li><a class="hover:text-slate-400" href="#">Terms_of_Trade</a></li>
+<li><a class="hover:text-slate-400" href="#">Privacy_Policy</a></li>
+</ul>
+</div>
+<div class="border border-slate-700 p-4">
+<p class="text-[10px] italic text-slate-400 mb-2">"The sea, once it casts its spell, holds one in its net of wonder forever."</p>
+<div class="text-[10px] font-bold">— COUSTEAU_J</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-slate-800 text-center text-[10px] text-slate-500">
+        © 2024 FINVENTORY INDUSTRIAL SYSTEMS. ALL RIGHTS RESERVED. BATCH_ID_2024_09_24
+    </div>
+</footer>
+
+</body></html>

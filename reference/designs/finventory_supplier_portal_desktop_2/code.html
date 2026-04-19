@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&amp;family=Caveat:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-tertiary-container": "#4e3e00",
+                "outline": "#707881",
+                "on-secondary-container": "#773e01",
+                "surface-container-lowest": "#ffffff",
+                "surface-dim": "#ebd6c9",
+                "surface-container-high": "#f9e4d7",
+                "error": "#ba1a1a",
+                "on-primary-fixed-variant": "#004a75",
+                "surface-bright": "#fff8f5",
+                "background": "#fff8f5",
+                "inverse-surface": "#3a2e25",
+                "tertiary": "#725c07",
+                "on-primary-container": "#f7f9ff",
+                "inverse-primary": "#95ccff",
+                "surface-container-low": "#fff1e9",
+                "on-surface-variant": "#404750",
+                "secondary-fixed-dim": "#ffb77d",
+                "on-background": "#241911",
+                "on-primary-fixed": "#001d32",
+                "surface-tint": "#00639a",
+                "secondary-fixed": "#ffdcc3",
+                "on-tertiary-fixed-variant": "#574500",
+                "on-tertiary-fixed": "#231b00",
+                "tertiary-container": "#c5a952",
+                "on-primary": "#ffffff",
+                "surface": "#fff8f5",
+                "tertiary-fixed": "#ffe085",
+                "outline-variant": "#c0c7d1",
+                "on-error": "#ffffff",
+                "on-surface": "#241911",
+                "error-container": "#ffdad6",
+                "surface-container-highest": "#f3dfd1",
+                "surface-variant": "#f3dfd1",
+                "inverse-on-surface": "#ffede2",
+                "primary-fixed-dim": "#95ccff",
+                "primary": "#005f93",
+                "surface-container": "#ffeadc",
+                "primary-fixed": "#cde5ff",
+                "secondary": "#8c4f14",
+                "tertiary-fixed-dim": "#e2c46a",
+                "on-secondary": "#ffffff",
+                "on-error-container": "#93000a",
+                "on-tertiary": "#ffffff",
+                "on-secondary-fixed-variant": "#6e3900",
+                "secondary-container": "#fdac6a",
+                "primary-container": "#1e78b4",
+                "on-secondary-fixed": "#2f1500"
+            },
+            "borderRadius": {
+                "DEFAULT": "1rem",
+                "lg": "2rem",
+                "xl": "3rem",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "headline": ["Plus Jakarta Sans"],
+                "body": ["Plus Jakarta Sans"],
+                "label": ["Plus Jakarta Sans"],
+                "accent": ["Caveat"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .italic-accent-caveat {
+            font-family: 'Caveat', cursive;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fff8f5;
+            letter-spacing: -0.02em;
+        }
+        .no-border-tonal-transition-via-blur {
+            border: none;
+        }
+        .ghost-border {
+            border-bottom: 2px solid rgba(192, 199, 209, 0.15);
+        }
+        .ghost-border:focus-within {
+            border-bottom: 2px solid #005f93;
+            box-shadow: 0 4px 12px rgba(0, 95, 147, 0.1);
+        }
+        .ocean-shadow {
+            box-shadow: 0 20px 40px rgba(0, 95, 147, 0.06);
+        }
+        .sparkline-gradient {
+            background: linear-gradient(90deg, rgba(30, 120, 180, 0.1) 0%, rgba(30, 120, 180, 0) 100%);
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl no-border-tonal-transition-via-blur shadow-[0_20px_40px_rgba(0,95,147,0.06)]">
+<div class="flex justify-between items-center px-12 py-5 w-full max-w-screen-2xl mx-auto font-['Plus_Jakarta_Sans'] tracking-[-0.02em] leading-relaxed"><!-- Logo (Left) -->
+<div class="flex items-center flex-1">
+<span class="text-2xl font-bold text-sky-900 dark:text-sky-100 italic-accent-caveat">Finventory</span>
+</div>
+<!-- Links (Center) -->
+<div class="hidden md:flex gap-8 items-center justify-center flex-1">
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 transition-transform duration-300 hover:scale-[1.02]" href="#">Marketplace</a>
+<a class="text-sky-700 dark:text-sky-300 font-bold border-b-2 border-sky-700 pb-1 transition-transform duration-300 hover:scale-[1.02]" href="#">Suppliers</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 transition-transform duration-300 hover:scale-[1.02]" href="#">Impact</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 transition-transform duration-300 hover:scale-[1.02]" href="#">About</a>
+</div>
+<!-- Actions (Right) -->
+<div class="flex items-center gap-4 flex-1 justify-end">
+<button class="px-6 py-2 text-slate-600 font-medium hover:text-sky-800 transition-all">Log in</button>
+<button class="px-6 py-2 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all">Sign up</button>
+</div></div>
+</nav>
+<main class="space-y-20 pb-20">
+<!-- Hero Section -->
+<section class="relative h-[614px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover grayscale-[20%] contrast-[110%]" data-alt="cinematic wide angle shot of a busy harbor at sunrise with fishing boats and soft golden light reflecting on water" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYDyRIOV_XghhBrPerMfFY4uOSf1XoxcFNo0ZAajR1h69tLHU12DBqs1pq7Duem8NxK32EzUoMzE7ZyFFzJgQhY2oxZN4WU1A3eMdfWPYcvoX_qB9oDZ9zdDdZPt69aUSBegxog640-rVBE9Usk8wMFgsQSziaiKcEplRQZ_vTmAYNmJ2ECxNypdoCgoAH-8wkr4jjovqKnB2UvnhC5IdwsVDMyGmmVw0w8klb9fr9Fx9U6NnD2-AU8yurJPDLhTPaS3CKDuLfiic"/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary/60 to-transparent"></div>
+</div>
+<div class="relative z-10 px-12 max-w-7xl mx-auto w-full">
+<div class="max-w-2xl">
+<span class="italic-accent-caveat text-white text-3xl mb-4 block">From the Captain</span>
+<h1 class="text-7xl font-extrabold text-white leading-tight tracking-tighter">Your dock, digitized.</h1>
+<p class="text-white/90 text-xl mt-6 font-light leading-relaxed">Transform your daily catch into instant listings. Connect directly with buyers while the salt is still in the air.</p>
+</div>
+</div>
+<!-- Wavy Divider -->
+<div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+<svg class="relative block w-full h-[60px] fill-surface" preserveaspectratio="none" viewbox="0 0 1200 120">
+<path class="shape-fill" d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C58.05,117.26,132.89,121.23,196.41,114.33Z"></path>
+</svg>
+</div>
+</section>
+<!-- KPI Row -->
+<section class="px-12 max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-lg ocean-shadow group hover:scale-[1.02] transition-transform">
+<p class="text-outline text-sm uppercase tracking-widest font-bold">Crates listed</p>
+<div class="flex items-baseline justify-between mt-2">
+<span class="text-5xl font-black italic-accent-caveat text-primary">142</span>
+<span class="material-symbols-outlined text-primary-container">inventory_2</span>
+</div>
+<div class="h-8 mt-4 sparkline-gradient rounded-full relative overflow-hidden">
+<div class="absolute inset-0 border-b-2 border-primary/20 w-full h-full flex items-end px-2">
+<div class="w-full h-1/2 bg-primary/10 rounded-t-sm"></div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-lg ocean-shadow group hover:scale-[1.02] transition-transform">
+<p class="text-outline text-sm uppercase tracking-widest font-bold">lbs rescued</p>
+<div class="flex items-baseline justify-between mt-2">
+<span class="text-5xl font-black italic-accent-caveat text-primary">3,820</span>
+<span class="material-symbols-outlined text-primary-container">set_meal</span>
+</div>
+<div class="h-8 mt-4 sparkline-gradient rounded-full"></div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-lg ocean-shadow group hover:scale-[1.02] transition-transform">
+<p class="text-outline text-sm uppercase tracking-widest font-bold">revenue</p>
+<div class="flex items-baseline justify-between mt-2">
+<span class="text-5xl font-black italic-accent-caveat text-primary">$12.4k</span>
+<span class="material-symbols-outlined text-primary-container">payments</span>
+</div>
+<div class="h-8 mt-4 sparkline-gradient rounded-full"></div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-8 rounded-lg ocean-shadow group hover:scale-[1.02] transition-transform">
+<p class="text-outline text-sm uppercase tracking-widest font-bold">pickup time</p>
+<div class="flex items-baseline justify-between mt-2">
+<span class="text-5xl font-black italic-accent-caveat text-primary">42m</span>
+<span class="material-symbols-outlined text-primary-container">schedule</span>
+</div>
+<div class="h-8 mt-4 sparkline-gradient rounded-full"></div>
+</div>
+</section>
+<!-- Main Form + Preview Section -->
+<section class="px-12 max-w-screen-2xl mx-auto flex flex-col lg:flex-row gap-12 items-start">
+<!-- Left: List a new crate Form -->
+<div class="flex-1 bg-surface-container-lowest p-12 rounded-lg ocean-shadow">
+<header class="mb-10">
+<span class="italic-accent-caveat text-primary text-2xl">Fresh from the nets</span>
+<h2 class="text-4xl font-extrabold tracking-tighter">List a new crate</h2>
+</header>
+<form class="space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="ghost-border p-2">
+<label class="block text-xs font-bold text-outline uppercase tracking-widest mb-1">Species</label>
+<input class="w-full bg-transparent border-none focus:ring-0 p-0 text-lg font-medium" placeholder="e.g. Bluefin Tuna" type="text"/>
+</div>
+<div class="ghost-border p-2">
+<label class="block text-xs font-bold text-outline uppercase tracking-widest mb-1">Type</label>
+<select class="w-full bg-transparent border-none focus:ring-0 p-0 text-lg font-medium">
+<option>Whole Round</option>
+<option>H&amp;G</option>
+<option>Fillet</option>
+</select>
+</div>
+<div class="ghost-border p-2">
+<label class="block text-xs font-bold text-outline uppercase tracking-widest mb-1">Weight (lbs)</label>
+<input class="w-full bg-transparent border-none focus:ring-0 p-0 text-lg font-medium" placeholder="45" type="number"/>
+</div>
+<div class="ghost-border p-2">
+<label class="block text-xs font-bold text-outline uppercase tracking-widest mb-1">Price per lb</label>
+<div class="flex items-center">
+<span class="text-lg font-medium mr-1">$</span>
+<input class="w-full bg-transparent border-none focus:ring-0 p-0 text-lg font-medium" placeholder="12.50" type="number"/>
+</div>
+</div>
+<div class="ghost-border p-2">
+<label class="block text-xs font-bold text-outline uppercase tracking-widest mb-1">Discount %</label>
+<input class="w-full bg-transparent border-none focus:ring-0 p-0 text-lg font-medium" placeholder="0" type="number"/>
+</div>
+<div class="ghost-border p-2">
+<label class="block text-xs font-bold text-outline uppercase tracking-widest mb-1">Pickup Windows</label>
+<input class="w-full bg-transparent border-none focus:ring-0 p-0 text-lg font-medium" placeholder="ASAP - 6:00 PM" type="text"/>
+</div>
+</div>
+<div class="mt-8">
+<label class="block text-xs font-bold text-outline uppercase tracking-widest mb-4">Photo dropzone</label>
+<div class="border-2 border-dashed border-outline-variant/30 rounded-lg p-12 text-center hover:bg-surface-container-low transition-colors group cursor-pointer">
+<span class="material-symbols-outlined text-5xl text-outline-variant group-hover:text-primary transition-colors">cloud_upload</span>
+<p class="mt-2 text-outline font-medium">Drop your catch photo here or <span class="text-primary underline">browse</span></p>
+</div>
+</div>
+<div class="flex justify-end pt-6">
+<button class="bg-gradient-to-r from-primary to-primary-container text-white px-10 py-4 rounded-full font-bold text-lg shadow-xl hover:scale-[1.02] transition-transform">
+                            Publish Listing
+                        </button>
+</div>
+</form>
+</div>
+<!-- Right: Preview + Tip -->
+<div class="w-full lg:w-96 space-y-8">
+<!-- Preview Card -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden ocean-shadow relative">
+<div class="h-56 relative">
+<img class="w-full h-full object-cover" data-alt="close up of fresh atlantic salmon fillets on crushed ice with lemon slices and rosemary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD71PYmTkULPrkQEzIPQ1SBiTzO9oYeYoTcaZuJmML_O7aPy-MsMiR9Amjx2mi7EWN0MOwNuAbeMVGCIJnLXKg-s59W5X-kQnhRZDFmt76RiIIqUg6I6lVGfHRLtxJCvzbXSshFzI5PFWDX5UAziAr9VQDhLM5CRyN8EM19l4Pi519fM5b5h6eI7uzVfZTVSu_JaWocyexNNbIOZCkhRj-u7HqBpOu51ipd30h70ktG5s-WUxAbCQQ1MfMQNBFcw9_QvZ_yLxUPL_8"/>
+<div class="absolute top-4 left-4 bg-primary text-white px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase shadow-lg">Live Preview</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-2xl font-bold tracking-tight">Atlantic Salmon</h3>
+<p class="text-outline text-sm">Whole Round • 45 lbs</p>
+</div>
+<span class="text-2xl font-black text-primary">$12.50<span class="text-sm font-normal text-outline">/lb</span></span>
+</div>
+<div class="mt-6 flex items-center text-sm font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-sm mr-2">location_on</span>
+                            Pier 42, North Harbor
+                        </div>
+</div>
+</div>
+<!-- Sun-yellow tip card -->
+<div class="bg-tertiary-container p-8 rounded-lg shadow-sm border-l-8 border-tertiary">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-on-tertiary-container">lightbulb</span>
+<div>
+<h4 class="font-bold text-on-tertiary-container mb-2">Captain's Tip</h4>
+<p class="text-on-tertiary-container/80 text-sm leading-relaxed">Listings with high-quality daylight photos sell 40% faster. Try to avoid shadows from the boat's rigging!</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Table: Your active listings -->
+<section class="px-12 max-w-screen-2xl mx-auto flex flex-col md:flex-row gap-12">
+<div class="flex-grow">
+<header class="mb-8 flex justify-between items-end">
+<div>
+<span class="italic-accent-caveat text-primary text-2xl">Current Fleet</span>
+<h2 class="text-4xl font-extrabold tracking-tighter">Your active listings</h2>
+</div>
+<button class="flex items-center text-primary font-bold hover:gap-3 transition-all gap-2">
+                        View Archive <span class="material-symbols-outlined">arrow_right_alt</span>
+</button>
+</header>
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden ocean-shadow">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-4 text-xs font-bold text-outline uppercase tracking-widest">Catch</th>
+<th class="px-6 py-4 text-xs font-bold text-outline uppercase tracking-widest">Type</th>
+<th class="px-6 py-4 text-xs font-bold text-outline uppercase tracking-widest">Weight</th>
+<th class="px-6 py-4 text-xs font-bold text-outline uppercase tracking-widest">Price</th>
+<th class="px-6 py-4 text-xs font-bold text-outline uppercase tracking-widest">Distance</th>
+<th class="px-6 py-4 text-xs font-bold text-outline uppercase tracking-widest">Status</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-md overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="fresh raw sea bass on crushed ice with lemon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQUnTXp9XvAvpadxAG1UMxRAbSuqNlBr4QsMdkem3uiBumAQM56LDBXfVOIf4qTLSy3ehsitKw5paZ19MHRiWNg7jqrP_1f5-c0To3FEtUgPth64a2vaQQcjSdAx50icphtFvXaKQU2J6YeZB90w1_z8rzEJEgIH1uolDhcopuizeAv1NhSDCdvxQ5fMkwUrebVjm9IMlZS4UQPIJ4s2Mip-6Wdzd0GDrXYi3mewiJAwtFsioFGWV0SmkULl-YPgRh3givZDUX75A"/>
+</div>
+<span class="font-bold">Sea Bass</span>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">Whole Round</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">28 lbs</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">$18.00/lb</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">0.4 mi</td>
+<td class="px-6 py-6">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-primary-container/20 text-primary-container tracking-wider uppercase">Live</span>
+</td>
+<td class="px-6 py-6 text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary">more_vert</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-md overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="basket of fresh blue crabs in a market" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0uOILm6AVT2u4Cmlha744d7MTkFWtMDc0gCvY9byiZhAhDIa58dclXHFSGOeMdiCaQ75vnZvpSHNi_0QMNkMdJMgBm2_plT1sDlI_fLL9ZdUQVPZa6a2aL6ze7Vc4hg--STKlMsAqcRhF9v8Uu80SKSRPCFp7svxx7KVLT7FbecZDvGxxlyWIeYARJ5xjub73BuX9EcBuQjvdq7akgaTqommraowIxQvi0J3Q4hEI8gp99OL9F8aYbfdM6w1nk3hSZN2UWy52rw0"/>
+</div>
+<span class="font-bold">Blue Crabs</span>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">Crate</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">12 lbs</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">$45.00/ea</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">1.2 mi</td>
+<td class="px-6 py-6">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-secondary-container/20 text-secondary tracking-wider uppercase">Reserved</span>
+</td>
+<td class="px-6 py-6 text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary">more_vert</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-md overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="divers catching scallops under water" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAH2B8HqQnzSEvlRmOG-4-rANVnXVskJDQsHE_b7b9UdBBRzXbMFHDqpRFQDMgfzGv7BC-x4KRQtC7eSNWm5RO9eVSD5eJwwl5TtWw1J2vB4PKGM69q6qrOGKRsxZpv6ArI-yVh9kPIYO84DFM2jj4a5ZXkkhSKS5vl7_Y_6kiv8ZUANifI_LQsU010Ve4TiamNuWh8Jk-urmXhEmfH_PFMS4GTDMcElwzJsyc-e4y_uzPC9eVNU_3bqNHr0FGdoYSoZ8_eTfEkOoI"/>
+</div>
+<span class="font-bold">Scallops</span>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">Shucked</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">5 lbs</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">$22.00/lb</td>
+<td class="px-6 py-6 text-on-surface-variant font-medium">Picked up</td>
+<td class="px-6 py-6">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-outline-variant/20 text-outline tracking-wider uppercase">Picked up</span>
+</td>
+<td class="px-6 py-6 text-right">
+<button class="material-symbols-outlined text-outline hover:text-primary">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Sidebar -->
+<aside class="w-full md:w-80 space-y-8 mt-20">
+<div class="bg-surface-container p-8 rounded-lg ocean-shadow">
+<h3 class="text-2xl font-black italic-accent-caveat text-primary mb-6">Sell faster</h3>
+<ul class="space-y-6">
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">timer</span>
+<div>
+<p class="font-bold text-sm">Morning Rush</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Listings before 7:00 AM receive 3x more views from restaurant chefs.</p>
+</div>
+</li>
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">sell</span>
+<div>
+<p class="font-bold text-sm">Bundling Magic</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Try listing a "Soup Pack" with smaller off-cuts for quick liquidation.</p>
+</div>
+</li>
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<div>
+<p class="font-bold text-sm">Identity Counts</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Add a photo of your boat to your profile to build trust with high-end buyers.</p>
+</div>
+</li>
+</ul>
+<button class="w-full mt-10 py-3 rounded-full border border-primary/20 text-primary font-bold hover:bg-primary hover:text-white transition-all">Explore All Tips</button>
+</div>
+</aside>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full relative bg-slate-900 dark:bg-black font-['Plus_Jakarta_Sans'] tracking-tight">
+<!-- SVG Wave Divider Inverse -->
+<div class="absolute top-0 left-0 w-full overflow-hidden leading-[0] transform rotate-180">
+<svg class="relative block w-full h-[60px] fill-surface" preserveaspectratio="none" viewbox="0 0 1200 120">
+<path class="shape-fill" d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C58.05,117.26,132.89,121.23,196.41,114.33Z"></path>
+</svg>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-7xl mx-auto pt-32">
+<div class="md:col-span-1">
+<span class="text-3xl font-black text-white">Finventory</span>
+<p class="mt-4 text-slate-400 text-sm leading-relaxed">Curating the ocean’s bounty through digital innovation and local heritage.</p>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Marketplace</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Suppliers</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Sustainability</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Impact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Resources</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Journal</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Privacy</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 hover:translate-x-1 transition-all inline-block" href="#">Terms</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Connect</h4>
+<div class="flex gap-4">
+<button class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-primary transition-colors focus:ring-2 focus:ring-sky-500">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-primary transition-colors focus:ring-2 focus:ring-sky-500">
+<span class="material-symbols-outlined text-sm">public</span>
+</button>
+</div>
+<p class="mt-8 text-slate-500 text-xs font-medium">© 2024 Finventory. Curating the ocean’s bounty.</p>
+</div>
+</div>
+</footer>
+</body></html>

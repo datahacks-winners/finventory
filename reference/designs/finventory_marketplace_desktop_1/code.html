@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Commercial Command Center | Finventory Nautical Operations</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#00ffd9",
+                    "slate-dark": "#0f172a",
+                    "slate-map": "#1e293b",
+                    "command-bg": "#020617",
+                    "border-line": "#1e293b"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .nautical-grid {
+                background-image: 
+                    linear-gradient(to right, rgba(0, 255, 217, 0.05) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 255, 217, 0.05) 1px, transparent 1px);
+                background-size: 40px 40px;
+            }
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .glass-panel {
+                background: rgba(15, 23, 42, 0.8);
+                backdrop-filter: blur(12px);
+                border: 1px solid rgba(0, 255, 217, 0.1);
+            }
+            .pulse-dot {
+                box-shadow: 0 0 0 rgba(0, 255, 217, 0.4);
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(0, 255, 217, 0.7); }
+                70% { box-shadow: 0 0 0 15px rgba(0, 255, 217, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(0, 255, 217, 0); }
+            }
+        }
+    </style>
+</head>
+<body class="bg-command-bg text-slate-100 font-body antialiased">
+<header class="sticky top-0 w-full z-50 bg-slate-dark/90 backdrop-blur-md border-b border-white/5">
+<nav class="flex justify-between items-center px-8 py-4 w-full mx-auto">
+<div class="flex items-center gap-8">
+<div class="text-xl font-black tracking-tighter text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">radar</span>
+                FINVENTORY COMMAND
+            </div>
+<div class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-widest text-slate-400">
+<a class="text-primary" href="#">Terminal</a>
+<a class="hover:text-white transition-colors" href="#">Logistics</a>
+<a class="hover:text-white transition-colors" href="#">Fleet</a>
+<a class="hover:text-white transition-colors" href="#">Archive</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded text-[10px] font-mono text-primary uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                Live Feed: Bodega Bay
+            </div>
+<button class="bg-white text-black px-5 py-1.5 rounded text-xs font-black uppercase hover:bg-primary transition-colors">Export Manifest</button>
+</div>
+</nav>
+</header>
+<main class="grid grid-cols-1 lg:grid-cols-[1fr_500px] h-[calc(100vh-72px)] overflow-hidden">
+<section class="relative bg-slate-dark nautical-grid overflow-hidden group">
+<div class="absolute inset-0 pointer-events-none opacity-40">
+<svg class="w-full h-full" fill="none" viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 200C150 180 250 350 400 300C550 250 650 450 800 400C950 350 1000 500 1000 500V800H0V200Z" fill="#1e293b" opacity="0.5"></path>
+<path d="M0 200C150 180 250 350 400 300C550 250 650 450 800 400C950 350 1000 500 1000 500" stroke="#334155" stroke-dasharray="8 4" stroke-width="1"></path>
+</svg>
+</div>
+<div class="absolute top-6 left-6 font-mono text-[10px] text-slate-500 uppercase flex flex-col gap-1">
+<p>LAT: 38° 19' 45" N</p>
+<p>LNG: 123° 02' 53" W</p>
+<p class="text-primary mt-2">Active Depth: 42m</p>
+</div>
+<div class="absolute top-[30%] left-[55%] flex flex-col items-center group/marker cursor-pointer">
+<div class="glass-panel p-2 rounded-lg mb-2 group-hover/marker:border-primary transition-colors">
+<svg fill="none" height="24" stroke="#00ffd9" stroke-width="1.5" viewBox="0 0 24 24" width="24">
+<path d="M22 12C22 12 19 7 12 7C5 7 2 12 2 12C2 12 5 17 12 17C19 17 22 12 22 12Z" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+</svg>
+</div>
+<div class="bg-primary text-slate-900 font-mono text-[10px] font-bold px-1.5 rounded">ID: SAL-402</div>
+</div>
+<div class="absolute top-[65%] left-[40%] flex flex-col items-center group/marker cursor-pointer">
+<div class="glass-panel p-2 rounded-lg mb-2 group-hover/marker:border-primary transition-colors">
+<svg fill="none" height="24" stroke="#00ffd9" stroke-width="1.5" viewBox="0 0 24 24" width="24">
+<path d="M12 4V20M4 12H20M8 8L16 16M16 8L8 16" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="12" cy="12" r="6" stroke-linecap="round" stroke-linejoin="round"></circle>
+</svg>
+</div>
+<div class="bg-primary text-slate-900 font-mono text-[10px] font-bold px-1.5 rounded">ID: CRB-991</div>
+</div>
+<div class="absolute top-[45%] left-[75%] flex flex-col items-center group/marker cursor-pointer">
+<div class="glass-panel p-2 rounded-lg mb-2 group-hover/marker:border-primary transition-colors">
+<svg fill="none" height="24" stroke="#00ffd9" stroke-width="1.5" viewBox="0 0 24 24" width="24">
+<path d="M7 12L12 7L17 12L12 17L7 12Z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M12 2L12 22M2 12L22 12" opacity="0.3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="bg-primary text-slate-900 font-mono text-[10px] font-bold px-1.5 rounded">ID: RF-012</div>
+</div>
+<div class="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2">
+<div class="w-4 h-4 bg-primary rounded-full pulse-dot"></div>
+<div class="absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
+<p class="text-[10px] font-mono font-bold text-white uppercase tracking-tighter">Your Hub: Pier 42</p>
+</div>
+</div>
+<div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+<div class="glass-panel p-4 rounded grid grid-cols-2 gap-8">
+<div>
+<p class="text-[10px] text-slate-500 uppercase font-bold mb-2">Scan Radius</p>
+<div class="flex items-center gap-4">
+<input class="w-32 accent-primary bg-slate-700 h-1 rounded-full appearance-none" type="range"/>
+<span class="font-mono text-primary text-sm">12.5NM</span>
+</div>
+</div>
+<div class="border-l border-white/10 pl-6">
+<p class="text-[10px] text-slate-500 uppercase font-bold mb-1">Signal Status</p>
+<p class="text-sm font-black text-white">ENCRYPTED</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 glass-panel rounded flex items-center justify-center hover:bg-primary/20"><span class="material-symbols-outlined text-sm">add</span></button>
+<button class="w-10 h-10 glass-panel rounded flex items-center justify-center hover:bg-primary/20"><span class="material-symbols-outlined text-sm">remove</span></button>
+</div>
+</div>
+</section>
+<aside class="bg-slate-dark border-l border-white/5 flex flex-col h-full overflow-hidden">
+<div class="p-6 border-b border-white/5 space-y-4">
+<div class="flex justify-between items-center">
+<h2 class="text-lg font-black tracking-tighter uppercase">Inventory Log</h2>
+<div class="flex items-center gap-2 font-mono text-[10px] text-primary">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#00ffd9]"></span>
+                    REAL-TIME UPDATES
+                </div>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="w-full bg-slate-950 border border-white/10 rounded px-10 py-2.5 text-xs font-mono focus:ring-1 focus:ring-primary focus:border-primary placeholder:text-slate-600" placeholder="FILTER BY SPECIES OR ID..." type="text"/>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+<button class="px-3 py-1.5 rounded border border-primary bg-primary/10 text-primary font-bold text-[10px] uppercase whitespace-nowrap">All Lots</button>
+<button class="px-3 py-1.5 rounded border border-white/10 text-slate-400 font-bold text-[10px] uppercase whitespace-nowrap hover:text-white hover:border-white">Bycatch</button>
+<button class="px-3 py-1.5 rounded border border-white/10 text-slate-400 font-bold text-[10px] uppercase whitespace-nowrap hover:text-white hover:border-white">Surplus</button>
+<button class="px-3 py-1.5 rounded border border-white/10 text-slate-400 font-bold text-[10px] uppercase whitespace-nowrap hover:text-white hover:border-white">Whole</button>
+</div>
+</div>
+<div class="flex-grow overflow-y-auto p-4 space-y-3 custom-scrollbar">
+<div class="bg-slate-950 border border-white/5 p-4 rounded hover:border-primary/50 transition-all group relative">
+<div class="flex justify-between items-start mb-3">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-mono text-[10px] text-slate-500">LOT #SAL-402</span>
+<span class="px-1.5 py-0.5 bg-blue-500/20 text-blue-400 rounded font-mono text-[9px] uppercase font-bold border border-blue-500/30">TEMP CONTROLLED</span>
+</div>
+<h3 class="text-base font-bold text-white group-hover:text-primary transition-colors">Wild King Salmon</h3>
+</div>
+<div class="text-right">
+<div class="text-xl font-mono font-bold text-white">$8.40<span class="text-[10px] text-slate-500 font-normal">/LB</span></div>
+<p class="text-[10px] text-primary font-mono">-$2.10 FROM ORIG</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 mb-4">
+<div class="bg-slate-900 p-2 rounded border border-white/5">
+<p class="text-[9px] text-slate-500 uppercase font-bold">Avail. Weight</p>
+<p class="text-xs font-mono font-bold text-white">422.0 LBS</p>
+</div>
+<div class="bg-slate-900 p-2 rounded border border-white/5">
+<p class="text-[9px] text-slate-500 uppercase font-bold">Distance</p>
+<p class="text-xs font-mono font-bold text-white">3.2 NM</p>
+</div>
+<div class="bg-slate-900 p-2 rounded border border-white/5">
+<p class="text-[9px] text-slate-500 uppercase font-bold">Vessel</p>
+<p class="text-xs font-mono font-bold text-white uppercase">ORION-II</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-grow bg-primary text-slate-950 py-2 rounded text-[10px] font-black uppercase tracking-widest hover:brightness-110">Execute Acquisition</button>
+<button class="w-10 h-9 flex items-center justify-center border border-white/10 rounded hover:border-white text-slate-400">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+</div>
+</div>
+<div class="bg-slate-950 border border-white/5 p-4 rounded hover:border-primary/50 transition-all group relative">
+<div class="flex justify-between items-start mb-3">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-mono text-[10px] text-slate-500">LOT #CRB-991</span>
+<span class="px-1.5 py-0.5 bg-primary/20 text-primary rounded font-mono text-[9px] uppercase font-bold border border-primary/30">BYCATCH</span>
+</div>
+<h3 class="text-base font-bold text-white group-hover:text-primary transition-colors">Dungeness Crab</h3>
+</div>
+<div class="text-right">
+<div class="text-xl font-mono font-bold text-white">$12.50<span class="text-[10px] text-slate-500 font-normal">/LB</span></div>
+<p class="text-[10px] text-slate-500 font-mono">MARKET PRICE</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 mb-4">
+<div class="bg-slate-900 p-2 rounded border border-white/5">
+<p class="text-[9px] text-slate-500 uppercase font-bold">Avail. Weight</p>
+<p class="text-xs font-mono font-bold text-white">15.0 LBS</p>
+</div>
+<div class="bg-slate-900 p-2 rounded border border-white/5">
+<p class="text-[9px] text-slate-500 uppercase font-bold">Distance</p>
+<p class="text-xs font-mono font-bold text-white">0.8 NM</p>
+</div>
+<div class="bg-slate-900 p-2 rounded border border-white/5">
+<p class="text-[9px] text-slate-500 uppercase font-bold">Status</p>
+<p class="text-xs font-mono font-bold text-primary uppercase">CRITICAL</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-grow bg-primary text-slate-950 py-2 rounded text-[10px] font-black uppercase tracking-widest hover:brightness-110">Execute Acquisition</button>
+<button class="w-10 h-9 flex items-center justify-center border border-white/10 rounded hover:border-white text-slate-400">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+</div>
+</div>
+<div class="bg-slate-950 border border-white/5 p-4 rounded hover:border-primary/50 transition-all group relative">
+<div class="flex justify-between items-start mb-3">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-mono text-[10px] text-slate-500">LOT #RF-012</span>
+<span class="px-1.5 py-0.5 bg-amber-500/20 text-amber-500 rounded font-mono text-[9px] uppercase font-bold border border-amber-500/30">SURPLUS</span>
+</div>
+<h3 class="text-base font-bold text-white group-hover:text-primary transition-colors">Pacific Rockfish</h3>
+</div>
+<div class="text-right">
+<div class="text-xl font-mono font-bold text-white">$6.20<span class="text-[10px] text-slate-500 font-normal">/LB</span></div>
+<p class="text-[10px] text-amber-500 font-mono">CLEARANCE</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 mb-4">
+<div class="bg-slate-900 p-2 rounded border border-white/5">
+<p class="text-[9px] text-slate-500 uppercase font-bold">Avail. Weight</p>
+<p class="text-xs font-mono font-bold text-white">40.0 LBS</p>
+</div>
+<div class="bg-slate-900 p-2 rounded border border-white/5">
+<p class="text-[9px] text-slate-500 uppercase font-bold">Distance</p>
+<p class="text-xs font-mono font-bold text-white">5.1 NM</p>
+</div>
+<div class="bg-slate-900 p-2 rounded border border-white/5">
+<p class="text-[9px] text-slate-500 uppercase font-bold">Temp</p>
+<p class="text-xs font-mono font-bold text-white">2.4°C</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-grow bg-primary text-slate-950 py-2 rounded text-[10px] font-black uppercase tracking-widest hover:brightness-110">Execute Acquisition</button>
+<button class="w-10 h-9 flex items-center justify-center border border-white/10 rounded hover:border-white text-slate-400">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+</div>
+</div>
+</div>
+<div class="p-6 bg-slate-950 border-t border-white/5 grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<p class="text-[9px] text-slate-500 uppercase tracking-widest font-bold">Total Available Weight</p>
+<p class="text-lg font-mono font-black text-white">12,480.0 KG</p>
+</div>
+<div class="text-right space-y-1">
+<p class="text-[9px] text-slate-500 uppercase tracking-widest font-bold">Avg. Price Point</p>
+<p class="text-lg font-mono font-black text-primary">$9.04/LB</p>
+</div>
+</div>
+</aside>
+</main>
+<footer class="w-full bg-slate-950 border-t border-white/5 py-4 px-8 flex justify-between items-center text-[10px] font-mono text-slate-500 uppercase tracking-tighter">
+<div>SYSTEM STATUS: OPTIMAL // ENCRYPTION: AES-256-GCM</div>
+<div>© 2024 FINVENTORY MARITIME SYSTEMS GROUP</div>
+<div class="flex gap-4">
+<span class="text-primary">LAT 38.3°N</span>
+<span class="text-primary">LNG 123.1°W</span>
+</div>
+</footer>
+
+</body></html>

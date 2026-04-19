@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finventory | The Artisanal Maritime Journal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Caveat:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "paper": "#fdfaf3",
+              "ink": "#1e293b",
+              "maritime-blue": "#0f4c75",
+              "sepia-accent": "#b08968",
+              "aged-gold": "#c5a059",
+              "seal-red": "#9a3412"
+            },
+            fontFamily: {
+              serif: ["Crimson Pro", "serif"],
+              display: ["Playfair Display", "serif"],
+              script: ["Caveat", "cursive"]
+            }
+          }
+        }
+      }
+    </script>
+<style type="text/tailwindcss">@layer base {
+    body {
+        background-image: url(https://www.transparenttextures.com/patterns/cream-paper.png);
+        @apply bg-paper text-ink font-serif;
+        }
+    }
+.vintage-stamp {
+    background-image: radial-gradient(circle at 2px 2px, transparent 2px, white 2px);
+    background-size: 6px 6px;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative
+    }
+.vintage-stamp::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border: 1px dashed #d1d5db;
+    pointer-events: none
+    }
+.journal-border {
+    border-image: url("data:image/svg+xml;utf8,<svg width=\"100\" height=\"100\" viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M1 1V99H99V1H1Z\" stroke=\"%23b08968\" stroke-width=\"0.5\" stroke-dasharray=\"2 2\"/></svg>") 1
+    }
+.map-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuA3jLCJ9y3vw9ktjCUFxkjwYNkMYTBGrw0tQzm1uNIrXKg78jObazvlnL5kMXbKwPZplgUZo1Iin_jOnANAFt4geUuYmtChySZgYFe281CvOjeIxJOnjyfLpkh0pYuBleapzamHLva_LJa9te8mxKQAMgVu-5Bv2KzDpo6rtJLCv_nnpZbaqU2rP2rG2znCAIdIXc9ndaaeQKtL8enuBiT3UbJVxNib5q2aKLuEHIbYbx77KiHQzAnISzUXCGC1PnaxTplyWX-N1Lc);
+    opacity: 0.6
+    }
+.no-scrollbar::-webkit-scrollbar {
+    display: none
+    }
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none
+    }</style>
+</head>
+<body class="selection:bg-aged-gold/30 selection:text-ink">
+<header class="border-b border-sepia-accent/20 sticky top-0 bg-paper/90 backdrop-blur-md z-50">
+<nav class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+<div class="flex items-center gap-12">
+<span class="font-display text-3xl font-black italic tracking-tighter text-maritime-blue">Finventory</span>
+<div class="hidden md:flex gap-8 text-sm uppercase tracking-[0.2em] font-medium text-sepia-accent">
+<a class="hover:text-ink transition-colors border-b border-ink" href="#">The Exchange</a>
+<a class="hover:text-ink transition-colors" href="#">Suppliers</a>
+<a class="hover:text-ink transition-colors" href="#">The Journal</a>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<button class="font-script text-2xl text-sepia-accent">Log in</button>
+<button class="bg-maritime-blue text-white px-8 py-2 rounded-sm shadow-lg hover:bg-ink transition-all uppercase text-xs tracking-widest font-bold">Register Berth</button>
+</div>
+</nav>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-12">
+<section class="relative flex flex-col gap-8">
+<header>
+<span class="font-script text-3xl text-aged-gold">Vessel Arrivals &amp; Coastal Gleanings</span>
+<h1 class="font-display text-5xl font-bold mt-2 text-ink">Marketplace Record</h1>
+</header>
+<div class="relative w-full aspect-[4/5] bg-[#f2e9d5] border-2 border-sepia-accent/30 rounded-sm overflow-hidden shadow-inner">
+<div class="absolute inset-0 map-texture"></div>
+<svg class="absolute inset-0 w-full h-full" fill="none" viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg">
+<path d="M-10 1000V0C150 0 220 50 180 150C150 220 300 300 350 450C400 600 280 750 320 850C350 950 450 1000 450 1000H-10Z" fill="#e8dfc9" opacity="0.8" stroke="#b08968" stroke-dasharray="10 5" stroke-width="1.5"></path>
+<path d="M400 200Q410 195 420 200" stroke="#b08968" stroke-opacity="0.3"></path>
+<path d="M415 210Q425 205 435 210" stroke="#b08968" stroke-opacity="0.3"></path>
+<path d="M500 550Q510 545 520 550" stroke="#b08968" stroke-opacity="0.3"></path>
+</svg>
+<div class="absolute top-[25%] left-[55%] group cursor-pointer hover:scale-110 transition-transform">
+<div class="vintage-stamp bg-white w-20 h-24 flex flex-col items-center justify-between">
+<div class="w-full h-12 bg-gray-100 overflow-hidden flex items-center justify-center grayscale">
+<img alt="Salmon" class="object-cover h-full opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA30stG08LgmrXLrDFv3Fro5ra3FqzlssNTOc6oxSNOrWzr0JplkVajr6aWCFDGMUZRzObRTO-FyyyogLDWMRLSBA6g3KDrFC8pY2QTQPSXUSztpKryEQX0WBR4Czx_XJeJuLrKXqZSqsAMJLMvEKr8iRVM2-H7Xl8A-Yl_JF4f4jO6t7W-PfGuYv3tzSr7g7xGLoUb3EXSTtR2pxbwyc-jkboZ5LWQQ3sdQU1eJyCzmDs189sv95ISLIPKdbfGI4pS_zvQO7eND7U"/>
+</div>
+<div class="text-[10px] font-bold text-maritime-blue text-center leading-tight">KING SALMON<br/><span class="text-seal-red">$8.40</span></div>
+<div class="absolute -top-1 -right-1 bg-seal-red text-white text-[8px] px-1 rounded-sm rotate-12">AIR MAIL</div>
+</div>
+</div>
+<div class="absolute top-[60%] left-[40%] group cursor-pointer hover:scale-110 transition-transform">
+<div class="vintage-stamp bg-white w-20 h-24 flex flex-col items-center justify-between">
+<div class="w-full h-12 bg-gray-100 overflow-hidden flex items-center justify-center grayscale">
+<img alt="Crab" class="object-cover h-full opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZZ-YX7eWKqJG4q2Xo8FPZWbGXwYt2JDnZ3G3a1c8qhUCA0sPabO8UOXx0d1o_xvhzENMEHZRmhXLqUhvzP4i5i6kylAWCOQxsEd76EtfAsuUNZhmF5x1kbm2kdqrLzND5RpSdAL3zxe8KbrG-uXHbvohNd-wdaxrKHgNHjA3JCbZ83oJF55vmLsaV4AAQiDwbdnbRRsW3PVzJLYJ8RJIsFNaILwgEjsyTS6QRyIuELWKUp5pdQ43BhfSsivMh_YYs3uKAypp6hcg"/>
+</div>
+<div class="text-[10px] font-bold text-maritime-blue text-center leading-tight">DUNGENESS<br/><span class="text-seal-red">$12.50</span></div>
+</div>
+</div>
+<div class="absolute top-[45%] left-[75%] group cursor-pointer hover:scale-110 transition-transform">
+<div class="vintage-stamp bg-white w-20 h-24 flex flex-col items-center justify-between">
+<div class="w-full h-12 bg-gray-100 overflow-hidden flex items-center justify-center grayscale">
+<img alt="Rockfish" class="object-cover h-full opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQdYo5Bu93SgR6w5IzeL338cKTw3VjYXSLJk6nH3mJNuQFPe86DzztG5Xj3m0MaIJ-gB7JeNDa-BBABsr58b4WD8FQn4TufoWNt49J3KzeZIaW5als58S989PGMT0WHuQQ6g1SQHaBXrz9IGTQvYk3ePkqEbPfpvEowfnJw9bGT1VF9RgKj9V7d369YkYu5UskW9DoWiZwWKK0ODIkGTgbvmI6eGK-4IpmyTrFxj0rNjJn89CuoFpzmNsLXliHwNRZ5xkwd9lTw7k"/>
+</div>
+<div class="text-[10px] font-bold text-maritime-blue text-center leading-tight">ROCKFISH<br/><span class="text-seal-red">$6.20</span></div>
+</div>
+</div>
+<div class="absolute top-1/2 left-[15%] -translate-x-1/2 -translate-y-1/2">
+<div class="flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-maritime-blue text-4xl">location_on</span>
+<span class="bg-ink text-white px-3 py-1 text-[10px] uppercase tracking-widest font-bold">Chef's Table</span>
+</div>
+</div>
+<div class="absolute bottom-8 right-8 w-24 h-24 opacity-40">
+<img alt="" class="absolute inset-0 animate-pulse" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsX_tsmWK3zD9OSnSNkvoXSUI-Qgs2BZdbdMMd-biOSPPATaY_oRS3hYQS_On8rpslnN6quLMVjl-fJCITWmf2HJT0ecnzMiGafZafc3gKnehWOExJHSwzFMvO7eLTseO-yZ_ZSsjNlv5x8EuZ6nSZdVLOdvQRkaqrh5KGWAhMMsBirdM0rbCvM0wpbl7-mS-gwKZTEludW3ZlCVjf47w8fMlb_rBePiRHehPoXRg_65TN1fxqX2ACJZfpBhDpSuoxNRRyKtcOKe0"/>
+<div class="w-full h-full rounded-full border border-sepia-accent border-dashed flex items-center justify-center">
+<span class="font-display font-bold text-sepia-accent">N</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-2">
+<div class="p-6 border border-sepia-accent/20 bg-paper/50">
+<p class="text-xs uppercase tracking-widest text-sepia-accent font-bold mb-2">Search Radius</p>
+<div class="flex items-center gap-4">
+<input class="flex-grow accent-maritime-blue bg-sepia-accent/10 h-1 rounded-full appearance-none" type="range"/>
+<span class="font-script text-3xl text-ink">12 mi</span>
+</div>
+</div>
+<div class="p-6 border border-sepia-accent/20 bg-paper/50 flex flex-col justify-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-aged-gold">inventory_2</span>
+<span class="text-xl font-display italic">47 Vessels Logged</span>
+</div>
+</div>
+</div>
+</section>
+<aside class="flex flex-col gap-8 h-full">
+<div class="sticky top-28 bg-paper pt-4 z-40">
+<div class="relative mb-6">
+<input class="w-full border-b-2 border-sepia-accent/30 bg-transparent py-4 font-serif text-lg placeholder:italic focus:ring-0 focus:border-maritime-blue transition-colors" placeholder="Filter by species, port, or vessel..." type="text"/>
+</div>
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-4 border-b border-sepia-accent/10">
+<button class="px-6 py-2 border border-ink bg-ink text-white text-xs uppercase tracking-widest font-bold whitespace-nowrap">Archives</button>
+<button class="px-6 py-2 border border-sepia-accent/30 text-sepia-accent text-xs uppercase tracking-widest font-bold whitespace-nowrap hover:bg-sepia-accent/5">Bycatch</button>
+<button class="px-6 py-2 border border-sepia-accent/30 text-sepia-accent text-xs uppercase tracking-widest font-bold whitespace-nowrap hover:bg-sepia-accent/5">Surplus</button>
+<button class="px-6 py-2 border border-sepia-accent/30 text-sepia-accent text-xs uppercase tracking-widest font-bold whitespace-nowrap hover:bg-sepia-accent/5">Off-cut</button>
+</div>
+</div>
+<div class="flex flex-col gap-12 overflow-y-auto no-scrollbar pb-24">
+<article class="flex flex-col gap-6 group">
+<div class="relative overflow-hidden aspect-[16/10] border border-sepia-accent/20">
+<img alt="Salmon" class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA30stG08LgmrXLrDFv3Fro5ra3FqzlssNTOc6oxSNOrWzr0JplkVajr6aWCFDGMUZRzObRTO-FyyyogLDWMRLSBA6g3KDrFC8pY2QTQPSXUSztpKryEQX0WBR4Czx_XJeJuLrKXqZSqsAMJLMvEKr8iRVM2-H7Xl8A-Yl_JF4f4jO6t7W-PfGuYv3tzSr7g7xGLoUb3EXSTtR2pxbwyc-jkboZ5LWQQ3sdQU1eJyCzmDs189sv95ISLIPKdbfGI4pS_zvQO7eND7U"/>
+<div class="absolute top-4 right-4 bg-paper px-3 py-1 text-[10px] font-bold tracking-tighter uppercase border border-sepia-accent/30">Wild Caught</div>
+<div class="absolute bottom-4 left-4 font-script text-white text-3xl drop-shadow-lg">Sunset Landing</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-baseline">
+<h3 class="font-display text-3xl font-bold text-ink">Wild King Salmon</h3>
+<span class="text-2xl font-display italic text-seal-red">$8.40 <small class="text-xs uppercase tracking-widest font-serif not-italic text-sepia-accent">/lb</small></span>
+</div>
+<p class="text-sepia-accent leading-relaxed italic border-l-2 border-aged-gold/30 pl-4">
+<span class="font-bold uppercase text-[10px] tracking-widest block mb-1">Supplier Origin</span>
+                        Hauled by Captain Elias aboard the 'Azure Mist'. Harvested at daybreak from the cool currents of the Farallon basin. Prime oily texture, vibrant marbling.
+                    </p>
+<div class="flex gap-6 mt-2 text-[10px] uppercase tracking-[0.2em] font-bold text-sepia-accent border-y border-sepia-accent/10 py-3">
+<span class="flex items-center gap-1.5"><i class="material-symbols-outlined text-sm">scale</i> 22 Lbs</span>
+<span class="flex items-center gap-1.5"><i class="material-symbols-outlined text-sm">sailing</i> 3.2 mi</span>
+<span class="flex items-center gap-1.5"><i class="material-symbols-outlined text-sm">timer</i> 4PM Port Arrival</span>
+</div>
+<button class="w-full mt-2 py-4 border-2 border-maritime-blue text-maritime-blue hover:bg-maritime-blue hover:text-white transition-all font-bold uppercase text-xs tracking-widest">Secure Crate Entry</button>
+</div>
+</article>
+<article class="flex flex-col gap-6 group">
+<div class="relative overflow-hidden aspect-[16/10] border border-sepia-accent/20">
+<img alt="Crab" class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZZ-YX7eWKqJG4q2Xo8FPZWbGXwYt2JDnZ3G3a1c8qhUCA0sPabO8UOXx0d1o_xvhzENMEHZRmhXLqUhvzP4i5i6kylAWCOQxsEd76EtfAsuUNZhmF5x1kbm2kdqrLzND5RpSdAL3zxe8KbrG-uXHbvohNd-wdaxrKHgNHjA3JCbZ83oJF55vmLsaV4AAQiDwbdnbRRsW3PVzJLYJ8RJIsFNaILwgEjsyTS6QRyIuELWKUp5pdQ43BhfSsivMh_YYs3uKAypp6hcg"/>
+<div class="absolute top-4 right-4 bg-paper px-3 py-1 text-[10px] font-bold tracking-tighter uppercase border border-sepia-accent/30">Bycatch Surplus</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-baseline">
+<h3 class="font-display text-3xl font-bold text-ink">Dungeness Crab</h3>
+<span class="text-2xl font-display italic text-seal-red">$12.50 <small class="text-xs uppercase tracking-widest font-serif not-italic text-sepia-accent">/lb</small></span>
+</div>
+<p class="text-sepia-accent leading-relaxed italic border-l-2 border-aged-gold/30 pl-4">
+<span class="font-bold uppercase text-[10px] tracking-widest block mb-1">Supplier Origin</span>
+                        Landed at Bodega Bay. These sweet, meaty specimens were a secondary haul from the morning's drift. Freshness guaranteed by the 'Salt &amp; Silt' crew.
+                    </p>
+<div class="flex gap-6 mt-2 text-[10px] uppercase tracking-[0.2em] font-bold text-sepia-accent border-y border-sepia-accent/10 py-3">
+<span class="flex items-center gap-1.5"><i class="material-symbols-outlined text-sm">scale</i> 15 Lbs</span>
+<span class="flex items-center gap-1.5"><i class="material-symbols-outlined text-sm">sailing</i> 0.8 mi</span>
+<span class="flex items-center gap-1.5"><i class="material-symbols-outlined text-sm">history</i> Just Docked</span>
+</div>
+<button class="w-full mt-2 py-4 border-2 border-maritime-blue text-maritime-blue hover:bg-maritime-blue hover:text-white transition-all font-bold uppercase text-xs tracking-widest">Secure Crate Entry</button>
+</div>
+</article>
+<article class="flex flex-col gap-6 group">
+<div class="relative overflow-hidden aspect-[16/10] border border-sepia-accent/20">
+<img alt="Rockfish" class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQdYo5Bu93SgR6w5IzeL338cKTw3VjYXSLJk6nH3mJNuQFPe86DzztG5Xj3m0MaIJ-gB7JeNDa-BBABsr58b4WD8FQn4TufoWNt49J3KzeZIaW5als58S989PGMT0WHuQQ6g1SQHaBXrz9IGTQvYk3ePkqEbPfpvEowfnJw9bGT1VF9RgKj9V7d369YkYu5UskW9DoWiZwWKK0ODIkGTgbvmI6eGK-4IpmyTrFxj0rNjJn89CuoFpzmNsLXliHwNRZ5xkwd9lTw7k"/>
+<div class="absolute top-4 right-4 bg-paper px-3 py-1 text-[10px] font-bold tracking-tighter uppercase border border-sepia-accent/30">Small Boat Catch</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-baseline">
+<h3 class="font-display text-3xl font-bold text-ink">Pacific Rockfish</h3>
+<span class="text-2xl font-display italic text-seal-red">$6.20 <small class="text-xs uppercase tracking-widest font-serif not-italic text-sepia-accent">/lb</small></span>
+</div>
+<p class="text-sepia-accent leading-relaxed italic border-l-2 border-aged-gold/30 pl-4">
+<span class="font-bold uppercase text-[10px] tracking-widest block mb-1">Supplier Origin</span>
+                        From the 'Wanderer' — a 24-foot skiff operating out of Pillar Point. Line-caught and bled immediately on deck for pristine white fillets.
+                    </p>
+<div class="flex gap-6 mt-2 text-[10px] uppercase tracking-[0.2em] font-bold text-sepia-accent border-y border-sepia-accent/10 py-3">
+<span class="flex items-center gap-1.5"><i class="material-symbols-outlined text-sm">scale</i> 40 Lbs</span>
+<span class="flex items-center gap-1.5"><i class="material-symbols-outlined text-sm">sailing</i> 5.1 mi</span>
+<span class="flex items-center gap-1.5"><i class="material-symbols-outlined text-sm">timer</i> 6PM Collection</span>
+</div>
+<button class="w-full mt-2 py-4 border-2 border-maritime-blue text-maritime-blue hover:bg-maritime-blue hover:text-white transition-all font-bold uppercase text-xs tracking-widest">Secure Crate Entry</button>
+</div>
+</article>
+</div>
+</aside>
+</main>
+<footer class="bg-ink text-paper py-24 mt-24">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16">
+<div class="col-span-1 md:col-span-2">
+<h2 class="font-display text-4xl font-bold italic mb-6">Finventory</h2>
+<p class="font-serif italic text-sepia-accent max-w-md leading-relaxed text-lg">
+                "An archival record of the ocean's bounty, connecting the discerning chef to the honest laborer. We believe in transparency as deep as the sea itself."
+            </p>
+</div>
+<div>
+<h4 class="font-bold text-xs uppercase tracking-[0.3em] mb-8 text-aged-gold">The Record</h4>
+<ul class="flex flex-col gap-4 text-sm font-serif">
+<li><a class="hover:text-aged-gold transition-colors" href="#">Coastal Map</a></li>
+<li><a class="hover:text-aged-gold transition-colors" href="#">Vessel Registry</a></li>
+<li><a class="hover:text-aged-gold transition-colors" href="#">Price Index</a></li>
+<li><a class="hover:text-aged-gold transition-colors" href="#">Impact Reports</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-xs uppercase tracking-[0.3em] mb-8 text-aged-gold">Office</h4>
+<address class="not-italic text-sm font-serif leading-relaxed text-sepia-accent">
+                Pier 45, Shed B<br/>
+                San Francisco, CA<br/>
+                est. 2024
+            </address>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-6 border-t border-sepia-accent/10 mt-16 pt-8 flex justify-between items-center text-[10px] uppercase tracking-widest font-bold text-sepia-accent/50">
+<span>© 2024 Finventory Journal</span>
+<div class="flex gap-8">
+<a href="#">Privacy</a>
+<a href="#">Terms</a>
+<a href="#">Sustainability Commitment</a>
+</div>
+</div>
+</footer>
+
+</body></html>

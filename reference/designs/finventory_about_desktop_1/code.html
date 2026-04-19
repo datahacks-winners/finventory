@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&amp;family=Caveat:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "navy-900": "#0f172a",
+                "navy-800": "#1e293b",
+                "slate-700": "#334155",
+                "slate-600": "#475569",
+                "slate-500": "#64748b",
+                "slate-100": "#f1f5f9",
+                "primary": "#0f172a",
+                "accent": "#0ea5e9",
+                "surface": "#ffffff",
+                "background": "#f8fafc"
+            },
+            "borderRadius": {
+                "none": "0",
+                "sm": "0.125rem",
+                "DEFAULT": "0",
+                "lg": "0",
+                "xl": "0",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "headline": ["Plus Jakarta Sans", "sans-serif"],
+                "body": ["Plus Jakarta Sans", "sans-serif"],
+                "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+            }
+          },
+        }
+      }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { @apply bg-background text-navy-900 font-body; }
+            h1, h2, h3, h4 { @apply font-headline font-bold uppercase tracking-tight; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .grid-pattern {
+            background-image: linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+                              linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .section-break {
+            @apply border-t border-navy-900;
+        }
+        .drop-cap::first-letter {
+            float: left;
+            font-size: 4rem;
+            line-height: 0.8;
+            padding-right: 0.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            @apply font-headline uppercase;
+        }
+    </style>
+</head>
+<body class="selection:bg-navy-900 selection:text-white">
+<nav class="sticky top-0 w-full z-50 bg-white border-b border-navy-900">
+<div class="flex justify-between items-center px-6 lg:px-12 py-4 w-full max-w-screen-2xl mx-auto">
+<a class="text-xl font-black uppercase tracking-tighter" href="/">Finventory<span class="text-accent">.</span></a>
+<div class="hidden md:flex items-center space-x-10">
+<a class="text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors" href="#">Marketplace</a>
+<a class="text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors" href="#">Suppliers</a>
+<a class="text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors" href="#">Impact</a>
+<a class="text-xs font-bold uppercase tracking-widest text-accent border-b border-accent" href="#">About</a>
+</div>
+<div class="flex items-center space-x-6">
+<button class="text-xs font-bold uppercase tracking-widest">Log in</button>
+<button class="px-6 py-2 bg-navy-900 text-white text-xs font-bold uppercase tracking-widest hover:bg-slate-700 transition-colors">Join Now</button>
+</div>
+</div>
+</nav>
+<main>
+<section class="relative border-b border-navy-900">
+<div class="max-w-screen-2xl mx-auto grid lg:grid-cols-2">
+<div class="p-8 lg:p-20 border-r border-navy-900 flex flex-col justify-center">
+<div class="mb-6 inline-flex items-center space-x-2">
+<span class="w-8 h-px bg-navy-900"></span>
+<span class="text-xs font-bold uppercase tracking-[0.3em]">Operational Since 2018</span>
+</div>
+<h1 class="text-5xl lg:text-7xl mb-8 leading-[0.9]">
+                    Coastal <br/><span class="text-slate-500">Logistics</span> <br/>Redefined.
+                </h1>
+<p class="text-lg text-slate-600 max-w-md mb-10 leading-relaxed font-medium">
+                    An infrastructure-first approach to bridging the gap between small-scale harvesters and high-volume commercial kitchens.
+                </p>
+<div class="flex border border-navy-900 divide-x divide-navy-900 w-fit">
+<div class="px-6 py-4">
+<span class="block text-2xl font-black">2.4k</span>
+<span class="text-[10px] uppercase font-bold tracking-widest text-slate-500">Metric Tons Tracked</span>
+</div>
+<div class="px-6 py-4">
+<span class="block text-2xl font-black">140+</span>
+<span class="text-[10px] uppercase font-bold tracking-widest text-slate-500">Active Harbors</span>
+</div>
+</div>
+</div>
+<div class="bg-slate-100 grid grid-cols-2 grid-rows-2">
+<img class="w-full h-full object-cover border-b border-r border-navy-900 grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaGcmT4xkbM2CAh-0zHXdeKJ1TLklz7J6209T1RVTUfG4-cmZZY5yZ75mUC5OyWEP8uvYl0ZobGhASYnnnUb570svkaSwNrTtQiLNWOf8Zydz_w_yefpLOqQZps287Tqf_vaHrXwWmApe86W_WfuSgIs7nKsj7pEx43qtrmLNFQ80Gss2M5oEPsPMugcjXmGm2ESPhzEPF8b9J80B7f70kFDaxj1zqv9yFmhxiRpSybKzX7qkNBkjcp4bx8KxXAEnOt2unDYY6aTk"/>
+<img class="w-full h-full object-cover border-b border-navy-900 grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz3hPtKruK_-z519lqDTVb2Wr3vduGLQ5-fsdWKClyzVwVAOKq_9DMWMBvizD2cSBuPtrWNJ2uIAr8KFuy9q19wEGoJHrIjMwVsAfpYOmSd6PsN5A4MJBPxe8e4PBTgX-Qp1-uh8RQhRUw_2lesCiflFaX6KJF9yP0z9FYYuBoGl_PFR42elKXwH0Z79hgiSr7Y4rQNghYwYQZxP3oCwEMvvN4Izlmadwv4OscDECILqno149d898g06zF89hTe3rqVHQW0DEWQcY"/>
+<div class="col-span-2 border-t border-navy-900">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUeexc2_XNI2-RyQiri6jxMIDcQwGP8lDKerPkRIHcQHwYrhIUah7RM4vcvxNu1RDvHCVYa6tK4tm21k--Mquqt9Ps1SkEfnmOBr2WDKVLRxCG2XMOE0OP7RzP7jFib_SE5sSe3YzC4HGfIZ3V8fiRwQy7QuwwIu5qnEB6zL0U7YM0DkbswcZglVlwZC5NIAT9HE6AG2RXGJ1sSeN607lhb9xWZ7DDkSpEv4wQ5qsvy2HQR1jh2SgjXyYcv03qPyw7V3W91zFDHjM"/>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24 border-b border-navy-900 bg-white grid-pattern">
+<div class="max-w-4xl mx-auto px-6">
+<div class="mb-12">
+<span class="text-xs font-bold uppercase tracking-[0.4em] text-accent block mb-4">Core Thesis</span>
+<h2 class="text-4xl mb-8">Systemic Integrity.</h2>
+</div>
+<div class="grid md:grid-cols-2 gap-12 items-start">
+<div class="space-y-6">
+<p class="drop-cap text-slate-700 leading-relaxed font-medium">
+                        It began with a simple observation at a harbor in Maine. While local chefs were clamoring for the morning's catch, the fishermen were struggling with antiquated logistics that favored industrial-scale volume over artisan-scale quality. We saw a future where technology didn't replace the human touch, but protected it.
+                    </p>
+<div class="p-8 border-l-4 border-navy-900 bg-slate-50 italic font-mono text-sm">
+                        "The ocean doesn't have a clock. It has a rhythm. Our job is to listen to it and bring that honesty to every kitchen table."
+                        <span class="block mt-4 not-italic font-bold uppercase text-[10px]">— Elias Thorne, Founder</span>
+</div>
+</div>
+<div class="space-y-8">
+<p class="text-slate-600 leading-relaxed">
+                        Finventory was born from the belief that transparency is the most important ingredient. By connecting the dots directly from boat to kitchen, we ensure that every piece of seafood has a story, a face, and a legacy. Our platform is more than a marketplace; it's a digital ecosystem built to sustain the maritime way of life.
+                    </p>
+<div class="grid grid-cols-2 gap-2">
+<img class="border border-navy-900 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeq_X6W33dmjHEiMhKDzLLANmdrS37S43psr-cDeZoZU4ep6vUhhpvh__1KXCFYgYu2s3CzCBi2D5fYFbOjmww4iWwe5dWZ-aCik1GBhQI8i27Z8-SeX1o8M46HAiMyn9Ow58I10Mf6VSzs9jrHquiWvI2ub5HjU4X_0UQoaRtV_1RIAF3BxqwKIPobNsRUGE6oC8UeScKXb94vsnH6Tp4QYqKgw7y862HgmTJKtn0-LccVbUND3jIY9QWUkZ_IAS_Qx29HQ3n0wU"/>
+<img class="border border-navy-900 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5VQS1Y-VIiDuMEddI2UckpX9cup-s5bX7mbb53JlAeFKRMmW2CvtIDxjVAls4gCuVYmNRaF2RiBZ6-jQyJS4oerIPqX1j_tCALfdqi_IyZphVzYmmEdWaKn-UuiBVRdMK898BXvP3l9j7sksD5zDVV7CW1Sxx-TsHvtrZP3apEfmb3Fy9JLfOOWhOUif_NoNZJr1jUHvRcPBApf6tfqrdUkfOwHxiV2jpOUsl2Xfco8q8s9uh-6zVS4osJB5MyLnaW3bsB_eEZO4"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="border-b border-navy-900">
+<div class="max-w-screen-2xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-navy-900">
+<div class="p-12 bg-navy-900 text-white flex flex-col justify-between">
+<div>
+<span class="text-xs font-bold uppercase tracking-[0.3em] opacity-60 mb-4 block">Standards</span>
+<h2 class="text-3xl font-black">Core <br/>Principles</h2>
+</div>
+<span class="material-symbols-outlined text-6xl opacity-20">verified</span>
+</div>
+<div class="p-12 bg-white flex flex-col justify-between group hover:bg-slate-50 transition-colors">
+<div>
+<div class="w-10 h-10 border border-navy-900 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<h3 class="text-lg font-black mb-4">Traceability</h3>
+<p class="text-sm text-slate-600 leading-relaxed font-medium">GPS-verified chain of custody for every metric ton moved through the network.</p>
+</div>
+<span class="text-[10px] font-mono mt-8">REF_ID: TRC_01</span>
+</div>
+<div class="p-12 bg-white flex flex-col justify-between group hover:bg-slate-50 transition-colors">
+<div>
+<div class="w-10 h-10 border border-navy-900 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<h3 class="text-lg font-black mb-4">Fair Remuneration</h3>
+<p class="text-sm text-slate-600 leading-relaxed font-medium">Eliminating tertiary intermediaries to ensure +25% harvester profit margins.</p>
+</div>
+<span class="text-[10px] font-mono mt-8">REF_ID: PAY_02</span>
+</div>
+<div class="p-12 bg-white flex flex-col justify-between group hover:bg-slate-50 transition-colors">
+<div>
+<div class="w-10 h-10 border border-navy-900 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined">recycling</span>
+</div>
+<h3 class="text-lg font-black mb-4">Resource Efficiency</h3>
+<p class="text-sm text-slate-600 leading-relaxed font-medium">Demand-driven harvesting models to achieve zero-waste operational targets.</p>
+</div>
+<span class="text-[10px] font-mono mt-8">REF_ID: WST_03</span>
+</div>
+</div>
+</section>
+<section class="py-24 bg-slate-100 border-b border-navy-900">
+<div class="max-w-screen-xl mx-auto px-6">
+<div class="flex items-end justify-between mb-16 border-b border-navy-900 pb-8">
+<div>
+<span class="text-xs font-bold uppercase tracking-[0.4em] text-accent block mb-2">Personnel</span>
+<h2 class="text-5xl font-black">Meet the Crew</h2>
+</div>
+<p class="text-slate-500 font-bold text-sm hidden md:block">Operational Leadership &amp; Strategy</p>
+</div>
+<div class="grid md:grid-cols-2 border border-navy-900 divide-y md:divide-y-0 md:divide-x divide-navy-900">
+<div class="bg-white p-8 lg:p-12 flex gap-8 items-start">
+<div class="w-32 h-40 flex-shrink-0 border border-navy-900 overflow-hidden grayscale">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkGmjH2-4wpMMdthks0GokGMClhhiRrwIXcPKeYQbcDHFyFOGd0WMyv85L9owBtc3BRD7O2QjEBkXW6RGr8wE70UiS9g4u4EsPsRdQKau7Pt3DBFAEfRltPpeQjN3ZF8zwEaSTpJawNjcKKCi2IwJKOHF6XY4Nk_6dzfoA66vO2zB3xZh3sizwqEttodQW0bfE1M25AZOICO0PS2t3FbTYX0fuaJ03Sw3EYQfzuhfm3DcWaAPymo-9pDgow7OPNzko-wESaOZgNRM"/>
+</div>
+<div class="flex-grow">
+<div class="mb-4">
+<h4 class="text-2xl font-black">Elias Thorne</h4>
+<p class="text-xs font-bold text-accent uppercase tracking-widest">Founder &amp; CEO</p>
+</div>
+<ul class="space-y-3 border-t border-slate-200 pt-4">
+<li class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Expertise</span>
+<span class="text-sm font-semibold">Supply Chain Logistics &amp; Arctic Research</span>
+</li>
+<li class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Home Harbor</span>
+<span class="text-sm font-semibold">Portland, ME</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="bg-white p-8 lg:p-12 flex gap-8 items-start">
+<div class="w-32 h-40 flex-shrink-0 border border-navy-900 overflow-hidden grayscale">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHuVL6s4Q1h9l-6ItBKwGNJHGfkRDoLSg-Eo1PDZWOuHiSzqb7jAXnVdaFp4De71XvxGsBKHaxg7skAwO0tDyBb_pW7rQBadW6CHIzAnPzuzyU1VOQszMHbq0kHOcP7G8XLDaQQkZyGtGf1YEP3oep-vx8PihbtpJFBPCAURCCFq7gXcdDwLSq_tXybkJ_9-RQkjMyiJLCtNDpcP-iwG9AqqAbvPbaWyeY-u3LQpaxlJYbVwGNfUj-HtiYdGbXLWcMfbOobZiY4Rs"/>
+</div>
+<div class="flex-grow">
+<div class="mb-4">
+<h4 class="text-2xl font-black">Sarah Chen</h4>
+<p class="text-xs font-bold text-accent uppercase tracking-widest">Operations Lead</p>
+</div>
+<ul class="space-y-3 border-t border-slate-200 pt-4">
+<li class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Expertise</span>
+<span class="text-sm font-semibold">Network Optimization &amp; Maritime Law</span>
+</li>
+<li class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Home Harbor</span>
+<span class="text-sm font-semibold">Gloucester, MA</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="bg-white p-8 lg:p-12 flex gap-8 items-start border-t border-navy-900">
+<div class="w-32 h-40 flex-shrink-0 border border-navy-900 overflow-hidden grayscale">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxVkuPfquor5dnyItHUeq81liGPthCLyPnMnDdn--OCVl1sgWzIjh5kB_FvyrW3h7o5iydbUa9LYl8TfuU9ROlQ-As3N3OzoBute1c1pywL2u7X1UhNGoojfn_Bj_6J6rV2IqqROlUGpXto4hcGeXXQep5ua_1M9_L_d1jIy17xZxryxquGM3w7v9_5GlOJUHuI5PuPRax3XwXq-TJLyDnGsiuOYFeOa6WCn_wQWGzHnUldi6rpxPNMIUCWdOzizZ4y33rQtU8adc"/>
+</div>
+<div class="flex-grow">
+<div class="mb-4">
+<h4 class="text-2xl font-black">Marcus Bell</h4>
+<p class="text-xs font-bold text-accent uppercase tracking-widest">Head of Logistics</p>
+</div>
+<ul class="space-y-3 border-t border-slate-200 pt-4">
+<li class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Expertise</span>
+<span class="text-sm font-semibold">Cold-Chain Distribution &amp; Analytics</span>
+</li>
+<li class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Home Harbor</span>
+<span class="text-sm font-semibold">New Bedford, MA</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="bg-white p-8 lg:p-12 flex gap-8 items-start border-t border-navy-900">
+<div class="w-32 h-40 flex-shrink-0 border border-navy-900 overflow-hidden grayscale">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDyW7s5Gdjoebo4j58oR0uiulHf4NbPM9CzOwd7dzJTEDsF8qdXayh99AWbgj418eEw-X_SV7IKS5FRnQO3zrSWZrrHJbQcbbPmFOkHWuGZ7kBhC0iNv_wXuxr-cQeJdshy5guWf54j4Emr8NbDmcNTMklyP1-u0wQ1NSNkP4yXpnsM8TJXeotbJOls7yrxNEEWzK0clWuCwFWxijoQFIVRM4qFb4v61HW_WaOe61nnLv99NFX-sR6pRXqWbsWktO91CwYUkTk858"/>
+</div>
+<div class="flex-grow">
+<div class="mb-4">
+<h4 class="text-2xl font-black">Lena Voss</h4>
+<p class="text-xs font-bold text-accent uppercase tracking-widest">Sustainability Director</p>
+</div>
+<ul class="space-y-3 border-t border-slate-200 pt-4">
+<li class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Expertise</span>
+<span class="text-sm font-semibold">Marine Biology &amp; Sustainable Yields</span>
+</li>
+<li class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Home Harbor</span>
+<span class="text-sm font-semibold">Woods Hole, MA</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-navy-900 text-white overflow-hidden relative">
+<div class="grid lg:grid-cols-2 max-w-screen-2xl mx-auto">
+<div class="p-12 lg:p-24 border-r border-slate-800">
+<h2 class="text-4xl lg:text-6xl font-black mb-8 leading-tight">Scale the <br/>Infrastructure<span class="text-accent">.</span></h2>
+<p class="text-slate-400 text-xl max-w-md mb-12 font-medium">We are actively seeking developers, logistics specialists, and maritime experts to join our core operations team.</p>
+<button class="px-10 py-5 bg-white text-navy-900 text-sm font-bold uppercase tracking-widest hover:bg-slate-200 transition-colors">Apply for Crew Position</button>
+</div>
+<div class="hidden lg:flex items-center justify-center p-24 opacity-20">
+<span class="material-symbols-outlined text-[20rem]">anchor</span>
+</div>
+</div>
+</section>
+<section class="py-16 bg-white border-b border-navy-900">
+<div class="max-w-screen-xl mx-auto px-6">
+<p class="text-[10px] font-bold uppercase tracking-[0.5em] text-slate-400 mb-12 text-center">External Audit &amp; Press Features</p>
+<div class="flex flex-wrap justify-center items-center gap-16 lg:gap-24 opacity-60 grayscale">
+<span class="text-xl font-black uppercase tracking-tighter">Daily Tide</span>
+<span class="text-xl font-bold uppercase tracking-widest">Ocean Quarterly</span>
+<span class="text-xl font-mono font-bold tracking-tighter">HARBOR_POST</span>
+<span class="text-xl font-sans font-black">MARITIME</span>
+<span class="text-xl border-2 border-navy-900 px-3 py-1 font-bold">BEACON</span>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-navy-900 text-white border-t border-slate-800">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-6 lg:px-12 py-20 w-full max-w-screen-2xl mx-auto">
+<div class="md:col-span-1">
+<h2 class="text-2xl font-black uppercase tracking-tighter mb-6">Finventory<span class="text-accent">.</span></h2>
+<p class="text-slate-500 text-sm leading-relaxed font-medium">Precision maritime logistics and supply chain transparency for the global seafood industry.</p>
+</div>
+<div>
+<h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Operations</h4>
+<ul class="space-y-4 text-sm font-bold">
+<li><a class="hover:text-accent transition-colors" href="#">Marketplace API</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Harvester Portal</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Fleet Analytics</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Compliance</h4>
+<ul class="space-y-4 text-sm font-bold">
+<li><a class="hover:text-accent transition-colors" href="#">Impact Metrics</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Traceability Standards</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Regulatory Filing</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Registry</h4>
+<ul class="space-y-4 text-sm font-bold">
+<li><a class="text-accent" href="#">About Operations</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Carrier Careers</a></li>
+<li><a class="hover:text-accent transition-colors" href="#">Privacy Protocol</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-slate-800 px-6 lg:px-12 py-8 flex flex-col md:flex-row justify-between items-center text-slate-500 text-[10px] font-mono uppercase tracking-widest">
+<span>© 2024 Finventory Logistics Group</span>
+<span>Secure Protocol: AES-256 Verified</span>
+</div>
+</footer>
+
+</body></html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Finventory | Authentication</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Caveat:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#4e3e00",
+                    "outline": "#707881",
+                    "on-secondary-container": "#773e01",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#ebd6c9",
+                    "surface-container-high": "#f9e4d7",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#004a75",
+                    "surface-bright": "#fff8f5",
+                    "background": "#fff8f5",
+                    "inverse-surface": "#3a2e25",
+                    "tertiary": "#725c07",
+                    "on-primary-container": "#f7f9ff",
+                    "inverse-primary": "#95ccff",
+                    "surface-container-low": "#fff1e9",
+                    "on-surface-variant": "#404750",
+                    "secondary-fixed-dim": "#ffb77d",
+                    "on-background": "#241911",
+                    "on-primary-fixed": "#001d32",
+                    "surface-tint": "#00639a",
+                    "secondary-fixed": "#ffdcc3",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-tertiary-fixed": "#231b00",
+                    "tertiary-container": "#c5a952",
+                    "on-primary": "#ffffff",
+                    "surface": "#fff8f5",
+                    "tertiary-fixed": "#ffe085",
+                    "outline-variant": "#c0c7d1",
+                    "on-error": "#ffffff",
+                    "on-surface": "#241911",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#f3dfd1",
+                    "surface-variant": "#f3dfd1",
+                    "inverse-on-surface": "#ffede2",
+                    "primary-fixed-dim": "#95ccff",
+                    "primary": "#005f93",
+                    "surface-container": "#ffeadc",
+                    "primary-fixed": "#cde5ff",
+                    "secondary": "#8c4f14",
+                    "tertiary-fixed-dim": "#e2c46a",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#6e3900",
+                    "secondary-container": "#fdac6a",
+                    "primary-container": "#1e78b4",
+                    "on-secondary-fixed": "#2f1500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"],
+                    "accent": ["Caveat"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(20px); }
+        .ocean-shadow { box-shadow: 0 20px 40px rgba(0, 95, 147, 0.08); }
+        .italic-accent-caveat { font-family: 'Caveat', cursive; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- Auth Container: Split Layout -->
+<main class="flex min-h-screen w-full flex-col md:flex-row">
+<!-- Left Column: Form Section -->
+<section class="flex flex-1 flex-col items-center justify-center px-8 py-16 md:px-16 lg:px-24 bg-surface z-10">
+<div class="w-full max-w-md">
+<!-- Brand Anchor -->
+<div class="mb-12 text-center md:text-left">
+<span class="text-3xl font-bold text-sky-900 italic-accent-caveat">Finventory</span>
+<h1 class="mt-6 text-4xl font-extrabold tracking-tight text-primary leading-tight">Welcome back to the harbor</h1>
+<p class="mt-3 text-on-surface-variant font-medium">Access your maritime inventory and direct supplier links.</p>
+</div>
+<!-- Login Form Card -->
+<div class="bg-surface-container-lowest p-8 rounded-lg ocean-shadow border border-outline-variant/10">
+<form class="space-y-6">
+<div>
+<label class="block text-sm font-bold text-primary mb-2" for="email">Email address</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 py-3 px-0 focus:ring-0 focus:border-primary transition-colors text-on-surface placeholder:text-outline/50" id="email" name="email" placeholder="captain@vessel.com" type="email"/>
+</div>
+<div>
+<label class="block text-sm font-bold text-primary mb-2" for="password">Password</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 py-3 px-0 focus:ring-0 focus:border-primary transition-colors text-on-surface placeholder:text-outline/50" id="password" name="password" placeholder="••••••••" type="password"/>
+</div>
+<div class="flex items-center justify-between text-sm">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20 bg-transparent" type="checkbox"/>
+<span class="text-on-surface-variant group-hover:text-primary transition-colors">Stay docked</span>
+</label>
+<a class="font-bold text-primary hover:text-primary-container transition-colors" href="#">Lost your key?</a>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all ocean-shadow" type="submit">
+                            Log in to Dashboard
+                        </button>
+</form>
+<div class="relative my-10">
+<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-outline-variant/20"></div></div>
+<div class="relative flex justify-center text-xs font-bold tracking-widest uppercase"><span class="bg-surface-container-lowest px-4 text-outline/60">OR CONNECT VIA</span></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-full border border-outline-variant/30 hover:bg-surface-container-low transition-colors font-bold text-sm">
+<svg class="w-5 h-5" viewbox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path></svg>
+                            Google
+                        </button>
+<button class="flex items-center justify-center gap-3 py-3 px-4 rounded-full border border-outline-variant/30 hover:bg-surface-container-low transition-colors font-bold text-sm">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.03 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2.001-.156-3.312 1.091-3.999 1.091zm2.312-4.753c.922-1.13 1.532-2.7 1.365-4.272-1.35.052-2.987.909-3.961 2.04-.87 1.026-1.637 2.636-1.429 4.168 1.507.117 3.039-.806 4.025-1.936z"></path></svg>
+                            Apple
+                        </button>
+</div>
+</div>
+<p class="mt-10 text-center text-on-surface-variant">
+                    New to the network? 
+                    <a class="text-primary font-bold hover:underline underline-offset-4 ml-1" href="#signup">Begin your voyage</a>
+</p>
+</div>
+</section>
+<!-- Right Column: Editorial Visual -->
+<aside class="hidden md:flex flex-1 relative items-end p-12 overflow-hidden min-h-screen">
+<img alt="misty coastal sunrise" class="absolute inset-0 w-full h-full object-cover" data-alt="cinematic panoramic photo of a misty fishing harbor at sunrise with soft golden light reflecting on calm blue water" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXoncivdFbtcsQZxD6gWlePIyckCXO4XZGMKuCjAtRT3AVGSr5hYWbVCUiburLGr736C0C4Dmg0auXfwkLBhdLKZZECKk32pYFYtM2q8CHuFvtql4oiBKs10hh1TfJPLBrq5WQrD6SVjytfVk0LvpZoIY4g4_0ZVY_gQbfX-DQYazDpiJdVyLyFMPwdDQysS5TwmYJNGSQcCBwqWysuqwCOamVYwZpBzgYDX8JzzZCq5eIN1OBjq7BI8gEbllJ0xyKeSYn0GS825o"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+<div class="relative z-10 glass-card p-10 rounded-lg max-w-lg">
+<span class="block text-primary-container italic-accent-caveat text-3xl mb-4">"The ocean is a generous host."</span>
+<p class="text-on-primary-container text-lg font-medium leading-relaxed">
+                    Our platform connects the finest catches with the world's most discerning kitchens. Transparency is our tide.
+                </p>
+<div class="mt-6 flex items-center gap-3">
+<div class="w-10 h-[1px] bg-primary-container"></div>
+<span class="text-sm font-bold uppercase tracking-widest text-primary-container">Captain Elias, North Sea</span>
+</div>
+</div>
+</aside>
+</main>
+<!-- Sign Up Section (Anchor Link Target) -->
+<section class="flex min-h-screen w-full flex-col md:flex-row border-t border-outline-variant/10" id="signup">
+<!-- Left Column: Image for Signup -->
+<aside class="hidden md:flex flex-1 relative items-center justify-center p-12 overflow-hidden">
+<img alt="chef and fisherman handshake" class="absolute inset-0 w-full h-full object-cover" data-alt="close up of a weathered fisherman shaking hands with a chef in white uniform against a backdrop of the ocean at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFNiBl1jXsVo42qbLxLqKTgf3PKrBiQPnQm22h9fTkP-PLMIo0y27KSjFpPIDkzz5tdifNdSiHIh6aDWmt1GCpSA1XF3LwSD-9oKLzJ26xsCwPsc0GG8Jktby9SoseYJFbdD9funtPmwA0FX7t9MrVeUCL8XSDrpdpaA4UDJWZaZyJSJGNYnD6-ZCFI9p2jy2UNhMbjmKOvvNTYN2IYvbhFsmadMNqLvdxygFPvnZGyJCODSS_tNLflDrCiY1f_OQAGo9FprZrBvY"/>
+<div class="absolute inset-0 bg-gradient-to-r from-slate-900/40 to-transparent"></div>
+<div class="relative z-10 max-w-md transform -rotate-2">
+<div class="bg-surface p-1 shadow-2xl rounded-lg">
+<div class="border-2 border-primary/10 rounded p-8">
+<span class="text-4xl font-bold text-primary italic-accent-caveat">Direct from tide to table.</span>
+<p class="mt-4 text-on-surface-variant font-medium leading-relaxed">Join a network where quality meets origin. No middlemen, just excellence.</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Right Column: Signup Form -->
+<section class="flex flex-1 flex-col items-center justify-center px-8 py-16 md:px-16 lg:px-24 bg-surface">
+<div class="w-full max-w-xl">
+<div class="mb-10 text-center md:text-left">
+<h2 class="text-4xl font-extrabold tracking-tight text-secondary leading-tight">Create your account</h2>
+<p class="mt-2 text-on-surface-variant font-medium">Choose your role and join the Finventory community.</p>
+</div>
+<div class="bg-surface-container-low p-8 rounded-lg ocean-shadow">
+<form class="space-y-8">
+<!-- Role Selector -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="role" type="radio" value="buyer"/>
+<div class="p-6 rounded-lg bg-surface border border-outline-variant/20 peer-checked:border-secondary peer-checked:ring-1 peer-checked:ring-secondary transition-all group-hover:bg-surface-container-highest">
+<div class="flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-4xl text-secondary mb-3" data-icon="restaurant">restaurant</span>
+<span class="block font-bold text-on-surface">I am a Buyer</span>
+<span class="text-xs text-on-surface-variant mt-1">Restaurants, Hotels, Retail</span>
+</div>
+</div>
+</label>
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="role" type="radio" value="supplier"/>
+<div class="p-6 rounded-lg bg-surface border border-outline-variant/20 peer-checked:border-secondary peer-checked:ring-1 peer-checked:ring-secondary transition-all group-hover:bg-surface-container-highest">
+<div class="flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-4xl text-secondary mb-3" data-icon="sailing">sailing</span>
+<span class="block font-bold text-on-surface">I am a Supplier</span>
+<span class="text-xs text-on-surface-variant mt-1">Fisheries, Farms, Wholesalers</span>
+</div>
+</div>
+</label>
+</div>
+<!-- Fields -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-bold text-secondary mb-1">Business Name</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 py-3 px-0 focus:ring-0 focus:border-secondary transition-colors" placeholder="Pacific Blue LTD" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-bold text-secondary mb-1">Contact Name</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 py-3 px-0 focus:ring-0 focus:border-secondary transition-colors" placeholder="Julian Ross" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-bold text-secondary mb-1">Email Address</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 py-3 px-0 focus:ring-0 focus:border-secondary transition-colors" placeholder="hello@business.com" type="email"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-bold text-secondary mb-1">Create Password</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 py-3 px-0 focus:ring-0 focus:border-secondary transition-colors" placeholder="••••••••" type="password"/>
+</div>
+<div>
+<label class="block text-sm font-bold text-secondary mb-1">Confirm Password</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant/30 py-3 px-0 focus:ring-0 focus:border-secondary transition-colors" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full py-4 bg-gradient-to-r from-secondary to-secondary-container text-white rounded-full font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-[0_15px_30px_rgba(140,79,20,0.15)]" type="submit">
+                                Create My Account
+                            </button>
+<p class="mt-4 text-xs text-center text-on-surface-variant leading-relaxed">
+                                By signing up, you agree to the Finventory <a class="underline font-bold text-secondary" href="#">Terms of Maritime Trade</a> and <a class="underline font-bold text-secondary" href="#">Privacy Policy</a>.
+                            </p>
+</div>
+</form>
+</div>
+<p class="mt-10 text-center text-on-surface-variant">
+                    Already part of the fleet? 
+                    <a class="text-secondary font-bold hover:underline underline-offset-4 ml-1" href="#">Log in here</a>
+</p>
+</div>
+</section>
+</section>
+<!-- Footer Component from JSON -->
+<footer class="w-full relative bg-slate-900 dark:bg-black text-[#fff8f5] font-['Plus_Jakarta_Sans'] tracking-tight">
+<!-- Wavy SVG Divider -->
+<div class="absolute top-0 left-0 w-full overflow-hidden leading-[0] transform -translate-y-[99%]">
+<svg class="relative block w-full h-12 fill-slate-900" data-name="Layer 1" preserveaspectratio="none" viewbox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+</svg>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-7xl mx-auto">
+<div class="col-span-1 md:col-span-1">
+<span class="text-3xl font-black text-white block mb-6">Finventory</span>
+<p class="text-slate-400 text-sm leading-relaxed max-w-xs">
+                    Curating the ocean’s bounty through direct, sustainable, and transparent trade routes.
+                </p>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest">Explore</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 block" href="#">Marketplace</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 block" href="#">Suppliers</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 block" href="#">Sustainability</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest">Company</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 block" href="#">Impact</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 block" href="#">Journal</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 block" href="#">Privacy</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6 text-sm uppercase tracking-widest">Connect</h4>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="alternate_email">alternate_email</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="anchor">anchor</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+</a>
+</div>
+<p class="mt-6 text-slate-500 text-xs leading-loose">
+                    © 2024 Finventory. Curating the ocean’s bounty.
+                </p>
+</div>
+</div>
+</footer>
+</body></html>

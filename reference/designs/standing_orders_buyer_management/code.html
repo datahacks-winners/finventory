@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Maritime Ledger - Standing Orders</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#00201e",
+                        "secondary-fixed": "#79f6ed",
+                        "background": "#f7f9fb",
+                        "tertiary-fixed": "#ffdbd0",
+                        "primary-fixed": "#d3e4ff",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-container": "#882800",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed-variant": "#00504c",
+                        "on-background": "#191c1e",
+                        "on-secondary-container": "#006f69",
+                        "on-error-container": "#93000a",
+                        "primary": "#003461",
+                        "on-primary-container": "#8abcff",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "secondary": "#006a65",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#59dad1",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#611a00",
+                        "surface-tint": "#27609d",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "surface-variant": "#e0e3e5",
+                        "primary-container": "#004b87",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-dim": "#d8dadc",
+                        "secondary-container": "#76f3ea",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#a3c9ff",
+                        "on-surface": "#191c1e",
+                        "outline-variant": "#c2c6d1",
+                        "outline": "#727781",
+                        "surface": "#f7f9fb",
+                        "on-primary-fixed-variant": "#004882",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffa182",
+                        "primary-fixed-dim": "#a3c9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#424750",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-fixed": "#001c38"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Work Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        h1, h2, h3 {
+            font-family: 'Work Sans', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(242, 244, 246, 0.7);
+            backdrop-filter: blur(16px);
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopNavBar -->
+<nav class="bg-[#f7f9fb] dark:bg-[#191c1e] bg-[#eceef0] dark:bg-[#2d3133] shadow-sm shadow-[0px_1px_0px_0px_rgba(0,0,0,0.05)] docked full-width top-0 z-50 flex justify-between items-center w-full px-8 h-16">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black uppercase tracking-tighter text-[#003461] dark:text-[#ffffff] font-['Work_Sans']">Maritime Ledger</span>
+<div class="hidden md:flex space-x-6">
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] font-['Work_Sans'] font-bold tracking-tight transition-colors" href="#">Marketplace</a>
+<a class="text-[#003461] dark:text-[#79f6ed] border-b-2 border-[#003461] dark:border-[#79f6ed] pb-1 font-['Work_Sans'] font-bold tracking-tight" href="#">Orders</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] font-['Work_Sans'] font-bold tracking-tight transition-colors" href="#">Inventory</a>
+<a class="text-[#424750] dark:text-[#c2c6d1] hover:text-[#003461] font-['Work_Sans'] font-bold tracking-tight transition-colors" href="#">Payouts</a>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 hover:bg-[#eceef0] dark:hover:bg-[#424750] transition-colors scale-95 active:scale-100 duration-150">
+<span class="material-symbols-outlined text-[#003461] dark:text-[#d3e4ff]">notifications</span>
+</button>
+<button class="p-2 hover:bg-[#eceef0] dark:hover:bg-[#424750] transition-colors scale-95 active:scale-100 duration-150">
+<span class="material-symbols-outlined text-[#003461] dark:text-[#d3e4ff]">qr_code_scanner</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Close up professional portrait of a vessel fleet manager in a modern maritime office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNU3iSlk2f9j6FMi9WijlBGdiPnbg5bqQRK-xuqssPI-JC2GddQQdneeNICwtH3JqXfVOWml4lElvjL69aN8N1_7WqvyFLT8whe1HGhe6ZVmmrcXZzQMjpmLfbZ0ut2i_wT8KhcclPjWi2vDCN-5_PSYY7d5chFnAInQosBeQbzUCJof-g8wvf8kpGm0zDFD2nlmxgiNN_eknfshxfSLLlxhHCeabhElkS9v46Y6GmJtJOTeWOXLUD7ZW-jam8xNIL3_RwZxegNHSr"/>
+</div>
+</div>
+</nav>
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 bg-[#eceef0] dark:bg-[#1d2023] py-6 space-y-2 border-r-0 fixed top-16 left-0">
+<div class="px-6 mb-8">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 bg-primary-container rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-white">sailing</span>
+</div>
+<div>
+<p class="font-['Work_Sans'] font-bold text-[#003461] text-sm">Fleet Manager</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Vessel ID: 882-Alpha</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-0">
+<a class="flex items-center px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined mr-3">map</span> Discovery
+                </a>
+<a class="flex items-center px-6 py-3 bg-[#ffffff] dark:bg-[#004b87] text-[#003461] dark:text-white rounded-l-none border-l-4 border-[#006a65] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined mr-3">anchor</span> Standing Orders
+                </a>
+<a class="flex items-center px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined mr-3">sailing</span> Fleet Status
+                </a>
+<a class="flex items-center px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined mr-3">payments</span> Ledger
+                </a>
+<a class="flex items-center px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined mr-3">qr_code_2</span> Scanner
+                </a>
+<a class="flex items-center px-6 py-3 text-[#424750] dark:text-[#c2c6d1] opacity-80 hover:bg-[#e0e3e5] dark:hover:bg-[#2d3133] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined mr-3">settings</span> Settings
+                </a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full bg-primary text-white py-3 rounded-sm font-bold text-sm tracking-tight scale-95 active:scale-100 transition-all">
+                    Create Listing
+                </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-64 pt-20 px-8 pb-24">
+<div class="max-w-6xl mx-auto">
+<!-- Header Section with Asymmetry -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+<div>
+<h1 class="text-4xl font-black text-on-surface tracking-tighter mb-2">Standing Orders</h1>
+<p class="text-on-surface-variant max-w-md">Automate your supply chain by setting precise acquisition criteria for the freshest catch.</p>
+</div>
+<div class="flex items-center space-x-4">
+<div class="flex items-center bg-surface-container-high rounded-sm p-1">
+<button class="px-4 py-2 bg-white text-primary text-xs font-bold rounded-sm shadow-sm">ACTIVE</button>
+<button class="px-4 py-2 text-on-surface-variant text-xs font-bold">PAUSED</button>
+</div>
+<button class="bg-primary text-white px-6 py-3 rounded-sm font-bold flex items-center space-x-2 shadow-lg">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>Create New Standing Order</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left: My Standing Orders List -->
+<div class="lg:col-span-7 space-y-6">
+<h2 class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant mb-4 flex items-center">
+<span class="w-8 h-[1px] bg-outline-variant mr-3"></span>
+                            My Standing Orders
+                        </h2>
+<!-- Order Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-sm shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 -rotate-12 translate-x-8 -translate-y-8 group-hover:bg-primary/10 transition-colors"></div>
+<div class="flex justify-between items-start relative z-10">
+<div class="flex gap-4">
+<div class="w-16 h-16 bg-surface-container rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-primary scale-125">set_meal</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-primary">5kg Whitefish</h3>
+<div class="flex items-center space-x-3 mt-1">
+<span class="bg-surface-variant text-on-surface-variant text-[10px] font-black px-2 py-0.5 rounded-sm">GRADE B</span>
+<span class="text-xs text-on-surface-variant font-medium flex items-center">
+<span class="material-symbols-outlined text-xs mr-1">calendar_today</span> Daily Delivery
+                                            </span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Auto-Buy</p>
+<div class="mt-2 inline-flex items-center px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary mr-2"></span>
+                                        LIVE
+                                    </div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant/15 flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="Vessel" class="w-full h-full object-cover" data-alt="Silhouette of a small fishing vessel at sunrise on a calm ocean" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYGLBAw3oORiJeJpV8pFaej63xTrkTBj58ts16cWV4YXtJzuAkMClmFvshFEh9beVozSIXyHnPfn7WJpTUfLprVDozy3GiA5Ei_NiP2LZ9kUgugJ0PpI5SltUEG91njGORaY4xVjelDWf4qR8jOcluY2UWElcO-5BCZJ1lVs8628amFbzL2tF3XLmMs4BhDKKKSynVrfIcI7m0pAAfBUuQWtD0iWKyZ-MV9z50ShfPESxMqpsVZhC8cnROwd6cWJn_9G4xZ8TpppUc"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">
+                                        +2
+                                    </div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-on-surface-variant hover:text-primary text-xs font-bold uppercase tracking-widest">Edit</button>
+<button class="text-error hover:text-error/80 text-xs font-bold uppercase tracking-widest">Pause</button>
+</div>
+</div>
+</div>
+<!-- Order Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-sm shadow-sm relative overflow-hidden group">
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="w-16 h-16 bg-primary-container/10 rounded-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-primary scale-150">restaurant</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-primary">2kg Tuna</h3>
+<div class="flex items-center space-x-3 mt-1">
+<span class="bg-primary text-on-primary text-[10px] font-bold px-2 py-0.5 rounded-sm">SUSHI GRADE</span>
+<span class="text-xs text-on-surface-variant font-medium flex items-center">
+<span class="material-symbols-outlined text-xs mr-1">event_repeat</span> Weekly
+                                            </span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Notify Only</p>
+<div class="mt-2 inline-flex items-center px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-[10px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-outline mr-2"></span>
+                                        PENDING MATCH
+                                    </div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant/15 flex justify-between items-center">
+<p class="text-xs text-on-surface-variant">Last matched: 4 days ago</p>
+<div class="flex items-center space-x-4">
+<button class="text-on-surface-variant hover:text-primary text-xs font-bold uppercase tracking-widest">Edit</button>
+<button class="text-error hover:text-error/80 text-xs font-bold uppercase tracking-widest">Delete</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: New Match & Form -->
+<div class="lg:col-span-5 space-y-8">
+<!-- New Match Alert Section -->
+<div class="bg-primary-container p-6 rounded-sm shadow-xl text-white relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/20 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-black tracking-tight">New Match Alert</h3>
+<span class="bg-secondary text-on-secondary px-2 py-0.5 rounded-sm text-[10px] font-bold">3 TODAY</span>
+</div>
+<p class="text-on-primary-container text-sm mb-6">3 listings match your 'Tuna' criteria. Quick-view available for next 2 hours.</p>
+<div class="space-y-3">
+<div class="bg-white/10 backdrop-blur-md p-3 rounded-sm flex justify-between items-center border border-white/5 hover:bg-white/15 transition-colors cursor-pointer">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-secondary-fixed mr-3">check_circle</span>
+<div>
+<p class="text-xs font-bold">Vessel: Bluefin-7</p>
+<p class="text-[10px] opacity-70">Catch: 2h ago • Price: $42/kg</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+<div class="bg-white/10 backdrop-blur-md p-3 rounded-sm flex justify-between items-center border border-white/5 hover:bg-white/15 transition-colors cursor-pointer">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-secondary-fixed mr-3">check_circle</span>
+<div>
+<p class="text-xs font-bold">Vessel: Sea Spirit</p>
+<p class="text-[10px] opacity-70">Catch: 45m ago • Price: $39/kg</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Creation Form Interface (Simulated) -->
+<div class="bg-surface-container p-8 rounded-sm">
+<h3 class="text-sm font-black uppercase tracking-widest text-primary mb-6">Order Parameters</h3>
+<div class="space-y-6">
+<div>
+<label class="block text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-2">Criteria / Species</label>
+<div class="relative">
+<input class="w-full bg-surface-container-high border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm font-medium h-12 px-4 transition-all" placeholder="e.g. Atlantic Salmon" type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-3 text-on-surface-variant">search</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-2">Frequency</label>
+<select class="w-full bg-surface-container-high border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm font-medium h-12 px-4">
+<option>Daily</option>
+<option>Weekly</option>
+<option>Bi-Weekly</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-2">Quantity (kg)</label>
+<input class="w-full bg-surface-container-high border-0 border-b-2 border-transparent focus:border-primary focus:ring-0 text-sm font-medium h-12 px-4" placeholder="0.00" type="number"/>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-sm">
+<div>
+<p class="text-xs font-bold text-primary">Auto-Buy Execution</p>
+<p class="text-[10px] text-on-surface-variant">Purchase immediately on match</p>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</div>
+</div>
+<button class="w-full bg-primary text-white py-4 font-bold text-sm uppercase tracking-widest shadow-lg hover:shadow-primary/20 transition-all">
+                                    Initialize Order
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-16 bg-[#ffffff]/80 dark:bg-[#191c1e]/80 backdrop-blur-xl border-t border-[#c2c6d1]/15 shadow-[0_-4px_12px_rgba(0,52,97,0.08)]">
+<a class="flex flex-col items-center text-[#424750] dark:text-[#c2c6d1]" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Buy</span>
+</a>
+<a class="flex flex-col items-center text-[#424750] dark:text-[#c2c6d1]" href="#">
+<span class="material-symbols-outlined">sell</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Sell</span>
+</a>
+<a class="flex flex-col items-center text-[#424750] dark:text-[#c2c6d1]" href="#">
+<span class="material-symbols-outlined">center_focus_weak</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Scan</span>
+</a>
+<a class="flex flex-col items-center text-[#003461] dark:text-[#79f6ed] font-bold" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-widest">Profile</span>
+</a>
+</nav>
+<!-- FAB Contextual Only (Home/Dashboard) - Suppressed as per instructions for a specific feature screen -->
+</body></html>
