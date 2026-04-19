@@ -12,25 +12,22 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 }
 
-// Only initialize Firebase if all required config is present
 const isValidConfig = firebaseConfig.apiKey && firebaseConfig.projectId
 
-let app: FirebaseApp | null = null
-let auth: Auth | null = null
-let db: Firestore | null = null
+let app: FirebaseApp | undefined
+let auth: Auth | undefined  
+let db: Firestore | undefined
 
 if (isValidConfig) {
   try {
     app = initializeApp(firebaseConfig)
     auth = getAuth(app)
     db = getFirestore(app)
-    console.log('Firebase initialized successfully')
   } catch (err) {
-    console.error('Failed to initialize Firebase:', err)
-    // Keep exports as null
+    console.error('Firebase init error:', err)
   }
 } else {
-  console.warn('Firebase config missing - Firebase services unavailable')
+  console.warn('Firebase config missing - auth/database unavailable')
 }
 
 export { auth, db }
