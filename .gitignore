@@ -43,6 +43,7 @@ terraform/errored.tfstate
 # Testing
 coverage/
 .nyc_output/
+test-results/
 
 # Logs
 logs/

@@ -20,7 +20,7 @@ steps:
       - '--build-arg'
       - 'VITE_API_URL=${_API_URL}'
       - '-t'
-      - 'gcr.io/finventory-1776558252/web:latest'
+      - 'us-central1-docker.pkg.dev/finventory-1776558252/web-images/web:latest'
       - '.'
     dir: 'apps/web'
     secretEnv:
@@ -40,7 +40,7 @@ steps:
       - 'deploy'
       - 'web'
       - '--image'
-      - 'gcr.io/finventory-1776558252/web:latest'
+      - 'us-central1-docker.pkg.dev/finventory-1776558252/web-images/web:latest'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -67,7 +67,7 @@ availableSecrets:
       env: 'PEXELS_API_KEY'
 
 images:
-  - 'gcr.io/finventory-1776558252/web:latest'
+  - 'us-central1-docker.pkg.dev/finventory-1776558252/web-images/web:latest'
 
 options:
   logging: CLOUD_LOGGING_ONLY
