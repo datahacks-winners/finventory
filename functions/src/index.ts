@@ -40,3 +40,6 @@ export {
 export {
   matchStandingOrders
 } from './jobs/standingOrderMatcher.js'
+
+// CalCOFI ML Proxy
+export { calcofiProxy } from './calcofiProxy.js'
