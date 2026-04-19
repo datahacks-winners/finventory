@@ -1,0 +1,10 @@
+{
+  "require": ["ts-node/register"],
+  "timeout": 10000,
+  "spec": "tests/**/*.test.ts",
+  "extension": ["ts"],
+  "node-option": [
+    "experimental-specifier-resolution=node",
+    "loader=ts-node/esm"
+  ]
+}

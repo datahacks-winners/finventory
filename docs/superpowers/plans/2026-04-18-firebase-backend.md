@@ -210,16 +210,15 @@ git commit -m "feat: add Firebase project configuration"
 ```typescript
 import * as admin from 'firebase-admin'
 
-// Initialize Firebase Admin
-const serviceAccount = {
-  projectId: process.env.GCP_PROJECT_ID || 'finventory',
-  // In production, this will use ADC automatically
+// Cloud Functions auto-initializes admin in production
+// Explicitly initialize for local development/testing
+// Check prevents double-initialization errors
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    databaseURL: process.env.FIREBASE_DATABASE_URL || 'https://finventory-default-rtdb.firebaseio.com'
+  })
 }
-
-admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
-  databaseURL: `https://${serviceAccount.projectId}-default-rtdb.firebaseio.com`
-})
 
 export const db = admin.firestore()
 export const rtdb = admin.database()

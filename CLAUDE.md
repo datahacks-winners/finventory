@@ -22,12 +22,12 @@ A peer-to-peer marketplace connecting seafood buyers and sellers to reduce waste
 ### Backend
 | Layer | Stack |
 |-------|-------|
-| Framework | Node.js + Fastify |
-| Database | PostgreSQL + PostGIS (relational), Firestore (real-time) |
-| Cache | Redis |
-| Real-time | Firestore onSnapshot (live inventory), FCM (push notifications) |
+| Database | Firestore (primary data store) |
+| Real-time | Firestore onSnapshot (live inventory) |
 | Storage | Cloud Storage (photos, certificates) |
 | Auth | Firebase Auth |
+| Functions | Cloud Functions (business logic, cron jobs) |
+| Push | FCM (Firebase Cloud Messaging) |
 
 ### Infrastructure
 - **Language**: TypeScript
@@ -37,24 +37,35 @@ A peer-to-peer marketplace connecting seafood buyers and sellers to reduce waste
 
 ---
 
-## GCP Conventions
+## GCP/Firebase Conventions
 
 - Use `gcloud` CLI for deployment and management
-- Services: Cloud Functions, Cloud Run, Cloud SQL, Cloud Storage, Firestore
-- Infrastructure as Code: Terraform or Pulumi (to be determined)
-- Authentication: ADC (Application Default Credentials) via `gcloud auth application-default login`
+- Services: Cloud Functions (1st gen with Node.js), Firestore, Cloud Storage, FCM
+- Firebase CLI: `firebase deploy` for Firestore rules, Storage rules
+- Local emulation: `firebase emulators:start`
+- Authentication: ADC via `gcloud auth application-default login`
 
 ---
 
-## Core API Endpoints
+## Firestore Collections
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/listings` | Browse with geo + filters |
-| POST | `/listings` | Create listing (with sushi cert fields) |
-| POST | `/orders` | Place order |
-| POST | `/orders/:id/confirm-pickup` | QR scan confirmation |
-| GET | `/standing-orders/matches` | Daily matches for standing orders |
+| Collection | Purpose |
+|------------|---------|
+| `listings` | Marketplace listings |
+| `users` | User profiles + seller stats |
+| `orders` | Order records |
+| `standingOrders` | Buyer standing order criteria |
+| `messages` | In-app messaging (optional) |
+
+## Cloud Functions
+
+| Function | Trigger | Purpose |
+|----------|---------|---------|
+| `createListing` | Callable | Validate & create listing with timestamps |
+| `autoDowngradeSushi` | Scheduled (cron) | 48hr sushi → Grade A |
+| `matchStandingOrders` | Scheduled | Find matches, send FCM |
+| `confirmPickup` | Callable | QR scan verification, update status |
+| `stripeWebhook` | HTTP | Handle payment webhooks |
 
 ---
 
@@ -88,22 +99,25 @@ Browse → Orders → Standing Orders (center) → Profile
 - **Grade B**: Standard quality
 
 ### Matching Algorithm
-Standing orders auto-match new listings → push notification to buyer
+Cloud Function `matchStandingOrders` runs on schedule, queries new listings, matches against standing order criteria, sends FCM to buyers
 
 ### Sushi Expiry
-- 48-hour cron job auto-downgrades Sushi → Grade A
+- Scheduled Cloud Function `autoDowngradeSushi` runs every hour
+- Finds listings where `grade === 'sushi'` && `createdAt < 48hrs ago`
+- Updates `grade` to `gradeA`
 
 ### Order Lifecycle
-`Pending` → `Picked_Up` (QR scan) → payout released to seller
+`pending` → `pickedUp` (QR scan via Cloud Function) → Stripe payout to seller
 
 ---
 
 ## Development Workflow
 
 1. **Always use git worktrees for feature work** - Create isolated worktrees for any new features or branches using `EnterWorktree` or git worktree commands
-2. Authenticate: `gcloud auth application-default login`
-3. Start local dev: `npm run dev` (per workspace)
-4. Deploy: TBD (Terraform/Pulumi + `gcloud`)
+2. Authenticate: `gcloud auth application-default login` + `firebase login`
+3. Start emulators: `firebase emulators:start`
+4. Deploy functions: `firebase deploy --only functions`
+5. Deploy rules: `firebase deploy --only firestore:rules,storage:rules`
 
 ---
 
@@ -113,6 +127,9 @@ Standing orders auto-match new listings → push notification to buyer
 finventory/
 ├── package.json
 ├── CLAUDE.md           # This file - high-level overview
+├── firebase.json       # Firebase config
+├── firestore.rules     # Firestore security rules
+├── storage.rules       # Cloud Storage security rules
 ├── docs/               # Comprehensive documentation
 │   ├── README.md       # Documentation index
 │   ├── ARCHITECTURE.md # System architecture, data flow
@@ -127,11 +144,20 @@ finventory/
 ├── packages/           # Shared packages
 │   └── shared/         # Shared types, utilities
 ├── apps/               # Applications
-│   ├── api/            # Backend API (Fastify + PostgreSQL)
 │   └── mobile/         # React Native app
 │       └── src/
-│           └── services/ # Firebase (Firestore, FCM, Auth)
-└── infra/              # Infrastructure (Terraform/Pulumi)
+│           ├── services/    # Firebase (Firestore, FCM, Auth)
+│           ├── screens/     # React Navigation screens
+│           └── components/  # UI components
+└── functions/          # Cloud Functions
+    ├── src/
+    │   ├── index.ts        # Main entry
+    │   ├── createListing.ts
+    │   ├── autoDowngradeSushi.ts
+    │   ├── matchStandingOrders.ts
+    │   ├── confirmPickup.ts
+    │   └── stripeWebhook.ts
+    └── package.json
 ```
 
 ---
@@ -152,7 +178,8 @@ finventory/
 ## Notes
 
 - Project initialized 2026-04-18
-- Using GCP + Firebase for cloud infrastructure
+- **Firestore-first architecture** — no custom REST API needed
 - Real-time inventory via Firestore onSnapshot listeners
 - Push notifications via FCM for standing order matches
-- Firebase Auth for authentication
+- Firebase Auth + Security Rules for data protection
+- Cloud Functions for complex business logic (cron, webhooks)

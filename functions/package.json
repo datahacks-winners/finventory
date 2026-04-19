@@ -1,0 +1,37 @@
+{
+  "name": "finventory-functions",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "test": "mocha --require ts-node/register --experimental-loader=ts-node/esm test/**/*.test.ts",
+    "test:watch": "mocha --require ts-node/register --experimental-loader=ts-node/esm --watch --watch-files test/**/*.test.ts"
+  },
+  "dependencies": {
+    "ngeohash": "^0.6.3"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.0",
+    "@types/mocha": "^10.0.10",
+    "@types/ngeohash": "^0.6.2",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "chai": "^6.2.2",
+    "eslint": "^8.57.1",
+    "firebase-admin": "^13.8.0",
+    "firebase-functions": "^7.2.5",
+    "mocha": "^11.7.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": "20"
+  }
+}

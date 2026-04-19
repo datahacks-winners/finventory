@@ -5,21 +5,24 @@
   "type": "module",
   "scripts": {
     "dev": "npm run dev --workspaces --if-present",
+    "dev:firebase": "firebase emulators:start --only functions,firestore,auth,storage,database",
     "build": "npm run build --workspaces --if-present",
     "deploy": "npm run deploy --workspaces --if-present",
+    "test": "npm run lint  # TODO: Add actual test suite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "test": "npm run lint",
+    "prepare": "husky githooks"
   },
   "dependencies": {
     "firebase-admin": "^13.0.0",
-    "pg": "^8.13.0",
+    "firebase-functions": "^6.3.2",
     "stripe": "^17.6.0"
   },
   "devDependencies": {
+    "@types/node": "^22.14.1",
     "@google-cloud/functions-framework": "^3.5.1",
     "@google-cloud/storage": "^7.15.5",
-    "@types/pg": "^8.11.10",
     "typescript": "^5.8.3",
     "eslint": "^9.31.0",
     "typescript-eslint": "^8.26.1",
