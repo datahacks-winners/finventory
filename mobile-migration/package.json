@@ -1,0 +1,34 @@
+{
+  "name": "@finventory/mobile-migration",
+  "version": "1.0.0",
+  "description": "Migration service files for replacing Firebase SDKs with GCP native SDKs",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Tests not yet implemented for migration services\"",
+    "lint": "eslint src/**/*.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "firebase",
+    "gcp",
+    "migration",
+    "react-native"
+  ],
+  "author": "Fish Rescue App",
+  "license": "MIT",
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-google-signin/google-signin": "^16.1.2",
+    "expo-device": "~7.0.1",
+    "expo-notifications": "~0.29.13"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "~5.9.2"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "private": true
+}

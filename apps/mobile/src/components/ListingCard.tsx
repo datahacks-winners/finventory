@@ -9,6 +9,41 @@ interface ListingCardProps {
   isFavorite: boolean;
 }
 
+// Stitch MD3 Grade Colors
+const gradeColors = {
+  sushi: {
+    bg: '#005f93',
+    text: '#ffffff',
+  },
+  A: {
+    bg: '#1e78b4',
+    text: '#f7f9ff',
+  },
+  B: {
+    bg: '#fdac6a',
+    text: '#773e01',
+  },
+  C: {
+    bg: '#c5a952',
+    text: '#4e3e00',
+  },
+};
+
+// Stitch Theme
+const colors = {
+  surface: '#ffffff',
+  surfaceContainer: '#ffeadc',
+  onSurface: '#241911',
+  onSurfaceVariant: '#404750',
+  outline: '#707881',
+  outlineVariant: '#c0c7d1',
+  primary: '#005f93',
+  primaryContainer: '#1e78b4',
+  onPrimary: '#ffffff',
+  primaryFixed: '#cde5ff',
+  secondary: '#8c4f14',
+};
+
 export function ListingCard({ listing, onFavoritePress, isFavorite }: ListingCardProps) {
   const router = useRouter();
 
@@ -26,15 +61,8 @@ export function ListingCard({ listing, onFavoritePress, isFavorite }: ListingCar
     return `Caught ${daysDiff} days ago`;
   };
 
-  const getGradeColor = () => {
-    switch (listing.grade) {
-      case 'sushi':
-        return '#3B82F6'; // blue
-      case 'A':
-        return '#10B981'; // green
-      case 'B':
-        return '#F59E0B'; // yellow
-    }
+  const getGradeColors = () => {
+    return gradeColors[listing.grade as keyof typeof gradeColors] || gradeColors.B;
   };
 
   const handlePress = () => {
@@ -42,44 +70,69 @@ export function ListingCard({ listing, onFavoritePress, isFavorite }: ListingCar
   };
 
   const displayQuantity = listing.liveQuantity ?? listing.quantity;
+  const gradeStyle = getGradeColors();
 
   return (
-    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.9}>
+    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.95}>
       <Image
         source={{ uri: listing.photos[0] || 'https://via.placeholder.com/300' }}
         style={styles.image}
         resizeMode="cover"
       />
 
-      <View style={[styles.gradeBadge, { backgroundColor: getGradeColor() }]}>
-        <Text style={styles.gradeText}>{listing.grade.toUpperCase()}</Text>
+      {/* Grade Badge - Top Left */}
+      <View style={[styles.gradeBadge, { backgroundColor: gradeStyle.bg }]}>
+        <Text style={[styles.gradeText, { color: gradeStyle.text }]}>
+          {listing.grade === 'sushi' ? 'SUSHI GRADE' : `GRADE ${listing.grade}`}
+        </Text>
       </View>
 
-      <TouchableOpacity style={styles.favoriteButton} onPress={onFavoritePress} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-        <Text style={styles.favoriteIcon}>{isFavorite ? '♥' : '♡'}</Text>
+      {/* Favorite Button - Top Right */}
+      <TouchableOpacity
+        style={styles.favoriteButton}
+        onPress={onFavoritePress}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
+        <Text style={[styles.favoriteIcon, isFavorite && styles.favoriteIconActive]}>
+          {isFavorite ? '★' : '☆'}
+        </Text>
       </TouchableOpacity>
 
+      {/* Content */}
       <View style={styles.content}>
+        {/* Species Name */}
         <Text style={styles.species} numberOfLines={1}>
           {listing.species.charAt(0).toUpperCase() + listing.species.slice(1)}
         </Text>
 
-        <View style={styles.row}>
-          <Text style={styles.price}>{formatPrice()}</Text>
-          {listing.sellerRating && (
-            <Text style={styles.rating}>⭐ {listing.sellerRating.toFixed(1)}</Text>
-          )}
-        </View>
+        {/* Details Row */}
+        <Text style={styles.details}>
+          {listing.location || 'Local Harbor'} • {formatFreshness()}
+        </Text>
 
-        <View style={styles.row}>
-          <Text style={styles.distance}>{listing.distance.toFixed(1)} mi away</Text>
-          <Text style={styles.freshness}>{formatFreshness()}</Text>
-        </View>
-
+        {/* Footer Row */}
         <View style={styles.footer}>
-          <Text style={styles.quantity}>{displayQuantity} {listing.unit} remaining</Text>
+          <Text style={styles.price}>{formatPrice()}</Text>
+          <View style={styles.metaRight}>
+            {listing.sellerRating && (
+              <View style={styles.ratingContainer}>
+                <Text style={styles.ratingStar}>★</Text>
+                <Text style={styles.rating}>{listing.sellerRating.toFixed(1)}</Text>
+              </View>
+            )}
+            <Text style={styles.distance}>{listing.distance.toFixed(1)} mi</Text>
+          </View>
+        </View>
+
+        {/* Quantity & Delivery */}
+        <View style={styles.bottomRow}>
+          <Text style={styles.quantity}>
+            {displayQuantity} {listing.unit} available
+          </Text>
           {listing.deliveryAvailable && (
-            <Text style={styles.deliveryBadge}>🚗 Delivery</Text>
+            <View style={styles.deliveryBadge}>
+              <Text style={styles.deliveryText}>Delivery</Text>
+            </View>
           )}
         </View>
       </View>
@@ -89,15 +142,16 @@ export function ListingCard({ listing, onFavoritePress, isFavorite }: ListingCar
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: colors.surface,
+    borderRadius: 16,
     overflow: 'hidden',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     marginBottom: 16,
+    // Ocean shadow effect
+    shadowColor: '#005f93',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 4,
   },
   image: {
     width: '100%',
@@ -108,13 +162,13 @@ const styles = StyleSheet.create({
     top: 12,
     left: 12,
     paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
+    paddingVertical: 5,
+    borderRadius: 20,
   },
   gradeText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.5,
   },
   favoriteButton: {
     position: 'absolute',
@@ -123,66 +177,93 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   favoriteIcon: {
-    fontSize: 20,
-    color: '#EF4444',
+    fontSize: 18,
+    color: colors.outline,
+  },
+  favoriteIconActive: {
+    color: colors.primary,
   },
   content: {
-    padding: 12,
+    padding: 16,
   },
   species: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.onSurface,
     marginBottom: 4,
   },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 4,
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#059669',
-  },
-  rating: {
+  details: {
     fontSize: 14,
-    color: '#6B7280',
-  },
-  distance: {
-    fontSize: 14,
-    color: '#6B7280',
-  },
-  freshness: {
-    fontSize: 14,
-    color: '#6B7280',
+    color: colors.onSurfaceVariant,
+    marginBottom: 12,
   },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 8,
-    paddingTop: 8,
+    marginBottom: 12,
+  },
+  price: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: colors.primary,
+    fontFamily: 'Caveat',
+  },
+  metaRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  ratingStar: {
+    fontSize: 14,
+    color: '#c5a952',
+  },
+  rating: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.onSurfaceVariant,
+  },
+  distance: {
+    fontSize: 14,
+    color: colors.onSurfaceVariant,
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.surfaceContainer,
   },
   quantity: {
-    fontSize: 14,
-    color: '#374151',
+    fontSize: 13,
+    color: colors.onSurfaceVariant,
     fontWeight: '500',
   },
   deliveryBadge: {
+    backgroundColor: colors.primaryFixed,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  deliveryText: {
     fontSize: 12,
-    color: '#059669',
-    backgroundColor: '#ECFDF5',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
+    fontWeight: '600',
+    color: colors.primary,
   },
 });

@@ -2,8 +2,8 @@ name: Production Deploy
 
 on:
   push:
-    branches: [main]
     tags: ['v*']
+  workflow_dispatch:
 
 concurrency:
   group: production-deploy
@@ -12,7 +12,7 @@ concurrency:
 env:
   NODE_VERSION: '20'
   GCP_REGION: us-central1
-  CLOUD_RUN_SERVICE: finventory-api-prod
+  GCP_PROJECT_ID: finventory-prod
 
 jobs:
   test:
@@ -31,10 +31,17 @@ jobs:
       - run: npm run lint
 
       - name: Type Check
-        run: npx tsc --noEmit || true
+        run: npx tsc --noEmit || echo "Type check failed, continuing..."
+        continue-on-error: true
 
-  build:
-    name: Build
+      - name: Test Cloud Functions
+        working-directory: ./functions
+        run: |
+          npm ci
+          npm test
+
+  build-functions:
+    name: Build Cloud Functions
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -45,16 +52,84 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - run: npm ci
-      - run: npm run build
+      - name: Build Cloud Functions
+        working-directory: ./functions
+        run: |
+          npm ci
+          npm run build
 
-  deploy-firebase:
-    name: Deploy Firebase Rules
+  build-web:
+    name: Build Web Container
     runs-on: ubuntu-latest
-    needs: [test, build]
+    needs: test
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY_PROD }}'
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build and Push Web Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/web
+          push: true
+          tags: |
+            us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }}
+            us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VITE_FIREBASE_API_KEY=${{ secrets.VITE_FIREBASE_API_KEY }}
+            VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+            VITE_FIREBASE_PROJECT_ID=${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+            VITE_FIREBASE_STORAGE_BUCKET=${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+            VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+            VITE_FIREBASE_APP_ID=${{ secrets.VITE_FIREBASE_APP_ID }}
+            VITE_PEXELS_API_KEY=${{ secrets.VITE_PEXELS_API_KEY_PROD }}
+
+  deploy-cloud-run:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    needs: [build-functions, build-web]
     environment:
       name: production
-      url: https://api.finventory.app
+      url: https://finventory-prod-web-${GCP_REGION}-a.run.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY_PROD }}'
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy finventory-prod-web \
+            --image us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }} \
+            --region ${{ env.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars=NODE_ENV=production
+
+  deploy-firebase:
+    name: Deploy Firebase Rules & Functions
+    runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v4
 
@@ -69,48 +144,7 @@ jobs:
         id: auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCLOUD_AUTH_KEY }}
-
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools@13.14.0
-
-      - name: Deploy Firestore Rules
-        if: hashFiles('firestore.rules') != ''
-        run: firebase deploy --only firestore:rules --project finventory-prod
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
-      - name: Deploy Storage Rules
-        if: hashFiles('storage.rules') != ''
-        run: firebase deploy --only storage --project finventory-prod
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
-      - name: Deploy Cloud Functions
-        if: hashFiles('functions/package.json') != ''
-        run: |
-          cd functions
-          npm ci
-          npm run build
-          firebase deploy --only functions --project finventory-prod
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
-  deploy-functions:
-    name: Deploy Cloud Functions (Production)
-    runs-on: ubuntu-latest
-    needs: [test, build]
-    if: hashFiles('functions/package.json') != ''
-    environment:
-      name: production
-      url: https://api.finventory.app
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          credentials_json: ${{ secrets.GCP_SA_KEY_PROD }}
 
       - name: Install and build functions
         run: |
@@ -121,68 +155,28 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools@13.14.0
 
-      - name: Deploy Cloud Functions
-        run: firebase deploy --only functions --project finventory-prod
+      - name: Deploy Firestore Rules
+        if: ${{ hashFiles('firestore.rules') != '' }}
+        run: firebase deploy --only firestore:rules --project ${{ env.GCP_PROJECT_ID }}
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
-  deploy-cloud-run:
-    name: Deploy Cloud Run (Production)
-    runs-on: ubuntu-latest
-    needs: [test, build]
-    environment:
-      name: production
-      url: https://api.finventory.app
-    steps:
-      - uses: actions/checkout@v4
+      - name: Deploy Storage Rules
+        if: ${{ hashFiles('storage.rules') != '' }}
+        run: firebase deploy --only storage --project ${{ env.GCP_PROJECT_ID }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
-      - name: Check for Dockerfile
-        id: check-dockerfile
-        run: |
-          if [ -f "apps/api/Dockerfile" ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Authenticate to GCP
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCLOUD_AUTH_KEY }}
-
-      - name: Set up Cloud SDK
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: finventory-prod
-
-      - name: Configure Docker
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
-
-      - name: Build and Push Container
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        run: |
-          IMAGE_TAG=${{ env.GCP_REGION }}-docker.pkg.dev/finventory-prod/finventory/${{ env.CLOUD_RUN_SERVICE }}:${{ github.sha }}
-          docker build -t $IMAGE_TAG ./apps/api
-          docker push $IMAGE_TAG
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-
-      - name: Deploy to Cloud Run
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        run: |
-          gcloud run deploy ${{ env.CLOUD_RUN_SERVICE }} \
-            --image ${{ env.IMAGE_TAG }} \
-            --region ${{ env.GCP_REGION }} \
-            --platform managed \
-            --no-allow-unauthenticated \
-            --set-env-vars NODE_ENV=production
+      - name: Deploy Cloud Functions
+        run: firebase deploy --only functions --project ${{ env.GCP_PROJECT_ID }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_PROD }}
 
   notify:
     name: Notify Deployment
     runs-on: ubuntu-latest
-    needs: [deploy-firebase, deploy-functions, deploy-cloud-run]
+    needs: [deploy-cloud-run, deploy-firebase]
     if: always()
     steps:
       - name: Deployment Summary
@@ -190,4 +184,5 @@ jobs:
           echo "## Production Deployment Complete" >> $GITHUB_STEP_SUMMARY
           echo "- Ref: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Web: https://finventory-prod-web-${GCP_REGION}-a.run.app" >> $GITHUB_STEP_SUMMARY
+          echo "- Functions: Firebase Cloud Functions" >> $GITHUB_STEP_SUMMARY

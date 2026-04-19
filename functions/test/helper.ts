@@ -14,21 +14,33 @@ export async function setupTestEnv(): Promise<firebase.RulesTestEnvironment> {
     },
   });
 
-  // Initialize admin app for tests
-  adminApp = admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-    projectId: PROJECT_ID,
-  });
+  // Initialize admin app for tests to use emulator
+  if (!admin.apps || admin.apps.length === 0) {
+    const settings = {
+      projectId: PROJECT_ID,
+    };
+    adminApp = admin.initializeApp(settings);
+  } else {
+    adminApp = admin.app();
+  }
 
   return testEnv;
 }
 
 export async function cleanupTestEnv(testEnv: firebase.RulesTestEnvironment): Promise<void> {
   if (adminApp) {
-    await adminApp.delete();
+    try {
+      await adminApp.delete();
+    } catch {
+      // Ignore deletion errors
+    }
     adminApp = null;
   }
-  await testEnv.cleanup();
+  try {
+    await testEnv.cleanup();
+  } catch {
+    // Ignore cleanup errors
+  }
 }
 
 export async function clearFirestore(testEnv: firebase.RulesTestEnvironment): Promise<void> {
