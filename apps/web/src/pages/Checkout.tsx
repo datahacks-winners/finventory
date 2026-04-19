@@ -33,7 +33,13 @@ export default function Checkout() {
     const savedCart = localStorage.getItem(CART_STORAGE_KEY)
     if (savedCart) {
       try {
-        setCart(JSON.parse(savedCart))
+        const parsed = JSON.parse(savedCart) as CartItem[]
+        // Filter out items without valid IDs
+        const valid = parsed.filter(item => item?.listing?.id)
+        setCart(valid)
+        if (valid.length !== parsed.length) {
+          localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(valid))
+        }
       } catch {
         setCart([])
       }
@@ -76,22 +82,48 @@ export default function Checkout() {
     setLoading(true)
     setError(null)
     const orderIds: string[] = []
+    const invalidItems: CartItem[] = []
 
     try {
       for (const item of cart) {
-        const result = await createOrder(
-          item.listing.id,
-          item.weight,
-          item.deliveryOption
-        )
-        if (result.success) {
-          orderIds.push(result.orderId)
+        try {
+          const result = await createOrder(
+            item.listing.id,
+            item.weight,
+            item.deliveryOption
+          )
+          if (result.success) {
+            orderIds.push(result.orderId)
+          }
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : ''
+          // If listing not found, mark as invalid
+          if (msg.includes('not found') || msg.includes('not-found')) {
+            invalidItems.push(item)
+          } else {
+            throw err // Re-throw other errors
+          }
         }
       }
 
-      setPlacedOrders(orderIds)
-      setSuccess(true)
-      clearCart()
+      // Remove invalid items from cart
+      if (invalidItems.length > 0) {
+        const invalidIds = new Set(invalidItems.map(i => i.listing.id))
+        setCart(prev => {
+          const updated = prev.filter(item => !invalidIds.has(item.listing.id))
+          localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updated))
+          return updated
+        })
+        setError(`${invalidItems.length} item(s) no longer available and removed from cart`)
+        setLoading(false)
+        return
+      }
+
+      if (orderIds.length > 0) {
+        setPlacedOrders(orderIds)
+        setSuccess(true)
+        clearCart()
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to place order')
     } finally {
