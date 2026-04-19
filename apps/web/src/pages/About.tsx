@@ -1,3 +1,9 @@
+const TEAM = [
+  { name: 'Justin Lo', role: 'Founder & CEO', harbor: 'Portland, ME', fun: 'Once spent a month on a research vessel in the Arctic.' },
+  { name: 'Mikey Nguyen', role: 'Operations Lead', harbor: 'Gloucester, MA', fun: 'Collects vintage sea charts from the 1800s.' },
+  { name: 'Govind Sriram', role: 'Head of Logistics', harbor: 'New Bedford, MA', fun: 'Champion oyster shucker (3rd place, 2021).' },
+  { name: 'Steven Ngo', role: 'Sustainability Director', harbor: 'Woods Hole, MA', fun: 'Can identify any Atlantic fish by its scales.' },
+]
 const VALUES = [
   { icon: 'analytics', iconBg: 'bg-primary-container', iconColor: 'text-on-primary-container', title: 'Traceability', desc: 'Every catch is tracked from the specific GPS coordinate to the final delivery signature.', offset: false },
   { icon: 'payments', iconBg: 'bg-secondary-container', iconColor: 'text-on-secondary-container', title: 'Fair pay', desc: 'We cut out the middlemen to ensure harvesters take home 25% more than industry averages.', offset: true },
@@ -109,6 +115,33 @@ export default function About() {
           </div>
         </section>
 
+        {/* ── Team ── */}
+        <section className="px-6 py-24 bg-surface-container-low">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-20">
+              <h2 className="text-5xl font-extrabold tracking-tighter mb-4">Meet the Crew</h2>
+              <p className="text-on-surface-variant">The navigators behind the marketplace.</p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {TEAM.map(member => (
+                <div
+                  key={member.name}
+                  className="group relative bg-white p-8 rounded-lg text-center shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+                >
+                  <div className="relative w-32 h-32 mx-auto mb-6">
+                    <div className="w-full h-full rounded-full bg-primary-container" />
+                    <div className="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full text-white p-4 text-xs font-medium">
+                      "{member.fun}"
+                    </div>
+                  </div>
+                  <h4 className="text-xl font-bold">{member.name}</h4>
+                  <p className="text-primary font-medium text-sm mb-1">{member.role}</p>
+                  <p className="text-on-surface-variant text-xs italic">Home harbor: {member.harbor}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
         {/* ── CTA ── */}
         <section className="px-6 py-32 bg-surface">
           <div className="max-w-7xl mx-auto">

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { httpsCallable } from 'firebase/functions'
-import { functions } from '../firebase'
+
+const RAG_SEARCH_URL = 'https://ragsearchhttp-593576627371.us-central1.run.app'
 
 interface Message {
   id: string
@@ -73,13 +73,16 @@ export default function SlopNavBot() {
     setMessages(prev => [...prev, userMessage])
 
     try {
-      if (!functions) {
-        throw new Error('Firebase Functions not initialized')
-      }
-      // Use Firebase callable function instead of raw fetch
-      const ragSearchCallable = httpsCallable(functions, 'ragSearch')
-      const result = await ragSearchCallable({ query: userMsg, limit: 5 })
-      const data = result.data as { answer: string; listings?: Message['listings'] }
+      // Use HTTP endpoint instead of Firebase callable
+      const response = await fetch(RAG_SEARCH_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: userMsg, limit: 5 })
+      })
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+
+      const data = await response.json() as { answer: string; listings?: Message['listings'] }
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),

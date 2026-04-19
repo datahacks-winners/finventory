@@ -17,7 +17,7 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,95,147,0.06)]">
-      <div className="flex items-center justify-between px-6 lg:px-12 py-5 w-full max-w-screen-2xl mx-auto">
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center px-6 lg:px-12 py-5 w-full max-w-screen-2xl mx-auto">
         {/* Left: Logo */}
         <Link
           to="/"
@@ -26,8 +26,8 @@ export default function Navbar() {
           Finventory
         </Link>
 
-        {/* Center: Navigation - absolutely centered on viewport */}
-        <div className="hidden md:flex gap-10 items-center absolute left-1/2 -translate-x-1/2 top-[22px]">
+        {/* Center: Navigation - truly centered via grid */}
+        <div className="hidden md:flex gap-10 items-center">
           {NAV_LINKS.map(link => (
             <Link
               key={link.to}
@@ -55,8 +55,8 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Right: Auth buttons - pushed to right by justify-between */}
-        <div className="flex gap-4 items-center">
+        {/* Right: Auth buttons */}
+        <div className="flex gap-4 items-center justify-end">
           {user ? (
             <>
               <span className="text-slate-600 text-sm hidden lg:inline">{user.displayName || user.email}</span>

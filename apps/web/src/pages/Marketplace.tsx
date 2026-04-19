@@ -333,17 +333,17 @@ export default function Marketplace() {
       {/* Header */}
       <div className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+          <div className="flex items-center gap-4">
             {/* Title & Count */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-none">
               <h1 className="text-2xl font-black text-slate-900">Fish Market</h1>
-              <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-bold">
+              <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-bold whitespace-nowrap">
                 {filteredListings.length} available
               </span>
             </div>
 
             {/* Search */}
-            <div className="flex-1 max-w-xl relative">
+            <div className="flex-1 relative">
               <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                 search
               </span>
@@ -357,7 +357,7 @@ export default function Marketplace() {
             </div>
 
             {/* Sort & Cart */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-none">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'distance' | 'price' | 'freshness')}
