@@ -5,6 +5,9 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  GoogleAuthProvider,
+  OAuthProvider,
+  signInWithPopup,
   type User
 } from 'firebase/auth'
 import { auth } from '../firebase'
@@ -15,6 +18,8 @@ interface AuthContextType {
   error: string | null
   signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string, displayName: string) => Promise<void>
+  signInWithGoogle: () => Promise<void>
+  signInWithApple: () => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -60,6 +65,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const signInWithGoogle = async () => {
+    setError(null)
+    if (!auth) throw new Error('Auth not available')
+    try {
+      const provider = new GoogleAuthProvider()
+      provider.addScope('email')
+      provider.addScope('profile')
+      provider.setCustomParameters({ prompt: 'select_account' })
+      await signInWithPopup(auth, provider)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Google sign in failed')
+      throw err
+    }
+  }
+
+  const signInWithApple = async () => {
+    setError(null)
+    if (!auth) throw new Error('Auth not available')
+    try {
+      const provider = new OAuthProvider('apple.com')
+      provider.addScope('email')
+      provider.addScope('name')
+      await signInWithPopup(auth, provider)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Apple sign in failed')
+      throw err
+    }
+  }
+
   const logout = async () => {
     setError(null)
     if (!auth) throw new Error('Auth not available')
@@ -72,7 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, signIn, signUp, logout }}>
+    <AuthContext.Provider value={{ user, loading, error, signIn, signUp, signInWithGoogle, signInWithApple, logout }}>
       {children}
     </AuthContext.Provider>
   )
