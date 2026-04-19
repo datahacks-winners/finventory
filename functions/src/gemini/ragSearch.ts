@@ -18,18 +18,17 @@ interface RagSearchResult {
   }>
 }
 
-// Use Cloud SQL connection directly
+// Use Cloud SQL Unix socket (works on Cloud Run)
 const getPool = (): Pool => {
   return new Pool({
-    host: '34.173.49.141',
-    port: 5432,
+    host: '/cloudsql/finventory-1776558252:us-central1:finventory-1776558252-vector-store',
     database: 'rag_vectors',
     user: 'rag_user',
     password: process.env.DB_PASSWORD || '',
     ssl: false,
-    max: 10,
+    max: 5,
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 5000
+    connectionTimeoutMillis: 10000
   })
 }
 
