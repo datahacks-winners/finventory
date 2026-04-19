@@ -49,7 +49,7 @@ export async function analyzeFishPhoto(
 
   const token = await user.getIdToken()
 
-  const response = await fetch(`${API_URL}/analyze-fish`, {
+  const response = await fetch(`${API_URL}/api/analyze-fish`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -6,6 +6,9 @@ domain_name        = "finventory.app"
 # TODO: Replace with actual OAuth credentials
 org_id = "" # Empty for no org
 
+# Billing account for GCP
+billing_account = "01CE42-1734CB-B1DF58"
+
 # Placeholder values - must be replaced before apply
 google_oauth_client_id      = "placeholder-client-id"
 google_oauth_client_secret  = "placeholder-client-secret"

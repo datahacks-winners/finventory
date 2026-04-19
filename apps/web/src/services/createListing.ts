@@ -34,7 +34,7 @@ export async function createListing(
 
   const token = await user.getIdToken()
 
-  const response = await fetch(`${API_URL}/listings`, {
+  const response = await fetch(`${API_URL}/api/listings`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

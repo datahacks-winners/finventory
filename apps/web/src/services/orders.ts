@@ -49,7 +49,7 @@ export async function createOrder(
   const auth = getAuth()
   const user = auth.currentUser
 
-  const response = await fetch(`${API_URL}/orders`, {
+  const response = await fetch(`${API_URL}/api/orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export async function confirmPickup(
 ): Promise<{ success: boolean; alreadyPickedUp: boolean }> {
   const token = await getAuthToken()
 
-  const response = await fetch(`${API_URL}/orders/${orderId}/confirm-pickup`, {
+  const response = await fetch(`${API_URL}/api/orders/${orderId}/confirm-pickup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ export async function confirmPickup(
 export async function cancelOrder(orderId: string): Promise<{ success: boolean }> {
   const token = await getAuthToken()
 
-  const response = await fetch(`${API_URL}/orders/${orderId}/cancel`, {
+  const response = await fetch(`${API_URL}/api/orders/${orderId}/cancel`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

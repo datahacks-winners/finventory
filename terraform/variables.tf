@@ -54,3 +54,14 @@ variable "org_id" {
   description = "GCP organization ID"
   type        = string
 }
+
+variable "billing_account" {
+  description = "GCP billing account ID"
+  type        = string
+}
+
+variable "seed_production_data" {
+  description = "Whether to seed production database with sample data"
+  type        = bool
+  default     = false
+}
