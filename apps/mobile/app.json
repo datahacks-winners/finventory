@@ -38,7 +38,16 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "@react-native-firebase/app",
+      [
+        "@react-native-firebase/auth",
+        {
+          "provider": "email"
+        }
+      ],
+      "@react-native-firebase/firestore",
+      "@react-native-firebase/messaging"
     ],
     "experiments": {
       "typedRoutes": true,
