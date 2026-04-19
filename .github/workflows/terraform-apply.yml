@@ -4,13 +4,11 @@ on:
   push:
     branches:
       - develop
-      - main
     paths:
       - 'terraform/**'
   pull_request:
     branches:
       - develop
-      - main
     paths:
       - 'terraform/**'
   workflow_dispatch:
@@ -66,11 +64,6 @@ jobs:
 
       - name: Apply to develop
         if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-        working-directory: ./terraform
-        run: terraform apply -auto-approve tfplan
-
-      - name: Apply to main (requires approval)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./terraform
         run: terraform apply -auto-approve tfplan
         environment: production
