@@ -2,7 +2,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import OceanCanvas from '../components/OceanCanvas'
 import { PexelsImage } from '../components/PexelsImage'
 import { usePexelsBatch, usePexels } from '../hooks/usePexels'
-import { AnimatedNumber } from '../components/AnimatedNumber'
 import { useListings } from '../hooks/useListings'
 import { getFallbackUrl } from '../services/pexels'
 import { useMemo, useState, useEffect } from 'react'
@@ -32,14 +31,14 @@ function sanitizePhotoUrl(url: string | undefined, _species: string): string | u
 const WHY_CARDS = [
   { icon: 'set_meal', bg: '#0077B6', textClass: 'text-white', title: 'Rescue the catch', desc: 'List bycatch and unsold hauls in seconds. Move surplus before it spoils.' },
   { icon: 'location_on', bg: '#F4743B', textClass: 'text-white', title: 'Local, by design', desc: "Map-first discovery shows what's available within miles, not days." },
-  { icon: 'eco', bg: '#FFCA4D', textClass: 'text-on-background', title: 'Visible impact', desc: 'Every order tracks pounds saved and emissions avoided — backed by CALCOFI data.' },
+  { icon: 'eco', bg: '#FFCA4D', textClass: 'text-on-background', title: 'Community first', desc: 'Direct connections between boats and kitchens, backed by CalCOFI data.' },
 ]
 
 const HOW_STEPS = [
   { n: '1', title: 'List', desc: 'Suppliers post crates with weight, species, and pickup window.' },
   { n: '2', title: 'Discover', desc: 'Buyers spot deals on a map sorted by distance and freshness.' },
   { n: '3', title: 'Reserve', desc: 'One-tap reserve. Payment held until pickup confirms.' },
-  { n: '4', title: 'Impact', desc: 'Every transaction logs lbs saved & CO₂ avoided to your dashboard.' },
+  { n: '4', title: 'Impact', desc: 'Every transaction supports regional fishers and keeps the coast thriving.' },
 ]
 
 // Fresh Catch Grid - responsive grid layout
@@ -447,7 +446,7 @@ export default function Home() {
             to chefs and bulk buyers — at prices that keep boats running and oceans thriving.
           </p>
 
-          <div className="flex flex-wrap gap-6 mb-24">
+          <div className="flex flex-wrap gap-6">
             <Link
               to="/marketplace"
               className="bg-sunset-yellow text-on-background px-10 py-5 rounded-full font-bold text-lg flex items-center gap-2 hover:scale-105 transition-transform"
@@ -461,21 +460,6 @@ export default function Home() {
             >
               I'm a supplier
             </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-white/20">
-            {[
-              { value: 18, suffix: 'k+', label: 'LBS RESCUED' },
-              { value: 240, suffix: 't', label: 'CO₂ SAVED' },
-              { value: 120, suffix: '+', label: 'COASTAL PARTNERS' },
-            ].map(s => (
-              <div key={s.label} className="flex flex-col">
-                <span className="italic-accent-caveat text-5xl text-sunset-yellow">
-                  <AnimatedNumber value={s.value} suffix={s.suffix} duration={2} />
-                </span>
-                <span className="text-xs font-bold uppercase tracking-widest text-white/60">{s.label}</span>
-              </div>
-            ))}
           </div>
         </div>
       </section>

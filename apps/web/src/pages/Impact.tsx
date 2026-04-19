@@ -94,54 +94,6 @@ export default function Impact() {
           </div>
         </section>
 
-        {/* ── Impact cards ── */}
-        <section className="px-12 py-32 bg-white">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: 'eco', iconBg: 'bg-primary/10', iconColor: 'text-primary',
-                  title: 'Ocean Conservation',
-                  desc: 'By redirecting surplus catch before it hits landfills, we maintain the delicate nitrogen balance of coastal shelf ecosystems.',
-                  metric: 82, suffix: '%', metricLabel: 'Efficiency Increase', metricColor: 'text-primary',
-                },
-                {
-                  icon: 'distance', iconBg: 'bg-secondary/10', iconColor: 'text-secondary',
-                  title: 'Logistics Precision',
-                  desc: 'Our routing algorithms eliminate cold-chain gaps, reducing the average transport distance by 314 miles per shipment.',
-                  metric: 314, suffix: 'mi', metricLabel: 'Avg. Saved per Haul', metricColor: 'text-secondary',
-                },
-                {
-                  icon: 'payments', iconBg: 'bg-tertiary/10', iconColor: 'text-tertiary',
-                  title: 'Community Capital',
-                  desc: 'Profit redirection back to independent fishers, ensuring the survival of heritage fishing fleets across New England.',
-                  metric: 14, prefix: '+', suffix: '%', metricLabel: 'Net Margin Increase', metricColor: 'text-tertiary',
-                },
-              ].map(card => (
-                <div key={card.title} className="bg-surface-container-low p-10 rounded-2xl flex flex-col justify-between h-full border border-outline-variant/30">
-                  <div>
-                    <div className={`w-12 h-12 ${card.iconBg} ${card.iconColor} rounded-lg flex items-center justify-center mb-6`}>
-                      <span className="material-symbols-outlined">{card.icon}</span>
-                    </div>
-                    <h3 className="text-2xl font-bold mb-4">{card.title}</h3>
-                    <p className="text-on-surface-variant leading-relaxed">{card.desc}</p>
-                  </div>
-                  <div className="mt-8 pt-6 border-t border-outline-variant/30">
-                    <span className={`text-3xl font-black ${card.metricColor}`}>
-                      <AnimatedNumber
-                        value={card.metric}
-                        prefix={card.prefix}
-                        suffix={card.suffix}
-                        duration={2}
-                      />
-                    </span>
-                    <span className="text-sm font-bold text-outline block mt-1">{card.metricLabel}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* ── Authentic story ── */}
         <section className="px-12 py-32 bg-surface-container-lowest">
