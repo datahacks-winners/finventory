@@ -47,12 +47,10 @@ export default function TempBinsChart({ className }: { className?: string }) {
   }
 
   return (
-    <div className="w-full overflow-x-auto">
-      <div
-        ref={chartRef}
-        className={`${className}`}
-        style={{ minHeight: '400px' }}
-      />
-    </div>
+    <div
+      ref={chartRef}
+      className={`${className} w-full`}
+      style={{ minHeight: '400px' }}
+    />
   )
 }
