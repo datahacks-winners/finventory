@@ -55,3 +55,25 @@ tmp/
 
 # Git worktrees
 .worktrees/
+
+# Local Python env & caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Notebooks — track only runnable sources + README (regenerate artefacts locally)
+notebooks/**
+!notebooks/**/*.py
+!notebooks/**/*.ipynb
+!notebooks/README.md
+
+# CalCOFI inference API — trained artefacts (generate via train_export_models.py)
+services/calcofi-api/models/*
+!services/calcofi-api/models/.gitkeep
+
+# CalCOFI / raw data — too large for git (see notebooks/README.md)
+data/
+
