@@ -66,17 +66,25 @@ export default function CalcofiInference() {
   const predictXGB = async () => {
     setLoading(true)
     setError(null)
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 60000) // 60s timeout
     try {
       const res = await fetch(`${API_BASE}/v1/predict/xgb-binned-5yr`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ features }),
+        signal: controller.signal,
       })
+      clearTimeout(timeoutId)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       setXgbResult(data.log1p_mean_larvae_10m2)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Prediction failed')
+      if (e instanceof Error && e.name === 'AbortError') {
+        setError('Request timed out (API cold start ~30-60s). Try again.')
+      } else {
+        setError(e instanceof Error ? e.message : 'Prediction failed')
+      }
     } finally {
       setLoading(false)
     }
@@ -85,17 +93,25 @@ export default function CalcofiInference() {
   const predictOLS = async () => {
     setLoading(true)
     setError(null)
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 60000)
     try {
       const res = await fetch(`${API_BASE}/v1/predict/ols-binned-10yr`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ features }),
+        signal: controller.signal,
       })
+      clearTimeout(timeoutId)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       setOlsResult(data.log1p_mean_larvae_10m2)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Prediction failed')
+      if (e instanceof Error && e.name === 'AbortError') {
+        setError('Request timed out (API cold start ~30-60s). Try again.')
+      } else {
+        setError(e instanceof Error ? e.message : 'Prediction failed')
+      }
     } finally {
       setLoading(false)
     }
@@ -104,17 +120,25 @@ export default function CalcofiInference() {
   const predictForecast = async () => {
     setLoading(true)
     setError(null)
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 120000) // TimesFM needs more time
     try {
       const res = await fetch(`${API_BASE}/v1/forecast/timesfm`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ history, horizon, variant: 'binned_5yr' }),
+        signal: controller.signal,
       })
+      clearTimeout(timeoutId)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       setForecastResult(data.point_forecast)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Forecast failed')
+      if (e instanceof Error && e.name === 'AbortError') {
+        setError('Request timed out (TimesFM slow cold start ~60-120s). Try again.')
+      } else {
+        setError(e instanceof Error ? e.message : 'Forecast failed')
+      }
     } finally {
       setLoading(false)
     }
