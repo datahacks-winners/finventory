@@ -1,6 +1,5 @@
 {
   "projects": {
-    "default": "finventory-dev",
-    "production": "finventory-prod"
+    "default": "finventory"
   }
 }
