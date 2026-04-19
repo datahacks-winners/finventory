@@ -71,9 +71,9 @@ export default function Impact() {
               CalCOFI larval egg surveys show egg density declining sharply beyond 14°C. As the Pacific warms, spawning success falls — making every rescued pound of existing catch more critical than ever.
             </p>
           </div>
-          <div className="w-full bg-surface-container-low border-y border-outline-variant/20 overflow-hidden">
-            <p className="text-xs font-bold uppercase tracking-widest text-outline px-4 md:px-8 pt-6">Egg Density vs. Surface Temperature</p>
-            <div className="px-4 md:px-8 pb-6">
+          <div className="w-full bg-surface-container-low border-y border-outline-variant/20">
+            <p className="text-xs font-bold uppercase tracking-widest text-outline px-4 md:px-8 lg:px-12 pt-6 max-w-7xl mx-auto">Egg Density vs. Surface Temperature</p>
+            <div className="px-4 md:px-8 lg:px-12 pb-6 max-w-7xl mx-auto">
               <TempBinsChart className="w-full" />
             </div>
           </div>

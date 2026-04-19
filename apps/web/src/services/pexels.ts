@@ -134,20 +134,20 @@ export function getFallbackUrl(query: string): string {
     'yellowfin tuna': 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
 
     // ═══════════════════════════════════════════════════════════════
-    // CRAB - Dungeness and other crabs (live crab on beach)
+    // CRAB - Using Pexels since Unsplash IDs were incorrect
     // ═══════════════════════════════════════════════════════════════
-    crab: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
-    'dungeness crab': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
-    'red rock crab': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
-    'snow crab': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
-    'king crab': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
+    crab: 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'dungeness crab': 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'red rock crab': 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'snow crab': 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'king crab': 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
 
     // ═══════════════════════════════════════════════════════════════
-    // LOBSTER - Fresh Maine/California lobster
+    // LOBSTER - Using Pexels verified lobster image
     // ═══════════════════════════════════════════════════════════════
-    lobster: 'https://images.unsplash.com/photo-1551248429-40975aa4de74?w=800&auto=format&fit=crop&q=80',
-    'spiny lobster': 'https://images.unsplash.com/photo-1551248429-40975aa4de74?w=800&auto=format&fit=crop&q=80',
-    'maine lobster': 'https://images.unsplash.com/photo-1551248429-40975aa4de74?w=800&auto=format&fit=crop&q=80',
+    lobster: 'https://images.pexels.com/photos/566345/pexels-photo-566345.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'spiny lobster': 'https://images.pexels.com/photos/566345/pexels-photo-566345.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'maine lobster': 'https://images.pexels.com/photos/566345/pexels-photo-566345.jpeg?auto=compress&cs=tinysrgb&w=800',
 
     // ═══════════════════════════════════════════════════════════════
     // ROCKFISH - California rockfish species
@@ -230,10 +230,10 @@ export function getFallbackUrl(query: string): string {
     // ═══════════════════════════════════════════════════════════════
     // CEPHALOPODS - Squid and octopus
     // ═══════════════════════════════════════════════════════════════
-    squid: 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=800&auto=format&fit=crop&q=80',
-    'market squid': 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=800&auto=format&fit=crop&q=80',
-    'humboldt squid': 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=800&auto=format&fit=crop&q=80',
-    octopus: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80',
+    squid: 'https://images.pexels.com/photos/361184/asparagus-squid-octopus-361184.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'market squid': 'https://images.pexels.com/photos/361184/asparagus-squid-octopus-361184.jpeg?auto=compress&cs=tinysrgb&w=800',
+    'humboldt squid': 'https://images.pexels.com/photos/361184/asparagus-squid-octopus-361184.jpeg?auto=compress&cs=tinysrgb&w=800',
+    octopus: 'https://images.pexels.com/photos/361184/asparagus-squid-octopus-361184.jpeg?auto=compress&cs=tinysrgb&w=800',
 
     // ═══════════════════════════════════════════════════════════════
     // CABEZON - California bottom fish
