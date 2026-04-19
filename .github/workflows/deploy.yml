@@ -58,9 +58,7 @@ jobs:
         run: npm install -g firebase-tools@13.14.0
 
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v2.6.0
-        with:
-          args: deploy --only functions,firestore:rules,storage:rules --project finventory-dev
+        run: firebase deploy --only functions,firestore:rules,storage:rules --project finventory-dev
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
@@ -98,9 +96,7 @@ jobs:
         run: npm install -g firebase-tools@13.14.0
 
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v2.6.0
-        with:
-          args: deploy --only functions,firestore:rules,storage:rules --project finventory-prod
+        run: firebase deploy --only functions,firestore:rules,storage:rules --project finventory-prod
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
