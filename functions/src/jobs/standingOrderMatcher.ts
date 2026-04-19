@@ -3,6 +3,7 @@ import * as admin from 'firebase-admin'
 import { db } from '../config.js'
 import { distanceInMiles } from '../utils/geohash.js'
 import { notifyStandingOrderMatch } from '../utils/notifications.js'
+import type { Listing } from '../api/listings.js'
 
 /**
  * Scheduled function - runs every 5 minutes
@@ -40,11 +41,11 @@ export const matchStandingOrders = onSchedule(
 
     // Check each listing against each standing order
     for (const listingDoc of listingsSnapshot.docs) {
-      const listing = listingDoc.data()!
+      const listing = listingDoc.data()! as Listing
       const listingId = listingDoc.id
 
       for (const soDoc of standingOrdersSnapshot.docs) {
-        const order = soDoc.data()!
+        const order = soDoc.data()! as StandingOrder
 
         // Skip if recently matched (within last hour)
         if (order.lastMatchedAt) {
@@ -81,6 +82,7 @@ export const matchStandingOrders = onSchedule(
 )
 
 interface StandingOrder {
+  buyerId: string
   species: string[]
   minGrade: string
   maxPricePerUnit?: number

@@ -3,6 +3,7 @@ import * as admin from 'firebase-admin'
 import { db, rtdb } from '../config.js'
 import { distanceInMiles } from '../utils/geohash.js'
 import { notifyStandingOrderMatch } from '../utils/notifications.js'
+import type { Listing } from '../api/listings.js'
 
 /**
  * Triggered when a new listing is created
@@ -13,7 +14,7 @@ export const onListingCreated = onDocumentCreated('listings/{listingId}', async 
   const snap = event.data
   if (!snap) return
 
-  const listing = snap.data()!
+  const listing = snap.data()! as Listing
   const listingId = event.params.listingId
 
   // Update real-time inventory

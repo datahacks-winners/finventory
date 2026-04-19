@@ -1,4 +1,4 @@
-import admin from 'firebase-admin'
+import * as admin from 'firebase-admin'
 
 // Cloud Functions auto-initializes admin in production
 // Explicitly initialize for local development/testing

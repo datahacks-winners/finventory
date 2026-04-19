@@ -15,7 +15,7 @@ export const onListingCreated = onDocumentCreated('listings/{listingId}', async 
     const listing = snap.data();
     const listingId = event.params.listingId;
     // Update real-time inventory
-    await rtdb.ref(`live_inventory/${listingId}`).set({
+    await rtdb().ref(`live_inventory/${listingId}`).set({
         count: listing.quantity,
         status: listing.status,
         lastUpdated: admin.database.ServerValue.TIMESTAMP

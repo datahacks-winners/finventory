@@ -1,4 +1,4 @@
-import geohash from 'ngeohash'
+import * as geohash from 'ngeohash'
 import * as admin from 'firebase-admin'
 
 export interface GeoPoint {
