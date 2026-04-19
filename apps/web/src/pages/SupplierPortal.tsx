@@ -22,14 +22,16 @@ interface Listing {
   createdAt: Timestamp
 }
 
-const SPARKLINE_DATA = {
+ 
+const _MOCK_SPARKLINE_DATA = {
   crates: [2, 4, 3, 5, 7, 6, 8],
   lbs: [45, 82, 63, 110, 145, 120, 180],
   revenue: [580, 1200, 890, 1650, 2100, 1750, 2400],
   pickup: [12, 18, 15, 22, 28, 24, 32],
 }
 
-const KPI_CARDS = [
+ 
+const _MOCK_KPI_CARDS = [
   { label: 'Crates listed', value: '8', icon: 'inventory_2', key: 'crates' as const },
   { label: 'lbs rescued', value: '180', icon: 'set_meal', key: 'lbs' as const },
   { label: 'revenue', value: '$2,400', icon: 'payments', key: 'revenue' as const },
@@ -234,7 +236,7 @@ export default function SupplierPortal() {
       </section>
 
       <section className="px-12 max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 -mt-10 relative z-20">
-        {KPI_CARDS.map((kpi) => (
+        {_MOCK_KPI_CARDS.map((kpi) => (
           <div
             key={kpi.label}
             className="bg-surface-container-lowest p-8 rounded-lg ocean-shadow group hover:scale-[1.02] transition-transform"
@@ -245,7 +247,7 @@ export default function SupplierPortal() {
               <span className="material-symbols-outlined text-primary-container">{kpi.icon}</span>
             </div>
             <div className="mt-4">
-              <SparklineChart data={SPARKLINE_DATA[kpi.key]} color="#1e78b4" height={32} />
+              <SparklineChart data={_MOCK_SPARKLINE_DATA[kpi.key]} color="#1e78b4" height={32} />
             </div>
           </div>
         ))}

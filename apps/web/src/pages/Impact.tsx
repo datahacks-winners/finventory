@@ -63,17 +63,17 @@ export default function Impact() {
         </section>
 
         {/* ── Charts ── */}
-        <section className="px-4 md:px-8 lg:px-12 py-20 bg-white">
-          <div className="max-w-7xl mx-auto mb-10">
+        <section className="py-20 bg-white">
+          <div className="px-4 md:px-8 lg:px-12 max-w-7xl mx-auto mb-10">
             <span className="italic-accent-caveat text-primary text-2xl block mb-2">CalCOFI Survey Data</span>
             <h2 className="text-4xl font-black tracking-tight text-on-surface">Warming Oceans, Fewer Fish</h2>
             <p className="text-on-surface-variant mt-4 max-w-2xl">
               CalCOFI larval egg surveys show egg density declining sharply beyond 14°C. As the Pacific warms, spawning success falls — making every rescued pound of existing catch more critical than ever.
             </p>
           </div>
-          <div className="w-full bg-surface-container-low rounded-2xl border border-outline-variant/20 overflow-hidden">
-            <p className="text-xs font-bold uppercase tracking-widest text-outline p-6 pb-0">Egg Density vs. Surface Temperature</p>
-            <div className="p-6">
+          <div className="w-full bg-surface-container-low border-y border-outline-variant/20 overflow-hidden">
+            <p className="text-xs font-bold uppercase tracking-widest text-outline px-4 md:px-8 pt-6">Egg Density vs. Surface Temperature</p>
+            <div className="px-4 md:px-8 pb-6">
               <TempBinsChart className="w-full" />
             </div>
           </div>
