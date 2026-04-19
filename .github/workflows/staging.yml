@@ -57,6 +57,22 @@ jobs:
           npm ci
           npm run build
 
+      - name: Package Functions for Terraform
+        working-directory: ./functions
+        run: zip -r ../terraform/function-source.zip lib/ package.json
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Upload to GCS
+        run: |
+          gcloud storage cp terraform/function-source.zip gs://${{ secrets.GCP_PROJECT_ID }}-function-sources/function-source.zip
+
   build-web:
     name: Build Web Container
     runs-on: ubuntu-latest
