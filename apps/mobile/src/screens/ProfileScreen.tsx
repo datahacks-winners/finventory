@@ -7,10 +7,33 @@ import {
   Alert,
   ScrollView,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 import { useAuth } from '../hooks/useAuth';
 import { FirestoreService } from '../services/firebase/firestore';
 import auth from '@react-native-firebase/auth';
+
+// Stitch Theme - Matches Auth & Supplier Portal designs
+const colors = {
+  surface: '#fff8f5',
+  surfaceContainer: '#ffeadc',
+  surfaceContainerLow: '#fff1e9',
+  surfaceContainerHigh: '#f9e4d7',
+  surfaceContainerHighest: '#f3dfd1',
+  onSurface: '#241911',
+  onSurfaceVariant: '#404750',
+  outline: '#707881',
+  outlineVariant: '#c0c7d1',
+  primary: '#005f93',
+  primaryContainer: '#1e78b4',
+  onPrimary: '#ffffff',
+  primaryFixed: '#cde5ff',
+  secondary: '#8c4f14',
+  secondaryContainer: '#fdac6a',
+  onSecondary: '#ffffff',
+  error: '#ba1a1a',
+  errorContainer: '#ffdad6',
+};
 
 export function ProfileScreen() {
   const { user, userProfile, signOut } = useAuth();
@@ -30,8 +53,8 @@ export function ProfileScreen() {
       await auth().currentUser?.updateProfile({ displayName });
       setEditing(false);
       Alert.alert('Success', 'Profile updated');
-    } catch (error: any) {
-      Alert.alert('Error', error.message);
+    } catch (error: unknown) {
+      Alert.alert('Error', error instanceof Error ? error.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -56,100 +79,385 @@ export function ProfileScreen() {
 
   if (!userProfile) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" />
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
 
   return (
-    <ScrollView className="flex-1 bg-gray-50">
-      <View className="p-6">
-        {/* Header */}
-        <View className="items-center mb-6">
-          <View className="w-24 h-24 bg-blue-500 rounded-full items-center justify-center mb-4">
-            <Text className="text-white text-3xl font-bold">
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* Hero Header - Supplier Portal Style */}
+      <View style={styles.hero}>
+        <Text style={styles.heroLabel}>Your Profile</Text>
+        <Text style={styles.heroTitle}>Your dock, digitized.</Text>
+        <Text style={styles.heroSubtitle}>
+          Manage your account and supplier preferences
+        </Text>
+      </View>
+
+      {/* Stats Row - 4 Cards like Supplier Portal */}
+      <View style={styles.statsRow}>
+        <View style={styles.statCard}>
+          <Text style={styles.statLabel}>CRATES LISTED</Text>
+          <View style={styles.statValueRow}>
+            <Text style={styles.statValue}>142</Text>
+            <Text style={styles.statIcon}>📦</Text>
+          </View>
+          <View style={styles.statBar} />
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statLabel}>LBS RESCUED</Text>
+          <View style={styles.statValueRow}>
+            <Text style={styles.statValue}>3,820</Text>
+            <Text style={styles.statIcon}>⚖️</Text>
+          </View>
+          <View style={styles.statBar} />
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statLabel}>REVENUE</Text>
+          <View style={styles.statValueRow}>
+            <Text style={styles.statValue}>$12.4k</Text>
+            <Text style={styles.statIcon}>💵</Text>
+          </View>
+          <View style={styles.statBar} />
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statLabel}>PICKUP TIME</Text>
+          <View style={styles.statValueRow}>
+            <Text style={styles.statValue}>42m</Text>
+            <Text style={styles.statIcon}>⏱️</Text>
+          </View>
+          <View style={styles.statBar} />
+        </View>
+      </View>
+
+      {/* Profile Card - White rounded card like Login */}
+      <View style={styles.profileCard}>
+        {/* Avatar */}
+        <View style={styles.avatarContainer}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>
               {displayName.charAt(0).toUpperCase()}
             </Text>
           </View>
-          <Text className="text-2xl font-bold">{displayName}</Text>
-          <Text className="text-gray-500">{userProfile.email}</Text>
+          <Text style={styles.userName}>{displayName}</Text>
+          <Text style={styles.userEmail}>{userProfile.email}</Text>
         </View>
 
         {/* Edit Form */}
         {editing ? (
-          <View className="mb-4">
-            <Text className="text-gray-700 mb-2 font-semibold">Display Name</Text>
-            <TextInput
-              className="bg-white border border-gray-300 rounded-lg p-3 mb-4"
-              value={displayName}
-              onChangeText={setDisplayName}
-            />
+          <View style={styles.form}>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Display Name</Text>
+              <TextInput
+                style={styles.input}
+                value={displayName}
+                onChangeText={setDisplayName}
+                placeholderTextColor={colors.outline}
+              />
+            </View>
 
-            <Text className="text-gray-700 mb-2 font-semibold">Phone</Text>
-            <TextInput
-              className="bg-white border border-gray-300 rounded-lg p-3 mb-4"
-              value={phone}
-              onChangeText={setPhone}
-              keyboardType="phone-pad"
-            />
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Phone</Text>
+              <TextInput
+                style={styles.input}
+                value={phone}
+                onChangeText={setPhone}
+                keyboardType="phone-pad"
+                placeholderTextColor={colors.outline}
+              />
+            </View>
 
-            <View className="flex-row space-x-3">
+            <View style={styles.buttonRow}>
               <TouchableOpacity
-                className="flex-1 bg-blue-500 rounded-lg p-3"
+                style={styles.saveButton}
                 onPress={handleSave}
                 disabled={loading}
               >
                 {loading ? (
-                  <ActivityIndicator color="white" />
+                  <ActivityIndicator color={colors.onPrimary} />
                 ) : (
-                  <Text className="text-white text-center font-semibold">Save</Text>
+                  <Text style={styles.saveButtonText}>Save Changes</Text>
                 )}
               </TouchableOpacity>
               <TouchableOpacity
-                className="flex-1 bg-gray-300 rounded-lg p-3"
+                style={styles.cancelButton}
                 onPress={() => setEditing(false)}
               >
-                <Text className="text-gray-700 text-center font-semibold">Cancel</Text>
+                <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>
         ) : (
           <TouchableOpacity
-            className="bg-blue-500 rounded-lg p-3 mb-6"
+            style={styles.editButton}
             onPress={() => setEditing(true)}
           >
-            <Text className="text-white text-center font-semibold">Edit Profile</Text>
+            <Text style={styles.editButtonText}>Edit Profile</Text>
           </TouchableOpacity>
         )}
+      </View>
 
-        {/* Account Info */}
-        <View className="bg-white rounded-lg p-4 mb-4">
-          <Text className="text-gray-700 mb-2 font-semibold">Account Type</Text>
-          <Text className="text-gray-900">
+      {/* Account Info Cards */}
+      <View style={styles.infoSection}>
+        <View style={styles.infoCard}>
+          <Text style={styles.infoLabel}>Account Type</Text>
+          <Text style={styles.infoValue}>
             {userProfile.isAnonymous ? 'Anonymous (Guest)' : 'Registered'}
           </Text>
         </View>
 
-        <View className="bg-white rounded-lg p-4 mb-4">
-          <Text className="text-gray-700 mb-2 font-semibold">Providers</Text>
-          {userProfile.providers.map(provider => (
-            <Text key={provider} className="text-gray-900 capitalize">
-              {provider.replace('.com', '')}
-            </Text>
-          ))}
-        </View>
-
-        {/* Sign Out */}
-        <TouchableOpacity
-          className="bg-red-500 rounded-lg p-4"
-          onPress={handleSignOut}
-        >
-          <Text className="text-white text-center font-semibold text-lg">
-            Sign Out
+        <View style={styles.infoCard}>
+          <Text style={styles.infoLabel}>Sign In Method</Text>
+          <Text style={styles.infoValue}>
+            {userProfile.providers?.[0]?.replace('.com', '') || 'Email'}
           </Text>
-        </TouchableOpacity>
+        </View>
       </View>
+
+      {/* Sign Out */}
+      <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
+        <Text style={styles.signOutText}>Sign Out</Text>
+      </TouchableOpacity>
+
+      <View style={styles.bottomPadding} />
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.surface,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+  },
+  hero: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 32,
+  },
+  heroLabel: {
+    fontFamily: 'Caveat',
+    fontSize: 24,
+    color: colors.primaryFixed,
+    marginBottom: 4,
+  },
+  heroTitle: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: colors.onPrimary,
+    letterSpacing: -0.02,
+  },
+  heroSubtitle: {
+    fontSize: 16,
+    color: colors.primaryFixed,
+    marginTop: 8,
+    opacity: 0.9,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    paddingHorizontal: 16,
+    marginTop: -20,
+  },
+  statCard: {
+    flex: 1,
+    minWidth: '45%',
+    backgroundColor: colors.surfaceContainerHighest,
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  statLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.outline,
+    letterSpacing: 1,
+  },
+  statValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  statValue: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: colors.primary,
+    letterSpacing: -0.5,
+  },
+  statIcon: {
+    fontSize: 24,
+  },
+  statBar: {
+    height: 4,
+    backgroundColor: colors.primaryFixed,
+    borderRadius: 2,
+    marginTop: 12,
+    opacity: 0.3,
+  },
+  profileCard: {
+    backgroundColor: colors.surfaceContainerLowest,
+    marginHorizontal: 16,
+    marginTop: 20,
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: colors.outlineVariant,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
+  },
+  avatarContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  avatarText: {
+    fontSize: 36,
+    fontWeight: '700',
+    color: colors.onPrimary,
+  },
+  userName: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: colors.onSurface,
+  },
+  userEmail: {
+    fontSize: 14,
+    color: colors.onSurfaceVariant,
+    marginTop: 4,
+  },
+  form: {
+    gap: 16,
+  },
+  inputGroup: {
+    gap: 8,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.primary,
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.outlineVariant,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: colors.onSurface,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  saveButton: {
+    flex: 2,
+    backgroundColor: colors.primary,
+    borderRadius: 24,
+    paddingVertical: 14,
+    alignItems: 'center',
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  saveButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.onPrimary,
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: colors.surfaceContainer,
+    borderRadius: 24,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.outlineVariant,
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.onSurfaceVariant,
+  },
+  editButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 24,
+    paddingVertical: 14,
+    alignItems: 'center',
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  editButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.onPrimary,
+  },
+  infoSection: {
+    marginHorizontal: 16,
+    marginTop: 16,
+    gap: 12,
+  },
+  infoCard: {
+    backgroundColor: colors.surfaceContainer,
+    borderRadius: 12,
+    padding: 16,
+  },
+  infoLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.outline,
+    letterSpacing: 0.5,
+    marginBottom: 4,
+  },
+  infoValue: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.onSurface,
+  },
+  signOutButton: {
+    marginHorizontal: 16,
+    marginTop: 24,
+    backgroundColor: colors.errorContainer,
+    borderRadius: 24,
+    paddingVertical: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.error,
+  },
+  signOutText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.error,
+  },
+  bottomPadding: {
+    height: 40,
+  },
+});

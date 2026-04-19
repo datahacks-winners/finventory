@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const linkAnonymousAccount = async (provider: string) => {
-    await AuthService.linkAnonymousAccount(provider as any);
+    await AuthService.linkAnonymousAccount(provider as 'email' | 'google' | 'apple');
   };
 
   const value: AuthContextType = {

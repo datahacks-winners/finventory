@@ -1,0 +1,20 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/finventory-1776558252/api-images/api:latest'
+      - '-f'
+      - 'Dockerfile'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/finventory-1776558252/api-images/api:latest'
+
+images:
+  - 'us-central1-docker.pkg.dev/finventory-1776558252/api-images/api:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
