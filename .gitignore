@@ -69,6 +69,10 @@ notebooks/**
 !notebooks/**/*.py
 !notebooks/**/*.ipynb
 !notebooks/README.md
+# Tracked artefact: 5-yr binned larvae–bottle table (export_species_binned_table.py)
+!notebooks/outputs/
+!notebooks/outputs/tables/
+!notebooks/outputs/tables/species_binned.csv
 
 # CalCOFI inference API — trained artefacts (generate via train_export_models.py)
 services/calcofi-api/models/*
