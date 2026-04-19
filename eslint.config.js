@@ -5,13 +5,15 @@ import tsEslint from "typescript-eslint";
 export default [
   {
     ignores: [
-      "node_modules/**",
-      "dist/**",
-      "build/**",
-      "functions/lib/**",
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/functions/lib/**",
       "apps/mobile/eslint.config.js",
       "**/*.config.js",
       "apps/mobile/scripts/**",
+      "backend-migration/**",
+      "mobile-migration/**",
     ],
   },
   ...tsEslint.configs.recommended,

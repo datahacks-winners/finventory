@@ -491,7 +491,7 @@ export async function initializeAuth(): Promise<User | null> {
     const newCredentials = await refreshIdToken(credentials.refreshToken)
     await saveCredentials(newCredentials)
     return newCredentials.user
-  } catch (error) {
+  } catch (_error) {
     // Token refresh failed, clear credentials
     await clearCredentials()
     return null
@@ -510,7 +510,7 @@ export async function initializeAuth(): Promise<User | null> {
 export function onAuthStateChanged(
   callback: (user: User | null) => void
 ): () => void {
-  let timeoutId: NodeJS.Timeout | null = null
+  const timeoutId: NodeJS.Timeout | null = null
 
   const checkAuthState = async () => {
     const user = await initializeAuth()

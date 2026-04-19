@@ -41,8 +41,8 @@ export interface Listing {
  * Schedule: Every 5 minutes
  */
 export async function matchStandingOrders(
-  event: pubsub.Message,
-  context: pubsub.Context
+  _event: pubsub.Message,
+  _context: pubsub.Context
 ): Promise<void> {
   try {
     const now = new Date()

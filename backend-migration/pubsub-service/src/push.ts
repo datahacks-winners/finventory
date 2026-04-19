@@ -1,4 +1,3 @@
-import { PubSub } from '@google-cloud/pubsub'
 import * as admin from 'firebase-admin'
 import { config } from './config.js'
 

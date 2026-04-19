@@ -1,4 +1,4 @@
-import { OAuth2Client } from 'google-auth-library'
+import { } from 'google-auth-library'
 import { config } from '../config.js'
 
 /**

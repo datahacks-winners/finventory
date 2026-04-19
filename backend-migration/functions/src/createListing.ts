@@ -69,13 +69,12 @@ https.onCall(createListing, async (req, res) => {
     // Verify authentication
     const authHeader = req.headers.authorization
     let userId: string
-    let userEmail: string | null
 
     try {
       const user = await authenticateUser(authHeader)
       userId = user.uid
-      userEmail = user.email
-    } catch (error) {
+      const _userEmail = user.email
+    } catch (_error) {
       res.status(401).send({ error: 'Unauthorized: Invalid token' })
       return
     }

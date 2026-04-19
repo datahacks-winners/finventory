@@ -611,7 +611,7 @@ export class DocumentReference<T = Record<string, unknown>> {
    *
    * MIGRATION: doc.set()
    */
-  async set(data: T, options: { merge?: boolean } = {}): Promise<void> {
+  async set(data: T, _options: { merge?: boolean } = {}): Promise<void> {
     await firestoreRequest(
       `documents/${this.documentPath}`,
       {

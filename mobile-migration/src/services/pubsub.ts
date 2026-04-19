@@ -92,7 +92,7 @@ export interface OrderStatusNotification {
 /**
  * Make authenticated request to Pub/Sub REST API
  */
-async function pubsubRequest<T>(
+async function _pubsubRequest<T>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
