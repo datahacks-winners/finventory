@@ -132,7 +132,7 @@ export function getFallbackUrl(query: string): string {
     oyster: 'https://images.unsplash.com/photo-1534489719095-5c4af064eecd?w=800',
     bass: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
     'striped bass': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
-    'leopard shark': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800',
+    'leopard shark': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
     halibut: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
     sardine: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
     anchovy: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800',
