@@ -121,21 +121,31 @@ jobs:
             VITE_PEXELS_API_KEY=${{ secrets.VITE_PEXELS_API_KEY }}
 
   deploy:
-    name: Trigger Terraform Deploy
+    name: Deploy to Cloud Run
     runs-on: ubuntu-latest
     needs: [build-functions, build-web]
+    environment:
+      name: staging
+      url: https://finventory-dev-web-k3lwkjv63a-uc.a.run.app
     steps:
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v3
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: terraform-apply
-          client-payload: |
-            {
-              "ref": "${{ github.ref }}",
-              "sha": "${{ github.sha }}",
-              "web_image_tag": "${{ github.sha }}"
-            }
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy Web to Cloud Run
+        run: |
+          gcloud run deploy finventory-dev-web \
+            --image us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }} \
+            --region ${{ env.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars=NODE_ENV=staging
 
   notify:
     name: Notify
