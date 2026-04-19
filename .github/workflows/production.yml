@@ -86,6 +86,16 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
+      - name: Deploy Cloud Functions
+        if: hashFiles('functions/package.json') != ''
+        run: |
+          cd functions
+          npm ci
+          npm run build
+          firebase deploy --only functions --project finventory-prod
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
+
   deploy-cloud-run:
     name: Deploy Cloud Run (Production)
     runs-on: ubuntu-latest
