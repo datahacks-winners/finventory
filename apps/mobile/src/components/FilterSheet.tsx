@@ -42,20 +42,10 @@ const colors = {
   onSecondary: '#ffffff',
 };
 
-// MD3 Grade chip colors
 const gradeChipColors = {
-  sushi: {
-    bg: '#005f93',
-    text: '#ffffff',
-  },
-  A: {
-    bg: '#1e78b4',
-    text: '#f7f9ff',
-  },
-  B: {
-    bg: '#fdac6a',
-    text: '#773e01',
-  },
+  sushi: { bg: '#005f93', text: '#ffffff' },
+  A: { bg: '#1e78b4', text: '#f7f9ff' },
+  B: { bg: '#fdac6a', text: '#773e01' },
 };
 
 export function FilterSheet({ visible, onClose }: FilterSheetProps) {
@@ -107,20 +97,14 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
-      <TouchableOpacity
-        style={styles.overlay}
-        activeOpacity={1}
-        onPress={onClose}
-      >
+      <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onClose}>
         <TouchableOpacity activeOpacity={1} style={styles.sheet}>
-          {/* Handle */}
           <View style={styles.handle} />
 
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-            {/* Header */}
             <View style={styles.header}>
+              <Text style={styles.headerLabel}>Refine your search</Text>
               <Text style={styles.headerTitle}>Filters</Text>
-              <Text style={styles.headerSubtitle}>Refine your catch</Text>
             </View>
 
             {/* Species Filter */}
@@ -132,18 +116,10 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
                   return (
                     <TouchableOpacity
                       key={species}
-                      style={[
-                        styles.chip,
-                        isActive && styles.chipActive,
-                      ]}
+                      style={[styles.chip, isActive && styles.chipActive]}
                       onPress={() => toggleSpecies(species)}
                     >
-                      <Text
-                        style={[
-                          styles.chipText,
-                          isActive && styles.chipTextActive,
-                        ]}
-                      >
+                      <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
                         {species}
                       </Text>
                     </TouchableOpacity>
@@ -158,22 +134,17 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
               <View style={styles.chipContainer}>
                 {GRADES.map((grade) => {
                   const isActive = localGrades.includes(grade);
-                  const gradeColors = gradeChipColors[grade];
+                  const gColors = gradeChipColors[grade];
                   return (
                     <TouchableOpacity
                       key={grade}
                       style={[
                         styles.gradeChip,
-                        isActive && { backgroundColor: gradeColors.bg, borderColor: gradeColors.bg },
+                        isActive && { backgroundColor: gColors.bg, borderColor: gColors.bg },
                       ]}
                       onPress={() => toggleGrade(grade)}
                     >
-                      <Text
-                        style={[
-                          styles.gradeChipText,
-                          isActive && { color: gradeColors.text },
-                        ]}
-                      >
+                      <Text style={[styles.gradeChipText, isActive && { color: gColors.text }]}>
                         {grade === 'sushi' ? 'SUSHI' : `GRADE ${grade}`}
                       </Text>
                     </TouchableOpacity>
@@ -206,12 +177,12 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
 
             {/* Price Range Filter */}
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Price Range</Text>
-              <View style={styles.priceRangeContainer}>
+              <Text style={styles.sectionTitle}>Price Range ($/lb)</Text>
+              <View style={styles.priceRow}>
                 <View style={styles.priceInput}>
-                  <Text style={styles.priceLabel}>Min ($)</Text>
+                  <Text style={styles.priceLabel}>Min</Text>
                   <TextInput
-                    style={styles.priceInputField}
+                    style={styles.priceField}
                     value={localPriceRange[0].toString()}
                     onChangeText={(text) =>
                       setLocalPriceRange([parseInt(text) || 0, localPriceRange[1]])
@@ -221,9 +192,9 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
                   />
                 </View>
                 <View style={styles.priceInput}>
-                  <Text style={styles.priceLabel}>Max ($)</Text>
+                  <Text style={styles.priceLabel}>Max</Text>
                   <TextInput
-                    style={styles.priceInputField}
+                    style={styles.priceField}
                     value={localPriceRange[1].toString()}
                     onChangeText={(text) =>
                       setLocalPriceRange([localPriceRange[0], parseInt(text) || 0])
@@ -236,13 +207,13 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
             </View>
           </ScrollView>
 
-          {/* Action Buttons */}
+          {/* Actions */}
           <View style={styles.actions}>
             <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
               <Text style={styles.resetButtonText}>Reset</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-              <Text style={styles.applyButtonText}>Apply</Text>
+              <Text style={styles.applyButtonText}>Apply Filters</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -254,7 +225,7 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(36, 25, 17, 0.6)',
+    backgroundColor: 'rgba(36, 25, 17, 0.5)',
     justifyContent: 'flex-end',
   },
   sheet: {
@@ -277,18 +248,19 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   header: {
-    marginBottom: 24,
+    marginBottom: 20,
+  },
+  headerLabel: {
+    fontFamily: 'Caveat',
+    fontSize: 20,
+    color: colors.primary,
+    marginBottom: 4,
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: '800',
-    color: colors.primary,
+    color: colors.onSurface,
     letterSpacing: -0.02,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: colors.onSurfaceVariant,
-    marginTop: 4,
   },
   section: {
     marginBottom: 24,
@@ -360,14 +332,14 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   sliderValue: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: '800',
     color: colors.primary,
     minWidth: 50,
     textAlign: 'center',
     fontFamily: 'Caveat',
   },
-  priceRangeContainer: {
+  priceRow: {
     flexDirection: 'row',
     gap: 12,
   },
@@ -380,7 +352,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     marginBottom: 6,
   },
-  priceInputField: {
+  priceField: {
     borderWidth: 1,
     borderColor: colors.outlineVariant,
     borderRadius: 12,

@@ -13,7 +13,7 @@ import { useAuth } from '../hooks/useAuth';
 import { FirestoreService } from '../services/firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-// Stitch Theme
+// Stitch Theme - Matches Auth & Supplier Portal designs
 const colors = {
   surface: '#fff8f5',
   surfaceContainer: '#ffeadc',
@@ -30,6 +30,7 @@ const colors = {
   primaryFixed: '#cde5ff',
   secondary: '#8c4f14',
   secondaryContainer: '#fdac6a',
+  onSecondary: '#ffffff',
   error: '#ba1a1a',
   errorContainer: '#ffdad6',
 };
@@ -52,8 +53,8 @@ export function ProfileScreen() {
       await auth().currentUser?.updateProfile({ displayName });
       setEditing(false);
       Alert.alert('Success', 'Profile updated');
-    } catch (error: any) {
-      Alert.alert('Error', error.message);
+    } catch (error: unknown) {
+      Alert.alert('Error', error instanceof Error ? error.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -86,7 +87,7 @@ export function ProfileScreen() {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Hero Header */}
+      {/* Hero Header - Supplier Portal Style */}
       <View style={styles.hero}>
         <Text style={styles.heroLabel}>Your Profile</Text>
         <Text style={styles.heroTitle}>Your dock, digitized.</Text>
@@ -95,25 +96,43 @@ export function ProfileScreen() {
         </Text>
       </View>
 
-      {/* Stats Row */}
+      {/* Stats Row - 4 Cards like Supplier Portal */}
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
-          <Text style={styles.statLabel}>ORDERS</Text>
+          <Text style={styles.statLabel}>CRATES LISTED</Text>
           <View style={styles.statValueRow}>
-            <Text style={styles.statValue}>12</Text>
+            <Text style={styles.statValue}>142</Text>
             <Text style={styles.statIcon}>📦</Text>
           </View>
+          <View style={styles.statBar} />
         </View>
         <View style={styles.statCard}>
-          <Text style={styles.statLabel}>RESCUED</Text>
+          <Text style={styles.statLabel}>LBS RESCUED</Text>
           <View style={styles.statValueRow}>
-            <Text style={styles.statValue}>340</Text>
-            <Text style={styles.statIcon}>🐟</Text>
+            <Text style={styles.statValue}>3,820</Text>
+            <Text style={styles.statIcon}>⚖️</Text>
           </View>
+          <View style={styles.statBar} />
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statLabel}>REVENUE</Text>
+          <View style={styles.statValueRow}>
+            <Text style={styles.statValue}>$12.4k</Text>
+            <Text style={styles.statIcon}>💵</Text>
+          </View>
+          <View style={styles.statBar} />
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statLabel}>PICKUP TIME</Text>
+          <View style={styles.statValueRow}>
+            <Text style={styles.statValue}>42m</Text>
+            <Text style={styles.statIcon}>⏱️</Text>
+          </View>
+          <View style={styles.statBar} />
         </View>
       </View>
 
-      {/* Profile Card */}
+      {/* Profile Card - White rounded card like Login */}
       <View style={styles.profileCard}>
         {/* Avatar */}
         <View style={styles.avatarContainer}>
@@ -244,12 +263,14 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 12,
     paddingHorizontal: 16,
     marginTop: -20,
   },
   statCard: {
     flex: 1,
+    minWidth: '45%',
     backgroundColor: colors.surfaceContainerHighest,
     borderRadius: 16,
     padding: 16,
@@ -280,14 +301,26 @@ const styles = StyleSheet.create({
   statIcon: {
     fontSize: 24,
   },
+  statBar: {
+    height: 4,
+    backgroundColor: colors.primaryFixed,
+    borderRadius: 2,
+    marginTop: 12,
+    opacity: 0.3,
+  },
   profileCard: {
-    backgroundColor: colors.surfaceContainerLow,
+    backgroundColor: colors.surfaceContainerLowest,
     marginHorizontal: 16,
     marginTop: 20,
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
     borderColor: colors.outlineVariant,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
   },
   avatarContainer: {
     alignItems: 'center',
@@ -346,6 +379,11 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     paddingVertical: 14,
     alignItems: 'center',
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   saveButtonText: {
     fontSize: 16,
@@ -371,6 +409,11 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     paddingVertical: 14,
     alignItems: 'center',
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   editButtonText: {
     fontSize: 16,

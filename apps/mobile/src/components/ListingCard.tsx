@@ -29,17 +29,19 @@ const gradeColors = {
   },
 };
 
-// Stitch Theme Colors
+// Stitch Theme
 const colors = {
-  surface: '#fff8f5',
+  surface: '#ffffff',
   surfaceContainer: '#ffeadc',
   onSurface: '#241911',
   onSurfaceVariant: '#404750',
   outline: '#707881',
   outlineVariant: '#c0c7d1',
   primary: '#005f93',
-  primaryFixed: '#cde5ff',
+  primaryContainer: '#1e78b4',
   onPrimary: '#ffffff',
+  primaryFixed: '#cde5ff',
+  secondary: '#8c4f14',
 };
 
 export function ListingCard({ listing, onFavoritePress, isFavorite }: ListingCardProps) {
@@ -71,21 +73,23 @@ export function ListingCard({ listing, onFavoritePress, isFavorite }: ListingCar
   const gradeStyle = getGradeColors();
 
   return (
-    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.9}>
+    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.95}>
       <Image
         source={{ uri: listing.photos[0] || 'https://via.placeholder.com/300' }}
         style={styles.image}
         resizeMode="cover"
       />
 
+      {/* Grade Badge - Top Left */}
       <View style={[styles.gradeBadge, { backgroundColor: gradeStyle.bg }]}>
         <Text style={[styles.gradeText, { color: gradeStyle.text }]}>
-          {listing.grade === 'sushi' ? 'SUSHI' : `GRADE ${listing.grade}`}
+          {listing.grade === 'sushi' ? 'SUSHI GRADE' : `GRADE ${listing.grade}`}
         </Text>
       </View>
 
-      <TouchableOpacity 
-        style={styles.favoriteButton} 
+      {/* Favorite Button - Top Right */}
+      <TouchableOpacity
+        style={styles.favoriteButton}
         onPress={onFavoritePress}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
@@ -94,30 +98,36 @@ export function ListingCard({ listing, onFavoritePress, isFavorite }: ListingCar
         </Text>
       </TouchableOpacity>
 
+      {/* Content */}
       <View style={styles.content}>
+        {/* Species Name */}
         <Text style={styles.species} numberOfLines={1}>
           {listing.species.charAt(0).toUpperCase() + listing.species.slice(1)}
         </Text>
 
-        <View style={styles.row}>
-          <Text style={styles.price}>{formatPrice()}</Text>
-          {listing.sellerRating && (
-            <View style={styles.ratingContainer}>
-              <Text style={styles.ratingStar}>★</Text>
-              <Text style={styles.rating}>{listing.sellerRating.toFixed(1)}</Text>
-            </View>
-          )}
-        </View>
+        {/* Details Row */}
+        <Text style={styles.details}>
+          {listing.location || 'Local Harbor'} • {formatFreshness()}
+        </Text>
 
-        <View style={styles.metaRow}>
-          <Text style={styles.distance}>{listing.distance.toFixed(1)} mi</Text>
-          <Text style={styles.dot}>•</Text>
-          <Text style={styles.freshness}>{formatFreshness()}</Text>
-        </View>
-
+        {/* Footer Row */}
         <View style={styles.footer}>
+          <Text style={styles.price}>{formatPrice()}</Text>
+          <View style={styles.metaRight}>
+            {listing.sellerRating && (
+              <View style={styles.ratingContainer}>
+                <Text style={styles.ratingStar}>★</Text>
+                <Text style={styles.rating}>{listing.sellerRating.toFixed(1)}</Text>
+              </View>
+            )}
+            <Text style={styles.distance}>{listing.distance.toFixed(1)} mi</Text>
+          </View>
+        </View>
+
+        {/* Quantity & Delivery */}
+        <View style={styles.bottomRow}>
           <Text style={styles.quantity}>
-            {displayQuantity} {listing.unit} avail
+            {displayQuantity} {listing.unit} available
           </Text>
           {listing.deliveryAvailable && (
             <View style={styles.deliveryBadge}>
@@ -136,13 +146,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-    // Glass effect
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
+    // Ocean shadow effect
+    shadowColor: '#005f93',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
     elevation: 4,
   },
   image: {
@@ -155,10 +163,10 @@ const styles = StyleSheet.create({
     left: 12,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 8,
+    borderRadius: 20,
   },
   gradeText: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '800',
     letterSpacing: 0.5,
   },
@@ -169,11 +177,14 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255, 248, 245, 0.9)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   favoriteIcon: {
     fontSize: 18,
@@ -183,25 +194,35 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   content: {
-    padding: 14,
-    backgroundColor: colors.surface,
+    padding: 16,
   },
   species: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
     color: colors.onSurface,
-    marginBottom: 6,
+    marginBottom: 4,
   },
-  row: {
+  details: {
+    fontSize: 14,
+    color: colors.onSurfaceVariant,
+    marginBottom: 12,
+  },
+  footer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 6,
+    marginBottom: 12,
   },
   price: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 22,
+    fontWeight: '800',
     color: colors.primary,
+    fontFamily: 'Caveat',
+  },
+  metaRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -217,29 +238,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.onSurfaceVariant,
   },
-  metaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginBottom: 10,
-  },
   distance: {
-    fontSize: 13,
+    fontSize: 14,
     color: colors.onSurfaceVariant,
   },
-  dot: {
-    fontSize: 13,
-    color: colors.outline,
-  },
-  freshness: {
-    fontSize: 13,
-    color: colors.onSurfaceVariant,
-  },
-  footer: {
+  bottomRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 10,
+    paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: colors.surfaceContainer,
   },

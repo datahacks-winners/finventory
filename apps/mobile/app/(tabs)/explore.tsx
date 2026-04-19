@@ -41,17 +41,13 @@ export default function StandingOrdersScreen() {
 
   const toggleSpecies = (species: string) => {
     setSelectedSpecies((prev) =>
-      prev.includes(species)
-        ? prev.filter((s) => s !== species)
-        : [...prev, species]
+      prev.includes(species) ? prev.filter((s) => s !== species) : [...prev, species]
     );
   };
 
   const toggleGrade = (grade: string) => {
     setSelectedGrades((prev) =>
-      prev.includes(grade)
-        ? prev.filter((g) => g !== grade)
-        : [...prev, grade]
+      prev.includes(grade) ? prev.filter((g) => g !== grade) : [...prev, grade]
     );
   };
 
@@ -63,11 +59,16 @@ export default function StandingOrdersScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* Header - White with Logo */}
       <View style={styles.header}>
-        <Text style={styles.headerLabel}>Automation</Text>
-        <Text style={styles.headerTitle}>Standing Orders</Text>
-        <Text style={styles.headerSubtitle}>
+        <Text style={styles.logo}>Finventory</Text>
+      </View>
+
+      {/* Hero Section */}
+      <View style={styles.hero}>
+        <Text style={styles.heroLabel}>Automation</Text>
+        <Text style={styles.heroTitle}>Standing Orders</Text>
+        <Text style={styles.heroSubtitle}>
           Set criteria to auto-reserve matching catch
         </Text>
       </View>
@@ -79,24 +80,19 @@ export default function StandingOrdersScreen() {
       >
         {!creating ? (
           <>
-            {/* Empty State / Info Card */}
+            {/* Info Card */}
             <View style={styles.infoCard}>
               <Text style={styles.infoIcon}>⚓</Text>
               <Text style={styles.infoTitle}>Never miss fresh catch</Text>
               <Text style={styles.infoText}>
-                Set up standing orders to automatically get notified when
-                new listings match your criteria. Perfect for restaurants
-                with regular seafood needs.
+                Set up standing orders to automatically get notified when new listings match your criteria. Perfect for restaurants with regular seafood needs.
               </Text>
-              <TouchableOpacity
-                style={styles.createButton}
-                onPress={() => setCreating(true)}
-              >
+              <TouchableOpacity style={styles.createButton} onPress={() => setCreating(true)}>
                 <Text style={styles.createButtonText}>Create Standing Order</Text>
               </TouchableOpacity>
             </View>
 
-            {/* Sample Active Order Card (Demo) */}
+            {/* Active Order Card */}
             <View style={styles.orderCard}>
               <View style={styles.orderHeader}>
                 <View style={styles.orderIconContainer}>
@@ -121,119 +117,96 @@ export default function StandingOrdersScreen() {
             </View>
           </>
         ) : (
-          <>
-            {/* Create Form */}
-            <View style={styles.formCard}>
-              <Text style={styles.formTitle}>New Standing Order</Text>
+          <View style={styles.formCard}>
+            <Text style={styles.formLabel}>New Order</Text>
+            <Text style={styles.formTitle}>Create Standing Order</Text>
 
-              {/* Species Selection */}
-              <View style={styles.formSection}>
-                <Text style={styles.formLabel}>Target Species</Text>
-                <View style={styles.chipGrid}>
-                  {COMMON_SPECIES.map((species) => {
-                    const isActive = selectedSpecies.includes(species);
-                    return (
-                      <TouchableOpacity
-                        key={species}
-                        style={[styles.chip, isActive && styles.chipActive]}
-                        onPress={() => toggleSpecies(species)}
-                      >
-                        <Text
-                          style={[
-                            styles.chipText,
-                            isActive && styles.chipTextActive,
-                          ]}
-                        >
-                          {species}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
+            {/* Species */}
+            <View style={styles.formSection}>
+              <Text style={styles.sectionLabel}>Target Species</Text>
+              <View style={styles.chipGrid}>
+                {COMMON_SPECIES.map((species) => {
+                  const isActive = selectedSpecies.includes(species);
+                  return (
+                    <TouchableOpacity
+                      key={species}
+                      style={[styles.chip, isActive && styles.chipActive]}
+                      onPress={() => toggleSpecies(species)}
+                    >
+                      <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
+                        {species}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
+            </View>
 
-              {/* Grade Selection */}
-              <View style={styles.formSection}>
-                <Text style={styles.formLabel}>Grade Range</Text>
-                <View style={styles.chipGrid}>
-                  {GRADES.map((grade) => {
-                    const isActive = selectedGrades.includes(grade);
-                    const gColors = gradeColors[grade];
-                    return (
-                      <TouchableOpacity
-                        key={grade}
-                        style={[
-                          styles.gradeChip,
-                          isActive && {
-                            backgroundColor: gColors.bg,
-                            borderColor: gColors.bg,
-                          },
-                        ]}
-                        onPress={() => toggleGrade(grade)}
-                      >
-                        <Text
-                          style={[
-                            styles.gradeChipText,
-                            isActive && { color: gColors.text },
-                          ]}
-                        >
-                          {grade === 'sushi' ? 'SUSHI' : `GRADE ${grade}`}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
+            {/* Grades */}
+            <View style={styles.formSection}>
+              <Text style={styles.sectionLabel}>Grade Range</Text>
+              <View style={styles.chipGrid}>
+                {GRADES.map((grade) => {
+                  const isActive = selectedGrades.includes(grade);
+                  const gColors = gradeColors[grade];
+                  return (
+                    <TouchableOpacity
+                      key={grade}
+                      style={[styles.gradeChip, isActive && { backgroundColor: gColors.bg, borderColor: gColors.bg }]}
+                      onPress={() => toggleGrade(grade)}
+                    >
+                      <Text style={[styles.gradeChipText, isActive && { color: gColors.text }]}>
+                        {grade === 'sushi' ? 'SUSHI' : `GRADE ${grade}`}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
+            </View>
 
-              {/* Distance Slider */}
-              <View style={styles.formSection}>
-                <Text style={styles.formLabel}>
-                  Max Distance: {maxDistance} mi
-                </Text>
-                <View style={styles.sliderContainer}>
-                  <TouchableOpacity
-                    style={styles.sliderButton}
-                    onPress={() => setMaxDistance(Math.max(5, maxDistance - 5))}
-                  >
-                    <Text style={styles.sliderButtonText}>−</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.sliderValue}>{maxDistance}</Text>
-                  <TouchableOpacity
-                    style={styles.sliderButton}
-                    onPress={() => setMaxDistance(Math.min(100, maxDistance + 5))}
-                  >
-                    <Text style={styles.sliderButtonText}>+</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              {/* Max Price */}
-              <View style={styles.formSection}>
-                <Text style={styles.formLabel}>Max Price per lb ($)</Text>
-                <TextInput
-                  style={styles.priceInput}
-                  value={maxPrice}
-                  onChangeText={setMaxPrice}
-                  keyboardType="numeric"
-                  placeholder="0.00"
-                  placeholderTextColor={colors.outline}
-                />
-              </View>
-
-              {/* Form Actions */}
-              <View style={styles.formActions}>
+            {/* Distance */}
+            <View style={styles.formSection}>
+              <Text style={styles.sectionLabel}>Max Distance: {maxDistance} mi</Text>
+              <View style={styles.sliderContainer}>
                 <TouchableOpacity
-                  style={styles.cancelButton}
-                  onPress={() => setCreating(false)}
+                  style={styles.sliderButton}
+                  onPress={() => setMaxDistance(Math.max(5, maxDistance - 5))}
                 >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                  <Text style={styles.sliderButtonText}>−</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.saveButton}>
-                  <Text style={styles.saveButtonText}>Save Order</Text>
+                <Text style={styles.sliderValue}>{maxDistance}</Text>
+                <TouchableOpacity
+                  style={styles.sliderButton}
+                  onPress={() => setMaxDistance(Math.min(100, maxDistance + 5))}
+                >
+                  <Text style={styles.sliderButtonText}>+</Text>
                 </TouchableOpacity>
               </View>
             </View>
-          </>
+
+            {/* Price */}
+            <View style={styles.formSection}>
+              <Text style={styles.sectionLabel}>Max Price per lb ($)</Text>
+              <TextInput
+                style={styles.priceInput}
+                value={maxPrice}
+                onChangeText={setMaxPrice}
+                keyboardType="numeric"
+                placeholder="0.00"
+                placeholderTextColor={colors.outline}
+              />
+            </View>
+
+            {/* Actions */}
+            <View style={styles.formActions}>
+              <TouchableOpacity style={styles.cancelButton} onPress={() => setCreating(false)}>
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.saveButton}>
+                <Text style={styles.saveButtonText}>Save Order</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         )}
 
         <View style={styles.bottomPadding} />
@@ -248,24 +221,39 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceContainer,
+  },
+  logo: {
+    fontFamily: 'Caveat',
+    fontSize: 28,
+    fontWeight: '700',
+    color: colors.primary,
+  },
+  hero: {
     backgroundColor: colors.primary,
     paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 24,
+    paddingTop: 20,
+    paddingBottom: 28,
   },
-  headerLabel: {
+  heroLabel: {
     fontFamily: 'Caveat',
     fontSize: 22,
     color: colors.primaryFixed,
     marginBottom: 4,
   },
-  headerTitle: {
+  heroTitle: {
     fontSize: 28,
     fontWeight: '800',
     color: colors.onPrimary,
     letterSpacing: -0.02,
   },
-  headerSubtitle: {
+  heroSubtitle: {
     fontSize: 14,
     color: colors.primaryFixed,
     marginTop: 6,
@@ -279,12 +267,17 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   infoCard: {
-    backgroundColor: colors.surfaceContainerLow,
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 24,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.outlineVariant,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 4,
   },
   infoIcon: {
     fontSize: 40,
@@ -308,6 +301,11 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     paddingVertical: 14,
     paddingHorizontal: 24,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   createButtonText: {
     fontSize: 16,
@@ -315,11 +313,16 @@ const styles = StyleSheet.create({
     color: colors.onPrimary,
   },
   orderCard: {
-    backgroundColor: colors.surfaceContainerHighest,
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
     borderColor: colors.outlineVariant,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 4,
   },
   orderHeader: {
     flexDirection: 'row',
@@ -368,22 +371,34 @@ const styles = StyleSheet.create({
     color: colors.onSurfaceVariant,
   },
   formCard: {
-    backgroundColor: colors.surfaceContainerLow,
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
     borderColor: colors.outlineVariant,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
+  },
+  formLabel: {
+    fontFamily: 'Caveat',
+    fontSize: 20,
+    color: colors.primary,
+    marginBottom: 4,
   },
   formTitle: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '800',
-    color: colors.primary,
+    color: colors.onSurface,
+    letterSpacing: -0.02,
     marginBottom: 20,
   },
   formSection: {
     marginBottom: 20,
   },
-  formLabel: {
+  sectionLabel: {
     fontSize: 14,
     fontWeight: '700',
     color: colors.onSurface,
@@ -449,7 +464,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   sliderValue: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '800',
     color: colors.primary,
     minWidth: 40,
@@ -491,6 +506,11 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     backgroundColor: colors.primary,
     alignItems: 'center',
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   saveButtonText: {
     fontSize: 16,

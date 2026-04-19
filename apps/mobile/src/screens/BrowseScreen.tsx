@@ -20,6 +20,24 @@ import { useAuth } from '../hooks/useAuth';
 
 const COMMON_FAVORITES = new Set<string>();
 
+// Stitch Theme
+const colors = {
+  surface: '#fff8f5',
+  surfaceContainer: '#ffeadc',
+  surfaceContainerLow: '#fff1e9',
+  surfaceContainerHigh: '#f9e4d7',
+  onSurface: '#241911',
+  onSurfaceVariant: '#404750',
+  outline: '#707881',
+  outlineVariant: '#c0c7d1',
+  primary: '#005f93',
+  primaryContainer: '#1e78b4',
+  onPrimary: '#ffffff',
+  primaryFixed: '#cde5ff',
+  secondary: '#8c4f14',
+  secondaryContainer: '#fdac6a',
+};
+
 export default function BrowseScreen() {
   const { viewMode, setViewMode } = useBrowseStore();
   const { listings, loading, error, refetch } = useListings();
@@ -71,12 +89,31 @@ export default function BrowseScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Hero Header - Stitch Style */}
-      <View style={styles.heroHeader}>
-        <Text style={styles.heroTitle}>
-          Rescue the <Text style={styles.accentText}>catch</Text>.
-        </Text>
-        <Text style={styles.heroTitle}>Feed the coast.</Text>
+      {/* Header - White with Logo */}
+      <View style={styles.header}>
+        <Text style={styles.logo}>Finventory</Text>
+        <View style={styles.headerActions}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => setFilterVisible(true)}
+          >
+            <Text style={styles.icon}>⚙️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.viewToggle}
+            onPress={() => setViewMode(viewMode === 'grid' ? 'map' : 'grid')}
+          >
+            <Text style={styles.viewToggleText}>
+              {viewMode === 'grid' ? '🗺️ Map' : '🔲 List'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Hero Section */}
+      <View style={styles.hero}>
+        <Text style={styles.heroLabel}>Marketplace</Text>
+        <Text style={styles.heroTitle}>Rescue the catch. Feed the coast.</Text>
         <Text style={styles.heroSubtitle}>
           Connect directly with local fleets to source surplus seafood that would otherwise be lost.
         </Text>
@@ -98,24 +135,6 @@ export default function BrowseScreen() {
         </View>
       </View>
 
-      {/* Action Bar */}
-      <View style={styles.actionBar}>
-        <TouchableOpacity
-          style={styles.filterButton}
-          onPress={() => setFilterVisible(true)}
-        >
-          <Text style={styles.filterButtonText}>Filter</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.viewToggle}
-          onPress={() => setViewMode(viewMode === 'grid' ? 'map' : 'grid')}
-        >
-          <Text style={styles.viewToggleText}>
-            {viewMode === 'grid' ? 'Map View' : 'List View'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
       {/* Location Banner */}
       {permissionStatus === 'denied' && (
         <View style={styles.banner}>
@@ -134,6 +153,10 @@ export default function BrowseScreen() {
             <RefreshControl refreshing={loading} onRefresh={refetch} />
           }
         >
+          {/* Section Label */}
+          <Text style={styles.sectionLabel}>Fresh from the nets</Text>
+          <Text style={styles.sectionTitle}>Available listings</Text>
+
           {loading ? (
             <>
               <ListingCardSkeleton />
@@ -175,54 +198,79 @@ export default function BrowseScreen() {
   );
 }
 
-// Stitch Theme Colors
-const colors = {
-  background: '#fff8f5',
-  surface: '#fff8f5',
-  surfaceContainer: '#ffeadc',
-  surfaceContainerLow: '#fff1e9',
-  surfaceContainerHigh: '#f9e4d7',
-  surfaceVariant: '#f3dfd1',
-  primary: '#005f93',
-  primaryContainer: '#1e78b4',
-  onPrimary: '#ffffff',
-  onSurface: '#241911',
-  onSurfaceVariant: '#404750',
-  outline: '#707881',
-  outlineVariant: '#c0c7d1',
-  secondary: '#8c4f14',
-  secondaryContainer: '#fdac6a',
-  error: '#ba1a1a',
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
-  },
-  heroHeader: {
     backgroundColor: colors.surface,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 20,
+    paddingVertical: 16,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceContainer,
   },
-  heroTitle: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: colors.onSurface,
-    letterSpacing: -0.02,
-    lineHeight: 40,
-  },
-  accentText: {
+  logo: {
     fontFamily: 'Caveat',
+    fontSize: 28,
     fontWeight: '700',
     color: colors.primary,
   },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  iconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.surfaceContainerLow,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    fontSize: 18,
+  },
+  viewToggle: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    backgroundColor: colors.primary,
+    borderRadius: 20,
+  },
+  viewToggleText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.onPrimary,
+  },
+  hero: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 28,
+  },
+  heroLabel: {
+    fontFamily: 'Caveat',
+    fontSize: 22,
+    color: colors.primaryFixed,
+    marginBottom: 4,
+  },
+  heroTitle: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: colors.onPrimary,
+    letterSpacing: -0.02,
+    lineHeight: 36,
+  },
   heroSubtitle: {
-    fontSize: 16,
-    color: colors.onSurfaceVariant,
-    marginTop: 12,
-    lineHeight: 22,
+    fontSize: 14,
+    color: colors.primaryFixed,
+    marginTop: 8,
+    opacity: 0.9,
+    lineHeight: 20,
   },
   statsRow: {
     flexDirection: 'row',
@@ -234,50 +282,18 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 24,
-    fontWeight: '700',
-    color: colors.primary,
+    fontWeight: '800',
+    color: colors.onPrimary,
+    fontFamily: 'Caveat',
   },
   statLabel: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.outline,
+    color: colors.primaryFixed,
     textTransform: 'uppercase',
     letterSpacing: 1,
     marginTop: 2,
-  },
-  actionBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: colors.surfaceContainerLow,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.surfaceVariant,
-  },
-  filterButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: colors.surfaceContainer,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-  },
-  filterButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.onSurface,
-  },
-  viewToggle: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: colors.primary,
-    borderRadius: 20,
-  },
-  viewToggleText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.onPrimary,
+    opacity: 0.8,
   },
   banner: {
     backgroundColor: colors.secondaryContainer,
@@ -296,12 +312,25 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 16,
   },
+  sectionLabel: {
+    fontFamily: 'Caveat',
+    fontSize: 20,
+    color: colors.primary,
+    marginBottom: 4,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: colors.onSurface,
+    letterSpacing: -0.02,
+    marginBottom: 16,
+  },
   centerContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
   },
   errorTitle: {
     fontSize: 20,
@@ -320,10 +349,15 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: colors.primary,
     borderRadius: 24,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   retryButtonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: colors.onPrimary,
   },
   emptyState: {
