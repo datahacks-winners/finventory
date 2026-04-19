@@ -1,8 +1,8 @@
 const TEAM = [
-  { name: 'Justin Lo', role: 'Founder & CEO', harbor: 'Portland, ME', fun: 'Once spent a month on a research vessel in the Arctic.' },
-  { name: 'Mikey Nguyen', role: 'Operations Lead', harbor: 'Gloucester, MA', fun: 'Collects vintage sea charts from the 1800s.' },
-  { name: 'Govind Sriram', role: 'Head of Logistics', harbor: 'New Bedford, MA', fun: 'Champion oyster shucker (3rd place, 2021).' },
-  { name: 'Steven Ngo', role: 'Sustainability Director', harbor: 'Woods Hole, MA', fun: 'Can identify any Atlantic fish by its scales.' },
+  { name: 'Justin Lo', role: 'Founder & CEO', fun: 'Once spent a month on a research vessel in the Arctic.' },
+  { name: 'Mikey Nguyen', role: 'Operations Lead', fun: 'Collects vintage sea charts from the 1800s.' },
+  { name: 'Govind Sriram', role: 'Head of Logistics', fun: 'Champion oyster shucker (3rd place, 2021).' },
+  { name: 'Steven Ngo', role: 'Sustainability Director', fun: 'Can identify any Atlantic fish by its scales.' },
 ]
 const VALUES = [
   { icon: 'analytics', iconBg: 'bg-primary-container', iconColor: 'text-on-primary-container', title: 'Traceability', desc: 'Every catch is tracked from the specific GPS coordinate to the final delivery signature.', offset: false },
@@ -136,7 +136,6 @@ export default function About() {
                   </div>
                   <h4 className="text-xl font-bold">{member.name}</h4>
                   <p className="text-primary font-medium text-sm mb-1">{member.role}</p>
-                  <p className="text-on-surface-variant text-xs italic">Home harbor: {member.harbor}</p>
                 </div>
               ))}
             </div>
