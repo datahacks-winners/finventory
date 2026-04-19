@@ -18,12 +18,12 @@ import { FilterSheet } from '../components/FilterSheet';
 import { ListingMap } from '../components/ListingMap';
 import { useAuth } from '../hooks/useAuth';
 
-const COMMON_FAVORITES = new Set<string>(); // In real app, fetch from Firestore
+const COMMON_FAVORITES = new Set<string>();
 
 export default function BrowseScreen() {
   const { viewMode, setViewMode } = useBrowseStore();
   const { listings, loading, error, refetch } = useListings();
-  const { permissionStatus, loading: locationLoading } = useUserLocation();
+  const { permissionStatus } = useUserLocation();
   const { isAnonymous } = useAuth();
 
   const [filterVisible, setFilterVisible] = useState(false);
@@ -46,10 +46,8 @@ export default function BrowseScreen() {
       const next = new Set(prev);
       if (next.has(listingId)) {
         next.delete(listingId);
-        // TODO: Remove from Firestore
       } else {
         next.add(listingId);
-        // TODO: Add to Firestore
       }
       return next;
     });
@@ -73,28 +71,52 @@ export default function BrowseScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Browse Listings</Text>
-        <View style={styles.headerActions}>
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => setFilterVisible(true)}
-          >
-            <Text style={styles.icon}>⚙️</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.viewToggle}
-            onPress={() => setViewMode(viewMode === 'grid' ? 'map' : 'grid')}
-          >
-            <Text style={styles.viewToggleText}>
-              {viewMode === 'grid' ? '🗺️ Map' : '🔲 Grid'}
-            </Text>
-          </TouchableOpacity>
+      {/* Hero Header - Stitch Style */}
+      <View style={styles.heroHeader}>
+        <Text style={styles.heroTitle}>
+          Rescue the <Text style={styles.accentText}>catch</Text>.
+        </Text>
+        <Text style={styles.heroTitle}>Feed the coast.</Text>
+        <Text style={styles.heroSubtitle}>
+          Connect directly with local fleets to source surplus seafood that would otherwise be lost.
+        </Text>
+
+        {/* Stats Row */}
+        <View style={styles.statsRow}>
+          <View style={styles.stat}>
+            <Text style={styles.statValue}>12,400 lb</Text>
+            <Text style={styles.statLabel}>rescued</Text>
+          </View>
+          <View style={styles.stat}>
+            <Text style={styles.statValue}>180+</Text>
+            <Text style={styles.statLabel}>harbors</Text>
+          </View>
+          <View style={styles.stat}>
+            <Text style={styles.statValue}>32%</Text>
+            <Text style={styles.statLabel}>savings</Text>
+          </View>
         </View>
       </View>
 
-      {/* Location Permission Banner */}
+      {/* Action Bar */}
+      <View style={styles.actionBar}>
+        <TouchableOpacity
+          style={styles.filterButton}
+          onPress={() => setFilterVisible(true)}
+        >
+          <Text style={styles.filterButtonText}>Filter</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.viewToggle}
+          onPress={() => setViewMode(viewMode === 'grid' ? 'map' : 'grid')}
+        >
+          <Text style={styles.viewToggleText}>
+            {viewMode === 'grid' ? 'Map View' : 'List View'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Location Banner */}
       {permissionStatus === 'denied' && (
         <View style={styles.banner}>
           <Text style={styles.bannerText}>
@@ -112,7 +134,7 @@ export default function BrowseScreen() {
             <RefreshControl refreshing={loading} onRefresh={refetch} />
           }
         >
-          {loading || locationLoading ? (
+          {loading ? (
             <>
               <ListingCardSkeleton />
               <ListingCardSkeleton />
@@ -145,7 +167,6 @@ export default function BrowseScreen() {
         />
       )}
 
-      {/* Filter Sheet */}
       <FilterSheet
         visible={filterVisible}
         onClose={() => setFilterVisible(false)}
@@ -154,62 +175,120 @@ export default function BrowseScreen() {
   );
 }
 
+// Stitch Theme Colors
+const colors = {
+  background: '#fff8f5',
+  surface: '#fff8f5',
+  surfaceContainer: '#ffeadc',
+  surfaceContainerLow: '#fff1e9',
+  surfaceContainerHigh: '#f9e4d7',
+  surfaceVariant: '#f3dfd1',
+  primary: '#005f93',
+  primaryContainer: '#1e78b4',
+  onPrimary: '#ffffff',
+  onSurface: '#241911',
+  onSurfaceVariant: '#404750',
+  outline: '#707881',
+  outlineVariant: '#c0c7d1',
+  secondary: '#8c4f14',
+  secondaryContainer: '#fdac6a',
+  error: '#ba1a1a',
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.background,
   },
-  header: {
+  heroHeader: {
+    backgroundColor: colors.surface,
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
+  },
+  heroTitle: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: colors.onSurface,
+    letterSpacing: -0.02,
+    lineHeight: 40,
+  },
+  accentText: {
+    fontFamily: 'Caveat',
+    fontWeight: '700',
+    color: colors.primary,
+  },
+  heroSubtitle: {
+    fontSize: 16,
+    color: colors.onSurfaceVariant,
+    marginTop: 12,
+    lineHeight: 22,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    marginTop: 20,
+    gap: 24,
+  },
+  stat: {
+    flexDirection: 'column',
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.primary,
+  },
+  statLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.outline,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginTop: 2,
+  },
+  actionBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.surfaceContainerLow,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.surfaceVariant,
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#111827',
+  filterButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: colors.surfaceContainer,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.outlineVariant,
   },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  iconButton: {
-    width: 36,
-    height: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    fontSize: 20,
+  filterButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.onSurface,
   },
   viewToggle: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: colors.primary,
+    borderRadius: 20,
   },
   viewToggleText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.onPrimary,
   },
   banner: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.secondaryContainer,
     paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#FDE68A',
+    paddingVertical: 10,
   },
   bannerText: {
     fontSize: 14,
-    color: '#92400E',
+    color: colors.secondary,
     textAlign: 'center',
+    fontWeight: '500',
   },
   content: {
     flex: 1,
@@ -222,29 +301,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
+    backgroundColor: colors.background,
   },
   errorTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.onSurface,
     marginBottom: 8,
   },
   errorMessage: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.onSurfaceVariant,
     textAlign: 'center',
     marginBottom: 16,
   },
   retryButton: {
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: '#3B82F6',
-    borderRadius: 8,
+    backgroundColor: colors.primary,
+    borderRadius: 24,
   },
   retryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.onPrimary,
   },
   emptyState: {
     alignItems: 'center',
@@ -257,12 +337,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.onSurface,
     marginBottom: 8,
   },
   emptyMessage: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.onSurfaceVariant,
     textAlign: 'center',
   },
 });
