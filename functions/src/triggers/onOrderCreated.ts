@@ -8,7 +8,7 @@ import { rtdb } from '../config.js'
  */
 export const onOrderCreated = functions.firestore
   .document('orders/{orderId}')
-  .onCreate(async (snap, context) => {
+  .onCreate(async (snap, _context) => {
     const order = snap.data()!
 
     // Get listing to update inventory

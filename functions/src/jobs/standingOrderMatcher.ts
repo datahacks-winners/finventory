@@ -10,7 +10,7 @@ import { notifyStandingOrderMatch } from '../utils/notifications.js'
  */
 export const matchStandingOrders = functions.pubsub
   .schedule('every 5 minutes')
-  .onRun(async (context) => {
+  .onRun(async (_context) => {
     const now = admin.firestore.Timestamp.now()
 
     // Get all active listings
