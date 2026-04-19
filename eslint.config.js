@@ -35,9 +35,15 @@ export default [
     },
   },
   {
-    files: ["**/*.js"],
+    files: ["**/*.js", "**/*.cjs"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
+    },
+  },
+  {
+    files: ["**/*.cjs"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
 ];
