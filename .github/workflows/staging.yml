@@ -145,7 +145,6 @@ jobs:
             --region ${{ env.GCP_REGION }} \
             --platform managed \
             --allow-unauthenticated \
-            --service-account=github-actions-sa@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com \
             --set-env-vars=NODE_ENV=staging
 
   notify:
