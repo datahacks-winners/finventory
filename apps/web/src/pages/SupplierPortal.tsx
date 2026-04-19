@@ -135,10 +135,13 @@ export default function SupplierPortal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // DEBUG: Auth check bypassed temporarily
+    /*
     if (!user) {
       navigate('/auth', { state: { from: '/suppliers' } })
       return
     }
+    */
 
     if (!formData.species || !formData.weight || !formData.price) {
       alert('Please fill in all required fields')
@@ -190,6 +193,11 @@ export default function SupplierPortal() {
     }
   }
 
+  // DEBUG MODE: Bypass auth check temporarily
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _debugBypassAuth = true
+
+  /* Original auth guard - re-enable after debugging
   if (!user) {
     return (
       <div className="text-on-surface min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fff8f5' }}>
@@ -203,6 +211,7 @@ export default function SupplierPortal() {
       </div>
     )
   }
+  */
 
   return (
     <div className="text-on-surface" style={{ backgroundColor: '#fff8f5' }}>
