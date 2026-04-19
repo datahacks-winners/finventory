@@ -211,8 +211,8 @@ export default function Marketplace() {
   }), [selectedSpecies, selectedGrades, maxDistance])
 
   const userLocation = useMemo(() => ({
-    latitude: 37.7749,
-    longitude: -122.4194,
+    latitude: 32.7,  // San Diego (where mock data is located)
+    longitude: -117.0,
   }), [])
 
   const { listings, loading } = useListings(filters, userLocation)
