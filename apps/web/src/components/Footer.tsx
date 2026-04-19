@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Logo from './Logo'
 
 const FOOTER_LINKS: Record<string, { label: string; to: string }[]> = {
   Marketplace: [
@@ -22,7 +23,7 @@ export default function Footer() {
     <footer className="bg-slate-900 text-[#fff8f5] w-full relative pt-24 pb-12">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 px-6 lg:px-12 w-full max-w-7xl mx-auto font-['Plus_Jakarta_Sans'] tracking-tight">
         <div className="col-span-1">
-          <div className="text-3xl font-black text-white mb-8 italic-accent-caveat">Finventory</div>
+          <Logo color="#fff" textColor="#fff" className="mb-6" />
           <p className="text-slate-400 leading-relaxed">
             Curating the ocean's bounty. Connecting harvesters and buyers for a waste-free coast.
           </p>

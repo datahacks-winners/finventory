@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useListings } from '../hooks/useListings'
 import { getFallbackUrl } from '../services/pexels'
+import { getMarketPrice, compareToMarket } from '../services/marketPrices'
 import type { ListingWithDistance } from '../services/listings'
 
 const GRADES = [
@@ -51,14 +52,31 @@ function ProductCard({
   onRemove: (id: string) => void
 }) {
   const [weight, setWeight] = useState(5)
+  const [imgError, setImgError] = useState(false)
   
-  const photo = getFallbackUrl(listing.species.toLowerCase())
+  const fallbackPhoto = getFallbackUrl(listing.species.toLowerCase())
+  const photo = imgError || !listing.photos?.[0] ? fallbackPhoto : listing.photos[0]
   const grade = GRADES.find(g => g.value === listing.grade) || GRADES[1]
   const hoursLeft = Math.floor((listing.expiresAt.toDate().getTime() - Date.now()) / (1000 * 60 * 60))
   const isUrgent = hoursLeft < 4
   
   const totalPrice = listing.pricePerUnit * weight
   const inCart = !!cartItem
+
+  // Get market price for this species
+  const marketPrice = getMarketPrice(listing.species)
+  const comparison = compareToMarket(listing.pricePerUnit, listing.species)
+
+  // Format the market comparison
+  const getDealBadge = () => {
+    if (!comparison.marketPrice) return null
+    if (comparison.diffPercent > 15) return { text: 'Great Deal', color: 'bg-emerald-500', icon: 'trending_down' }
+    if (comparison.diffPercent > 5) return { text: 'Good Deal', color: 'bg-blue-500', icon: 'trending_down' }
+    if (comparison.diffPercent > -5) return { text: 'Fair Price', color: 'bg-slate-500', icon: 'remove' }
+    return { text: 'Premium', color: 'bg-amber-500', icon: 'trending_up' }
+  }
+
+  const dealBadge = getDealBadge()
 
   return (
     <div 
@@ -72,6 +90,7 @@ function ProductCard({
           src={photo} 
           alt={listing.species}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={() => setImgError(true)}
         />
         
         {/* Badges */}
@@ -111,12 +130,36 @@ function ProductCard({
 
       {/* Content */}
       <div className="p-4">
-        <div className="flex items-start justify-between mb-2">
+        <div className="flex items-start justify-between mb-1">
           <h3 className="text-lg font-bold text-slate-900 capitalize">{listing.species}</h3>
-          <span className="text-2xl font-black text-primary">
-            ${listing.pricePerUnit.toFixed(2)}
+          <div className="text-right">
+            <span className="text-2xl font-black text-primary">
+              ${listing.pricePerUnit.toFixed(2)}
+            </span>
             <span className="text-sm font-medium text-slate-500">/lb</span>
-          </span>
+          </div>
+        </div>
+
+        {/* Market Price Row */}
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs text-slate-400">Market avg</span>
+          <div className="flex items-center gap-2">
+            {marketPrice ? (
+              <>
+                <span className="text-sm font-medium text-slate-400 line-through">
+                  ${marketPrice.avgPrice.toFixed(2)}/lb
+                </span>
+                {dealBadge && (
+                  <span className={`${dealBadge.color} text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-0.5`}>
+                    <span className="material-symbols-outlined text-xs">{dealBadge.icon}</span>
+                    {comparison.diffPercent > 0 ? `${comparison.diffPercent.toFixed(0)}% off` : dealBadge.text}
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-xs text-slate-400 italic">No market data</span>
+            )}
+          </div>
         </div>
 
         <p className="text-sm text-slate-500 mb-1">
@@ -413,6 +456,24 @@ export default function Marketplace() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar Filters */}
           <aside className="lg:w-64 space-y-6">
+            {/* Live Market Prices Panel */}
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+              <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">query_stats</span>
+                Live Market Prices
+              </h3>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between"><span className="text-slate-600">Chinook Salmon</span><span className="font-bold">$24.50</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Sockeye Salmon</span><span className="font-bold">$26.00</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Halibut</span><span className="font-bold">$32.00</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Dungeness Crab</span><span className="font-bold">$18.00</span></div>
+                <div className="flex justify-between"><span className="text-slate-600">Yellowfin Tuna</span><span className="font-bold">$48.00</span></div>
+              </div>
+              <div className="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-400">
+                NOAA + Local Markets
+              </div>
+            </div>
+
             {/* Clear filters */}
             {(selectedGrades.length > 0 || selectedSpecies.length > 0 || searchQuery) && (
               <button

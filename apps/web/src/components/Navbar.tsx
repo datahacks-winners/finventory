@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import Logo from './Logo'
 
 const NAV_LINKS = [
   { to: '/marketplace', label: 'Marketplace' },
@@ -44,11 +45,8 @@ export default function Navbar() {
     <nav className="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,95,147,0.06)]">
       <div className="grid grid-cols-[1fr_auto_1fr] items-center px-6 lg:px-12 py-5 w-full max-w-screen-2xl mx-auto">
         {/* Left: Logo */}
-        <Link
-          to="/"
-          className="text-2xl font-bold text-sky-900 italic-accent-caveat tracking-[-0.02em]"
-        >
-          Finventory
+        <Link to="/">
+          <Logo color="#1E5AA8" textColor="#0c4a6e" />
         </Link>
 
         {/* Center: Navigation - truly centered via grid */}

@@ -1,5 +1,5 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https'
-import * as admin from 'firebase-admin'
+import { Timestamp, FieldValue } from 'firebase-admin/firestore'
 import { db } from '../config.js'
 import { notifyNewOrder, notifyOrderStatusUpdate } from '../utils/notifications.js'
 
@@ -32,8 +32,8 @@ export interface Order {
     state: string
     zipCode: string
   }
-  createdAt: admin.firestore.Timestamp
-  pickedUpAt?: admin.firestore.Timestamp
+  createdAt: Timestamp
+  pickedUpAt?: Timestamp
 }
 
 /**
@@ -73,7 +73,7 @@ export const createOrder = onCall(
     }
 
     // Check if listing has expired
-    const now = admin.firestore.Timestamp.now()
+    const now = Timestamp.now()
     if (listing.expiresAt < now) {
       throw new HttpsError('failed-precondition', 'Listing has expired')
     }
@@ -124,7 +124,7 @@ export const createOrder = onCall(
 
       // Update listing quantity and status
       const newQuantity = listing.quantity - data.quantity
-      const updates: admin.firestore.UpdateData<Record<string, unknown>> = {
+      const updates: Record<string, unknown> = {
         quantity: newQuantity
       }
 
@@ -209,7 +209,7 @@ export const confirmPickup = onCall(
       // Update order status
       await orderRef.update({
         status: 'picked_up',
-        pickedUpAt: admin.firestore.FieldValue.serverTimestamp()
+        pickedUpAt: FieldValue.serverTimestamp()
       })
 
       // Notify buyer
@@ -274,7 +274,7 @@ export const cancelOrder = onCall(
 
       if (listingDoc.exists) {
         await listingRef.update({
-          quantity: admin.firestore.FieldValue.increment(order.quantity),
+          quantity: FieldValue.increment(order.quantity),
           status: 'active'
         })
       }

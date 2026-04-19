@@ -30,7 +30,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'finventory-web'
+      - 'web'
       - '--image'
       - 'us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:latest'
       - '--region'

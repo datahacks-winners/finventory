@@ -25,7 +25,8 @@ if (isValidConfig) {
     app = initializeApp(firebaseConfig)
     auth = getAuth(app)
     db = getFirestore(app)
-    functions = getFunctions(app)
+    // Initialize Functions with explicit region (us-central1 where functions are deployed)
+    functions = getFunctions(app, 'us-central1')
 
     // Connect to Firebase Emulators in development
     if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
