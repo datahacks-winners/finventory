@@ -19,14 +19,15 @@
     "stripe": "^17.6.0"
   },
   "devDependencies": {
-    "@types/node": "^22.14.1",
     "@google-cloud/functions-framework": "^3.5.1",
     "@google-cloud/storage": "^7.15.5",
-    "typescript": "^5.8.3",
+    "@types/node": "^22.14.1",
+    "csv-parse": "^6.2.1",
     "eslint": "^9.31.0",
-    "typescript-eslint": "^8.26.1",
     "husky": "^9.1.7",
-    "lint-staged": "^15.4.3"
+    "lint-staged": "^15.4.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.26.1"
   },
   "optionalDependencies": {
     "@stripe/stripe-react-native": "^0.38.0"
@@ -36,6 +37,8 @@
     "apps/*"
   ],
   "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix"]
+    "*.{ts,tsx}": [
+      "eslint --fix"
+    ]
   }
 }

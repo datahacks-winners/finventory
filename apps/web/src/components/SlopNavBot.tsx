@@ -49,7 +49,7 @@ export default function SlopNavBot() {
     setResult(null)
 
     try {
-      // Direct HTTP call to Cloud Function (bypasses Firebase callable issues)
+      // Direct HTTP call to Cloud Function
       const response = await fetch('https://ragsearch-eodwatsp5q-uc.a.run.app', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

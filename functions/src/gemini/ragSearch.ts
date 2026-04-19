@@ -24,7 +24,7 @@ const MOCK_INVENTORY = [
     itemId: 'listing_001',
     itemType: 'listing',
     content: 'Pacific Bluefin Tuna - A grade, 500 lb available from Pacific Seafood Co in Seattle, WA at $12.50/lb',
-    url: 'https://web-593576627371.us-central1.run.app/listing/listing_001',
+    url: 'https://finventory-web-593576627371.us-central1.run.app/listing/listing_001',
     similarity: 0.95,
     metadata: { species: 'Bluefin Tuna', grade: 'A', quantity: '500 lb', location: 'Seattle, WA', seller: 'Pacific Seafood Co', price: 12.50 }
   },
@@ -32,7 +32,7 @@ const MOCK_INVENTORY = [
     itemId: 'listing_002',
     itemType: 'listing',
     content: 'Yellowfin Tuna - sushi grade, 300 lb from Ocean Fresh in Portland, OR at $18/lb',
-    url: 'https://web-593576627371.us-central1.run.app/listing/listing_002',
+    url: 'https://finventory-web-593576627371.us-central1.run.app/listing/listing_002',
     similarity: 0.88,
     metadata: { species: 'Yellowfin Tuna', grade: 'sushi', quantity: '300 lb', location: 'Portland, OR', seller: 'Ocean Fresh', price: 18.00 }
   },
@@ -40,7 +40,7 @@ const MOCK_INVENTORY = [
     itemId: 'listing_003',
     itemType: 'listing',
     content: 'Albacore Tuna - B grade, 200 lb bulk lot from Fisherman Joe in San Diego, CA at $8/lb',
-    url: 'https://web-593576627371.us-central1.run.app/listing/listing_003',
+    url: 'https://finventory-web-593576627371.us-central1.run.app/listing/listing_003',
     similarity: 0.82,
     metadata: { species: 'Albacore Tuna', grade: 'B', quantity: '200 lb', location: 'San Diego, CA', seller: 'Fisherman Joe', price: 8.00 }
   },
@@ -48,7 +48,7 @@ const MOCK_INVENTORY = [
     itemId: 'listing_004',
     itemType: 'listing',
     content: 'Bigeye Tuna - A grade, 450 lb fresh catch from Deep Sea Fisheries in Los Angeles, CA at $15/lb',
-    url: 'https://web-593576627371.us-central1.run.app/listing/listing_004',
+    url: 'https://finventory-web-593576627371.us-central1.run.app/listing/listing_004',
     similarity: 0.79,
     metadata: { species: 'Bigeye Tuna', grade: 'A', quantity: '450 lb', location: 'Los Angeles, CA', seller: 'Deep Sea Fisheries', price: 15.00 }
   },
@@ -56,7 +56,7 @@ const MOCK_INVENTORY = [
     itemId: 'listing_005',
     itemType: 'listing',
     content: 'Skipjack Tuna - commercial grade, 1000 lb pallet from Global Seafood Trading in Miami, FL at $6/lb',
-    url: 'https://web-593576627371.us-central1.run.app/listing/listing_005',
+    url: 'https://finventory-web-593576627371.us-central1.run.app/listing/listing_005',
     similarity: 0.75,
     metadata: { species: 'Skipjack Tuna', grade: 'commercial', quantity: '1000 lb', location: 'Miami, FL', seller: 'Global Seafood Trading', price: 6.00 }
   },
@@ -64,7 +64,7 @@ const MOCK_INVENTORY = [
     itemId: 'listing_006',
     itemType: 'listing',
     content: 'Salmon - King/Chinook, A grade, 350 lb from Alaska Wild Catch in Juneau, AK at $22/lb',
-    url: 'https://web-593576627371.us-central1.run.app/listing/listing_006',
+    url: 'https://finventory-web-593576627371.us-central1.run.app/listing/listing_006',
     similarity: 0.71,
     metadata: { species: 'King Salmon', grade: 'A', quantity: '350 lb', location: 'Juneau, AK', seller: 'Alaska Wild Catch', price: 22.00 }
   },
@@ -72,7 +72,7 @@ const MOCK_INVENTORY = [
     itemId: 'listing_007',
     itemType: 'listing',
     content: 'Halibut - Pacific, B grade, 180 lb from North Coast Fisheries in Anchorage, AK at $14/lb',
-    url: 'https://web-593576627371.us-central1.run.app/listing/listing_007',
+    url: 'https://finventory-web-593576627371.us-central1.run.app/listing/listing_007',
     similarity: 0.68,
     metadata: { species: 'Pacific Halibut', grade: 'B', quantity: '180 lb', location: 'Anchorage, AK', seller: 'North Coast Fisheries', price: 14.00 }
   },
@@ -80,7 +80,7 @@ const MOCK_INVENTORY = [
     itemId: 'listing_008',
     itemType: 'listing',
     content: 'Cod - Atlantic, A grade, 600 lb from Boston Fish Market in Boston, MA at $9/lb',
-    url: 'https://web-593576627371.us-central1.run.app/listing/listing_008',
+    url: 'https://finventory-web-593576627371.us-central1.run.app/listing/listing_008',
     similarity: 0.65,
     metadata: { species: 'Atlantic Cod', grade: 'A', quantity: '600 lb', location: 'Boston, MA', seller: 'Boston Fish Market', price: 9.00 }
   }
@@ -118,11 +118,92 @@ function findListings(query: string, limit: number) {
   return scored.sort((a, b) => b.similarity - a.similarity).slice(0, limit)
 }
 
+// Call Gemma 4 31B via AI Studio OpenAI-compatible endpoint
+async function generateAIResponse(query: string, listings: typeof MOCK_INVENTORY): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY
+
+  if (!apiKey || listings.length === 0) {
+    // Fallback to template response
+    if (listings.length === 0) {
+      return `I couldn't find any listings matching "${query}". Try searching for different fish species like "tuna", "salmon", or "cod", or adjust your quantity requirements.`
+    }
+    const totalAvailable = listings.reduce((sum, l) => {
+      const qty = l.metadata?.quantity?.match(/(\d+)/)?.[1]
+      return sum + (qty ? parseInt(qty) : 0)
+    }, 0)
+    let answer = `Found **${listings.length} listing${listings.length > 1 ? 's' : ''}** for "${query}" with ~${totalAvailable} lb total available:\n\n`
+    answer += listings.map(l => {
+      const meta = l.metadata as Record<string, unknown>
+      return `- **[${meta.species || 'Fish'} - ${meta.grade || 'Unknown'} grade](${l.url})**\n  ${meta.quantity || ''} from ${meta.seller || 'Unknown'} in ${meta.location || 'Unknown'}${meta.price ? ` at **$${meta.price}/lb**` : ''}`
+    }).join('\n\n')
+    return answer
+  }
+
+  // Build context from listings
+  const context = listings.map(l =>
+    `- ${l.content} (Link: ${l.url})`
+  ).join('\n')
+
+  try {
+    // Use AI Studio OpenAI-compatible endpoint with Gemma 4 31B
+    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'gemma-3-12b-it',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful fish market assistant. Help buyers find what they need from the available inventory. Always cite specific listings using markdown links like [item description](url). Be concise but friendly.'
+          },
+          {
+            role: 'user',
+            content: `Available inventory:\n${context}\n\nBuyer asks: ${query}\n\nRespond helpfully, citing relevant listings with [description](url) links. If nothing matches, say so clearly.`
+          }
+        ],
+        max_tokens: 500,
+        temperature: 0.7
+      })
+    })
+
+    if (!response.ok) {
+      const err = await response.text()
+      console.error('Gemma API error:', err)
+      throw new Error(`Gemma API error: ${response.status}`)
+    }
+
+    const data = await response.json() as {
+      choices?: Array<{
+        message?: { content?: string }
+      }>
+    }
+
+    return data.choices?.[0]?.message?.content || 'No response from AI'
+  } catch (error) {
+    console.error('AI generation failed:', error)
+    // Fallback response
+    const totalAvailable = listings.reduce((sum, l) => {
+      const qty = l.metadata?.quantity?.match(/(\d+)/)?.[1]
+      return sum + (qty ? parseInt(qty) : 0)
+    }, 0)
+    let answer = `Found **${listings.length} listing${listings.length > 1 ? 's' : ''}** for "${query}" with ~${totalAvailable} lb total available:\n\n`
+    answer += listings.map(l => {
+      const meta = l.metadata as Record<string, unknown>
+      return `- **[${meta.species || 'Fish'} - ${meta.grade || 'Unknown'} grade](${l.url})**\n  ${meta.quantity || ''} from ${meta.seller || 'Unknown'} in ${meta.location || 'Unknown'}${meta.price ? ` at **$${meta.price}/lb**` : ''}`
+    }).join('\n\n')
+    return answer
+  }
+}
+
 export const ragSearch = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://web-593576627371.us-central1.run.app'],
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://finventory-web-593576627371.us-central1.run.app'],
     timeoutSeconds: 30,
-    memory: '256MiB'
+    memory: '256MiB',
+    secrets: ['GEMINI_API_KEY']
   },
   async (request): Promise<RagSearchResult> => {
     const { query, limit = 5 } = request.data as RagSearchRequest
@@ -135,23 +216,8 @@ export const ragSearch = onCall(
       // Search using keyword matching
       const listings = findListings(query, limit)
 
-      // Generate natural language response
-      let answer: string
-
-      if (listings.length === 0) {
-        answer = `I couldn't find any listings matching "${query}". Try searching for different fish species like "tuna", "salmon", or "cod", or adjust your quantity requirements.`
-      } else {
-        const totalAvailable = listings.reduce((sum, l) => {
-          const qty = l.metadata?.quantity?.match(/(\d+)/)?.[1]
-          return sum + (qty ? parseInt(qty) : 0)
-        }, 0)
-
-        answer = `Found **${listings.length} listing${listings.length > 1 ? 's' : ''}** for "${query}" with ~${totalAvailable} lb total available:\n\n`
-        answer += listings.map(l => {
-          const meta = l.metadata as Record<string, unknown>
-          return `- **[${meta.species || 'Fish'} - ${meta.grade || 'Unknown'} grade](${l.url})**\n  ${meta.quantity || ''} from ${meta.seller || 'Unknown'} in ${meta.location || 'Unknown'}${meta.price ? ` at **$${meta.price}/lb**` : ''}`
-        }).join('\n\n')
-      }
+      // Generate AI-powered natural language response
+      const answer = await generateAIResponse(query, listings)
 
       return {
         answer,
