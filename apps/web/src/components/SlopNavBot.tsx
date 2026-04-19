@@ -49,8 +49,7 @@ export default function SlopNavBot() {
     setResult(null)
 
     try {
-      // Direct HTTP call to Cloud Function
-      const response = await fetch('https://ragsearch-eodwatsp5q-uc.a.run.app', {
+      const response = await fetch('https://ragsearch-593576627371.us-central1.run.app', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -84,7 +83,7 @@ export default function SlopNavBot() {
       {/* Search Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/80 text-white rounded-full transition-colors"
+        className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-container text-white rounded-full transition-colors"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -94,9 +93,9 @@ export default function SlopNavBot() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 max-w-[90vw] bg-surface border border-outline-variant rounded-lg shadow-2xl z-50 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-96 max-w-[90vw] bg-surface border border-surface-variant rounded-lg shadow-2xl z-50 overflow-hidden">
           {/* Input Area */}
-          <div className="p-4 border-b border-outline-variant">
+          <div className="p-4 border-b border-surface-variant">
             <form onSubmit={handleSearch} className="relative">
               <input
                 ref={inputRef}
@@ -104,12 +103,12 @@ export default function SlopNavBot() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="What are you looking for?"
-                className="w-full px-4 py-3 bg-surface-container-low border border-outline rounded-lg text-on-surface placeholder:text-outline focus:outline-none focus:border-primary"
+                className="w-full px-4 py-3 bg-surface-container border border-outline-variant rounded-lg text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary"
               />
               <button
                 type="submit"
                 disabled={loading || !query.trim()}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-primary hover:bg-primary/80 disabled:bg-surface-container-high text-white rounded-md transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-primary hover:bg-primary-container disabled:bg-surface-variant text-white rounded-md transition-colors"
               >
                 {loading ? (
                   <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -134,7 +133,7 @@ export default function SlopNavBot() {
                       setQuery(s)
                       inputRef.current?.focus()
                     }}
-                    className="px-3 py-1 text-sm bg-surface-700 hover:bg-surface-600 text-surface-300 rounded-full transition-colors"
+                    className="px-3 py-1 text-sm bg-surface-container-high hover:bg-surface-container text-on-surface-variant rounded-full transition-colors"
                   >
                     {s}
                   </button>
@@ -144,22 +143,22 @@ export default function SlopNavBot() {
           </div>
 
           {/* Results */}
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-96 overflow-y-auto bg-surface">
             {error && (
-              <div className="p-4 text-red-400 text-sm">{error}</div>
+              <div className="p-4 text-error text-sm">{error}</div>
             )}
 
             {result && (
               <div className="p-4">
                 {/* AI Response */}
-                <div className="prose prose-invert prose-sm max-w-none mb-4">
+                <div className="prose prose-sm max-w-none mb-4 text-on-surface">
                   <ReactMarkdown>{result.answer}</ReactMarkdown>
                 </div>
 
                 {/* Matching Listings */}
                 {result.listings.length > 0 && (
-                  <div className="border-t border-surface-700 pt-4">
-                    <h4 className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-2">
+                  <div className="border-t border-surface-variant pt-4">
+                    <h4 className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">
                       {result.listings.length} Matches
                     </h4>
                     <div className="space-y-2">
@@ -171,13 +170,13 @@ export default function SlopNavBot() {
                             e.preventDefault()
                             window.location.href = listing.url
                           }}
-                          className="block p-3 bg-surface-700 hover:bg-surface-600 rounded-lg transition-colors"
+                          className="block p-3 bg-surface-container hover:bg-surface-container-high rounded-lg transition-colors"
                         >
                           <div className="flex items-start justify-between">
                             <div className="text-sm text-on-surface">
                               {listing.content.substring(0, 80)}...
                             </div>
-                            <span className="text-xs text-ocean-400 ml-2 shrink-0">
+                            <span className="text-xs text-primary ml-2 shrink-0">
                               {(listing.similarity * 100).toFixed(0)}% match
                             </span>
                           </div>
@@ -188,7 +187,7 @@ export default function SlopNavBot() {
                 )}
 
                 {result.listings.length === 0 && (
-                  <div className="text-center py-4 text-surface-500 text-sm">
+                  <div className="text-center py-4 text-on-surface-variant text-sm">
                     No matching listings found.
                   </div>
                 )}
