@@ -37,3 +37,8 @@ variable "fcm_server_key" {
   type        = string
   sensitive   = true
 }
+
+variable "org_id" {
+  description = "GCP organization ID"
+  type        = string
+}
