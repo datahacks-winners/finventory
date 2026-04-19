@@ -105,6 +105,8 @@ locals {
         status           = "active"
         sushiCertNumber  = "SUSHI-001"
         sushiCertExpiry  = "2026-07-19T10:00:00Z"
+        rating           = 4.8
+        reviewCount      = 124
         createdAt        = "2026-04-19T12:00:00Z"
         updatedAt        = "2026-04-19T12:00:00Z"
       }
@@ -129,6 +131,8 @@ locals {
           "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800"
         ]
         status           = "active"
+        rating           = 4.6
+        reviewCount      = 89
         createdAt        = "2026-04-19T12:00:00Z"
         updatedAt        = "2026-04-19T12:00:00Z"
       }
@@ -155,6 +159,8 @@ locals {
           "https://images.unsplash.com/photo-1534939561126-855b8675edd7?w=800"
         ]
         status           = "active"
+        rating           = 4.9
+        reviewCount      = 203
         createdAt        = "2026-04-19T12:00:00Z"
         updatedAt        = "2026-04-19T12:00:00Z"
       }
@@ -183,6 +189,8 @@ locals {
         status            = "active"
         sushiCertNumber   = "SUSHI-002"
         sushiCertExpiry   = "2026-06-19T10:00:00Z"
+        rating            = 4.7
+        reviewCount       = 156
         createdAt         = "2026-04-19T12:00:00Z"
         updatedAt         = "2026-04-19T12:00:00Z"
       }
@@ -208,6 +216,8 @@ locals {
           "https://images.unsplash.com/photo-1559305289-4c31700ba9cb?w=800"
         ]
         status           = "active"
+        rating           = 4.5
+        reviewCount      = 67
         createdAt        = "2026-04-19T12:00:00Z"
         updatedAt        = "2026-04-19T12:00:00Z"
       }
@@ -232,6 +242,8 @@ locals {
           "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800"
         ]
         status           = "active"
+        rating           = 4.4
+        reviewCount      = 45
         createdAt        = "2026-04-19T12:00:00Z"
         updatedAt        = "2026-04-19T12:00:00Z"
       }
@@ -256,6 +268,8 @@ locals {
           "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800"
         ]
         status           = "active"
+        rating           = 4.2
+        reviewCount      = 34
         createdAt        = "2026-04-19T12:00:00Z"
         updatedAt        = "2026-04-19T12:00:00Z"
       }
@@ -281,6 +295,8 @@ locals {
           "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=800"
         ]
         status           = "active"
+        rating           = 4.9
+        reviewCount      = 278
         createdAt        = "2026-04-19T12:00:00Z"
         updatedAt        = "2026-04-19T12:00:00Z"
       }
