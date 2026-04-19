@@ -5,10 +5,12 @@ import tsEslint from "typescript-eslint";
 export default [
   {
     ignores: [
-      "node_modules/**",
-      "dist/**",
-      "build/**",
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
       "functions/lib/**",
+      "backend-migration/**",
+      "mobile-migration/**",
       "apps/mobile/eslint.config.js",
       "**/*.config.js",
       "apps/mobile/scripts/**",
@@ -28,7 +30,7 @@ export default [
       "@typescript-eslint": typescriptEslint,
     },
     rules: {
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
       "@typescript-eslint/no-explicit-any": "warn",
     },
   },

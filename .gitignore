@@ -16,6 +16,7 @@ build/
 .next/
 out/
 *.tsbuildinfo
+functions/lib/
 
 # Firebase
 .firebase/
