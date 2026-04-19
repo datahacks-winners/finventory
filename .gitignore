@@ -28,6 +28,8 @@ gcp-state.json
 terraform.tfstate
 terraform.tfstate.*
 .terraform/
+terraform/*.tfstate
+terraform/errored.tfstate
 
 # IDE
 .vscode/
