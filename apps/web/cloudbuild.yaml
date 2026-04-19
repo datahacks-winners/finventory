@@ -2,6 +2,8 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
+      - '--build-arg'
+      - 'VITE_PEXELS_API_KEY=${_PEXELS_API_KEY}'
       - '-t'
       - 'gcr.io/finventory-1776558252/web:latest'
       - '-f'
@@ -14,3 +16,6 @@ images:
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _PEXELS_API_KEY: ""  # Set via Cloud Build trigger or gcloud command
