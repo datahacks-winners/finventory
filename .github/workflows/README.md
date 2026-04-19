@@ -5,7 +5,7 @@
 | Workflow | Trigger | Environment | Approval |
 |----------|---------|-------------|----------|
 | `staging.yml` | Push to `develop` | finventory-dev | Automatic |
-| `production.yml` | Push to `develop` or tag `v*` | finventory-prod | Manual (GitHub Environments) |
+| `production.yml` | Tag `v*` | finventory-prod | Manual (GitHub Environments) |
 
 ## Required Secrets
 
