@@ -1,5 +1,15 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import { ListingWithDistance } from '../types/listing';
+
+interface ListingMapProps {
+  listings: ListingWithDistance[];
+  userLocation: {
+    latitude: number;
+    longitude: number;
+  } | null;
+  onListingPress: (listingId: string) => void;
+}
 
 /**
  * Placeholder component for map-based listing display
@@ -17,13 +27,20 @@ import { View, StyleSheet, Text } from 'react-native';
  * - ListingCard (for selected listing preview)
  * - BrowseScreen (parent, manages map/list toggle)
  */
-export const ListingMap: React.FC = () => {
+export const ListingMap: React.FC<ListingMapProps> = ({
+  listings,
+  userLocation,
+  onListingPress: _onListingPress,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.placeholder}>
         <Text style={styles.placeholderText}>Map View</Text>
         <Text style={styles.placeholderSubtext}>
           Mapbox GL integration coming soon
+        </Text>
+        <Text style={styles.placeholderSubtext}>
+          {listings.length} listings • {userLocation ? 'Location enabled' : 'No location'}
         </Text>
       </View>
     </View>

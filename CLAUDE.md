@@ -114,10 +114,11 @@ Cloud Function `matchStandingOrders` runs on schedule, queries new listings, mat
 ## Development Workflow
 
 1. **Always use git worktrees for feature work** - Create isolated worktrees for any new features or branches using `EnterWorktree` or git worktree commands
-2. Authenticate: `gcloud auth application-default login` + `firebase login`
-3. Start emulators: `firebase emulators:start`
-4. Deploy functions: `firebase deploy --only functions`
-5. Deploy rules: `firebase deploy --only firestore:rules,storage:rules`
+2. **PR target branch**: All pull requests should target `develop` (not `main`)
+3. Authenticate: `gcloud auth application-default login` + `firebase login`
+4. Start emulators: `firebase emulators:start`
+5. Deploy functions: `firebase deploy --only functions`
+6. Deploy rules: `firebase deploy --only firestore:rules,storage:rules`
 
 ---
 

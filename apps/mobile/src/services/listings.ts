@@ -130,7 +130,7 @@ export function subscribeToLiveInventory(
 ): () => void {
   const ref = realtime().ref('live_inventory');
 
-  const listener = ref.on('value', (snapshot) => {
+  const listener = ref.on('value', (snapshot: { val: () => Record<string, number> }) => {
     const data = snapshot.val();
     callback(data || {});
   });
