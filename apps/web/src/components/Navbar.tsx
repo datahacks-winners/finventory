@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const NAV_LINKS = [
   { to: '/marketplace', label: 'Marketplace' },
@@ -9,6 +10,7 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const { pathname } = useLocation()
+  const { user } = useAuth()
 
   const isActive = (to: string) =>
     to === '/marketplace' ? pathname.startsWith('/marketplace') : pathname === to
@@ -37,21 +39,47 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          {user && (
+            <Link
+              to="/orders"
+              className={`tracking-[-0.02em] leading-relaxed transition-transform duration-300 hover:scale-[1.02] font-['Plus_Jakarta_Sans'] ${
+                isActive('/orders')
+                  ? 'text-sky-700 font-bold border-b-2 border-sky-700 pb-1'
+                  : 'text-slate-600 hover:text-sky-800 font-medium'
+              }`}
+            >
+              My Orders
+            </Link>
+          )}
         </div>
 
         <div className="flex gap-4 items-center">
-          <Link
-            to="/auth"
-            className="text-slate-600 font-medium px-6 py-2 hover:scale-[1.02] transition-transform hover:text-sky-800"
-          >
-            Log in
-          </Link>
-          <Link
-            to="/auth"
-            className="bg-primary text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/10 hover:scale-[1.05] transition-all"
-          >
-            Sign up
-          </Link>
+          {user ? (
+            <>
+              <span className="text-slate-600 text-sm hidden lg:inline">{user.displayName || user.email}</span>
+              <Link
+                to="/orders"
+                className="bg-primary text-white px-6 py-3 rounded-full font-bold shadow-lg shadow-primary/10 hover:scale-[1.05] transition-all"
+              >
+                My Orders
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/auth"
+                className="text-slate-600 font-medium px-6 py-2 hover:scale-[1.02] transition-transform hover:text-sky-800"
+              >
+                Log in
+              </Link>
+              <Link
+                to="/auth"
+                className="bg-primary text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/10 hover:scale-[1.05] transition-all"
+              >
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

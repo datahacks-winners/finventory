@@ -9,10 +9,12 @@ import SupplierPortal from './pages/SupplierPortal'
 import Impact from './pages/Impact'
 import About from './pages/About'
 import Auth from './pages/Auth'
+import MyOrders from './pages/MyOrders'
 
 function AppRoutes() {
   const { pathname } = useLocation()
   const isAuth = pathname === '/auth'
+  const hideFooter = pathname === '/orders' || pathname.startsWith('/marketplace/')
 
   return (
     <div className="bg-surface text-on-surface font-body min-h-screen">
@@ -25,8 +27,9 @@ function AppRoutes() {
         <Route path="/impact" element={<Impact />} />
         <Route path="/about" element={<About />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/orders" element={<MyOrders />} />
       </Routes>
-      {!isAuth && <Footer />}
+      {!isAuth && !hideFooter && <Footer />}
     </div>
   )
 }
