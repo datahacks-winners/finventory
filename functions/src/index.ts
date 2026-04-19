@@ -18,6 +18,9 @@ export {
   getMyStandingOrders
 } from './api/standingOrders.js'
 
+// Gemini AI Functions
+export { analyzeFishPhoto } from './gemini/analyzePhoto.js'
+
 // Firestore Triggers
 export {
   onListingCreated
