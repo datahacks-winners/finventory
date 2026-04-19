@@ -91,16 +91,6 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
-      - name: Deploy Cloud Functions
-        if: hashFiles('functions/package.json') != ''
-        run: |
-          cd functions
-          npm ci
-          npm run build
-          firebase deploy --only functions --project finventory-dev
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
   deploy-functions:
     name: Deploy Cloud Functions (Staging)
     runs-on: ubuntu-latest
@@ -192,3 +182,7 @@ jobs:
           echo "- Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- Status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployments" >> $GITHUB_STEP_SUMMARY
+          echo "- Firebase rules deployed to finventory-dev" >> $GITHUB_STEP_SUMMARY
+          echo "- Cloud Functions deployed to finventory-dev" >> $GITHUB_STEP_SUMMARY
