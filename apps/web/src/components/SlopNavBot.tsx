@@ -247,20 +247,15 @@ export default function SlopNavBot() {
       {/* Floating Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-4 py-3 rounded-full shadow-xl transition-all hover:scale-105 hover:shadow-2xl ${
-          isOpen ? 'bg-on-surface text-white' : 'bg-primary text-white'
-        }`}
+        className="w-14 h-14 bg-primary hover:bg-primary-container text-white rounded-full shadow-xl transition-all hover:scale-105 hover:shadow-2xl flex items-center justify-center"
+        aria-label={isOpen ? 'Close chat' : 'Chat with Shelby'}
       >
         {isOpen ? (
-          <>
-            <span className="text-xl">🦀</span>
-            <span className="hidden sm:inline font-medium">Bye bye!</span>
-          </>
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         ) : (
-          <>
-            <span className="text-xl animate-bounce">🦀</span>
-            <span className="hidden sm:inline font-bold">Chat with Shelby!</span>
-          </>
+          <span className="text-2xl animate-bounce">🦀</span>
         )}
       </button>
     </div>
