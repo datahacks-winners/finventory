@@ -84,19 +84,19 @@ jobs:
         run: npm install -g firebase-tools@13.14.0
 
       - name: Deploy Firestore Rules
-        if: hashFiles('firestore.rules') != ''
+        if: ${{ hashFiles('firestore.rules') != '' }}
         run: firebase deploy --only firestore:rules --project finventory-prod
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
       - name: Deploy Storage Rules
-        if: hashFiles('storage.rules') != ''
+        if: ${{ hashFiles('storage.rules') != '' }}
         run: firebase deploy --only storage --project finventory-prod
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
       - name: Deploy Firestore Indexes
-        if: hashFiles('firestore.indexes.json') != ''
+        if: ${{ hashFiles('firestore.indexes.json') != '' }}
         run: firebase deploy --only firestore:indexes --project finventory-prod
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
