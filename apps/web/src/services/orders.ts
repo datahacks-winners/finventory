@@ -28,7 +28,9 @@ export interface Order {
   }
 }
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://api-eodwatsp5q-uc.a.run.app'
+const CREATE_ORDER_URL = 'https://createorder-eodwatsp5q-uc.a.run.app'
+const CANCEL_ORDER_URL = 'https://cancelorder-eodwatsp5q-uc.a.run.app'
+const CONFIRM_PICKUP_URL = 'https://confirmpickup-eodwatsp5q-uc.a.run.app'
 
 async function getAuthToken(): Promise<string> {
   const auth = getAuth()
@@ -49,7 +51,7 @@ export async function createOrder(
   const auth = getAuth()
   const user = auth.currentUser
 
-  const response = await fetch(`${API_URL}/api/orders`, {
+  const response = await fetch(CREATE_ORDER_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -78,7 +80,7 @@ export async function confirmPickup(
 ): Promise<{ success: boolean; alreadyPickedUp: boolean }> {
   const token = await getAuthToken()
 
-  const response = await fetch(`${API_URL}/api/orders/${orderId}/confirm-pickup`, {
+  const response = await fetch(CONFIRM_PICKUP_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -98,10 +100,10 @@ export async function confirmPickup(
   return response.json()
 }
 
-export async function cancelOrder(orderId: string): Promise<{ success: boolean }> {
+export async function cancelOrder(_orderId: string): Promise<{ success: boolean }> {
   const token = await getAuthToken()
 
-  const response = await fetch(`${API_URL}/api/orders/${orderId}/cancel`, {
+  const response = await fetch(CANCEL_ORDER_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -72,8 +72,10 @@ export default function Impact() {
             </p>
           </div>
           <div className="w-full bg-surface-container-low border-y border-outline-variant/20">
-            <p className="text-xs font-bold uppercase tracking-widest text-outline px-4 md:px-8 lg:px-12 pt-6 max-w-7xl mx-auto">Egg Density vs. Surface Temperature</p>
-            <div className="px-4 md:px-8 lg:px-12 pb-6 max-w-7xl mx-auto">
+            <div className="px-4 md:px-8 lg:px-12 max-w-7xl mx-auto">
+              <p className="text-xs font-bold uppercase tracking-widest text-outline pt-6">Egg Density vs. Surface Temperature</p>
+            </div>
+            <div className="px-0 pb-0">
               <TempBinsChart className="w-full" />
             </div>
           </div>
