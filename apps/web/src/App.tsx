@@ -11,6 +11,7 @@ import Impact from './pages/Impact'
 import About from './pages/About'
 import Auth from './pages/Auth'
 import MyOrders from './pages/MyOrders'
+import Checkout from './pages/Checkout'
 import { Component, type ReactNode } from 'react'
 
 // Error boundary to catch AuthProvider crashes
@@ -53,6 +54,7 @@ function AppRoutes() {
         <Route path="/about" element={<About />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/orders" element={<MyOrders />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
       {!isAuth && !hideFooter && <Footer />}
     </div>

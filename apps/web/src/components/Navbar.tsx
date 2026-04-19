@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const NAV_LINKS = [
   { to: '/marketplace', label: 'Marketplace' },
@@ -87,5 +88,29 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+  )
+}
+
+function LogoutButton() {
+  const { logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      navigate('/')
+    } catch (err) {
+      console.error('Logout failed:', err)
+    }
+  }
+
+  return (
+    <button
+      onClick={handleLogout}
+      className="text-slate-500 hover:text-red-600 p-2 rounded-full hover:bg-red-50 transition-all"
+      title="Sign out"
+    >
+      <span className="material-symbols-outlined text-xl">logout</span>
+    </button>
   )
 }

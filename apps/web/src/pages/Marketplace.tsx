@@ -12,12 +12,16 @@ const GRADES = [
 
 const SPECIES_LIST = [
   'Salmon', 'Tuna', 'Cod', 'Halibut', 'Crab', 'Lobster', 
-  'Sardines', 'Mackerel', 'Shrimp', 'Snapper', 'Sea Bass', 'Trout'
+  'Sardines', 'Mackerel', 'Shrimp', 'Snapper', 'Sea Bass', 'Trout',
 ]
+
+const ITEMS_PER_PAGE = 12
+const _CART_STORAGE_KEY = 'finventory-cart'
 
 interface CartItem {
   listing: ListingWithDistance
   weight: number
+  deliveryOption: 'pickup' | 'delivery'
 }
 
 function formatDistance(miles: number | undefined): string {
