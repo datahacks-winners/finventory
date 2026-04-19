@@ -6,18 +6,6 @@ interface RagSearchRequest {
   limit?: number
 }
 
-interface _RagSearchResult {
-  answer: string
-  listings: Array<{
-    itemId: string
-    itemType: string
-    content: string
-    url: string
-    similarity: number
-    metadata?: Record<string, unknown>
-  }>
-}
-
 // Mock inventory data - in production this would come from pgvector
 const MOCK_INVENTORY = [
   {

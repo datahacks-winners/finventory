@@ -38,7 +38,7 @@ const KPI_CARDS = [
 
 export default function SupplierPortal() {
   const { user } = useAuth()
-  const navigate = useNavigate()
+  const _navigate = useNavigate()
   const location = useLocation()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -194,7 +194,7 @@ export default function SupplierPortal() {
   }
 
   // DEBUG MODE: Bypass auth check temporarily
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const _debugBypassAuth = true
 
   /* Original auth guard - re-enable after debugging
