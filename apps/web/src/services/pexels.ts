@@ -1,6 +1,8 @@
 import imgBluefin from '../assets/fish/bluefin.jpeg'
+import imgCrab from '../assets/fish/dungeness-crab.jpg'
 import imgHalibut from '../assets/fish/halibut.jpg'
 import imgLeopard from '../assets/fish/leopard.jpeg'
+import imgRockfish from '../assets/fish/rockfish.jpg'
 import imgSalmon from '../assets/fish/salmon.jpg'
 import imgSanddabs from '../assets/fish/sanddabs.jpg'
 import imgSockeye from '../assets/fish/sockeye.jpg'
@@ -146,13 +148,13 @@ export function getFallbackUrl(query: string): string {
     yellowfin: imgYellowfin,
 
     // ═══════════════════════════════════════════════════════════════
-    // CRAB - Using Pexels since Unsplash IDs were incorrect
+    // CRAB - Using local image instead of broken external URL
     // ═══════════════════════════════════════════════════════════════
-    crab: 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'dungeness crab': 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'red rock crab': 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'snow crab': 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
-    'king crab': 'https://images.pexels.com/photos/56884/crab-carcinus-maenas-crustacean-sea-56884.jpeg?auto=compress&cs=tinysrgb&w=800',
+    crab: imgCrab,
+    'dungeness crab': imgCrab,
+    'red rock crab': imgCrab,
+    'snow crab': imgCrab,
+    'king crab': imgCrab,
 
     // ═══════════════════════════════════════════════════════════════
     // LOBSTER - Using Pexels verified lobster image
@@ -162,12 +164,12 @@ export function getFallbackUrl(query: string): string {
     'maine lobster': 'https://images.pexels.com/photos/566345/pexels-photo-566345.jpeg?auto=compress&cs=tinysrgb&w=800',
 
     // ═══════════════════════════════════════════════════════════════
-    // ROCKFISH - California rockfish species
+    // ROCKFISH - California rockfish species - using local image
     // ═══════════════════════════════════════════════════════════════
-    rockfish: 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
-    'vermillion rockfish': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
-    'bocaccio rockfish': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
-    'canary rockfish': 'https://images.unsplash.com/photo-1623659599466-2d3e776d2837?w=800&auto=format&fit=crop&q=80',
+    rockfish: imgRockfish,
+    'vermillion rockfish': imgRockfish,
+    'bocaccio rockfish': imgRockfish,
+    'canary rockfish': imgRockfish,
 
     // ═══════════════════════════════════════════════════════════════
     // SHEEPHEAD - California sheephead (wrasse family)

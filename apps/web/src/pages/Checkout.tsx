@@ -87,18 +87,26 @@ export default function Checkout() {
     try {
       for (const item of cart) {
         try {
+          console.log('Creating order for listing:', item.listing.id, 'weight:', item.weight)
           const result = await createOrder(
             item.listing.id,
             item.weight,
             item.deliveryOption
           )
+          console.log('Order result:', result)
           if (result.success) {
             orderIds.push(result.orderId)
           }
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : ''
-          // If listing not found, mark as invalid
-          if (msg.includes('not found') || msg.includes('not-found')) {
+        } catch (err: any) {
+          console.error('Order error:', err)
+          const msg = err?.message || ''
+          const code = err?.code || ''
+          // Check for not-found error (Firebase callable returns this as 'not-found' code)
+          if (msg.toLowerCase().includes('not found') || 
+              msg.toLowerCase().includes('not-found') ||
+              code === 'not-found' ||
+              code === 'not_found' ||
+              err?.details?.includes('Listing not found')) {
             invalidItems.push(item)
           } else {
             throw err // Re-throw other errors
@@ -125,6 +133,7 @@ export default function Checkout() {
         clearCart()
       }
     } catch (err) {
+      console.error('Place order failed:', err)
       setError(err instanceof Error ? err.message : 'Failed to place order')
     } finally {
       setLoading(false)
