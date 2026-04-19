@@ -14,9 +14,10 @@ import { SustainabilityInfo } from '../types/inaturalist';
 interface INaturalistPanelProps {
   speciesName: string;
   info: SustainabilityInfo;
+  title?: string;
 }
 
-export function INaturalistPanel({ speciesName, info }: INaturalistPanelProps) {
+export function INaturalistPanel({ speciesName, info, title = 'More about this fish' }: INaturalistPanelProps) {
   const [expanded, setExpanded] = useState(false);
 
   const taxon = info.taxon;
@@ -44,7 +45,7 @@ export function INaturalistPanel({ speciesName, info }: INaturalistPanelProps) {
         activeOpacity={0.7}
       >
         <View style={styles.headerLeft}>
-          <Text style={styles.headerLabel}>iNaturalist</Text>
+          <Text style={styles.headerLabel}>{title}</Text>
           {info.loading ? (
             <ActivityIndicator size="small" color="#4B5563" style={styles.spinner} />
           ) : (
@@ -77,23 +78,36 @@ export function INaturalistPanel({ speciesName, info }: INaturalistPanelProps) {
             </Text>
           ) : (
             <>
-              {/* Photos */}
-              {taxon.taxon_photos && taxon.taxon_photos.length > 0 && (
+              {/* Hero photo */}
+              {(taxon.default_photo?.medium_url || taxon.taxon_photos?.[0]?.photo.medium_url) && (
+                <View style={styles.heroWrapper}>
+                  <Image
+                    source={{ uri: taxon.default_photo?.medium_url ?? taxon.taxon_photos![0].photo.medium_url }}
+                    style={styles.heroPhoto}
+                    resizeMode="cover"
+                  />
+                  {(taxon.default_photo?.attribution ?? taxon.taxon_photos?.[0]?.photo.attribution) ? (
+                    <Text style={styles.heroAttribution} numberOfLines={1}>
+                      {taxon.default_photo?.attribution ?? taxon.taxon_photos![0].photo.attribution}
+                    </Text>
+                  ) : null}
+                </View>
+              )}
+
+              {/* Additional photos */}
+              {taxon.taxon_photos && taxon.taxon_photos.length > 1 && (
                 <ScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   style={styles.photoScroll}
                 >
-                  {taxon.taxon_photos.slice(0, 5).map((tp, i) => (
+                  {taxon.taxon_photos.slice(1, 6).map((tp, i) => (
                     <View key={i} style={styles.photoWrapper}>
                       <Image
                         source={{ uri: tp.photo.medium_url }}
                         style={styles.photo}
                         resizeMode="cover"
                       />
-                      <Text style={styles.photoAttribution} numberOfLines={1}>
-                        {tp.photo.attribution}
-                      </Text>
                     </View>
                   ))}
                 </ScrollView>
@@ -232,28 +246,44 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     textAlign: 'center',
   },
+  heroWrapper: {
+    marginHorizontal: -16,
+    marginTop: 12,
+    marginBottom: 4,
+  },
+  heroPhoto: {
+    width: '100%',
+    height: 220,
+  },
+  heroAttribution: {
+    fontSize: 10,
+    color: '#9CA3AF',
+    paddingHorizontal: 16,
+    paddingTop: 4,
+    paddingBottom: 8,
+  },
   photoScroll: {
     marginHorizontal: -16,
     paddingHorizontal: 16,
-    marginTop: 12,
+    marginTop: 4,
     marginBottom: 12,
   },
   photoWrapper: {
     marginRight: 8,
     borderRadius: 8,
     overflow: 'hidden',
-    width: 140,
+    width: 100,
   },
   photo: {
-    width: 140,
-    height: 100,
+    width: 100,
+    height: 72,
     borderRadius: 8,
   },
   photoAttribution: {
     fontSize: 9,
     color: '#9CA3AF',
     marginTop: 2,
-    maxWidth: 140,
+    maxWidth: 100,
   },
   commonName: {
     fontSize: 18,
