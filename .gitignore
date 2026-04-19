@@ -73,6 +73,9 @@ notebooks/**
 # CalCOFI inference API — trained artefacts (generate via train_export_models.py)
 services/calcofi-api/models/*
 !services/calcofi-api/models/.gitkeep
+# Allow joblib + manifest in `gcloud builds submit` (default gcloudignore = .gitignore). Keep .pt out.
+!services/calcofi-api/models/*.joblib
+!services/calcofi-api/models/timesfm_manifest.json
 
 # CalCOFI / raw data — too large for git (see notebooks/README.md)
 data/

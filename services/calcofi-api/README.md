@@ -2,6 +2,8 @@
 
 FastAPI service for **XGBoost (5-yr binned)**, **OLS (10-yr binned)**, and **TimesFM** forecasts. Models live under `models/` (gitignored); generate them with `train_export_models.py` or the TimesFM notebook scripts with `--save-model`.
 
+**HTTP reference:** [API.md](./API.md) (paths, JSON bodies, feature column lists).
+
 ## Docker (local)
 
 From the **repository root** (Docker Desktop / daemon must be running):
@@ -11,7 +13,9 @@ docker build -f services/calcofi-api/Dockerfile -t calcofi-api:local .
 docker run --rm -p 8080:8080 -e PORT=8080 calcofi-api:local
 ```
 
-Open `http://localhost:8080/healthz`.
+Open `http://localhost:8080/healthz` (alias: `/health`). On **Cloud Run**, prefer **`/health`**: `GET /healthz` can be mishandled by the platform (known quirk for some paths ending in `z`); your app is still live if `GET /openapi.json` works.
+
+**Cloud Build** uploads use the same rules as `.gitignore`. `*.joblib` and `timesfm_manifest.json` are re-included so the image contains XGB/OLS if those files exist on the machine that runs `gcloud builds submit` (keep `timesfm_state.pt` out; it stays ignored).
 
 ### Build troubleshooting
 
@@ -47,9 +51,10 @@ gcloud run deploy calcofi-api \
   --allow-unauthenticated \
   --memory=4Gi \
   --cpu=2 \
-  --timeout=300 \
-  --set-env-vars=PORT=8080
+  --timeout=300
 ```
+
+Do not set `PORT` in `--set-env-vars` on Cloud Run: it is **reserved** and injected for you. The image’s `CMD` already uses `${PORT:-8080}`.
 
 ### IAM / organization errors
 

@@ -44,8 +44,9 @@ gcloud run deploy "${SERVICE}" \
   --memory=4Gi \
   --cpu=2 \
   --timeout=300 \
-  --max-instances=10 \
-  --set-env-vars=PORT=8080
+  --max-instances=10
+
+# Cloud Run sets PORT automatically; do not pass it in --set-env-vars (reserved).
 
 echo "==> Service URL"
 gcloud run services describe "${SERVICE}" --region="${REGION}" --format='value(status.url)'

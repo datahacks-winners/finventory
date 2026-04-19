@@ -21,7 +21,9 @@ app = FastAPI(
 
 
 @app.get("/healthz")
+@app.get("/health")
 def healthz():
+    # Use /health on Cloud Run: /healthz can be mishandled (platform quirk; paths ending in "z").
     return {"status": "ok", "models": runtime.models_ready()}
 
 
