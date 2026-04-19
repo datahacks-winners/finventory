@@ -1,0 +1,19 @@
+# Submit from repository root (set _IMAGE to your registry, e.g. gcr.io/$PROJECT_ID/calcofi-api:latest):
+#   export PROJECT_ID=$(gcloud config get-value project)
+#   gcloud builds submit --config=services/calcofi-api/cloudbuild.yaml \
+#     --substitutions=_IMAGE=gcr.io/${PROJECT_ID}/calcofi-api:latest .
+substitutions:
+  _IMAGE: gcr.io/PROJECT_ID/calcofi-api:latest
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -f
+      - services/calcofi-api/Dockerfile
+      - -t
+      - ${_IMAGE}
+      - .
+
+images:
+  - ${_IMAGE}

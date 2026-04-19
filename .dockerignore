@@ -1,0 +1,25 @@
+# Slim build context for services/calcofi-api (and other root builds)
+.git
+.github
+.cursor
+.vscode
+**/.venv
+**/node_modules
+**/dist
+**/.next
+**/build
+**/__pycache__
+**/*.pyc
+.husky
+apps
+packages
+functions
+docs
+notebooks
+data
+**/.DS_Store
+.worktrees
+
+# Huge PyTorch checkpoint — omit from image context (runtime loads HF weights via manifest).
+# Saves ~900MB upload time and avoids BuildKit layer I/O strain. Keep joblibs + manifest.
+services/calcofi-api/models/timesfm_state.pt

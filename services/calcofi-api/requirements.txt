@@ -1,0 +1,18 @@
+# Inference API — CPU torch by default (swap wheel index for CUDA if needed).
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+fastapi>=0.109,<1
+uvicorn[standard]>=0.27,<1
+pydantic>=2,<3
+numpy>=1.26,<3
+pandas>=2,<3
+scikit-learn>=1.4,<2
+# Stay on 2.x: wheels for 3.x may pull NVIDIA CUDA libs (~300MB) even for CPU inference.
+xgboost>=2,<3
+joblib>=1.3,<2
+torch>=2.2,<3
+
+# TimesFM is optional at runtime (forecast endpoint). Install in the image
+# from Google’s repo when needed, e.g.
+#   pip install "timesfm[torch]"
+# or mount vendor/timesfm + pip install -e …
