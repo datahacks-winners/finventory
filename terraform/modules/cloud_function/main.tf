@@ -24,7 +24,7 @@ resource "google_cloudfunctions2_function" "function" {
   dynamic "event_trigger" {
     for_each = var.event_triggers
     content {
-      trigger     = event_trigger.trigger
+      trigger    = event_trigger.trigger
       event_type = event_trigger.event_type
     }
   }

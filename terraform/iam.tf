@@ -102,8 +102,8 @@ resource "google_project_iam_member" "github_actions_firebase" {
 # Create service account key for GitHub Actions
 resource "google_service_account_key" "github_actions" {
   service_account_id = google_service_account.github_actions.name
-  key_algorithm        = "KEY_ALG_RSA_2048"
-  private_key_type     = "TYPE_GOOGLE_CREDENTIALS_FILE"
+  key_algorithm      = "KEY_ALG_RSA_2048"
+  private_key_type   = "TYPE_GOOGLE_CREDENTIALS_FILE"
 }
 
 resource "google_project_iam_member" "cloud_run_storage" {
