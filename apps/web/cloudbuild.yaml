@@ -25,6 +25,11 @@ steps:
       - 'FIREBASE_MESSAGING_SENDER_ID'
       - 'FIREBASE_APP_ID'
 
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:cors-fix'
+
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -57,7 +62,7 @@ availableSecrets:
       env: 'FIREBASE_APP_ID'
 
 images:
-  - 'us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:chart-fix-21-bins-v2'
+  - 'us-central1-docker.pkg.dev/finventory-1776558252/cloud-run-source-deploy/finventory-web:cors-fix'
 
 options:
   logging: CLOUD_LOGGING_ONLY
