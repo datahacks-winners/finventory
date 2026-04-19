@@ -5,8 +5,7 @@ import { usePexelsBatch, usePexels } from '../hooks/usePexels'
 import { AnimatedNumber } from '../components/AnimatedNumber'
 import { useListings } from '../hooks/useListings'
 import { getFallbackUrl } from '../services/pexels'
-import { useMemo, useState, useRef } from 'react'
-import PhotoAnalysis from '../components/PhotoAnalysis'
+import { useMemo, useState, useEffect } from 'react'
 
 const WHY_CARDS = [
   { icon: 'set_meal', bg: '#0077B6', textClass: 'text-white', title: 'Rescue the catch', desc: 'List bycatch and unsold hauls in seconds. Move surplus before it spoils.' },
@@ -147,144 +146,228 @@ function FreshCatchMarquee() {
   )
 }
 
-// Snap & List Section - AI-powered photo-to-listing feature
-function SnapAndListSection() {
-  const navigate = useNavigate()
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState('')
-  const [showAnalysis, setShowAnalysis] = useState(false)
-  const [_analysisData, setAnalysisData] = useState<{
-    species: string
-    grade: 'sushi' | 'A' | 'B'
-    estimatedWeight: { value: number; unit: 'lb' | 'kg' }
-    description: string
-    suggestedPrice: { min: number; max: number }
-  } | null>(null)
+// AI Demo Section - Animated showcase of photo-to-listing feature
+function AIDemoSection() {
+  const [step, setStep] = useState(0)
 
-  const handlePhotoUpload = () => {
-    fileInputRef.current?.click()
-  }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStep((s) => (s + 1) % 4)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (ev) => {
-        const photoUrl = ev.target?.result as string
-        setUploadedPhotoUrl(photoUrl)
-        setShowAnalysis(true)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleAnalysisComplete = (data: {
-    species: string
-    grade: 'sushi' | 'A' | 'B'
-    estimatedWeight: { value: number; unit: 'lb' | 'kg' }
-    description: string
-    suggestedPrice: { min: number; max: number }
-  }) => {
-    setAnalysisData(data)
-    setShowAnalysis(false)
-    // Navigate to supplier portal with draft data
-    navigate('/suppliers', {
-      state: {
-        draft: {
-          species: data.species,
-          grade: data.grade,
-          weight: data.estimatedWeight.value.toString(),
-          price: ((data.suggestedPrice.min + data.suggestedPrice.max) / 2).toFixed(2),
-          photo: uploadedPhotoUrl,
-        }
-      }
-    })
-  }
+  const steps = [
+    { title: 'Snap a photo', icon: 'photo_camera', desc: 'Take a photo of your catch' },
+    { title: 'AI Analysis', icon: 'auto_awesome', desc: 'Identifying species & grade...' },
+    { title: 'Smart Details', icon: 'insights', desc: 'Weight, price & freshness detected' },
+    { title: 'Listing Live', icon: 'rocket_launch', desc: 'Published in seconds' },
+  ]
 
   return (
-    <section className="py-20 bg-gradient-to-br from-primary/5 via-surface to-secondary/5">
+    <section className="py-24 bg-gradient-to-br from-primary/5 via-surface to-secondary/5">
       <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          {/* Left: Text content */}
           <div>
             <span className="italic-accent-caveat text-primary text-3xl mb-4 block">for suppliers</span>
-            <h2 className="text-4xl lg:text-5xl font-black text-on-background tracking-tight mb-6">
-              Snap a photo. We handle the rest.
+            <h2 className="text-4xl lg:text-6xl font-black text-on-background tracking-tight mb-6">
+              Snap. Analyze. List.
             </h2>
-            <p className="text-lg text-on-surface-variant mb-8 max-w-lg">
-              Our AI analyzes your catch in seconds — identifying species, grading quality, 
-              estimating weight, and suggesting fair market prices. Just upload and review.
+            <p className="text-xl text-on-surface-variant mb-12 max-w-lg">
+              Our AI identifies your catch, grades quality, estimates weight, and suggests pricing — all from a single photo.
             </p>
 
-            <div className="space-y-4 mb-8">
-              {[
-                { icon: 'photo_camera', text: 'Take a photo of your catch' },
-                { icon: 'auto_awesome', text: 'AI identifies species & grade' },
-                { icon: 'edit_note', text: 'Review & publish in seconds' },
-              ].map((step, i) => (
-                <div key={step.text} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-                    {i + 1}
+            {/* Step indicators */}
+            <div className="space-y-4">
+              {steps.map((s, i) => (
+                <div
+                  key={s.title}
+                  className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-500 ${
+                    step === i ? 'bg-primary text-white shadow-lg scale-105' : 'bg-white/50 text-on-surface'
+                  }`}
+                >
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                    step === i ? 'bg-white text-primary' : 'bg-primary/10 text-primary'
+                  }`}>
+                    <span className="material-symbols-outlined">{s.icon}</span>
                   </div>
-                  <span className="material-symbols-outlined text-primary">{step.icon}</span>
-                  <span className="text-on-surface font-medium">{step.text}</span>
+                  <div>
+                    <h4 className="font-bold text-lg">{s.title}</h4>
+                    <p className={`text-sm ${step === i ? 'text-white/80' : 'text-on-surface-variant'}`}>
+                      {s.desc}
+                    </p>
+                  </div>
+                  {step === i && (
+                    <div className="ml-auto">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
+
+            <div className="mt-10">
+              <Link
+                to="/suppliers"
+                className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform"
+              >
+                Try It Now
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </Link>
+            </div>
           </div>
 
+          {/* Right: Animated phone demo */}
           <div className="relative">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleFileChange}
-            />
+            {/* Phone frame */}
+            <div className="relative mx-auto w-80 h-[600px] bg-surface-container-lowest rounded-[3rem] shadow-2xl border-8 border-surface-container-highest overflow-hidden">
+              {/* Notch */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-surface-container-highest rounded-b-2xl z-20" />
 
-            {!uploadedPhotoUrl ? (
-              <div
-                onClick={handlePhotoUpload}
-                className="bg-surface-container-lowest rounded-3xl p-12 border-2 border-dashed border-primary/30 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer text-center"
-              >
-                <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <span className="material-symbols-outlined text-4xl text-primary">photo_camera</span>
+              {/* Screen content */}
+              <div className="relative h-full pt-12 pb-8 px-4">
+                {/* App header */}
+                <div className="flex items-center justify-between mb-6">
+                  <span className="font-bold text-on-surface">New Listing</span>
+                  <span className="material-symbols-outlined text-outline">close</span>
                 </div>
-                <h3 className="text-xl font-bold text-on-surface mb-2">Upload your catch</h3>
-                <p className="text-on-surface-variant mb-4">
-                  Drop a photo here or click to browse
-                </p>
-                <button className="bg-primary text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
-                  Try It Now
-                </button>
+
+                {/* Animated content based on step */}
+                <div className="relative h-full">
+                  {/* Step 0: Camera/Photo */}
+                  <div className={`absolute inset-0 transition-all duration-700 ${step === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
+                    <div className="h-64 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-2xl flex items-center justify-center mb-4">
+                      <img
+                        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&auto=format&fit=crop"
+                        alt="Fresh salmon"
+                        className="w-full h-full object-cover rounded-2xl"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-20 h-20 border-4 border-white rounded-full flex items-center justify-center animate-pulse">
+                          <span className="material-symbols-outlined text-4xl text-white">photo_camera</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-center text-on-surface-variant">Point camera at your catch</p>
+                  </div>
+
+                  {/* Step 1: AI Scanning */}
+                  <div className={`absolute inset-0 transition-all duration-700 ${step === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
+                    <div className="h-64 rounded-2xl overflow-hidden mb-4 relative">
+                      <img
+                        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&auto=format&fit=crop"
+                        alt="Analyzing"
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Scanning overlay */}
+                      <div className="absolute inset-0 bg-primary/20">
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-primary animate-[scan_2s_ease-in-out_infinite]" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="bg-white/90 px-4 py-2 rounded-full flex items-center gap-2">
+                            <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                            <span className="text-sm font-medium text-primary">Analyzing...</span>
+                          </div>
+                        </div>
+                      </div>
+                      {/* Detection boxes */}
+                      <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 border-2 border-primary/50 rounded-lg animate-pulse">
+                        <div className="absolute -top-6 left-0 bg-primary text-white text-xs px-2 py-1 rounded">Fish detected</div>
+                      </div>
+                    </div>
+                    <p className="text-center text-on-surface-variant">AI analyzing species & freshness</p>
+                  </div>
+
+                  {/* Step 2: Results */}
+                  <div className={`absolute inset-0 transition-all duration-700 ${step === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
+                    <div className="h-40 rounded-2xl overflow-hidden mb-4">
+                      <img
+                        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&auto=format&fit=crop"
+                        alt="Salmon"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {/* Analysis results */}
+                    <div className="space-y-2 animate-[slideIn_0.5s_ease-out]">
+                      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex justify-between items-center">
+                        <span className="text-sm text-emerald-700">Species</span>
+                        <span className="font-bold text-emerald-800">Atlantic Salmon</span>
+                      </div>
+                      <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex justify-between items-center">
+                        <span className="text-sm text-blue-700">Grade</span>
+                        <span className="font-bold text-blue-800">Sushi Grade</span>
+                      </div>
+                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex justify-between items-center">
+                        <span className="text-sm text-amber-700">Est. Weight</span>
+                        <span className="font-bold text-amber-800">12.5 lbs</span>
+                      </div>
+                      <div className="bg-purple-50 border border-purple-200 rounded-xl p-3 flex justify-between items-center">
+                        <span className="text-sm text-purple-700">Suggested Price</span>
+                        <span className="font-bold text-purple-800">$18-24/lb</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 3: Published */}
+                  <div className={`absolute inset-0 transition-all duration-700 ${step === 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
+                    <div className="h-full flex flex-col items-center justify-center">
+                      <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mb-6 animate-bounce">
+                        <span className="material-symbols-outlined text-5xl text-emerald-600">check_circle</span>
+                      </div>
+                      <h3 className="text-2xl font-bold text-on-surface mb-2">Listed!</h3>
+                      <p className="text-center text-on-surface-variant mb-6">Your salmon is now live on the marketplace</p>
+                      
+                      {/* Mini listing preview */}
+                      <div className="w-full bg-white rounded-xl p-4 shadow-lg">
+                        <div className="flex gap-3">
+                          <img
+                            src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=100&auto=format&fit=crop"
+                            alt="Salmon"
+                            className="w-16 h-16 rounded-lg object-cover"
+                          />
+                          <div className="flex-1">
+                            <h4 className="font-bold">Atlantic Salmon</h4>
+                            <p className="text-sm text-outline">Sushi Grade • 12.5 lbs</p>
+                            <p className="text-lg font-black text-primary">$21<span className="text-sm font-normal text-outline">/lb</span></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom progress dots */}
+                <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2">
+                  {steps.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        step === i ? 'w-6 bg-primary' : 'bg-outline/30'
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
-            ) : showAnalysis ? (
-              <div className="bg-surface-container-lowest rounded-3xl p-6 shadow-xl">
-                <img
-                  src={uploadedPhotoUrl}
-                  alt="Upload preview"
-                  className="w-full h-48 object-cover rounded-xl mb-4"
-                />
-                <PhotoAnalysis
-                  photoUrl={uploadedPhotoUrl}
-                  onAnalysisComplete={handleAnalysisComplete}
-                  onCancel={() => {
-                    setShowAnalysis(false)
-                    setUploadedPhotoUrl('')
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="bg-surface-container-lowest rounded-3xl p-8 shadow-xl text-center">
-                <span className="material-symbols-outlined text-6xl text-emerald-500 mb-4">check_circle</span>
-                <h3 className="text-xl font-bold text-on-surface mb-2">Analysis Complete!</h3>
-                <p className="text-on-surface-variant mb-4">
-                  Redirecting you to complete your listing...
-                </p>
-              </div>
-            )}
+            </div>
+
+            {/* Decorative elements */}
+            <div className="absolute -top-8 -right-8 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
+            <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-secondary/10 rounded-full blur-2xl" />
           </div>
         </div>
       </div>
+
+      {/* Add scan animation keyframes */}
+      <style>{`
+        @keyframes scan {
+          0%, 100% { top: 0; }
+          50% { top: 100%; }
+        }
+        @keyframes slideIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </section>
   )
 }
@@ -419,8 +502,8 @@ export default function Home() {
       {/* ── Today's Fresh Catch ── */}
       <FreshCatchMarquee />
 
-      {/* ── Snap & List ── */}
-      <SnapAndListSection />
+      {/* ── AI Demo ── */}
+      <AIDemoSection />
 
       {/* ── For Suppliers / For Buyers ── */}
       <section className="py-12 bg-surface">
