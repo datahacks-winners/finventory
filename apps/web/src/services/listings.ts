@@ -96,10 +96,12 @@ export function subscribeToListings(
   const unsubscribe = onSnapshot(
     q,
     (snapshot) => {
+      console.log('Firestore snapshot received:', snapshot.size, 'docs')
       const listings = snapshot.docs.map((docSnapshot: QueryDocumentSnapshot) => ({
         id: docSnapshot.id,
         ...docSnapshot.data(),
       })) as Listing[]
+      console.log('Listings after map:', listings.length)
 
       let filtered = listings
 
