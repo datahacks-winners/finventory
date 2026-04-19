@@ -177,36 +177,6 @@ export default function Impact() {
           </div>
         </section>
 
-        {/* ── Harbor Distribution Map ── */}
-        <section className="px-12 py-32 bg-white">
-          <div className="max-w-7xl mx-auto text-center mb-16">
-            <h2 className="text-4xl font-black text-on-surface mb-4">Harbor Distribution</h2>
-            <p className="text-on-surface-variant font-medium max-w-xl mx-auto">Static point-of-presence mapping across our primary Atlantic hubs.</p>
-          </div>
-          <div className="max-w-5xl mx-auto aspect-[16/9] relative bg-slate-50 border border-slate-200 rounded-3xl overflow-hidden line-art-map shadow-sm">
-            {[
-              { top: '20%', right: '15%', color: 'bg-primary', label: 'Gloucester' },
-              { top: '35%', right: '18%', color: 'bg-secondary', label: 'Portland' },
-              { bottom: '25%', right: '22%', color: 'bg-tertiary', label: 'Cape May' },
-              { bottom: '10%', right: '30%', color: 'bg-primary', label: 'Charleston' },
-            ].map(p => (
-              <div key={p.label} className="absolute flex flex-col items-center" style={{ top: p.top, right: p.right, bottom: p.bottom }}>
-                <div className={`w-3 h-3 ${p.color} rounded-full mb-2`} />
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white/80 px-2 py-0.5 rounded">
-                  {p.label}
-                </span>
-              </div>
-            ))}
-            <div className="absolute top-8 left-8">
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">System Status</div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <div className="text-sm font-medium text-slate-600">Active Monitoring</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* ── Methodology Accordion ── */}
         <section className="px-12 py-32 bg-surface-container-low">
           <div className="max-w-4xl mx-auto">
