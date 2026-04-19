@@ -250,21 +250,14 @@ export default function SlopNavBot() {
       {/* Floating Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-center gap-2 px-4 py-3 rounded-full shadow-xl transition-all hover:scale-105 hover:shadow-2xl min-w-[140px] ${
+        className={`flex items-center gap-2 px-4 py-3 rounded-full shadow-xl transition-all hover:scale-105 hover:shadow-2xl w-[180px] ${
           isOpen ? 'bg-on-surface text-white' : 'bg-primary text-white'
         }`}
       >
-        {isOpen ? (
-          <>
-            <span className="text-xl">🦀</span>
-            <span className="hidden sm:inline font-medium">Bye bye!</span>
-          </>
-        ) : (
-          <>
-            <span className="text-xl animate-bounce">🦀</span>
-            <span className="hidden sm:inline font-bold">Chat with Shelby!</span>
-          </>
-        )}
+        <span className={`text-xl ${isOpen ? '' : 'animate-bounce'}`}>🦀</span>
+        <span className="hidden sm:inline font-bold flex-1 text-center">
+          {isOpen ? 'Bye bye!' : 'Chat with Shelby!'}
+        </span>
       </button>
     </div>
   )
