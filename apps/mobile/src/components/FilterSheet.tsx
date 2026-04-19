@@ -23,6 +23,31 @@ const COMMON_SPECIES = [
 
 const GRADES: Grade[] = ['sushi', 'A', 'B'];
 
+// Stitch Theme
+const colors = {
+  surface: '#fff8f5',
+  surfaceContainer: '#ffeadc',
+  surfaceContainerLow: '#fff1e9',
+  surfaceContainerHigh: '#f9e4d7',
+  onSurface: '#241911',
+  onSurfaceVariant: '#404750',
+  outline: '#707881',
+  outlineVariant: '#c0c7d1',
+  primary: '#005f93',
+  primaryContainer: '#1e78b4',
+  onPrimary: '#ffffff',
+  primaryFixed: '#cde5ff',
+  secondary: '#8c4f14',
+  secondaryContainer: '#fdac6a',
+  onSecondary: '#ffffff',
+};
+
+const gradeChipColors = {
+  sushi: { bg: '#005f93', text: '#ffffff' },
+  A: { bg: '#1e78b4', text: '#f7f9ff' },
+  B: { bg: '#fdac6a', text: '#773e01' },
+};
+
 export function FilterSheet({ visible, onClose }: FilterSheetProps) {
   const { filters, setFilters, resetFilters } = useBrowseStore();
   const [localSpecies, setLocalSpecies] = useState<string[]>(filters.species);
@@ -72,37 +97,34 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
-      <TouchableOpacity
-        style={styles.overlay}
-        activeOpacity={1}
-        onPress={onClose}
-      >
+      <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onClose}>
         <TouchableOpacity activeOpacity={1} style={styles.sheet}>
           <View style={styles.handle} />
-          <ScrollView style={styles.content}>
+
+          <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+            <View style={styles.header}>
+              <Text style={styles.headerLabel}>Refine your search</Text>
+              <Text style={styles.headerTitle}>Filters</Text>
+            </View>
+
             {/* Species Filter */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Species</Text>
               <View style={styles.chipContainer}>
-                {COMMON_SPECIES.map((species) => (
-                  <TouchableOpacity
-                    key={species}
-                    style={[
-                      styles.chip,
-                      localSpecies.includes(species) && styles.chipActive,
-                    ]}
-                    onPress={() => toggleSpecies(species)}
-                  >
-                    <Text
-                      style={[
-                        styles.chipText,
-                        localSpecies.includes(species) && styles.chipTextActive,
-                      ]}
+                {COMMON_SPECIES.map((species) => {
+                  const isActive = localSpecies.includes(species);
+                  return (
+                    <TouchableOpacity
+                      key={species}
+                      style={[styles.chip, isActive && styles.chipActive]}
+                      onPress={() => toggleSpecies(species)}
                     >
-                      {species}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                      <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
+                        {species}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
 
@@ -110,25 +132,24 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Grade</Text>
               <View style={styles.chipContainer}>
-                {GRADES.map((grade) => (
-                  <TouchableOpacity
-                    key={grade}
-                    style={[
-                      styles.chip,
-                      localGrades.includes(grade) && styles.chipActive,
-                    ]}
-                    onPress={() => toggleGrade(grade)}
-                  >
-                    <Text
+                {GRADES.map((grade) => {
+                  const isActive = localGrades.includes(grade);
+                  const gColors = gradeChipColors[grade];
+                  return (
+                    <TouchableOpacity
+                      key={grade}
                       style={[
-                        styles.chipText,
-                        localGrades.includes(grade) && styles.chipTextActive,
+                        styles.gradeChip,
+                        isActive && { backgroundColor: gColors.bg, borderColor: gColors.bg },
                       ]}
+                      onPress={() => toggleGrade(grade)}
                     >
-                      {grade.toUpperCase()}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                      <Text style={[styles.gradeChipText, isActive && { color: gColors.text }]}>
+                        {grade === 'sushi' ? 'SUSHI' : `GRADE ${grade}`}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
 
@@ -142,9 +163,9 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
                   style={styles.sliderButton}
                   onPress={() => setLocalDistance(Math.max(0, localDistance - 5))}
                 >
-                  <Text style={styles.sliderButtonText}>-</Text>
+                  <Text style={styles.sliderButtonText}>−</Text>
                 </TouchableOpacity>
-                <Text style={styles.sliderValue}>{localDistance}</Text>
+                <Text style={styles.sliderValue}>{localDistance === 0 ? '∞' : localDistance}</Text>
                 <TouchableOpacity
                   style={styles.sliderButton}
                   onPress={() => setLocalDistance(Math.min(100, localDistance + 5))}
@@ -156,37 +177,37 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
 
             {/* Price Range Filter */}
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>
-                Price: ${localPriceRange[0]} - ${localPriceRange[1]}/{localDistance === 0 ? 'unit' : 'lb'}
-              </Text>
-              <View style={styles.priceRangeContainer}>
+              <Text style={styles.sectionTitle}>Price Range ($/lb)</Text>
+              <View style={styles.priceRow}>
                 <View style={styles.priceInput}>
                   <Text style={styles.priceLabel}>Min</Text>
                   <TextInput
-                    style={styles.priceInputField}
+                    style={styles.priceField}
                     value={localPriceRange[0].toString()}
                     onChangeText={(text) =>
                       setLocalPriceRange([parseInt(text) || 0, localPriceRange[1]])
                     }
                     keyboardType="numeric"
+                    placeholderTextColor={colors.outline}
                   />
                 </View>
                 <View style={styles.priceInput}>
                   <Text style={styles.priceLabel}>Max</Text>
                   <TextInput
-                    style={styles.priceInputField}
+                    style={styles.priceField}
                     value={localPriceRange[1].toString()}
                     onChangeText={(text) =>
                       setLocalPriceRange([localPriceRange[0], parseInt(text) || 0])
                     }
                     keyboardType="numeric"
+                    placeholderTextColor={colors.outline}
                   />
                 </View>
               </View>
             </View>
           </ScrollView>
 
-          {/* Action Buttons */}
+          {/* Actions */}
           <View style={styles.actions}>
             <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
               <Text style={styles.resetButtonText}>Reset</Text>
@@ -204,33 +225,50 @@ export function FilterSheet({ visible, onClose }: FilterSheetProps) {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(36, 25, 17, 0.5)',
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    maxHeight: '80%',
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    maxHeight: '85%',
+    paddingTop: 12,
   },
   handle: {
     width: 40,
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.outlineVariant,
     alignSelf: 'center',
-    marginTop: 12,
+    marginBottom: 8,
     borderRadius: 2,
   },
   content: {
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingTop: 8,
+  },
+  header: {
+    marginBottom: 20,
+  },
+  headerLabel: {
+    fontFamily: 'Caveat',
+    fontSize: 20,
+    color: colors.primary,
+    marginBottom: 4,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: colors.onSurface,
+    letterSpacing: -0.02,
   },
   section: {
     marginBottom: 24,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.onSurface,
     marginBottom: 12,
   },
   chipContainer: {
@@ -240,22 +278,37 @@ const styles = StyleSheet.create({
   },
   chip: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.surfaceContainerLow,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.outlineVariant,
   },
   chipActive: {
-    backgroundColor: '#3B82F6',
-    borderColor: '#3B82F6',
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   chipText: {
     fontSize: 14,
-    color: '#6B7280',
+    fontWeight: '600',
+    color: colors.onSurfaceVariant,
   },
   chipTextActive: {
-    color: '#FFFFFF',
+    color: colors.onPrimary,
+  },
+  gradeChip: {
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: colors.surfaceContainerLow,
+    borderWidth: 1,
+    borderColor: colors.outlineVariant,
+  },
+  gradeChipText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.onSurfaceVariant,
+    letterSpacing: 0.5,
   },
   sliderContainer: {
     flexDirection: 'row',
@@ -264,23 +317,29 @@ const styles = StyleSheet.create({
     gap: 24,
   },
   sliderButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.surfaceContainer,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.outlineVariant,
   },
   sliderButtonText: {
     fontSize: 24,
-    color: '#374151',
+    fontWeight: '600',
+    color: colors.primary,
   },
   sliderValue: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: 32,
+    fontWeight: '800',
+    color: colors.primary,
+    minWidth: 50,
+    textAlign: 'center',
+    fontFamily: 'Caveat',
   },
-  priceRangeContainer: {
+  priceRow: {
     flexDirection: 'row',
     gap: 12,
   },
@@ -289,46 +348,56 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 12,
-    color: '#6B7280',
-    marginBottom: 4,
+    fontWeight: '700',
+    color: colors.primary,
+    marginBottom: 6,
   },
-  priceInputField: {
+  priceField: {
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    borderColor: colors.outlineVariant,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     fontSize: 16,
+    color: colors.onSurface,
+    backgroundColor: colors.surfaceContainerLow,
   },
   actions: {
     flexDirection: 'row',
-    padding: 16,
+    padding: 20,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.surfaceContainerHigh,
   },
   resetButton: {
     flex: 1,
-    paddingVertical: 14,
-    borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    paddingVertical: 16,
+    borderRadius: 24,
+    backgroundColor: colors.surfaceContainer,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.outlineVariant,
   },
   resetButtonText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#374151',
+    fontWeight: '700',
+    color: colors.onSurfaceVariant,
   },
   applyButton: {
     flex: 2,
-    paddingVertical: 14,
-    borderRadius: 12,
-    backgroundColor: '#3B82F6',
+    paddingVertical: 16,
+    borderRadius: 24,
+    backgroundColor: colors.primary,
     alignItems: 'center',
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   applyButtonText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontWeight: '700',
+    color: colors.onPrimary,
   },
 });
