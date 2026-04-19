@@ -10,7 +10,7 @@ concurrency:
 
 env:
   NODE_VERSION: '20'
-  GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_REGION: us-central1
 
 jobs:
@@ -66,6 +66,14 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Validate GCP_PROJECT_ID
+        run: |
+          if [ -z "${{ env.GCP_PROJECT_ID }}" ]; then
+            echo "ERROR: GCP_PROJECT_ID is not set (check secrets.GCP_PROJECT_ID)"
+            exit 1
+          fi
+          echo "Project ID: ${{ env.GCP_PROJECT_ID }}"
 
       - name: Configure GCP credentials
         uses: google-github-actions/auth@v2
