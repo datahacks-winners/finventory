@@ -22,7 +22,11 @@ export const getVisionModel = (): GenerativeModel => {
 
 export const getTextModel = (): GenerativeModel => {
   if (!_textModel) {
-    _textModel = getGeminiClient().getGenerativeModel({ model: 'gemini-2.0-flash' })
+    _textModel = getGeminiClient().getGenerativeModel({ model: 'gemini-1.5-flash' })
   }
   return _textModel
+}
+
+export const getEmbeddingModel = () => {
+  return getGeminiClient().getGenerativeModel({ model: 'text-embedding-004' })
 }

@@ -507,6 +507,127 @@ app.post('/triggers/order-created', async (req, res) => {
   res.json({ success: true });
 });
 
+// ========== GEMINI AI ANALYSIS ==========
+
+app.post('/api/analyze-fish', verifyAuth, async (req, res) => {
+  try {
+    const { photoUrl, location } = req.body;
+
+    if (!photoUrl) {
+      return res.status(400).json({ error: 'photoUrl is required' });
+    }
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: 'Gemini API key not configured' });
+    }
+
+    // Fetch image from URL
+    const imageResponse = await fetch(photoUrl);
+    if (!imageResponse.ok) {
+      return res.status(400).json({ error: 'Could not fetch image from URL' });
+    }
+
+    const imageBuffer = await imageResponse.arrayBuffer();
+    const base64Image = Buffer.from(imageBuffer).toString('base64');
+    const mimeType = photoUrl.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg';
+
+    const prompt = `Analyze this seafood photo and provide a detailed assessment for a marketplace listing.
+
+Return ONLY a JSON object with this exact structure:
+{
+  "species": "common name (e.g., 'Pacific Salmon', 'Atlantic Cod')",
+  "confidence": 0.0-1.0,
+  "grade": "sushi" | "A" | "B",
+  "gradeReasoning": "brief explanation for grade assignment",
+  "estimatedWeight": {
+    "value": number,
+    "unit": "lb" | "kg",
+    "confidence": 0.0-1.0
+  },
+  "freshnessIndicators": {
+    "eyeClarity": "clear" | "cloudy" | "sunken",
+    "gillColor": "bright_red" | "pale" | "brown",
+    "skinTexture": "firm_shiny" | "dull" | "slimy",
+    "overall": "excellent" | "good" | "fair" | "poor"
+  },
+  "suggestedPrice": {
+    "min": number,
+    "max": number,
+    "currency": "USD",
+    "reasoning": "brief market context"
+  },
+  "description": "compelling 2-3 sentence product description emphasizing freshness and quality",
+  "tags": ["relevant", "search", "tags"]
+}
+
+Grading criteria:
+- sushi: Highest quality, suitable for raw consumption, firm flesh, clear eyes, bright gills
+- A: Premium quality, excellent freshness, minor cosmetic imperfections ok
+- B: Good quality, standard commercial grade, may have slight blemishes
+
+Be conservative with grades. Only assign "sushi" if clearly premium quality.`;
+
+    // Call Gemini API
+    const geminiResponse = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            role: 'user',
+            parts: [
+              { text: prompt },
+              {
+                inlineData: {
+                  mimeType,
+                  data: base64Image
+                }
+              }
+            ]
+          }],
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 1024
+          }
+        })
+      }
+    );
+
+    if (!geminiResponse.ok) {
+      const error = await geminiResponse.text();
+      console.error('Gemini API error:', error);
+      return res.status(500).json({ error: 'Failed to analyze image with AI' });
+    }
+
+    const geminiData = await geminiResponse.json();
+    const responseText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    // Extract JSON from response
+    const jsonMatch = responseText.match(/```json\n?([\s\S]*?)\n?```/) ||
+                      responseText.match(/```\n?([\s\S]*?)\n?```/) ||
+                      responseText.match(/(\{[\s\S]*\})/);
+
+    const jsonString = jsonMatch ? jsonMatch[1].trim() : responseText.trim();
+    const analysis = JSON.parse(jsonString);
+
+    // Store analysis in Firestore for analytics
+    await db.collection('ai_analyses').add({
+      userId: req.user.uid,
+      photoUrl,
+      analysis,
+      location: location || null,
+      createdAt: admin.firestore.Timestamp.now()
+    });
+
+    res.json(analysis);
+  } catch (error) {
+    console.error('Error analyzing fish photo:', error);
+    res.status(500).json({ error: 'Failed to analyze photo' });
+  }
+});
+
 // ========== HELPER FUNCTIONS ==========
 
 async function matchStandingOrders(listingId, listing) {
