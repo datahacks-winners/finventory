@@ -32,7 +32,7 @@ export default function Footer() {
       </div>
 
       <div className="px-6 lg:px-12 py-8 mt-16 border-t border-slate-800/50 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-        <span className="text-slate-500 text-sm">© 2024 Finventory. Curating the ocean's bounty.</span>
+        <span className="text-slate-500 text-sm">© 2026 Finventory. Curating the ocean's bounty.</span>
         <div className="flex gap-6">
           {['public', 'waves', 'anchor'].map(icon => (
             <a key={icon} href="#" className="text-slate-500 hover:text-white transition-colors">
