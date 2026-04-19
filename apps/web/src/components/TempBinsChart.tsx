@@ -11,8 +11,7 @@ export default function TempBinsChart({ className }: { className?: string }) {
 
     embed(chartRef.current, '/chart_temp_bins.json', {
       actions: false,
-      renderer: 'svg',
-      autosize: { type: 'fit', contains: 'padding' }
+      renderer: 'svg'
     }).then(result => {
       viewRef.current = result.view
       // Force resize after a brief delay to ensure container is measured
