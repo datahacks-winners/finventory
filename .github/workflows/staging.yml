@@ -57,7 +57,7 @@ jobs:
     name: Deploy Firebase Rules
     runs-on: ubuntu-latest
     needs: [test, build]
-    environment: staging
+    # environment: staging  # REMOVED - now uses repo-level secrets
     steps:
       - uses: actions/checkout@v4
 
@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test, build]
     if: hashFiles('functions/package.json') != ''
-    environment: staging
+    # environment: staging  # REMOVED - now uses repo-level secrets
     steps:
       - uses: actions/checkout@v4
 

@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions'
+import * as v1 from 'firebase-functions/v1'
 import * as admin from 'firebase-admin'
 import { db } from '../config.js'
 
@@ -173,12 +174,12 @@ export function getTierFromScore(score: number): VerificationTier {
  * Get my verification status and progress
  */
 export const getMyVerification = functions.https.onCall(
-  async (_, context) => {
-    if (!context.auth) {
+  async (request) => {
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const sellerId = context.auth.uid
+    const sellerId = request.auth.uid
 
     try {
       // Get or create verification record
@@ -247,19 +248,19 @@ export const getMyVerification = functions.https.onCall(
  * Submit verification document
  */
 export const submitVerificationDocument = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     type: VerificationDocument['type']
     documentUrl: string
     documentNumber?: string
     issuingBody?: string
     issuedAt?: admin.firestore.Timestamp
     expiresAt?: admin.firestore.Timestamp
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const sellerId = context.auth.uid
+    const sellerId = request.auth.uid
     const now = admin.firestore.Timestamp.now()
 
     try {
@@ -339,17 +340,17 @@ export const submitVerificationDocument = functions.https.onCall(
  * Admin: Verify or reject document
  */
 export const reviewVerificationDocument = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     documentId: string
     action: 'verify' | 'reject'
     rejectionReason?: string
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     // Check if user is admin
-    const adminDoc = await db.collection('admins').doc(context.auth.uid).get()
+    const adminDoc = await db.collection('admins').doc(request.auth.uid).get()
     if (!adminDoc.exists) {
       throw new functions.https.HttpsError('permission-denied', 'Admin access required')
     }
@@ -369,7 +370,7 @@ export const reviewVerificationDocument = functions.https.onCall(
       if (data.action === 'verify') {
         await docRef.update({
           status: 'verified',
-          verifiedBy: context.auth.uid,
+          verifiedBy: request.auth.uid,
           verifiedAt: now
         })
 
@@ -415,7 +416,7 @@ export const reviewVerificationDocument = functions.https.onCall(
         await docRef.update({
           status: 'rejected',
           rejectionReason: data.rejectionReason,
-          verifiedBy: context.auth.uid,
+          verifiedBy: request.auth.uid,
           verifiedAt: now
         })
 
@@ -435,12 +436,12 @@ export const reviewVerificationDocument = functions.https.onCall(
  * Check if seller can create listing (enforce tier limits)
  */
 export const checkCanCreateListing = functions.https.onCall(
-  async (data: { quantityKg: number }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ quantityKg: number }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const sellerId = context.auth.uid
+    const sellerId = request.auth.uid
     const { quantityKg } = data
 
     try {
@@ -508,17 +509,17 @@ export const checkCanCreateListing = functions.https.onCall(
  * Admin: Set hard limit on seller (for violations)
  */
 export const setSellerHardLimit = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     sellerId: string
     reason: string
     remove?: boolean
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     // Check if user is admin
-    const adminDoc = await db.collection('admins').doc(context.auth.uid).get()
+    const adminDoc = await db.collection('admins').doc(request.auth.uid).get()
     if (!adminDoc.exists) {
       throw new functions.https.HttpsError('permission-denied', 'Admin access required')
     }
@@ -567,13 +568,13 @@ export const setSellerHardLimit = functions.https.onCall(
  * Admin: List pending verification documents
  */
 export const getPendingVerifications = functions.https.onCall(
-  async (data: { limit?: number }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ limit?: number }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     // Check if user is admin
-    const adminDoc = await db.collection('admins').doc(context.auth.uid).get()
+    const adminDoc = await db.collection('admins').doc(request.auth.uid).get()
     if (!adminDoc.exists) {
       throw new functions.https.HttpsError('permission-denied', 'Admin access required')
     }
@@ -735,9 +736,7 @@ async function notifySellerOfHardLimit(sellerId: string, reason: string) {
 // Scheduled Job: Check Expiring Documents
 // ============================================================================
 
-export const checkExpiringDocuments = functions.pubsub
-  .schedule('every 24 hours')
-  .onRun(async (_context) => {
+export const checkExpiringDocuments = v1.pubsub.schedule('every 24 hours').onRun(async (_context) => {
     console.log('Checking for expiring verification documents...')
     
     const now = admin.firestore.Timestamp.now()

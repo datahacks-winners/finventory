@@ -38,5 +38,12 @@
   ],
   "lint-staged": {
     "*.{ts,tsx}": ["eslint --fix"]
+  },
+  "overrides": {
+    "glob": "^11.0.1",
+    "rimraf": "^6.0.1",
+    "undici": "^7.0.0",
+    "serialize-javascript": "^7.0.5",
+    "diff": "^8.0.4"
   }
 }

@@ -5,11 +5,13 @@ import { notifyNewOrder, notifyOrderStatusUpdate } from '../utils/notifications.
 /**
  * Create a new order
  */
-export const createOrder = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
+export const createOrder = functions.https.onCall(async (request) => {
+    const data = request.data;
+    const context = request;
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
-    const userId = context.auth.uid;
+    const userId = request.auth.uid;
     // Verify buyer ID
     if (data.buyerId !== userId) {
         throw new functions.https.HttpsError('permission-denied', 'Cannot order for another user');
@@ -91,8 +93,10 @@ export const createOrder = functions.https.onCall(async (data, context) => {
 /**
  * Confirm order pickup (QR code scan)
  */
-export const confirmPickup = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
+export const confirmPickup = functions.https.onCall(async (request) => {
+    const data = request.data;
+    const context = request;
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
     const { orderId, qrCode } = data;
@@ -108,7 +112,7 @@ export const confirmPickup = functions.https.onCall(async (data, context) => {
         throw new functions.https.HttpsError('permission-denied', 'Invalid QR code');
     }
     // Verify user is either buyer or seller
-    const userId = context.auth.uid;
+    const userId = request.auth.uid;
     const isBuyer = userId === order.buyerId;
     const isSeller = userId === order.sellerId;
     if (!isBuyer && !isSeller) {
@@ -146,12 +150,14 @@ export const confirmPickup = functions.https.onCall(async (data, context) => {
 /**
  * Cancel an order
  */
-export const cancelOrder = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
+export const cancelOrder = functions.https.onCall(async (request) => {
+    const data = request.data;
+    const context = request;
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
     const { orderId } = data;
-    const userId = context.auth.uid;
+    const userId = request.auth.uid;
     // Get order
     const orderRef = db.collection('orders').doc(orderId);
     const orderDoc = await orderRef.get();

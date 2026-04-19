@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import * as admin from 'firebase-admin';
 import { db } from '../config.js';
 import { distanceInMiles } from '../utils/geohash.js';
@@ -7,9 +7,7 @@ import { notifyStandingOrderMatch } from '../utils/notifications.js';
  * Scheduled function - runs every 5 minutes
  * Finds active listings that match standing orders and notifies buyers
  */
-export const matchStandingOrders = functions.pubsub
-    .schedule('every 5 minutes')
-    .onRun(async (_context) => {
+export const matchStandingOrders = functions.pubsub.schedule('every 5 minutes').onRun(async (_context) => {
     const now = admin.firestore.Timestamp.now();
     // Get all active listings
     const listingsSnapshot = await db

@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+import * as functions from 'firebase-functions/v1'
 import * as admin from 'firebase-admin'
 import { db } from '../config.js'
 import { calculateFreshnessScore } from '../api/inventory.js'
@@ -7,9 +7,7 @@ import { calculateFreshnessScore } from '../api/inventory.js'
  * Scheduled job: Update freshness scores and auto-downgrade sushi
  * Runs every hour
  */
-export const freshnessMonitor = functions.pubsub
-  .schedule('every 1 hours')
-  .onRun(async (_context) => {
+export const freshnessMonitor = functions.pubsub.schedule('every 60 minutes').onRun(async (_context) => {
     console.log('Starting freshness monitor job...')
     
     const now = admin.firestore.Timestamp.now()

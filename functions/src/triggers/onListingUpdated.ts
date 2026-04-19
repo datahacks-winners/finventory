@@ -1,5 +1,5 @@
-import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
+import { onDocumentUpdated } from 'firebase-functions/v2/firestore'
 import { rtdb } from '../config.js'
 import { removeGeoIndex } from '../utils/geohash.js'
 
@@ -8,12 +8,14 @@ import { removeGeoIndex } from '../utils/geohash.js'
  * - Updates real-time inventory
  * - Cleans up geo index if listing is sold/expired
  */
-export const onListingUpdated = functions.firestore
-  .document('listings/{listingId}')
-  .onUpdate(async (change, context) => {
-    const before = change.before.data()!
-    const after = change.after.data()!
-    const listingId = context.params.listingId
+export const onListingUpdated = onDocumentUpdated(
+  'listings/{listingId}',
+  async (event) => {
+    const before = event.data?.before.data()
+    const after = event.data?.after.data()
+    if (!before || !after) return
+    
+    const listingId = event.params.listingId
 
     // Update real-time inventory
     await rtdb.ref(`live_inventory/${listingId}`).update({
@@ -32,4 +34,5 @@ export const onListingUpdated = functions.firestore
     if (after.status === 'sold' || after.status === 'expired') {
       await rtdb.ref(`live_inventory/${listingId}`).remove()
     }
-  })
+  }
+)

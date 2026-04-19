@@ -252,11 +252,11 @@ export function getPhotoTypeDescription(grade: string, type: string): string {
  * Validate listing photos before creation
  */
 export const validatePhotos = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     grade: string
     photos: Array<{ type: string; url: string }>
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
     
@@ -280,8 +280,8 @@ export const validatePhotos = functions.https.onCall(
  * Get photo requirements for a grade
  */
 export const getPhotoRequirements = functions.https.onCall(
-  async (data: { grade: string }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ grade: string }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
     
@@ -359,8 +359,8 @@ export async function analyzePhotoWithAI(
  * Trigger AI analysis on photo upload (optional enhancement)
  */
 export const analyzeListingPhoto = functions.https.onCall(
-  async (data: { photoUrl: string }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ photoUrl: string }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
     

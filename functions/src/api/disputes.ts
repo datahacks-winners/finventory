@@ -90,7 +90,7 @@ const AUTO_RESOLUTION_THRESHOLD_SHORT = 0.1 // 10% short for auto-refund
  * File a new quality dispute
  */
 export const fileDispute = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     orderId: string
     disputeType: DisputeType
     claimDescription: string
@@ -100,12 +100,12 @@ export const fileDispute = functions.https.onCall(
     evidencePhotos: string[]
     evidenceVideos?: string[]
     temperatureLog?: string
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
     const now = admin.firestore.Timestamp.now()
 
     try {
@@ -225,8 +225,8 @@ export const fileDispute = functions.https.onCall(
  * Get dispute details
  */
 export const getDispute = functions.https.onCall(
-  async (data: { disputeId: string }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ disputeId: string }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
@@ -247,9 +247,9 @@ export const getDispute = functions.https.onCall(
         throw new functions.https.HttpsError('not-found', 'Order not found')
       }
 
-      const isBuyer = order.buyerId === context.auth.uid
-      const isSeller = order.sellerId === context.auth.uid
-      const isAdmin = await checkIsAdmin(context.auth.uid)
+      const isBuyer = order.buyerId === request.auth.uid
+      const isSeller = order.sellerId === request.auth.uid
+      const isAdmin = await checkIsAdmin(request.auth.uid)
 
       if (!isBuyer && !isSeller && !isAdmin) {
         throw new functions.https.HttpsError('permission-denied', 'Not authorized')
@@ -268,16 +268,16 @@ export const getDispute = functions.https.onCall(
  * Add message to dispute
  */
 export const addDisputeMessage = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     disputeId: string
     message: string
     attachments?: string[]
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
     const now = admin.firestore.Timestamp.now()
 
     try {
@@ -342,19 +342,19 @@ export const addDisputeMessage = functions.https.onCall(
  * Admin: Resolve dispute
  */
 export const resolveDispute = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     disputeId: string
     resolution: ResolutionType
     refundAmount?: number
     sellerCreditAmount?: number
     reason: string
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     // Check admin
-    const isAdmin = await checkIsAdmin(context.auth.uid)
+    const isAdmin = await checkIsAdmin(request.auth.uid)
     if (!isAdmin) {
       throw new functions.https.HttpsError('permission-denied', 'Admin access required')
     }
@@ -392,7 +392,7 @@ export const resolveDispute = functions.https.onCall(
             refundAmount: data.refundAmount,
             sellerCreditAmount: data.sellerCreditAmount,
             reason: data.reason,
-            resolvedBy: context.auth!.uid,
+            resolvedBy: request.auth!.uid,
             resolvedAt: now
           },
           updatedAt: now
@@ -432,15 +432,15 @@ export const resolveDispute = functions.https.onCall(
  * Appeal a resolved dispute
  */
 export const appealDispute = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     disputeId: string
     reason: string
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
     const now = admin.firestore.Timestamp.now()
 
     try {
@@ -504,15 +504,15 @@ export const appealDispute = functions.https.onCall(
  * Get my disputes (buyer or seller)
  */
 export const getMyDisputes = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     status?: DisputeStatus[]
     limit?: number
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
     const limit = data.limit || 20
 
     try {
@@ -572,16 +572,16 @@ export const getMyDisputes = functions.https.onCall(
  * Admin: Get all disputes
  */
 export const getAllDisputes = functions.https.onCall(
-  async (data: {
+  async (request: functions.https.CallableRequest<{
     status?: DisputeStatus[]
     limit?: number
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     // Check admin
-    const isAdmin = await checkIsAdmin(context.auth.uid)
+    const isAdmin = await checkIsAdmin(request.auth.uid)
     if (!isAdmin) {
       throw new functions.https.HttpsError('permission-denied', 'Admin access required')
     }

@@ -127,12 +127,12 @@ export function calculateGradeExpiry(
  * Create a new inventory batch (when fish is received)
  */
 export const createInventoryBatch = functions.https.onCall(
-  async (data: CreateInventoryBatchRequest, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<CreateInventoryBatchRequest>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Verify user is the seller
     if (data.sellerId !== userId) {
@@ -233,13 +233,13 @@ export const createInventoryBatch = functions.https.onCall(
  * Update batch (grade change, storage temp, etc.)
  */
 export const updateInventoryBatch = functions.https.onCall(
-  async (data: { batchId: string; updates: Partial<InventoryBatch> }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ batchId: string; updates: Partial<InventoryBatch> }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     const { batchId, updates } = data
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Get batch
     const batchRef = db.collection('inventoryBatches').doc(batchId)
@@ -330,19 +330,19 @@ export const updateInventoryBatch = functions.https.onCall(
  * Convert batch to listing(s)
  */
 export const convertBatchToListing = functions.https.onCall(
-  async (data: { 
+  async (request: functions.https.CallableRequest<{ 
     batchId: string
     quantityKg: number
     pricePerKg: number
     photos: string[]
     deliveryAvailable: boolean
     expiresAt: admin.firestore.Timestamp
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
     const { batchId, quantityKg, pricePerKg, photos, deliveryAvailable, expiresAt } = data
 
     // Get batch
@@ -447,17 +447,17 @@ export const convertBatchToListing = functions.https.onCall(
  * Get inventory batches for a seller
  */
 export const getInventoryBatches = functions.https.onCall(
-  async (data: { 
+  async (request: functions.https.CallableRequest<{ 
     status?: InventoryBatch['status'][]
     locationId?: string
     species?: string
     limit?: number
-  }, context) => {
-    if (!context.auth) {
+  }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
     const { status, locationId, species, limit = 50 } = data
 
     try {
@@ -496,8 +496,8 @@ export const getInventoryBatches = functions.https.onCall(
  * Get inventory movements for a batch
  */
 export const getInventoryMovements = functions.https.onCall(
-  async (data: { batchId: string; limit?: number }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ batchId: string; limit?: number }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
@@ -510,7 +510,7 @@ export const getInventoryMovements = functions.https.onCall(
     }
 
     const batch = batchDoc.data() as InventoryBatch
-    if (batch.sellerId !== context.auth.uid) {
+    if (batch.sellerId !== request.auth.uid) {
       throw new functions.https.HttpsError('permission-denied', 'Not your batch')
     }
 
@@ -538,13 +538,13 @@ export const getInventoryMovements = functions.https.onCall(
  * Discard/expired batch (mark as waste)
  */
 export const discardInventoryBatch = functions.https.onCall(
-  async (data: { batchId: string; reason: string }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ batchId: string; reason: string }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     const { batchId, reason } = data
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Get batch
     const batchRef = db.collection('inventoryBatches').doc(batchId)
@@ -615,12 +615,12 @@ export const discardInventoryBatch = functions.https.onCall(
  * Get inventory dashboard stats for a seller
  */
 export const getInventoryDashboard = functions.https.onCall(
-  async (_, context) => {
-    if (!context.auth) {
+  async (request) => {
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     try {
       // Get all active batches

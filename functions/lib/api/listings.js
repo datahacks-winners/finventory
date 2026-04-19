@@ -5,12 +5,14 @@ import { addGeoIndex, removeGeoIndex } from '../utils/geohash.js';
 /**
  * Create a new listing
  */
-export const createListing = functions.https.onCall(async (data, context) => {
+export const createListing = functions.https.onCall(async (request) => {
+    const data = request.data;
+    const context = request;
     // Verify authentication
-    if (!context.auth) {
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
-    const userId = context.auth.uid;
+    const userId = request.auth.uid;
     // Verify user is the seller
     if (data.sellerId !== userId) {
         throw new functions.https.HttpsError('permission-denied', 'Cannot create listing for another user');
@@ -80,8 +82,10 @@ export const createListing = functions.https.onCall(async (data, context) => {
 /**
  * Update a listing
  */
-export const updateListing = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
+export const updateListing = functions.https.onCall(async (request) => {
+    const data = request.data;
+    const context = request;
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
     const { listingId, updates } = data;
@@ -93,7 +97,7 @@ export const updateListing = functions.https.onCall(async (data, context) => {
     }
     const listing = listingDoc.data();
     // Verify ownership
-    if (listing.sellerId !== context.auth.uid) {
+    if (listing.sellerId !== request.auth.uid) {
         throw new functions.https.HttpsError('permission-denied', 'Not your listing');
     }
     // Don't allow changing seller or critical fields
@@ -123,8 +127,10 @@ export const updateListing = functions.https.onCall(async (data, context) => {
 /**
  * Delete a listing
  */
-export const deleteListing = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
+export const deleteListing = functions.https.onCall(async (request) => {
+    const data = request.data;
+    const context = request;
+    if (!request.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
     }
     const { listingId } = data;
@@ -136,7 +142,7 @@ export const deleteListing = functions.https.onCall(async (data, context) => {
     }
     const listing = listingDoc.data();
     // Verify ownership
-    if (listing.sellerId !== context.auth.uid) {
+    if (listing.sellerId !== request.auth.uid) {
         throw new functions.https.HttpsError('permission-denied', 'Not your listing');
     }
     // Only allow deleting active listings

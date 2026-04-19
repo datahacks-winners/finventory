@@ -35,12 +35,12 @@ export interface CreateStandingOrderRequest {
  * Create a new standing order
  */
 export const createStandingOrder = functions.https.onCall(
-  async (data: CreateStandingOrderRequest, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<CreateStandingOrderRequest>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Validate inputs
     if (!data.name || data.name.trim().length === 0) {
@@ -106,13 +106,13 @@ export const createStandingOrder = functions.https.onCall(
  * Update a standing order
  */
 export const updateStandingOrder = functions.https.onCall(
-  async (data: { standingOrderId: string; updates: Partial<StandingOrder> }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ standingOrderId: string; updates: Partial<StandingOrder> }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     const { standingOrderId, updates } = data
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Get standing order
     const soRef = db.collection('standingOrders').doc(standingOrderId)
@@ -153,13 +153,13 @@ export const updateStandingOrder = functions.https.onCall(
  * Delete a standing order
  */
 export const deleteStandingOrder = functions.https.onCall(
-  async (data: { standingOrderId: string }, context) => {
-    if (!context.auth) {
+  async (request: functions.https.CallableRequest<{ standingOrderId: string }>) => { const data = request.data; const context = request;
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
     const { standingOrderId } = data
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Get standing order
     const soRef = db.collection('standingOrders').doc(standingOrderId)
@@ -190,12 +190,12 @@ export const deleteStandingOrder = functions.https.onCall(
  * Get user's standing orders
  */
 export const getMyStandingOrders = functions.https.onCall(
-  async (_data: unknown, context) => {
-    if (!context.auth) {
+  async (request) => {
+    if (!request.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     try {
       const snapshot = await db
