@@ -23,7 +23,7 @@ export const onOrderCreated = onDocumentCreated('orders/{orderId}', async (event
   const listing = listingDoc.data()!
 
   // Update real-time inventory
-  await rtdb.ref(`live_inventory/${order.listingId}`).update({
+  await rtdb().ref(`live_inventory/${order.listingId}`).update({
     count: listing.quantity,
     status: listing.status,
     lastUpdated: admin.database.ServerValue.TIMESTAMP

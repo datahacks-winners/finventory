@@ -17,7 +17,7 @@ export const onListingUpdated = onDocumentUpdated('listings/{listingId}', async 
   const listingId = event.params.listingId
 
   // Update real-time inventory
-  await rtdb.ref(`live_inventory/${listingId}`).update({
+  await rtdb().ref(`live_inventory/${listingId}`).update({
     count: after.quantity,
     status: after.status,
     lastUpdated: admin.database.ServerValue.TIMESTAMP
@@ -31,6 +31,6 @@ export const onListingUpdated = onDocumentUpdated('listings/{listingId}', async 
 
   // Clean up real-time inventory if sold/expired
   if (after.status === 'sold' || after.status === 'expired') {
-    await rtdb.ref(`live_inventory/${listingId}`).remove()
+    await rtdb().ref(`live_inventory/${listingId}`).remove()
   }
 })
