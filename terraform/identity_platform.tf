@@ -36,18 +36,18 @@ resource "google_identity_platform_config" "main" {
 
 # Default tenant config - Google OAuth
 resource "google_identity_platform_default_supported_idp_config" "google" {
-  project      = var.project_id
-  idp_id       = "google.com"
-  client_id    = var.google_oauth_client_id
+  project       = var.project_id
+  idp_id        = "google.com"
+  client_id     = var.google_oauth_client_id
   client_secret = var.google_oauth_client_secret
-  enabled      = true
+  enabled       = true
 }
 
 # Apple Sign In provider
 resource "google_identity_platform_default_supported_idp_config" "apple" {
-  project      = var.project_id
-  idp_id       = "apple.com"
-  client_id    = var.apple_sign_in_client_id
+  project       = var.project_id
+  idp_id        = "apple.com"
+  client_id     = var.apple_sign_in_client_id
   client_secret = var.apple_sign_in_client_secret
-  enabled      = true
+  enabled       = true
 }

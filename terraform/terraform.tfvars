@@ -1,0 +1,14 @@
+project_id         = "finventory-1776558252"
+region             = "us-central1"
+firestore_location = "us-central1"
+domain_name        = "finventory.app"
+
+# TODO: Replace with actual OAuth credentials
+org_id = "" # Empty for no org
+
+# Placeholder values - must be replaced before apply
+google_oauth_client_id      = "placeholder-client-id"
+google_oauth_client_secret  = "placeholder-client-secret"
+apple_sign_in_client_id     = "placeholder-apple-client-id"
+apple_sign_in_client_secret = "placeholder-apple-client-secret"
+fcm_server_key              = "placeholder-fcm-key"

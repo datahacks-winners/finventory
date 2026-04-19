@@ -13,3 +13,13 @@ output "functions_service_url" {
 output "mobile_api_url" {
   value = "https://${var.domain_name}"
 }
+
+output "web_url" {
+  description = "Web app Cloud Run URL"
+  value       = google_cloud_run_v2_service.web.uri
+}
+
+output "web_domain" {
+  description = "Web app custom domain"
+  value       = google_cloud_run_domain_mapping.web.name
+}

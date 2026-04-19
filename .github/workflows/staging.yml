@@ -1,4 +1,4 @@
-name: Staging Deploy
+name: Staging Build
 
 on:
   push:
@@ -10,6 +10,8 @@ concurrency:
 
 env:
   NODE_VERSION: '20'
+  GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  GCP_REGION: us-central1
 
 jobs:
   test:
@@ -37,8 +39,8 @@ jobs:
           npm ci
           npm test
 
-  build:
-    name: Build
+  build-functions:
+    name: Build Cloud Functions
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -49,129 +51,71 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - run: npm ci
-      - run: npm run build
-
       - name: Build Cloud Functions
         working-directory: ./functions
         run: |
           npm ci
           npm run build
 
-  deploy-firebase:
-    name: Deploy Firebase Rules
+  build-web:
+    name: Build Web Container
     runs-on: ubuntu-latest
-    needs: [test, build]
-    environment: staging
+    needs: test
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - run: npm ci
-
-      - name: Authenticate to GCP
-        id: auth
+      - name: Configure GCP credentials
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCLOUD_AUTH_KEY }}
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools@13.14.0
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Deploy Firestore Rules
-        if: ${{ hashFiles('firestore.rules') != '' }}
-        run: firebase deploy --only firestore:rules --project finventory-dev
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
-      - name: Deploy Storage Rules
-        if: ${{ hashFiles('storage.rules') != '' }}
-        run: firebase deploy --only storage --project finventory-dev
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
-      - name: Deploy Firestore Indexes
-        if: ${{ hashFiles('firestore.indexes.json') != '' }}
-        run: firebase deploy --only firestore:indexes --project finventory-dev
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
-  deploy-functions:
-    name: Deploy Cloud Functions (Staging)
-    runs-on: ubuntu-latest
-    needs: [test, build]
-    if: ${{ hashFiles('functions/package.json') != '' }}
-    environment: staging
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install and build functions
+      - name: Configure Docker for GCR
         run: |
-          cd functions
-          npm ci
-          npm run build
+          gcloud auth configure-docker gcr.io --quiet
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools@13.14.0
-
-      - name: Deploy Cloud Functions
-        run: firebase deploy --only functions --project finventory-dev
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
-  deploy-hosting:
-    name: Deploy Frontend (Staging)
-    runs-on: ubuntu-latest
-    needs: [test, build]
-    environment: staging
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: Build and Push Web Image
+        uses: docker/build-push-action@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          context: ./apps/web
+          push: true
+          tags: |
+            gcr.io/${{ env.GCP_PROJECT_ID }}/web:${{ github.sha }}
+            gcr.io/${{ env.GCP_PROJECT_ID }}/web:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Install root dependencies
-        run: npm ci
-
-      - name: Build web app
-        working-directory: ./apps/web
-        run: |
-          npm ci
-          npm run build
-
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools@13.14.0
-
-      - name: Deploy to Firebase Hosting
-        run: firebase deploy --only hosting --project finventory-dev
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  deploy:
+    name: Trigger Terraform Deploy
+    runs-on: ubuntu-latest
+    needs: [build-functions, build-web]
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          event-type: terraform-apply
+          client-payload: |
+            {
+              "ref": "${{ github.ref }}",
+              "sha": "${{ github.sha }}",
+              "web_image_tag": "${{ github.sha }}"
+            }
 
   notify:
-    name: Notify Deployment
+    name: Notify
     runs-on: ubuntu-latest
-    needs: [deploy-firebase, deploy-functions, deploy-hosting]
+    needs: [deploy]
     if: always()
     steps:
-      - name: Deployment Summary
+      - name: Summary
         run: |
-          echo "## Staging Deployment Complete" >> $GITHUB_STEP_SUMMARY
-          echo "- Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Deployments" >> $GITHUB_STEP_SUMMARY
-          echo "- Firebase rules deployed to finventory-dev" >> $GITHUB_STEP_SUMMARY
-          echo "- Cloud Functions deployed to finventory-dev" >> $GITHUB_STEP_SUMMARY
-          echo "- Frontend deployed to https://finventory-dev.web.app" >> $GITHUB_STEP_SUMMARY
+          echo "## Staging Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "- Functions built" >> $GITHUB_STEP_SUMMARY
+          echo "- Web image: gcr.io/${{ env.GCP_PROJECT_ID }}/web:${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Terraform will deploy all changes" >> $GITHUB_STEP_SUMMARY
+          echo "- URL: https://${{ env.GCP_PROJECT_ID }}-web.a.run.app" >> $GITHUB_STEP_SUMMARY

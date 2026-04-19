@@ -12,10 +12,18 @@ on:
     paths:
       - 'terraform/**'
   workflow_dispatch:
+  repository_dispatch:
+    types: [terraform-apply]
 
 permissions:
   contents: read
   pull-requests: write
+
+env:
+  TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
+  TF_VAR_region: us-central1
+  TF_VAR_domain_name: ${{ vars.GCP_PROJECT_ID }}.web.app
+  TF_VAR_web_image_tag: ${{ github.event.client_payload.web_image_tag || 'latest' }}
 
 jobs:
   terraform:
@@ -60,10 +68,25 @@ jobs:
         working-directory: ./terraform
         run: terraform show -no-color tfplan
 
-      - name: Apply to develop
+      - name: Apply on push to develop
         if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
         working-directory: ./terraform
         run: terraform apply -auto-approve tfplan
+
+      - name: Apply on Repository Dispatch
+        if: github.event_name == 'repository_dispatch'
+        working-directory: ./terraform
+        run: terraform apply -auto-approve tfplan
+
+      - name: Apply on workflow_dispatch
+        if: github.event_name == 'workflow_dispatch'
+        working-directory: ./terraform
+        run: terraform apply -auto-approve tfplan
+
+      - name: Terraform Outputs
+        if: always()
+        working-directory: ./terraform
+        run: terraform output
 
       - name: Comment PR with plan
         if: github.event_name == 'pull_request'
@@ -83,7 +106,7 @@ jobs:
 
             </details>
 
-            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }\`*`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
