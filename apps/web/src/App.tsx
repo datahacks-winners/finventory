@@ -11,6 +11,30 @@ import Impact from './pages/Impact'
 import About from './pages/About'
 import Auth from './pages/Auth'
 import MyOrders from './pages/MyOrders'
+import { Component, type ReactNode } from 'react'
+
+// Error boundary to catch AuthProvider crashes
+class AuthErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+  
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+  
+  componentDidCatch(error: Error) {
+    console.warn('AuthProvider failed:', error.message)
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return <>{this.props.children}</>
+    }
+    return <>{this.props.children}</>
+  }
+}
 
 function AppRoutes() {
   const { pathname } = useLocation()
@@ -39,9 +63,11 @@ function App() {
   return (
     <BrowserRouter>
       <SlopNavBot />
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
+      <AuthErrorBoundary>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </AuthErrorBoundary>
     </BrowserRouter>
   )
 }
