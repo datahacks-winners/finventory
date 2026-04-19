@@ -38,12 +38,19 @@ export default [
     files: ["**/*.js", "**/*.cjs"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     },
   },
   {
     files: ["**/*.cjs"],
     rules: {
       "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+  {
+    files: ["**/test/**", "**/*.test.js", "**/*.test.ts", "**/*.spec.js", "**/*.spec.ts"],
+    rules: {
+      "@typescript-eslint/no-unused-expressions": "off",
     },
   },
 ];
