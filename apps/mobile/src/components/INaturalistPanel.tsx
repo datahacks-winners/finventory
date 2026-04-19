@@ -74,7 +74,7 @@ export function INaturalistPanel({ speciesName, info, title = 'More about this f
             <Text style={styles.errorText}>Could not load species data.</Text>
           ) : !taxon ? (
             <Text style={styles.errorText}>
-              No iNaturalist data found for "{speciesName}".
+              No iNaturalist data found for &quot;{speciesName}&quot;.
             </Text>
           ) : (
             <>
