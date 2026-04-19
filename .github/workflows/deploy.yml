@@ -11,6 +11,8 @@ concurrency:
 
 permissions:
   contents: read
+  actions: write
+  id-token: write
 
 env:
   NODE_VERSION: '20'
@@ -65,7 +67,8 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
+          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}'
 
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
@@ -74,20 +77,11 @@ jobs:
         run: |
           gcloud storage cp terraform/function-source.zip gs://${{ secrets.GCP_PROJECT_ID }}-function-sources/function-source.zip
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: '1.6.*'
-
-      - name: Terraform Init
-        working-directory: ./terraform
-        run: terraform init
-
-      - name: Terraform Apply
-        working-directory: ./terraform
-        run: terraform apply -auto-approve
+      - name: Trigger Terraform Apply
+        run: |
+          gh workflow run terraform-apply.yml --ref develop
         env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deployment Summary
         run: |
@@ -124,7 +118,8 @@ jobs:
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
+          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}'
 
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
@@ -133,20 +128,11 @@ jobs:
         run: |
           gcloud storage cp terraform/function-source.zip gs://${{ secrets.GCP_PROJECT_ID }}-function-sources/function-source.zip
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: '1.6.*'
-
-      - name: Terraform Init
-        working-directory: ./terraform
-        run: terraform init
-
-      - name: Terraform Apply
-        working-directory: ./terraform
-        run: terraform apply -auto-approve
+      - name: Trigger Terraform Apply
+        run: |
+          gh workflow run terraform-apply.yml --ref develop
         env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deployment Summary
         run: |
