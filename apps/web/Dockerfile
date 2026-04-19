@@ -37,7 +37,7 @@ FROM nginx:alpine
 COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
 
 # Create nginx config
-RUN printf 'server {\n    listen 8080;\n    server_name localhost;\n    location / {\n        root /usr/share/nginx/html;\n        index index.html;\n        try_files $uri $uri/ /index.html;\n    }\n}\n' > /etc/nginx/conf.d/default.conf
+RUN printf 'server {\n    listen 8080;\n    server_name localhost;\n    location / {\n        root /usr/share/nginx/html;\n        index index.html;\n        try_files \$uri \$uri/ /index.html;\n    }\n}\n' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
 

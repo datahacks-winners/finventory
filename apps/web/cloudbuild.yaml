@@ -4,7 +4,6 @@ steps:
     args:
       - '-c'
       - |
-        echo "FIREBASE_API_KEY is set: $$FIREBASE_API_KEY"
         docker build \
           --build-arg VITE_FIREBASE_API_KEY="$$FIREBASE_API_KEY" \
           --build-arg VITE_FIREBASE_AUTH_DOMAIN="$$FIREBASE_AUTH_DOMAIN" \
@@ -30,7 +29,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'finventory-web'
+      - 'web'
       - '--image'
       - 'us-central1-docker.pkg.dev/finventory-1776558252/web-images/web:latest'
       - '--region'
@@ -63,4 +62,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 substitutions:
-  _API_URL: "https://ragsearchhttp-593576627371.us-central1.run.app"
+  _API_URL: "https://api-eodwatsp5q-uc.a.run.app"
