@@ -1,8 +1,9 @@
 {
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
   "config": {
     "view": {
-      "continuousWidth": 300,
-      "continuousHeight": 300,
+      "continuousWidth": "container",
+      "continuousHeight": 350,
       "fill": "#f0ebe4",
       "strokeWidth": 0
     },
@@ -12,11 +13,23 @@
       "gridColor": "#1b2b3a",
       "gridOpacity": 0.12,
       "labelColor": "#1b2b3a",
-      "labelFontSize": 11,
+      "labelFontSize": 12,
       "tickColor": "#1b2b3a",
       "titleColor": "#1b2b3a",
-      "titleFontSize": 12
+      "titleFontSize": 13,
+      "titleFontWeight": 600
     }
+  },
+  "title": {
+    "text": "Egg Density Drops as Water Warms — All Species",
+    "color": "#1b2b3a",
+    "fontSize": 16,
+    "fontWeight": 700,
+    "anchor": "start",
+    "offset": 10,
+    "subtitle": "Mean log₁₀(eggs / 10 m²) per 2°C bin · shaded band = 95% CI · dot size = sample count",
+    "subtitleColor": "#5a7080",
+    "subtitleFontSize": 13
   },
   "layer": [
     {
@@ -29,13 +42,14 @@
         "x": {
           "axis": {
             "format": ".0f",
-            "labelFontSize": 11
+            "labelFontSize": 12
           },
           "field": "temp_bin",
           "scale": {
-            "zero": false
+            "zero": false,
+            "nice": true
           },
-          "title": "Surface Temperature (\u00b0C)",
+          "title": "Surface Temperature (°C)",
           "type": "quantitative"
         },
         "y": {
@@ -53,30 +67,32 @@
         "type": "line",
         "color": "#1a8fd1",
         "point": false,
-        "strokeWidth": 2.5
+        "strokeWidth": 3
       },
       "encoding": {
         "x": {
           "axis": {
             "format": ".0f",
-            "labelFontSize": 11
+            "labelFontSize": 12
           },
           "field": "temp_bin",
           "scale": {
-            "zero": false
+            "zero": false,
+            "nice": true
           },
-          "title": "Surface Temperature (\u00b0C)",
+          "title": "Surface Temperature (°C)",
           "type": "quantitative"
         },
         "y": {
           "axis": {
-            "labelFontSize": 11
+            "labelFontSize": 12
           },
           "field": "mean_eggs",
           "scale": {
-            "zero": false
+            "zero": false,
+            "nice": true
           },
-          "title": "Mean log\u2081\u2080(eggs / 10 m\u00b2)",
+          "title": "Mean log₁₀(eggs / 10 m²)",
           "type": "quantitative"
         }
       }
@@ -87,57 +103,57 @@
         "color": "#1a8fd1",
         "filled": true,
         "opacity": 1,
-        "size": 55
+        "stroke": "white",
+        "strokeWidth": 1.5
       },
       "encoding": {
         "size": {
           "field": "n",
           "legend": null,
           "scale": {
-            "range": [
-              30,
-              120
-            ]
+            "range": [40, 150]
           },
           "type": "quantitative"
         },
         "x": {
           "axis": {
             "format": ".0f",
-            "labelFontSize": 11
+            "labelFontSize": 12
           },
           "field": "temp_bin",
           "scale": {
-            "zero": false
+            "zero": false,
+            "nice": true
           },
-          "title": "Surface Temperature (\u00b0C)",
+          "title": "Surface Temperature (°C)",
           "type": "quantitative"
         },
         "y": {
           "axis": {
-            "labelFontSize": 11
+            "labelFontSize": 12
           },
           "field": "mean_eggs",
           "scale": {
-            "zero": false
+            "zero": false,
+            "nice": true
           },
-          "title": "Mean log\u2081\u2080(eggs / 10 m\u00b2)",
+          "title": "Mean log₁₀(eggs / 10 m²)",
           "type": "quantitative"
         }
       }
     },
     {
       "data": {
-        "name": "data-626c543a3815a29ea37946b835549040"
+        "values": [
+          {"temp_bin": 6.0, "trend": 2.1979240247145633},
+          {"temp_bin": 26.0, "trend": 1.6671351745799767}
+        ]
       },
       "mark": {
         "type": "line",
         "color": "#1b2b3a",
-        "opacity": 0.7,
-        "strokeDash": [
-          6,
-          4
-        ],
+        "opacity": 0.6,
+        "strokeDash": [6, 4],
         "strokeWidth": 2
       },
       "encoding": {
@@ -153,122 +169,18 @@
     }
   ],
   "data": {
-    "name": "data-7bba0625b1e4705c4df3e4f957d60d61"
-  },
-  "height": 300,
-  "title": {
-    "text": "Egg Density Drops as Water Warms \u2014 All Species",
-    "color": "#1b2b3a",
-    "fontSize": 15,
-    "subtitle": "Mean log\u2081\u2080(eggs / 10 m\u00b2) per 2\u00b0C bin  \u00b7  shaded band = 95% CI  \u00b7  dot size = sample count",
-    "subtitleColor": "#5a7080",
-    "subtitleFontSize": 12
-  },
-  "usermeta": {
-    "embedOptions": {}
-  },
-  "width": 640,
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
-  "datasets": {
-    "data-7bba0625b1e4705c4df3e4f957d60d61": [
-      {
-        "temp_bin": 6.0,
-        "mean_eggs": 2.1680983485598895,
-        "sem": 0.4264526263682197,
-        "n": 6,
-        "ci_lo": 1.3322512008781788,
-        "ci_hi": 3.0039454962416
-      },
-      {
-        "temp_bin": 8.0,
-        "mean_eggs": 1.7977248621714876,
-        "sem": 0.18356220350544614,
-        "n": 17,
-        "ci_lo": 1.4379429433008133,
-        "ci_hi": 2.157506781042162
-      },
-      {
-        "temp_bin": 10.0,
-        "mean_eggs": 2.1427899886339663,
-        "sem": 0.053916329531132456,
-        "n": 177,
-        "ci_lo": 2.0371139827529468,
-        "ci_hi": 2.248465994514986
-      },
-      {
-        "temp_bin": 12.0,
-        "mean_eggs": 2.0901223760431997,
-        "sem": 0.028630614619544806,
-        "n": 725,
-        "ci_lo": 2.034006371388892,
-        "ci_hi": 2.1462383806975076
-      },
-      {
-        "temp_bin": 14.0,
-        "mean_eggs": 2.159796842995708,
-        "sem": 0.03159392796789973,
-        "n": 727,
-        "ci_lo": 2.0978727441786247,
-        "ci_hi": 2.2217209418127912
-      },
-      {
-        "temp_bin": 16.0,
-        "mean_eggs": 2.0232442057320066,
-        "sem": 0.04513297892663039,
-        "n": 311,
-        "ci_lo": 1.9347835670358111,
-        "ci_hi": 2.111704844428202
-      },
-      {
-        "temp_bin": 18.0,
-        "mean_eggs": 2.102994387546347,
-        "sem": 0.07258976057417771,
-        "n": 132,
-        "ci_lo": 1.9607184568209586,
-        "ci_hi": 2.2452703182717353
-      },
-      {
-        "temp_bin": 20.0,
-        "mean_eggs": 1.9242045316029133,
-        "sem": 0.12666862020313138,
-        "n": 44,
-        "ci_lo": 1.6759340360047759,
-        "ci_hi": 2.1724750272010507
-      },
-      {
-        "temp_bin": 22.0,
-        "mean_eggs": 1.803868822941468,
-        "sem": 0.17354269171410158,
-        "n": 25,
-        "ci_lo": 1.4637251471818291,
-        "ci_hi": 2.144012498701107
-      },
-      {
-        "temp_bin": 24.0,
-        "mean_eggs": 1.6267906680524935,
-        "sem": 0.24545935680390002,
-        "n": 13,
-        "ci_lo": 1.1456903287168494,
-        "ci_hi": 2.1078910073881376
-      },
-      {
-        "temp_bin": 26.0,
-        "mean_eggs": 1.418190561840482,
-        "sem": 0.4272800327266017,
-        "n": 5,
-        "ci_lo": 0.5807216976963426,
-        "ci_hi": 2.2556594259846214
-      }
-    ],
-    "data-626c543a3815a29ea37946b835549040": [
-      {
-        "temp_bin": 6.0,
-        "trend": 2.1979240247145633
-      },
-      {
-        "temp_bin": 26.0,
-        "trend": 1.6671351745799767
-      }
+    "values": [
+      {"temp_bin": 6.0, "mean_eggs": 2.1680983485598895, "sem": 0.4264526263682197, "n": 6, "ci_lo": 1.3322512008781788, "ci_hi": 3.0039454962416},
+      {"temp_bin": 8.0, "mean_eggs": 1.7977248621714876, "sem": 0.18356220350544614, "n": 17, "ci_lo": 1.4379429433008133, "ci_hi": 2.157506781042162},
+      {"temp_bin": 10.0, "mean_eggs": 2.1427899886339663, "sem": 0.053916329531132456, "n": 177, "ci_lo": 2.0371139827529468, "ci_hi": 2.248465994514986},
+      {"temp_bin": 12.0, "mean_eggs": 2.0901223760431997, "sem": 0.028630614619544806, "n": 725, "ci_lo": 2.034006371388892, "ci_hi": 2.1462383806975076},
+      {"temp_bin": 14.0, "mean_eggs": 2.159796842995708, "sem": 0.03159392796789973, "n": 727, "ci_lo": 2.0978727441786247, "ci_hi": 2.2217209418127912},
+      {"temp_bin": 16.0, "mean_eggs": 2.0232442057320066, "sem": 0.04513297892663039, "n": 311, "ci_lo": 1.9347835670358111, "ci_hi": 2.111704844428202},
+      {"temp_bin": 18.0, "mean_eggs": 2.102994387546347, "sem": 0.07258976057417771, "n": 132, "ci_lo": 1.9607184568209586, "ci_hi": 2.2452703182717353},
+      {"temp_bin": 20.0, "mean_eggs": 1.9242045316029133, "sem": 0.12666862020313138, "n": 44, "ci_lo": 1.6759340360047759, "ci_hi": 2.1724750272010507},
+      {"temp_bin": 22.0, "mean_eggs": 1.803868822941468, "sem": 0.17354269171410158, "n": 25, "ci_lo": 1.4637251471818291, "ci_hi": 2.144012498701107},
+      {"temp_bin": 24.0, "mean_eggs": 1.6267906680524935, "sem": 0.24545935680390002, "n": 13, "ci_lo": 1.1456903287168494, "ci_hi": 2.1078910073881376},
+      {"temp_bin": 26.0, "mean_eggs": 1.418190561840482, "sem": 0.4272800327266017, "n": 5, "ci_lo": 0.5807216976963426, "ci_hi": 2.2556594259846214}
     ]
   }
 }
