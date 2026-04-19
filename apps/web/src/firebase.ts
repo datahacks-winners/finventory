@@ -1,6 +1,6 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
 import { getAuth, type Auth, connectAuthEmulator } from 'firebase/auth'
-import { getFirestore, type Firestore } from 'firebase/firestore'
+import { getFirestore, type Firestore, connectFirestoreEmulator } from 'firebase/firestore'
 import { getFunctions, type Functions, connectFunctionsEmulator } from 'firebase/functions'
 
 // TODO: Replace with your Firebase config from console
@@ -30,8 +30,9 @@ if (isValidConfig) {
     // Connect to Firebase Emulators in development
     if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
       connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
+      connectFirestoreEmulator(db, 'localhost', 8080)
       connectFunctionsEmulator(functions, 'localhost', 5001)
-      console.log('[Firebase] Using Emulators - Auth: 9099, Functions: 5001')
+      console.log('[Firebase] Using Emulators - Firestore: 8080, Auth: 9099, Functions: 5001')
     }
   } catch (err) {
     console.error('Firebase init error:', err)
