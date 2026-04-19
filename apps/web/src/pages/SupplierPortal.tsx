@@ -1,39 +1,79 @@
 import SparklineChart from '../components/SparklineChart'
 import OceanCanvas from '../components/OceanCanvas'
+import { useState, useEffect } from 'react'
+import { useAuth } from '../context/AuthContext'
+import { collection, query, where, onSnapshot } from 'firebase/firestore'
+import { db } from '../firebase'
 
+// TODO: Replace with real data from Firestore
 const SPARKLINE_DATA = {
-  crates: [80, 95, 110, 105, 120, 130, 142],
-  lbs: [2100, 2600, 3000, 2900, 3400, 3600, 3820],
-  revenue: [7200, 8800, 10100, 9800, 11200, 11900, 12400],
-  pickup: [55, 50, 48, 46, 45, 43, 42],
+  crates: [0, 0, 0, 0, 0, 0, 0],
+  lbs: [0, 0, 0, 0, 0, 0, 0],
+  revenue: [0, 0, 0, 0, 0, 0, 0],
+  pickup: [0, 0, 0, 0, 0, 0, 0],
 }
 
 const KPI_CARDS = [
-  { label: 'Crates listed', value: '142', icon: 'inventory_2', key: 'crates' as const },
-  { label: 'lbs rescued', value: '3,820', icon: 'set_meal', key: 'lbs' as const },
-  { label: 'revenue', value: '$12.4k', icon: 'payments', key: 'revenue' as const },
-  { label: 'pickup time', value: '42m', icon: 'schedule', key: 'pickup' as const },
+  { label: 'Crates listed', value: '—', icon: 'inventory_2', key: 'crates' as const },
+  { label: 'lbs rescued', value: '—', icon: 'set_meal', key: 'lbs' as const },
+  { label: 'revenue', value: '—', icon: 'payments', key: 'revenue' as const },
+  { label: 'pickup time', value: '—', icon: 'schedule', key: 'pickup' as const },
 ]
 
-const LISTINGS = [
-  {
-    name: 'Sea Bass', type: 'Whole Round', weight: '28 lbs', price: '$18.00/lb', distance: '0.4 mi',
-    status: 'Live', statusClass: 'bg-primary-container/20 text-primary-container',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDQUnTXp9XvAvpadxAG1UMxRAbSuqNlBr4QsMdkem3uiBumAQM56LDBXfVOIf4qTLSy3ehsitKw5paZ19MHRiWNg7jqrP_1f5-c0To3FEtUgPth64a2vaQQcjSdAx50icphtFvXaKQU2J6YeZB90w1_z8rzEJEgIH1uolDhcopuizeAv1NhSDCdvxQ5fMkwUrebVjm9IMlZS4UQPIJ4s2Mip-6Wdzd0GDrXYi3mewiJAwtFsioFGWV0SmkULl-YPgRh3givZDUX75A',
-  },
-  {
-    name: 'Blue Crabs', type: 'Crate', weight: '12 lbs', price: '$45.00/ea', distance: '1.2 mi',
-    status: 'Reserved', statusClass: 'bg-secondary-container/20 text-secondary',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD0uOILm6AVT2u4Cmlha744d7MTkFWtMDc0gCvY9byiZhAhDIa58dclXHFSGOeMdiCaQ75vnZvpSHNi_0QMNkMdJMgBm2_plT1sDlI_fLL9ZdUQVPZa6a2aL6ze7Vc4hg--STKlMsAqcRhF9v8Uu80SKSRPCFp7svxx7KVLT7FbecZDvGxxlyWIeYARJ5xjub73BuX9EcBuQjvdq7akgaTqommraowIxQvi0J3Q4hEI8gp99OL9F8aYbfdM6w1nk3hSZN2UWy52rw0',
-  },
-  {
-    name: 'Scallops', type: 'Shucked', weight: '5 lbs', price: '$22.00/lb', distance: 'Picked up',
-    status: 'Picked up', statusClass: 'bg-outline-variant/20 text-outline',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAH2B8HqQnzSEvlRmOG-4-rANVnXVskJDQsHE_b7b9UdBBRzXbMHDqpRFQDMgfzGv7BC-x4KRQtC7eSNWm5RO9eVSD5eJwwl5TtWw1J2vB4PKGM69q6qrOGKRsxZpv6ArI-yVh9kPIYO84DFM2jj4a5ZXkkhSKS5vl7_Y_6kiv8ZUANifI_LQsU010Ve4TiamNuWh8Jk-urmXhEmfH_PFMS4GTDMcElwzJsyc-e4y_uzPC9eVNU_3bqNHr0FGdoYSoZ8_eTfEkOoI',
-  },
-]
+interface Listing {
+  id: string
+  name: string
+  type: string
+  weight: string
+  price: string
+  distance: string
+  status: string
+  statusClass: string
+  img: string
+}
 
 export default function SupplierPortal() {
+  const { user } = useAuth()
+  const [_stats, _setStats] = useState(KPI_CARDS)
+  const [listings, setListings] = useState<Listing[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!user) {
+      setLoading(false)
+      return
+    }
+
+    // TODO: Fetch seller stats and listings from Firestore
+    // Example real-time listener:
+    const q = query(collection(db, 'listings'), where('sellerId', '==', user.uid))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedListings = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Listing[]
+      setListings(fetchedListings)
+      setLoading(false)
+    })
+
+    return unsubscribe
+  }, [user])
+
+  // Show login prompt if not authenticated
+  if (!user) {
+    return (
+      <div className="text-on-surface min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fff8f5' }}>
+        <div className="text-center">
+          <h1 className="text-4xl font-bold mb-4">Supplier Portal</h1>
+          <p className="text-outline mb-6">Please sign in to view your dashboard</p>
+          <a href="/auth" className="bg-primary text-white px-8 py-3 rounded-full font-bold">
+            Sign In
+          </a>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="text-on-surface" style={{ backgroundColor: '#fff8f5' }}>
       {/* ── Hero ── */}
@@ -205,30 +245,36 @@ export default function SupplierPortal() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/10">
-                {LISTINGS.map(row => (
-                  <tr key={row.name} className="hover:bg-surface-container-low/50 transition-colors">
-                    <td className="px-6 py-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-md overflow-hidden flex-shrink-0">
-                          <img className="w-full h-full object-cover" alt={row.name} src={row.img} />
+                {loading ? (
+                  <tr><td colSpan={7} className="px-6 py-12 text-center text-outline">Loading...</td></tr>
+                ) : listings.length === 0 ? (
+                  <tr><td colSpan={7} className="px-6 py-12 text-center text-outline">No active listings. Create your first listing above.</td></tr>
+                ) : (
+                  listings.map(row => (
+                    <tr key={row.id} className="hover:bg-surface-container-low/50 transition-colors">
+                      <td className="px-6 py-6">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-md overflow-hidden flex-shrink-0">
+                            <img className="w-full h-full object-cover" alt={row.name} src={row.img || '/placeholder-fish.png'} />
+                          </div>
+                          <span className="font-bold">{row.name}</span>
                         </div>
-                        <span className="font-bold">{row.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-6 text-on-surface-variant font-medium">{row.type}</td>
-                    <td className="px-6 py-6 text-on-surface-variant font-medium">{row.weight}</td>
-                    <td className="px-6 py-6 text-on-surface-variant font-medium">{row.price}</td>
-                    <td className="px-6 py-6 text-on-surface-variant font-medium">{row.distance}</td>
-                    <td className="px-6 py-6">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase ${row.statusClass}`}>
-                        {row.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-6 text-right">
-                      <button className="material-symbols-outlined text-outline hover:text-primary">more_vert</button>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="px-6 py-6 text-on-surface-variant font-medium">{row.type}</td>
+                      <td className="px-6 py-6 text-on-surface-variant font-medium">{row.weight}</td>
+                      <td className="px-6 py-6 text-on-surface-variant font-medium">{row.price}</td>
+                      <td className="px-6 py-6 text-on-surface-variant font-medium">{row.distance}</td>
+                      <td className="px-6 py-6">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase ${row.statusClass}`}>
+                          {row.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-6 text-right">
+                        <button className="material-symbols-outlined text-outline hover:text-primary">more_vert</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
