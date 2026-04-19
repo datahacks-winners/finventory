@@ -1,15 +1,18 @@
 import { useState, FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 type Tab = 'login' | 'signup'
 type Role = 'logistician' | 'vendor'
 
 export default function Auth() {
   const navigate = useNavigate()
+  const { signIn, signUp, error: authError } = useAuth()
   const [tab, setTab] = useState<Tab>('login')
   const [role, setRole] = useState<Role>('logistician')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [displayName, setDisplayName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -19,22 +22,25 @@ export default function Auth() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.error || 'Authentication failed')
-      }
-
-      const data = await res.json()
-      localStorage.setItem('token', data.token)
-      navigate('/dashboard')
+      await signIn(email, password)
+      navigate('/suppliers')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSignup = async (e: FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+
+    try {
+      await signUp(email, password, displayName || email.split('@')[0])
+      navigate('/suppliers')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Sign up failed')
     } finally {
       setLoading(false)
     }
@@ -198,11 +204,22 @@ export default function Auth() {
                   </div>
                 </div>
 
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={handleSignup}>
+                  {(error || authError) && (
+                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-full text-sm font-medium text-center">
+                      {error || authError}
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-2 px-1">Business Name</label>
-                      <input type="text" placeholder="Pacific Blue LTD" className="w-full bg-white border border-stone-200 rounded-full py-3.5 px-6 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                      <input 
+                        type="text" 
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        placeholder="Pacific Blue LTD" 
+                        className="w-full bg-white border border-stone-200 rounded-full py-3.5 px-6 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" 
+                      />
                     </div>
                     <div>
                       <label className="block text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-2 px-1">Location</label>
@@ -211,12 +228,26 @@ export default function Auth() {
                   </div>
                   <div>
                     <label className="block text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-2 px-1">Corporate Email</label>
-                    <input type="email" placeholder="hello@business.com" className="w-full bg-white border border-stone-200 rounded-full py-3.5 px-6 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                    <input 
+                      type="email" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="hello@business.com" 
+                      required
+                      className="w-full bg-white border border-stone-200 rounded-full py-3.5 px-6 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" 
+                    />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-2 px-1">Password</label>
-                      <input type="password" placeholder="••••••••" className="w-full bg-white border border-stone-200 rounded-full py-3.5 px-6 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                      <input 
+                        type="password" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••" 
+                        required
+                        className="w-full bg-white border border-stone-200 rounded-full py-3.5 px-6 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" 
+                      />
                     </div>
                     <div>
                       <label className="block text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-2 px-1">Confirm</label>
@@ -226,9 +257,10 @@ export default function Auth() {
                   <div className="pt-6">
                     <button
                       type="submit"
-                      className="w-full py-4 bg-primary text-white rounded-full font-bold text-sm hover:bg-primary-container transition-all shadow-lg shadow-primary/20 uppercase tracking-widest"
+                      disabled={loading}
+                      className="w-full py-4 bg-primary text-white rounded-full font-bold text-sm hover:bg-primary-container transition-all shadow-lg shadow-primary/20 uppercase tracking-widest disabled:opacity-50"
                     >
-                      Request Access
+                      {loading ? 'Creating Account...' : 'Request Access'}
                     </button>
                     <p className="mt-6 text-[10px] text-center text-stone-400 font-medium leading-relaxed max-w-xs mx-auto">
                       All registration requests are reviewed by our logistics compliance board.

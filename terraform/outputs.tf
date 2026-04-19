@@ -29,3 +29,8 @@ output "github_actions_sa_key" {
   value     = google_service_account_key.github_actions.private_key
   sensitive = true
 }
+
+output "firebase_auth_domain" {
+  description = "Firebase Auth domain"
+  value       = "${var.project_id}.firebaseapp.com"
+}
