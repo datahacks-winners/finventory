@@ -4,7 +4,17 @@ import tsEslint from "typescript-eslint";
 
 export default [
   {
-    ignores: ["node_modules/**", "dist/**", "build/**", "*.config.js"],
+    ignores: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/functions/lib/**",
+      "apps/mobile/eslint.config.js",
+      "**/*.config.js",
+      "apps/mobile/scripts/**",
+      "backend-migration/**",
+      "mobile-migration/**",
+    ],
   },
   ...tsEslint.configs.recommended,
   {
@@ -20,8 +30,20 @@ export default [
       "@typescript-eslint": typescriptEslint,
     },
     rules: {
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
       "@typescript-eslint/no-explicit-any": "warn",
+    },
+  },
+  {
+    files: ["**/*.js", "**/*.cjs"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
+  {
+    files: ["**/*.cjs"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
 ];

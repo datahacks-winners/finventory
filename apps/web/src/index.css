@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    zoom: 0.8;
+  }
+
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     letter-spacing: -0.02em;
@@ -88,18 +92,9 @@
     font-family: 'Plus Jakarta Sans';
   }
 
-  .sparkline-gradient {
-    background: linear-gradient(90deg, rgba(30, 120, 180, 0.1) 0%, rgba(30, 120, 180, 0) 100%);
-  }
-
   .map-grid {
-    background-image: radial-gradient(circle, #005f93 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-color: transparent;
     opacity: 0.05;
-  }
-
-  .ocean-gradient {
-    background: linear-gradient(135deg, #fff8f5 0%, #e0f2fe 100%);
   }
 
   .segmented-control {
@@ -110,7 +105,7 @@
   }
 
   .editorial-overlay {
-    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9));
+    background-color: rgba(15, 23, 42, 0.8);
   }
 
   .line-art-map {
@@ -118,5 +113,34 @@
     background-position: right top;
     background-repeat: no-repeat;
     background-size: cover;
+  }
+
+  /* Infinite scrolling marquee animation */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+
+  /* AI Demo animations */
+  @keyframes scan {
+    0%, 100% { top: 0; }
+    50% { top: 100%; }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }
