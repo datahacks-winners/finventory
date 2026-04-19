@@ -67,6 +67,18 @@ export default function Impact() {
               <p className="text-on-surface-variant mt-4 max-w-2xl">
                 CalCOFI larval egg surveys show egg density declining sharply beyond 14°C. As the Pacific warms, spawning success falls — making every rescued pound of existing catch more critical than ever.
               </p>
+              <p className="text-on-surface-variant mt-3 max-w-2xl text-sm">
+                By reducing the amount of fish that gets thrown away, we cut the greenhouse gas emissions tied to food waste decomposition — emissions that accelerate the ocean warming driving down clutch sizes across Pacific spawning grounds.
+                Research confirms that climate-driven sea surface temperature rise is a primary stressor on marine reproductive output; every pound rescued is a pound that doesn't rot in a landfill and compound that pressure.
+              </p>
+              <a
+                href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8618751/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-3 text-xs font-bold text-primary/70 hover:text-primary underline underline-offset-2 transition-colors"
+              >
+                Source: Jacox et al., PMC8618751 — Climate forcing of Pacific fish populations
+              </a>
             </div>
             <div className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/20">
               <p className="text-xs font-bold uppercase tracking-widest text-outline mb-4">Egg Density vs. Surface Temperature</p>
