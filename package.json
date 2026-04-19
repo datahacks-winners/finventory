@@ -1,0 +1,39 @@
+{
+  "name": "finventory",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "deploy": "npm run deploy --workspaces --if-present",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "pg": "^8.13.0",
+    "stripe": "^17.6.0"
+  },
+  "devDependencies": {
+    "@google-cloud/functions-framework": "^3.5.1",
+    "@google-cloud/storage": "^7.15.5",
+    "@types/pg": "^8.11.10",
+    "typescript": "^5.8.3",
+    "eslint": "^9.31.0",
+    "typescript-eslint": "^8.26.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3"
+  },
+  "optionalDependencies": {
+    "@stripe/stripe-react-native": "^0.38.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "lint-staged": {
+    "*.{ts,tsx}": ["eslint --fix"]
+  }
+}
