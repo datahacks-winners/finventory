@@ -1,3 +1,11 @@
+import imgBluefin from '../assets/fish/bluefin.jpeg'
+import imgHalibut from '../assets/fish/halibut.jpg'
+import imgLeopard from '../assets/fish/leopard.jpeg'
+import imgSalmon from '../assets/fish/salmon.jpg'
+import imgSanddabs from '../assets/fish/sanddabs.jpg'
+import imgSockeye from '../assets/fish/sockeye.jpg'
+import imgYellowfin from '../assets/fish/yellowfin.jpeg'
+
 const PEXELS_API = 'https://api.pexels.com/v1'
 
 export interface PexelsPhoto {
@@ -120,18 +128,22 @@ export function getFallbackUrl(query: string): string {
     // ═══════════════════════════════════════════════════════════════
     // SALMON - Fresh whole salmon on ice
     // ═══════════════════════════════════════════════════════════════
-    salmon: 'https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=800&auto=format&fit=crop&q=80',
-    'pink salmon': 'https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=800&auto=format&fit=crop&q=80',
-    'chinook salmon': 'https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=800&auto=format&fit=crop&q=80',
-    'coho salmon': 'https://images.unsplash.com/photo-1579583630411-2239b7b676fe?w=800&auto=format&fit=crop&q=80',
+    salmon: imgSalmon,
+    'pink salmon': imgSalmon,
+    'chinook salmon': imgSalmon,
+    'coho salmon': imgSalmon,
+    'sockeye salmon': imgSockeye,
+    sockeye: imgSockeye,
 
     // ═══════════════════════════════════════════════════════════════
     // TUNA - Fresh bluefin tuna steaks and whole fish
     // ═══════════════════════════════════════════════════════════════
-    tuna: 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
-    'albacore tuna': 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
-    'bluefin tuna': 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800&auto=format&fit=crop&q=80',
-    'yellowfin tuna': 'https://images.unsplash.com/photo-1611171711791-b34c917fd839?w=800&auto=format&fit=crop&q=80',
+    tuna: imgBluefin,
+    'albacore tuna': imgBluefin,
+    'bluefin tuna': imgBluefin,
+    bluefin: imgBluefin,
+    'yellowfin tuna': imgYellowfin,
+    yellowfin: imgYellowfin,
 
     // ═══════════════════════════════════════════════════════════════
     // CRAB - Using Pexels since Unsplash IDs were incorrect
@@ -166,15 +178,22 @@ export function getFallbackUrl(query: string): string {
     // ═══════════════════════════════════════════════════════════════
     // HALIBUT - Pacific halibut flatfish
     // ═══════════════════════════════════════════════════════════════
-    halibut: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
-    'pacific halibut': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
-    'california halibut': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop&q=80',
+    halibut: imgHalibut,
+    'pacific halibut': imgHalibut,
+    'california halibut': imgHalibut,
 
     // ═══════════════════════════════════════════════════════════════
     // SABLEFISH / BLACK COD - Deep water fish
     // ═══════════════════════════════════════════════════════════════
     sablefish: 'https://images.unsplash.com/photo-1606850780554-b55ea6863e85?w=800&auto=format&fit=crop&q=80',
     'black cod': 'https://images.unsplash.com/photo-1606850780554-b55ea6863e85?w=800&auto=format&fit=crop&q=80',
+
+    // ═══════════════════════════════════════════════════════════════
+    // SANDDABS - Pacific sanddabs (flatfish)
+    // ═══════════════════════════════════════════════════════════════
+    sanddab: imgSanddabs,
+    sanddabs: imgSanddabs,
+    'pacific sanddab': imgSanddabs,
 
     // ═══════════════════════════════════════════════════════════════
     // SOLE / FLOUNDER - Flatfish species
@@ -216,8 +235,8 @@ export function getFallbackUrl(query: string): string {
     // ═══════════════════════════════════════════════════════════════
     // SHARKS
     // ═══════════════════════════════════════════════════════════════
-    'leopard shark': 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=800&auto=format&fit=crop&q=80',
-    shark: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=800&auto=format&fit=crop&q=80',
+    'leopard shark': imgLeopard,
+    shark: imgLeopard,
 
     // ═══════════════════════════════════════════════════════════════
     // SMALL PELAGICS - Sardines, anchovies, mackerel
@@ -279,8 +298,12 @@ export function getFallbackUrl(query: string): string {
   }
 
   // Try to match partial species names
+  if (normalized.includes('sockeye')) return fallbacks.sockeye
   if (normalized.includes('salmon')) return fallbacks.salmon
+  if (normalized.includes('yellowfin')) return fallbacks.yellowfin
+  if (normalized.includes('bluefin')) return fallbacks.bluefin
   if (normalized.includes('tuna')) return fallbacks.tuna
+  if (normalized.includes('sanddab')) return fallbacks.sanddab
   if (normalized.includes('crab')) return fallbacks.crab
   if (normalized.includes('lobster')) return fallbacks.lobster
   if (normalized.includes('rockfish')) return fallbacks.rockfish
