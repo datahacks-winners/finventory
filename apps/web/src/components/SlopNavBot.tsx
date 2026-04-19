@@ -1,6 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions'
-import { getApp } from 'firebase/app'
 import ReactMarkdown from 'react-markdown'
 
 interface SearchResult {
@@ -51,17 +49,21 @@ export default function SlopNavBot() {
     setResult(null)
 
     try {
-      const app = getApp()
-      const functions = getFunctions(app)
-      
-      // Use emulator in development
-      if (window.location.hostname === 'localhost') {
-        connectFunctionsEmulator(functions, 'localhost', 5001)
+      // Direct HTTP call to Cloud Function (bypasses Firebase callable issues)
+      const response = await fetch('https://ragsearch-eodwatsp5q-uc.a.run.app', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: { query: query.trim(), limit: 5 }
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
       }
-      
-      const ragSearch = httpsCallable(functions, 'ragSearch')
-      const response = await ragSearch({ query: query.trim(), limit: 5 })
-      setResult(response.data as SearchResult)
+
+      const json = await response.json()
+      setResult(json.result as SearchResult)
     } catch (err) {
       console.error('Search error:', err)
       setError('Failed to search. Try again.')

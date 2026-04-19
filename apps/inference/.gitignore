@@ -1,0 +1,28 @@
+# Model files (large binaries)
+models/*.joblib
+models/*.pkl
+models/*.bin
+timesfm_2p5_200m_torch/
+checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+pip-log.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
