@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const API_BASE = 'https://calcofiproxy-4tpti7hkwa-uc.a.run.app'
+const API_BASE = 'https://calcofiproxy-eodwatsp5q-uc.a.run.app'
 
 const DEFAULT_FEATURES = {
   year: 2020,
