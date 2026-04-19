@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "npm run lint",
-"prepare": "[ -z \"$CI\" ] && husky githooks || true",
+    "prepare": "[ -z \"$CI\" ] && husky githooks || true"
   },
   "dependencies": {
     "firebase-admin": "^13.0.0",
