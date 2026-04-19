@@ -1,6 +1,4 @@
-import { httpsCallable, getFunctions } from 'firebase/functions'
-
-const functions = getFunctions()
+import { getAuth } from 'firebase/auth'
 
 export interface FishAnalysisRequest {
   photoUrl: string
@@ -36,15 +34,34 @@ export interface FishAnalysisResult {
   tags: string[]
 }
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://api-eodwatsp5q-uc.a.run.app'
+
 export async function analyzeFishPhoto(
   photoUrl: string,
   location?: { latitude: number; longitude: number }
 ): Promise<FishAnalysisResult> {
-  const analyzeCallable = httpsCallable<
-    FishAnalysisRequest,
-    FishAnalysisResult
-  >(functions, 'analyzeFishPhoto')
+  const auth = getAuth()
+  const user = auth.currentUser
 
-  const result = await analyzeCallable({ photoUrl, location })
-  return result.data
+  if (!user) {
+    throw new Error('Must be authenticated to analyze fish photo')
+  }
+
+  const token = await user.getIdToken()
+
+  const response = await fetch(`${API_URL}/analyze-fish`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ photoUrl, location }),
+  })
+
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || 'Failed to analyze fish photo')
+  }
+
+  return response.json()
 }

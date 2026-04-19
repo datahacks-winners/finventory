@@ -1,6 +1,5 @@
 import { db } from '../firebase'
 import { collection, query, where, orderBy, onSnapshot, doc, getDoc, Timestamp } from 'firebase/firestore'
-import { httpsCallable, getFunctions } from 'firebase/functions'
 import { getAuth } from 'firebase/auth'
 
 export interface Order {
@@ -29,7 +28,16 @@ export interface Order {
   }
 }
 
-const functions = getFunctions()
+const API_URL = import.meta.env.VITE_API_URL || 'https://api-eodwatsp5q-uc.a.run.app'
+
+async function getAuthToken(): Promise<string> {
+  const auth = getAuth()
+  const user = auth.currentUser
+  if (!user) {
+    throw new Error('Must be authenticated')
+  }
+  return user.getIdToken()
+}
 
 export async function createOrder(
   listingId: string,
@@ -37,46 +45,76 @@ export async function createOrder(
   deliveryOption: 'pickup' | 'delivery' = 'pickup',
   deliveryAddress?: { street: string; city: string; state: string; zipCode: string }
 ): Promise<{ success: boolean; orderId: string; pickupQRCode: string }> {
+  const token = await getAuthToken()
   const auth = getAuth()
   const user = auth.currentUser
-  
-  if (!user) {
-    throw new Error('Must be authenticated to create order')
-  }
-  
-  const createOrderCallable = httpsCallable(functions, 'createOrder')
 
-  const result = await createOrderCallable({
-    listingId,
-    quantity,
-    deliveryOption,
-    deliveryAddress,
-    buyerId: user.uid
+  const response = await fetch(`${API_URL}/orders`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      listingId,
+      quantity,
+      deliveryOption,
+      deliveryAddress,
+      buyerId: user?.uid,
+    }),
   })
 
-  return result.data as { success: boolean; orderId: string; pickupQRCode: string }
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || 'Failed to create order')
+  }
+
+  return response.json()
 }
 
 export async function confirmPickup(
   orderId: string,
   qrCode: string
 ): Promise<{ success: boolean; alreadyPickedUp: boolean }> {
-  const confirmPickupCallable = httpsCallable(functions, 'confirmPickup')
+  const token = await getAuthToken()
 
-  const result = await confirmPickupCallable({
-    orderId,
-    qrCode,
-    scannerRole: 'buyer',
+  const response = await fetch(`${API_URL}/orders/${orderId}/confirm-pickup`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      qrCode,
+      scannerRole: 'buyer',
+    }),
   })
 
-  return result.data as { success: boolean; alreadyPickedUp: boolean }
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || 'Failed to confirm pickup')
+  }
+
+  return response.json()
 }
 
 export async function cancelOrder(orderId: string): Promise<{ success: boolean }> {
-  const cancelOrderCallable = httpsCallable(functions, 'cancelOrder')
+  const token = await getAuthToken()
 
-  const result = await cancelOrderCallable({ orderId })
-  return result.data as { success: boolean }
+  const response = await fetch(`${API_URL}/orders/${orderId}/cancel`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || 'Failed to cancel order')
+  }
+
+  return response.json()
 }
 
 export function subscribeToMyOrders(
