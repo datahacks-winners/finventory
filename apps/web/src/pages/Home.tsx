@@ -1,8 +1,13 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import OceanCanvas from '../components/OceanCanvas'
 import { PexelsImage } from '../components/PexelsImage'
 import { usePexelsBatch, usePexels } from '../hooks/usePexels'
 import { AnimatedNumber } from '../components/AnimatedNumber'
+import { useListings } from '../hooks/useListings'
+import type { ListingWithDistance } from '../services/listings'
+import { getFallbackUrl } from '../services/pexels'
+import { useMemo, useState, useRef } from 'react'
+import PhotoAnalysis from '../components/PhotoAnalysis'
 
 const WHY_CARDS = [
   { icon: 'set_meal', bg: '#0077B6', textClass: 'text-white', title: 'Rescue the catch', desc: 'List bycatch and unsold hauls in seconds. Move surplus before it spoils.' },
@@ -16,6 +21,310 @@ const HOW_STEPS = [
   { n: '3', title: 'Reserve', desc: 'One-tap reserve. Payment held until pickup confirms.' },
   { n: '4', title: 'Impact', desc: 'Every transaction logs lbs saved & CO₂ avoided to your dashboard.' },
 ]
+
+// Fresh Catch Card - simplified version of Marketplace ListingCard
+function FreshCatchCard({ listing }: { listing: ListingWithDistance }) {
+  const navigate = useNavigate()
+  const photo = listing.photos?.[0] || getFallbackUrl(listing.species.toLowerCase())
+  const hoursLeft = Math.floor((listing.expiresAt.toDate().getTime() - new Date().getTime()) / (1000 * 60 * 60))
+
+  const formatTimeLeft = () => {
+    if (hoursLeft < 1) return 'Expires soon'
+    if (hoursLeft < 24) return `${hoursLeft}h left`
+    return `${Math.floor(hoursLeft / 24)}d left`
+  }
+
+  return (
+    <div
+      onClick={() => navigate(`/marketplace/${listing.id}`)}
+      className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+    >
+      <div className="h-64 relative overflow-hidden">
+        <img
+          src={photo}
+          alt={`${listing.species} - ${listing.grade} grade`}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+        {/* Badges */}
+        <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
+          {listing.grade === 'sushi' && (
+            <span className="bg-blue-500 text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+              <span className="material-symbols-outlined text-sm">restaurant</span>
+              Sushi
+            </span>
+          )}
+          {hoursLeft < 6 && (
+            <span className="bg-orange-500 text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg animate-pulse">
+              <span className="material-symbols-outlined text-sm">wb_twilight</span>
+              Sunset
+            </span>
+          )}
+        </div>
+
+        {/* Bottom content */}
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          <div className="flex justify-between items-end">
+            <div>
+              <h3 className="text-white font-bold text-lg capitalize leading-tight">{listing.species}</h3>
+              <p className="text-white/80 text-sm">{listing.sellerName || 'Local Supplier'}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-white font-black text-2xl">${listing.pricePerUnit.toFixed(0)}</p>
+              <p className="text-white/70 text-xs">/lb</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 mt-2 text-white/70 text-xs">
+            {listing.distance !== undefined && (
+              <span className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm">location_on</span>
+                {listing.distance.toFixed(1)} mi
+              </span>
+            )}
+            <span className="flex items-center gap-1">
+              <span className="material-symbols-outlined text-sm">schedule</span>
+              {formatTimeLeft()}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Hover action */}
+      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+        <button className="bg-white text-primary px-6 py-3 rounded-full font-bold shadow-xl transform scale-90 group-hover:scale-100 transition-transform flex items-center gap-2">
+          <span className="material-symbols-outlined">shopping_basket</span>
+          Claim
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// Fresh Catch Section
+function FreshCatchSection() {
+  const _navigate = useNavigate()
+  const filters = useMemo(() => ({
+    species: [],
+    grades: [],
+    priceRange: [0, 1000] as [number, number],
+    distance: 100,
+  }), [])
+
+  const userLocation = useMemo(() => ({
+    latitude: 37.7749,
+    longitude: -122.4194,
+  }), [])
+
+  const { listings, loading } = useListings(filters, userLocation)
+
+  // Get featured listings (first 4, prioritizing fresh ones)
+  const featured = useMemo(() => {
+    return listings
+      .sort((a, b) => a.expiresAt.toDate().getTime() - b.expiresAt.toDate().getTime())
+      .slice(0, 4)
+  }, [listings])
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-surface">
+        <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 text-center">
+          <div className="relative inline-block">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent" />
+            <span className="material-symbols-outlined text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse text-sm">
+              waves
+            </span>
+          </div>
+          <p className="text-outline mt-4">Loading fresh catches...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (featured.length === 0) {
+    return null
+  }
+
+  return (
+    <section className="py-20 bg-surface">
+      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <span className="italic-accent-caveat text-primary text-3xl mb-2 block">fresh from the boats</span>
+            <h2 className="text-4xl lg:text-5xl font-black text-on-background tracking-tight">
+              Today's Featured Catch
+            </h2>
+          </div>
+          <Link
+            to="/marketplace"
+            className="hidden md:flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform"
+          >
+            Browse All
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {featured.map((listing) => (
+            <FreshCatchCard key={listing.id} listing={listing} />
+          ))}
+        </div>
+
+        <div className="md:hidden mt-8 text-center">
+          <Link
+            to="/marketplace"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-bold"
+          >
+            Browse All Catches
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Snap & List Section - AI-powered photo-to-listing feature
+function SnapAndListSection() {
+  const navigate = useNavigate()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState('')
+  const [showAnalysis, setShowAnalysis] = useState(false)
+  const [_analysisData, setAnalysisData] = useState<{
+    species: string
+    grade: 'sushi' | 'A' | 'B'
+    estimatedWeight: { value: number; unit: 'lb' | 'kg' }
+    description: string
+    suggestedPrice: { min: number; max: number }
+  } | null>(null)
+
+  const handlePhotoUpload = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (ev) => {
+        const photoUrl = ev.target?.result as string
+        setUploadedPhotoUrl(photoUrl)
+        setShowAnalysis(true)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleAnalysisComplete = (data: {
+    species: string
+    grade: 'sushi' | 'A' | 'B'
+    estimatedWeight: { value: number; unit: 'lb' | 'kg' }
+    description: string
+    suggestedPrice: { min: number; max: number }
+  }) => {
+    setAnalysisData(data)
+    setShowAnalysis(false)
+    // Navigate to supplier portal with draft data
+    navigate('/suppliers', {
+      state: {
+        draft: {
+          species: data.species,
+          grade: data.grade,
+          weight: data.estimatedWeight.value.toString(),
+          price: ((data.suggestedPrice.min + data.suggestedPrice.max) / 2).toFixed(2),
+          photo: uploadedPhotoUrl,
+        }
+      }
+    })
+  }
+
+  return (
+    <section className="py-20 bg-gradient-to-br from-primary/5 via-surface to-secondary/5">
+      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <span className="italic-accent-caveat text-primary text-3xl mb-4 block">for suppliers</span>
+            <h2 className="text-4xl lg:text-5xl font-black text-on-background tracking-tight mb-6">
+              Snap a photo. We handle the rest.
+            </h2>
+            <p className="text-lg text-on-surface-variant mb-8 max-w-lg">
+              Our AI analyzes your catch in seconds — identifying species, grading quality, 
+              estimating weight, and suggesting fair market prices. Just upload and review.
+            </p>
+
+            <div className="space-y-4 mb-8">
+              {[
+                { icon: 'photo_camera', text: 'Take a photo of your catch' },
+                { icon: 'auto_awesome', text: 'AI identifies species & grade' },
+                { icon: 'edit_note', text: 'Review & publish in seconds' },
+              ].map((step, i) => (
+                <div key={step.text} className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">
+                    {i + 1}
+                  </div>
+                  <span className="material-symbols-outlined text-primary">{step.icon}</span>
+                  <span className="text-on-surface font-medium">{step.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+
+            {!uploadedPhotoUrl ? (
+              <div
+                onClick={handlePhotoUpload}
+                className="bg-surface-container-lowest rounded-3xl p-12 border-2 border-dashed border-primary/30 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer text-center"
+              >
+                <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="material-symbols-outlined text-4xl text-primary">photo_camera</span>
+                </div>
+                <h3 className="text-xl font-bold text-on-surface mb-2">Upload your catch</h3>
+                <p className="text-on-surface-variant mb-4">
+                  Drop a photo here or click to browse
+                </p>
+                <button className="bg-primary text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
+                  Try It Now
+                </button>
+              </div>
+            ) : showAnalysis ? (
+              <div className="bg-surface-container-lowest rounded-3xl p-6 shadow-xl">
+                <img
+                  src={uploadedPhotoUrl}
+                  alt="Upload preview"
+                  className="w-full h-48 object-cover rounded-xl mb-4"
+                />
+                <PhotoAnalysis
+                  photoUrl={uploadedPhotoUrl}
+                  onAnalysisComplete={handleAnalysisComplete}
+                  onCancel={() => {
+                    setShowAnalysis(false)
+                    setUploadedPhotoUrl('')
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="bg-surface-container-lowest rounded-3xl p-8 shadow-xl text-center">
+                <span className="material-symbols-outlined text-6xl text-emerald-500 mb-4">check_circle</span>
+                <h3 className="text-xl font-bold text-on-surface mb-2">Analysis Complete!</h3>
+                <p className="text-on-surface-variant mb-4">
+                  Redirecting you to complete your listing...
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
 
 const FISH_QUERY_MAP: Record<string, string> = {
   hero: 'fishing boat harbor sunset ocean',
@@ -143,6 +452,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── Today's Fresh Catch ── */}
+      <FreshCatchSection />
+
+      {/* ── Snap & List ── */}
+      <SnapAndListSection />
 
       {/* ── For Suppliers / For Buyers ── */}
       <section className="py-12 bg-surface">

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import SparklineChart from '../components/SparklineChart'
 import OceanCanvas from '../components/OceanCanvas'
 import PhotoAnalysis from '../components/PhotoAnalysis'
@@ -39,7 +39,11 @@ const KPI_CARDS = [
 export default function SupplierPortal() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Check for draft data from Home page photo analysis
+  const draftData = location.state?.draft
 
   const [listings, setListings] = useState<Listing[]>([])
   const [pendingOrders, setPendingOrders] = useState<Order[]>([])
@@ -48,15 +52,15 @@ export default function SupplierPortal() {
   const [submitSuccess, setSubmitSuccess] = useState(false)
 
   const [formData, setFormData] = useState({
-    species: '',
-    weight: '',
-    price: '',
+    species: draftData?.species || '',
+    weight: draftData?.weight || '',
+    price: draftData?.price || '',
     discount: '0',
     pickupWindows: '',
     type: 'Whole Round',
-    grade: 'A' as 'sushi' | 'A' | 'B',
+    grade: draftData?.grade || 'A' as 'sushi' | 'A' | 'B',
     deliveryAvailable: false,
-    photos: [] as string[],
+    photos: draftData?.photo ? [draftData.photo] : [] as string[],
   })
 
   useEffect(() => {
@@ -267,6 +271,12 @@ export default function SupplierPortal() {
           <header className="mb-10">
             <span className="italic-accent-caveat text-primary text-2xl">Fresh from the nets</span>
             <h2 className="text-4xl font-extrabold tracking-tighter">List a new crate</h2>
+            {draftData && (
+              <div className="mt-4 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg flex items-center gap-2">
+                <span className="material-symbols-outlined">auto_awesome</span>
+                <span className="font-bold">AI filled in your catch details from the photo. Review and publish!</span>
+              </div>
+            )}
             {submitSuccess && (
               <div className="mt-4 bg-emerald-100 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg flex items-center gap-2">
                 <span className="material-symbols-outlined">check_circle</span>
