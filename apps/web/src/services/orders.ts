@@ -1,8 +1,7 @@
-import { db } from '../firebase'
+import { db, functions } from '../firebase'
 import { collection, query, where, orderBy, onSnapshot, doc, getDoc, Timestamp } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
-import { httpsCallable, getFunctions, connectFunctionsEmulator } from 'firebase/functions'
-import { getApp } from 'firebase/app'
+import { httpsCallable } from 'firebase/functions'
 
 export interface Order {
   id: string
@@ -30,19 +29,6 @@ export interface Order {
   }
 }
 
-// Get Firebase Functions instance
-function getFunctionsInstance() {
-  const app = getApp()
-  const functions = getFunctions(app)
-  
-  // Use emulator in development if configured
-  if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
-    connectFunctionsEmulator(functions, 'localhost', 5001)
-  }
-  
-  return functions
-}
-
 export async function createOrder(
   listingId: string,
   quantity: number,
@@ -56,7 +42,10 @@ export async function createOrder(
     throw new Error('Must be authenticated')
   }
 
-  const functions = getFunctionsInstance()
+  if (!functions) {
+    throw new Error('Firebase Functions not initialized')
+  }
+
   const createOrderCallable = httpsCallable(functions, 'createOrder')
   
   const result = await createOrderCallable({
@@ -74,7 +63,10 @@ export async function confirmPickup(
   orderId: string,
   qrCode: string
 ): Promise<{ success: boolean; alreadyPickedUp: boolean }> {
-  const functions = getFunctionsInstance()
+  if (!functions) {
+    throw new Error('Firebase Functions not initialized')
+  }
+
   const confirmPickupCallable = httpsCallable(functions, 'confirmPickup')
   
   const result = await confirmPickupCallable({
@@ -87,7 +79,10 @@ export async function confirmPickup(
 }
 
 export async function cancelOrder(orderId: string): Promise<{ success: boolean }> {
-  const functions = getFunctionsInstance()
+  if (!functions) {
+    throw new Error('Firebase Functions not initialized')
+  }
+
   const cancelOrderCallable = httpsCallable(functions, 'cancelOrder')
   
   const result = await cancelOrderCallable({ orderId })
