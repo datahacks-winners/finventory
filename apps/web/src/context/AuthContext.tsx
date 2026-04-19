@@ -26,7 +26,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!auth) return
+    if (!auth) {
+      setLoading(false)
+      return
+    }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
       setLoading(false)
@@ -35,8 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
-    if (!auth) throw new Error('Auth not initialized')
     setError(null)
+    if (!auth) throw new Error('Auth not available')
     try {
       await signInWithEmailAndPassword(auth, email, password)
     } catch (err) {
@@ -46,8 +49,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signUp = async (email: string, password: string, displayName: string) => {
-    if (!auth) throw new Error('Auth not initialized')
     setError(null)
+    if (!auth) throw new Error('Auth not available')
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       await updateProfile(userCredential.user, { displayName })
@@ -58,8 +61,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const logout = async () => {
-    if (!auth) throw new Error('Auth not initialized')
     setError(null)
+    if (!auth) throw new Error('Auth not available')
     try {
       await signOut(auth)
     } catch (err) {
