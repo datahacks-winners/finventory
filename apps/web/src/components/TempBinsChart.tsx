@@ -12,9 +12,11 @@ export default function TempBinsChart({ className }: { className?: string }) {
     embed(chartRef.current, '/chart_temp_bins.json', {
       actions: false,
       renderer: 'svg',
+      autosize: { type: 'fit', contains: 'padding' }
     }).then(result => {
       viewRef.current = result.view
-      result.view.resize()
+      // Force resize after a brief delay to ensure container is measured
+      setTimeout(() => result.view.resize(), 50)
     }).catch(err => {
       console.error('Vega embed error:', err)
       setError(err instanceof Error ? err.message : 'Chart failed to load')
