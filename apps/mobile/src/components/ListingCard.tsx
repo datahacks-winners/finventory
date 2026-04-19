@@ -55,9 +55,9 @@ export function ListingCard({ listing, onFavoritePress, isFavorite }: ListingCar
         <Text style={styles.gradeText}>{listing.grade.toUpperCase()}</Text>
       </View>
 
-      <View style={styles.favoriteButton} onPress={onFavoritePress} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+      <TouchableOpacity style={styles.favoriteButton} onPress={onFavoritePress} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
         <Text style={styles.favoriteIcon}>{isFavorite ? '♥' : '♡'}</Text>
-      </View>
+      </TouchableOpacity>
 
       <View style={styles.content}>
         <Text style={styles.species} numberOfLines={1}>

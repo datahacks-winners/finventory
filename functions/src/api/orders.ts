@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+import { onCall, HttpsError } from 'firebase-functions/v2/https'
 import * as admin from 'firebase-admin'
 import { db } from '../config.js'
 import { notifyNewOrder, notifyOrderStatusUpdate } from '../utils/notifications.js'
@@ -39,17 +39,19 @@ export interface Order {
 /**
  * Create a new order
  */
-export const createOrder = functions.https.onCall(
-  async (data: CreateOrderRequest, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
+export const createOrder = onCall(
+  async (request) => {
+    const data = request.data as CreateOrderRequest
+
+    if (!request.auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated')
     }
 
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Verify buyer ID
     if (data.buyerId !== userId) {
-      throw new functions.https.HttpsError('permission-denied', 'Cannot order for another user')
+      throw new HttpsError('permission-denied', 'Cannot order for another user')
     }
 
     // Get listing
@@ -57,43 +59,43 @@ export const createOrder = functions.https.onCall(
     const listingDoc = await listingRef.get()
 
     if (!listingDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Listing not found')
+      throw new HttpsError('not-found', 'Listing not found')
     }
 
     const listing = listingDoc.data()!
 
     // Check if listing is active
     if (listing.status !== 'active') {
-      throw new functions.https.HttpsError('failed-precondition', 'Listing is not available')
+      throw new HttpsError('failed-precondition', 'Listing is not available')
     }
 
     // Check if listing has expired
     const now = admin.firestore.Timestamp.now()
     if (listing.expiresAt < now) {
-      throw new functions.https.HttpsError('failed-precondition', 'Listing has expired')
+      throw new HttpsError('failed-precondition', 'Listing has expired')
     }
 
     // Check if buyer is the seller
     if (listing.sellerId === userId) {
-      throw new functions.https.HttpsError('failed-precondition', 'Cannot buy your own listing')
+      throw new HttpsError('failed-precondition', 'Cannot buy your own listing')
     }
 
     // Validate quantity
     if (data.quantity <= 0) {
-      throw new functions.https.HttpsError('invalid-argument', 'Quantity must be positive')
+      throw new HttpsError('invalid-argument', 'Quantity must be positive')
     }
 
     if (data.quantity > listing.quantity) {
-      throw new functions.https.HttpsError('failed-precondition', 'Not enough quantity available')
+      throw new HttpsError('failed-precondition', 'Not enough quantity available')
     }
 
     // Validate delivery option
     if (data.deliveryOption === 'delivery' && !listing.deliveryAvailable) {
-      throw new functions.https.HttpsError('failed-precondition', 'Delivery not available for this listing')
+      throw new HttpsError('failed-precondition', 'Delivery not available for this listing')
     }
 
     if (data.deliveryOption === 'delivery' && !data.deliveryAddress) {
-      throw new functions.https.HttpsError('invalid-argument', 'Delivery address required')
+      throw new HttpsError('invalid-argument', 'Delivery address required')
     }
 
     // Generate unique QR code
@@ -143,7 +145,7 @@ export const createOrder = functions.https.onCall(
       }
     } catch (error) {
       console.error('Error creating order:', error)
-      throw new functions.https.HttpsError('internal', 'Failed to create order')
+      throw new HttpsError('internal', 'Failed to create order')
     }
   }
 )
@@ -151,12 +153,13 @@ export const createOrder = functions.https.onCall(
 /**
  * Confirm order pickup (QR code scan)
  */
-export const confirmPickup = functions.https.onCall(
-  async (data: { orderId: string; qrCode: string; scannerRole: 'buyer' | 'seller' }, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
+export const confirmPickup = onCall(
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated')
     }
 
+    const data = request.data as { orderId: string; qrCode: string; scannerRole: 'buyer' | 'seller' }
     const { orderId, qrCode } = data
 
     // Get order
@@ -164,23 +167,23 @@ export const confirmPickup = functions.https.onCall(
     const orderDoc = await orderRef.get()
 
     if (!orderDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Order not found')
+      throw new HttpsError('not-found', 'Order not found')
     }
 
     const order = orderDoc.data()!
 
     // Verify QR code
     if (order.pickupQRCode !== qrCode) {
-      throw new functions.https.HttpsError('permission-denied', 'Invalid QR code')
+      throw new HttpsError('permission-denied', 'Invalid QR code')
     }
 
     // Verify user is either buyer or seller
-    const userId = context.auth.uid
+    const userId = request.auth.uid
     const isBuyer = userId === order.buyerId
     const isSeller = userId === order.sellerId
 
     if (!isBuyer && !isSeller) {
-      throw new functions.https.HttpsError('permission-denied', 'Not your order')
+      throw new HttpsError('permission-denied', 'Not your order')
     }
 
     // Check if order is already picked up
@@ -193,7 +196,7 @@ export const confirmPickup = functions.https.onCall(
 
     // Check if order is cancelled
     if (order.status === 'cancelled') {
-      throw new functions.https.HttpsError('failed-precondition', 'Order is cancelled')
+      throw new HttpsError('failed-precondition', 'Order is cancelled')
     }
 
     try {
@@ -212,7 +215,7 @@ export const confirmPickup = functions.https.onCall(
       }
     } catch (error) {
       console.error('Error confirming pickup:', error)
-      throw new functions.https.HttpsError('internal', 'Failed to confirm pickup')
+      throw new HttpsError('internal', 'Failed to confirm pickup')
     }
   }
 )
@@ -220,33 +223,34 @@ export const confirmPickup = functions.https.onCall(
 /**
  * Cancel an order
  */
-export const cancelOrder = functions.https.onCall(
-  async (data: { orderId: string }, context) => {
-    if (!context.auth) {
-      throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated')
+export const cancelOrder = onCall(
+  async (request) => {
+    if (!request.auth) {
+      throw new HttpsError('unauthenticated', 'User must be authenticated')
     }
 
+    const data = request.data as { orderId: string }
     const { orderId } = data
-    const userId = context.auth.uid
+    const userId = request.auth.uid
 
     // Get order
     const orderRef = db.collection('orders').doc(orderId)
     const orderDoc = await orderRef.get()
 
     if (!orderDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Order not found')
+      throw new HttpsError('not-found', 'Order not found')
     }
 
     const order = orderDoc.data()!
 
     // Only buyer can cancel
     if (order.buyerId !== userId) {
-      throw new functions.https.HttpsError('permission-denied', 'Only buyer can cancel')
+      throw new HttpsError('permission-denied', 'Only buyer can cancel')
     }
 
     // Can only cancel pending orders
     if (order.status !== 'pending') {
-      throw new functions.https.HttpsError('failed-precondition', 'Cannot cancel completed order')
+      throw new HttpsError('failed-precondition', 'Cannot cancel completed order')
     }
 
     try {
@@ -269,7 +273,7 @@ export const cancelOrder = functions.https.onCall(
       return { success: true }
     } catch (error) {
       console.error('Error cancelling order:', error)
-      throw new functions.https.HttpsError('internal', 'Failed to cancel order')
+      throw new HttpsError('internal', 'Failed to cancel order')
     }
   }
 )

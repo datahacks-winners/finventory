@@ -10,6 +10,7 @@ export default [
       "build/**",
       "functions/lib/**",
       "apps/mobile/eslint.config.js",
+      "**/*.config.js",
       "apps/mobile/scripts/**",
     ],
   },

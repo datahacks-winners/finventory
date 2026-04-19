@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 import * as admin from 'firebase-admin';
 import { db, rtdb } from '../config.js';
 import { distanceInMiles } from '../utils/geohash.js';
@@ -8,11 +8,12 @@ import { notifyStandingOrderMatch } from '../utils/notifications.js';
  * - Updates real-time inventory
  * - Finds matching standing orders and notifies buyers
  */
-export const onListingCreated = functions.firestore
-    .document('listings/{listingId}')
-    .onCreate(async (snap, context) => {
+export const onListingCreated = onDocumentCreated('listings/{listingId}', async (event) => {
+    const snap = event.data;
+    if (!snap)
+        return;
     const listing = snap.data();
-    const listingId = context.params.listingId;
+    const listingId = event.params.listingId;
     // Update real-time inventory
     await rtdb.ref(`live_inventory/${listingId}`).set({
         count: listing.quantity,

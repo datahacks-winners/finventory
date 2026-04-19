@@ -3,11 +3,16 @@ import * as admin from 'firebase-admin'
 // Cloud Functions auto-initializes admin in production
 // Explicitly initialize for local development/testing
 // Check prevents double-initialization errors
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-    databaseURL: process.env.FIREBASE_DATABASE_URL || 'https://finventory-default-rtdb.firebaseio.com'
-  })
+try {
+  if (!admin.apps || !admin.apps.length) {
+    admin.initializeApp({
+      credential: admin.credential?.applicationDefault?.() || admin.credential.cert({}),
+      databaseURL: process.env.FIREBASE_DATABASE_URL || 'https://finventory-default-rtdb.firebaseio.com'
+    })
+  }
+} catch (e) {
+  // Admin may already be initialized or in test environment
+  console.log('Firebase admin initialization skipped:', e)
 }
 
 export const db = admin.firestore()

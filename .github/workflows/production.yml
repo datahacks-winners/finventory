@@ -31,7 +31,8 @@ jobs:
       - run: npm run lint
 
       - name: Type Check
-        run: npx tsc --noEmit || true
+        run: npx tsc --noEmit || echo "Type check failed, continuing..."
+        continue-on-error: true
 
   build:
     name: Build

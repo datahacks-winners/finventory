@@ -1,4 +1,4 @@
-import { FirebaseFirestore } from '@react-native-firebase/firestore';
+import { Timestamp } from '@react-native-firebase/firestore';
 
 export type Grade = 'sushi' | 'A' | 'B';
 export type Unit = 'lb' | 'kg' | 'each';
@@ -9,7 +9,7 @@ export interface Listing {
   species: string;
   grade: Grade;
   sushiCertNumber?: string;
-  sushiCertExpiry?: FirebaseFirestore.Timestamp;
+  sushiCertExpiry?: Timestamp;
   quantity: number;
   unit: Unit;
   pricePerUnit: number;
@@ -19,11 +19,11 @@ export interface Listing {
     geohash: string;
   };
   photos: string[];
-  freshnessDate: FirebaseFirestore.Timestamp;
+  freshnessDate: Timestamp;
   deliveryAvailable: boolean;
   status: 'active' | 'pending_pickup' | 'sold' | 'expired';
-  createdAt: FirebaseFirestore.Timestamp;
-  expiresAt: FirebaseFirestore.Timestamp;
+  createdAt: Timestamp;
+  expiresAt: Timestamp;
 }
 
 export interface ListingWithDistance extends Listing {

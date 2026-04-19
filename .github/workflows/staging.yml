@@ -10,8 +10,6 @@ concurrency:
 
 env:
   NODE_VERSION: '20'
-  GCP_REGION: us-central1
-  CLOUD_RUN_SERVICE: finventory-api-staging
 
 jobs:
   test:
@@ -30,7 +28,12 @@ jobs:
       - run: npm run lint
 
       - name: Type Check
-        run: npx tsc --noEmit || true
+        run: npx tsc --noEmit || echo "Type check failed, continuing..."
+        continue-on-error: true
+
+      - name: Test Cloud Functions
+        working-directory: ./functions
+        run: npm test
 
   build:
     name: Build
@@ -46,6 +49,10 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+
+      - name: Build Cloud Functions
+        working-directory: ./functions
+        run: npm run build
 
   deploy-firebase:
     name: Deploy Firebase Rules
@@ -83,13 +90,9 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
-      - name: Deploy Cloud Functions
-        if: hashFiles('functions/package.json') != ''
-        run: |
-          cd functions
-          npm ci
-          npm run build
-          firebase deploy --only functions --project finventory-dev
+      - name: Deploy Firestore Indexes
+        if: hashFiles('firestore.indexes.json') != ''
+        run: firebase deploy --only firestore:indexes --project finventory-dev
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
@@ -121,61 +124,10 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-  deploy-cloud-run:
-    name: Deploy Cloud Run (Staging)
-    runs-on: ubuntu-latest
-    needs: [test, build]
-    environment: staging
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Check for Dockerfile
-        id: check-dockerfile
-        run: |
-          if [ -f "apps/api/Dockerfile" ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Authenticate to GCP
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCLOUD_AUTH_KEY }}
-
-      - name: Set up Cloud SDK
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: finventory-dev
-
-      - name: Configure Docker
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
-
-      - name: Build and Push Container
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        run: |
-          IMAGE_TAG=${{ env.GCP_REGION }}-docker.pkg.dev/finventory-dev/finventory/${{ env.CLOUD_RUN_SERVICE }}:${{ github.sha }}
-          docker build -t $IMAGE_TAG ./apps/api
-          docker push $IMAGE_TAG
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-
-      - name: Deploy to Cloud Run
-        if: steps.check-dockerfile.outputs.exists == 'true'
-        run: |
-          gcloud run deploy ${{ env.CLOUD_RUN_SERVICE }} \
-            --image ${{ env.IMAGE_TAG }} \
-            --region ${{ env.GCP_REGION }} \
-            --platform managed \
-            --allow-unauthenticated \
-            --set-env-vars NODE_ENV=staging
-
   notify:
     name: Notify Deployment
     runs-on: ubuntu-latest
-    needs: [deploy-firebase, deploy-functions, deploy-cloud-run]
+    needs: [deploy-firebase, deploy-functions]
     if: always()
     steps:
       - name: Deployment Summary
@@ -184,3 +136,7 @@ jobs:
           echo "- Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- Status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployments" >> $GITHUB_STEP_SUMMARY
+          echo "- Firebase rules deployed to finventory-dev" >> $GITHUB_STEP_SUMMARY
+          echo "- Cloud Functions deployed to finventory-dev" >> $GITHUB_STEP_SUMMARY
