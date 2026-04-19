@@ -8,6 +8,8 @@ export default [
       "node_modules/**",
       "dist/**",
       "build/**",
+      "functions/lib/**",
+      "apps/mobile/eslint.config.js",
       "**/*.config.js",
       "apps/mobile/scripts/**",
     ],
@@ -28,6 +30,12 @@ export default [
     rules: {
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
       "@typescript-eslint/no-explicit-any": "warn",
+    },
+  },
+  {
+    files: ["**/*.js"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
     },
   },
 ];
