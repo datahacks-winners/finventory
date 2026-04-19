@@ -11,7 +11,6 @@ export default function TempBinsChart({ className }: { className?: string }) {
     embed(containerRef.current, '/chart_temp_bins.json', {
       actions: false,
       renderer: 'svg',
-      container: containerRef.current,
     }).then(result => {
       view = result.view
     })
