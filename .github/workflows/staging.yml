@@ -91,6 +91,12 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
 
+      - name: Deploy Firestore Indexes
+        if: hashFiles('firestore.indexes.json') != ''
+        run: firebase deploy --only firestore:indexes --project finventory-dev
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
+
   deploy-functions:
     name: Deploy Cloud Functions (Staging)
     runs-on: ubuntu-latest
