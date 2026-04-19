@@ -10,37 +10,34 @@ ARG VITE_FIREBASE_PROJECT_ID
 ARG VITE_FIREBASE_STORAGE_BUCKET
 ARG VITE_FIREBASE_MESSAGING_SENDER_ID
 ARG VITE_FIREBASE_APP_ID
+ARG VITE_PEXELS_API_KEY
 ARG VITE_API_URL
 
-# Copy package files from the monorepo context
-COPY apps/web/package*.json ./
+# Copy root package files for monorepo deps
+COPY package*.json ./
+COPY apps/web/package*.json apps/web/
 RUN npm install
 
-# Copy web source and build
-COPY apps/web/ .
+# Copy source
+COPY . .
 
-# Build with env vars passed as build args
-ENV VITE_FIREBASE_API_KEY=${VITE...KEY}
-ENV VITE_FIREBASE_AUTH_DOMAIN=${VITE...AIN}
+# Build with env vars
+ENV VITE_FIREBASE_API_KEY=${VITE_FIREBASE_API_KEY}
+ENV VITE_FIREBASE_AUTH_DOMAIN=${VITE_FIREBASE_AUTH_DOMAIN}
 ENV VITE_FIREBASE_PROJECT_ID=${VITE_FIREBASE_PROJECT_ID}
 ENV VITE_FIREBASE_STORAGE_BUCKET=${VITE_FIREBASE_STORAGE_BUCKET}
 ENV VITE_FIREBASE_MESSAGING_SENDER_ID=${VITE_FIREBASE_MESSAGING_SENDER_ID}
 ENV VITE_FIREBASE_APP_ID=${VITE_FIREBASE_APP_ID}
+ENV VITE_PEXELS_API_KEY=${VITE_PEXELS_API_KEY}
 ENV VITE_API_URL=${VITE_API_URL}
 
-# Echo for debugging (will show in build logs)
-RUN echo "Building with API key: ${VITE_FIREBASE_API_KEY:0:15}..."
-
-# Build the app
-RUN npm run build
+RUN npm run build -w apps/web
 
 # Production stage - static file server
 FROM nginx:alpine
 
-# Copy built assets
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
 
-# SPA config - redirect all routes to index.html
 RUN echo 'server { \
     listen 8080; \
     location / { \
@@ -51,6 +48,5 @@ RUN echo 'server { \
 
 EXPOSE 8080
 
-# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
