@@ -66,6 +66,7 @@ export default function Navbar() {
               >
                 My Orders
               </Link>
+              <LogoutButton />
             </>
           ) : (
             <>
