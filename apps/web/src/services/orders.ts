@@ -1,6 +1,8 @@
 import { db } from '../firebase'
-import { collection, query, where, orderBy, onSnapshot, doc, getDoc, Timestamp } from 'firebase/firestore'
+import { collection, query, where, orderBy, onSnapshot, doc, getDoc, Timestamp, getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
+import { httpsCallable, getFunctions, connectFunctionsEmulator } from 'firebase/functions'
+import { getApp } from 'firebase/app'
 
 export interface Order {
   id: string
@@ -28,17 +30,17 @@ export interface Order {
   }
 }
 
-const CREATE_ORDER_URL = 'https://createorder-eodwatsp5q-uc.a.run.app'
-const CANCEL_ORDER_URL = 'https://cancelorder-eodwatsp5q-uc.a.run.app'
-const CONFIRM_PICKUP_URL = 'https://confirmpickup-eodwatsp5q-uc.a.run.app'
-
-async function getAuthToken(): Promise<string> {
-  const auth = getAuth()
-  const user = auth.currentUser
-  if (!user) {
-    throw new Error('Must be authenticated')
+// Get Firebase Functions instance
+function getFunctionsInstance() {
+  const app = getApp()
+  const functions = getFunctions(app)
+  
+  // Use emulator in development if configured
+  if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+    connectFunctionsEmulator(functions, 'localhost', 5001)
   }
-  return user.getIdToken()
+  
+  return functions
 }
 
 export async function createOrder(
@@ -47,76 +49,50 @@ export async function createOrder(
   deliveryOption: 'pickup' | 'delivery' = 'pickup',
   deliveryAddress?: { street: string; city: string; state: string; zipCode: string }
 ): Promise<{ success: boolean; orderId: string; pickupQRCode: string }> {
-  const token = await getAuthToken()
   const auth = getAuth()
   const user = auth.currentUser
-
-  const response = await fetch(CREATE_ORDER_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      listingId,
-      quantity,
-      deliveryOption,
-      deliveryAddress,
-      buyerId: user?.uid,
-    }),
-  })
-
-  if (!response.ok) {
-    const error = await response.text()
-    throw new Error(error || 'Failed to create order')
+  
+  if (!user) {
+    throw new Error('Must be authenticated')
   }
 
-  return response.json()
+  const functions = getFunctionsInstance()
+  const createOrderCallable = httpsCallable(functions, 'createOrder')
+  
+  const result = await createOrderCallable({
+    listingId,
+    quantity,
+    deliveryOption,
+    deliveryAddress,
+    buyerId: user.uid,
+  })
+  
+  return result.data as { success: boolean; orderId: string; pickupQRCode: string }
 }
 
 export async function confirmPickup(
   orderId: string,
   qrCode: string
 ): Promise<{ success: boolean; alreadyPickedUp: boolean }> {
-  const token = await getAuthToken()
-
-  const response = await fetch(CONFIRM_PICKUP_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      qrCode,
-      scannerRole: 'buyer',
-    }),
+  const functions = getFunctionsInstance()
+  const confirmPickupCallable = httpsCallable(functions, 'confirmPickup')
+  
+  const result = await confirmPickupCallable({
+    orderId,
+    qrCode,
+    scannerRole: 'buyer',
   })
-
-  if (!response.ok) {
-    const error = await response.text()
-    throw new Error(error || 'Failed to confirm pickup')
-  }
-
-  return response.json()
+  
+  return result.data as { success: boolean; alreadyPickedUp: boolean }
 }
 
-export async function cancelOrder(_orderId: string): Promise<{ success: boolean }> {
-  const token = await getAuthToken()
-
-  const response = await fetch(CANCEL_ORDER_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-  })
-
-  if (!response.ok) {
-    const error = await response.text()
-    throw new Error(error || 'Failed to cancel order')
-  }
-
-  return response.json()
+export async function cancelOrder(orderId: string): Promise<{ success: boolean }> {
+  const functions = getFunctionsInstance()
+  const cancelOrderCallable = httpsCallable(functions, 'cancelOrder')
+  
+  const result = await cancelOrderCallable({ orderId })
+  
+  return result.data as { success: boolean }
 }
 
 export function subscribeToMyOrders(
