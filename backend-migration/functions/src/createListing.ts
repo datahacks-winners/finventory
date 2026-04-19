@@ -1,6 +1,7 @@
 import { https } from '@google-cloud/functions-framework'
 import { db, config } from './config.js'
 import { encodeGeohash } from '../shared/utils/geohash.js'
+import { authenticateUser } from './utils/auth.js'
 
 // Types
 export interface CreateListingRequest {
@@ -67,15 +68,17 @@ https.onCall(createListing, async (req, res) => {
   try {
     // Verify authentication
     const authHeader = req.headers.authorization
-    if (!authHeader?.startsWith('Bearer ')) {
-      res.status(401).send({ error: 'Unauthorized: No token provided' })
+    let userId: string
+    let userEmail: string | null
+
+    try {
+      const user = await authenticateUser(authHeader)
+      userId = user.uid
+      userEmail = user.email
+    } catch (error) {
+      res.status(401).send({ error: 'Unauthorized: Invalid token' })
       return
     }
-
-    // Note: In production, verify Firebase Auth token here
-    // For now, extract user ID from token (simplified)
-    const token = authHeader.substring(7)
-    const userId = token // TODO: Verify with Firebase Admin SDK or Cloud Identity Platform
 
     const data: CreateListingRequest = req.body
 

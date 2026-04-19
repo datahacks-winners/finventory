@@ -1,5 +1,5 @@
 # Cloud Run Service and Load Balancer
-- RESTful API for mobile app with HTTPS load balancer and SSL certificate
+# RESTful API for mobile app with HTTPS load balancer and SSL certificate
 
 # Cloud Run service
 resource "google_cloud_run_v2_service" "mobile_api" {
@@ -15,7 +15,7 @@ resource "google_cloud_run_v2_service" "mobile_api" {
     }
 
     containers {
-      image = "us-docker.pkg.dev/cloudrun/container/hello@sha256:...PLACEHOLDER..."
+      image = "gcr.io/${var.project_id}/mobile-api:latest"
 
       # Environment variables
       env {

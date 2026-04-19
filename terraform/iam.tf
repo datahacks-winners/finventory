@@ -74,30 +74,8 @@ resource "google_project_iam_member" "cloud_run_invoker" {
 }
 
 # IAM: Pub/Sub Invoker roles
-resource "google_cloudfunctions2_function_iam_member" "pubsub_invoker_listing" {
-  project        = google_cloudfunctions2_function.create_listing.project
-  location       = google_cloudfunctions2_function.create_listing.location
-  cloud_function = google_cloudfunctions2_function.create_listing.name
-  role           = "roles/cloudfunctions.invoker"
-  member         = "serviceAccount:${google_service_account.pubsub_invoker.email}"
-}
-
-resource "google_cloudfunctions2_function_iam_member" "pubsub_invoker_order" {
-  project        = google_cloudfunctions2_function.create_order.project
-  location       = google_cloudfunctions2_function.create_order.location
-  cloud_function = google_cloudfunctions2_function.create_order.name
-  role           = "roles/cloudfunctions.invoker"
-  member         = "serviceAccount:${google_service_account.pubsub_invoker.email}"
-}
-
-# IAM: Cloud Scheduler roles
-resource "google_cloud_scheduler_job_iam_member" "scheduler_invoker" {
-  name        = google_cloud_scheduler_job.match_standing_orders.name
-  region      = var.region
-  project     = var.project_id
-  role        = "roles/cloudscheduler.invoker"
-  member      = "serviceAccount:${google_service_account.scheduler.email}"
-}
+# Note: Functions are created via modules, using their output URIs
+# IAM bindings for functions are configured in the modules themselves
 
 # IAM: Storage bucket access for service accounts
 resource "google_storage_bucket_iam_member" "cloud_functions_listing_photos" {
