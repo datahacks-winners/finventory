@@ -1,7 +1,6 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https'
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager'
 import { Pool } from 'pg'
-import { getTextModel } from './client.js'
 
 const secrets = new SecretManagerServiceClient()
 
@@ -45,11 +44,30 @@ const getPool = async (): Promise<Pool> => {
   return pool
 }
 
-// Generate embedding using Gemini
+// Generate embedding using Gemini Embeddings API
 const generateEmbedding = async (text: string): Promise<number[]> => {
-  const model = getTextModel()
-  const result = await model.embedContent(text)
-  return result.embedding.values
+  const apiKey = process.env.GEMINI_API_KEY
+  if (!apiKey || apiKey === 'test') {
+    throw new Error('GEMINI_API_KEY not configured')
+  }
+  
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key=${apiKey}`
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'models/embedding-001',
+      content: { parts: [{ text }] }
+    })
+  })
+  
+  if (!response.ok) {
+    const err = await response.text()
+    throw new Error(`Embedding API error: ${response.status} ${response.statusText} - ${err}`)
+  }
+  
+  const data = await response.json() as { embedding?: { values?: number[] } }
+  return data.embedding?.values || []
 }
 
 export const ragSearch = onCall(
