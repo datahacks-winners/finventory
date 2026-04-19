@@ -104,6 +104,7 @@ export function subscribeToListings(
       console.log('Listings after map:', listings.length)
 
       let filtered = listings
+      console.log('Listings before filters:', filtered.length)
 
       if (filters.species.length > 0) {
         filtered = filtered.filter((l) =>
@@ -111,6 +112,7 @@ export function subscribeToListings(
             l.species.toLowerCase().includes(s.toLowerCase())
           )
         )
+        console.log('After species filter:', filtered.length)
       }
 
       filtered = filtered.filter(
@@ -118,6 +120,7 @@ export function subscribeToListings(
           l.pricePerUnit >= filters.priceRange[0] &&
           l.pricePerUnit <= filters.priceRange[1]
       )
+      console.log('After price filter:', filtered.length)
 
       let withDistance: ListingWithDistance[] = filtered.map((l) => ({
         ...l,
@@ -135,6 +138,7 @@ export function subscribeToListings(
         withDistance = withDistance.filter(
           (l) => l.distance && l.distance <= filters.distance
         )
+        console.log('After distance filter:', withDistance.length, 'distance:', filters.distance)
       }
 
       // Sort by distance
