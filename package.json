@@ -9,7 +9,7 @@
     "deploy": "npm run deploy --workspaces --if-present",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "prepare": "husky githooks"
   },
   "dependencies": {
     "firebase-admin": "^13.0.0",
