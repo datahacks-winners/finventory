@@ -197,7 +197,7 @@ function ProductCard({
 export default function Marketplace() {
   const [selectedGrades, setSelectedGrades] = useState<string[]>([])
   const [selectedSpecies, setSelectedSpecies] = useState<string[]>([])
-  const [maxDistance, setMaxDistance] = useState(100)
+  const [maxDistance, setMaxDistance] = useState(500)
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState<'distance' | 'price' | 'freshness'>('distance')
   const [cart, setCart] = useState<CartItem[]>([])
@@ -431,7 +431,7 @@ export default function Marketplace() {
                 <input
                   type="range"
                   min={5}
-                  max={100}
+                  max={500}
                   step={5}
                   value={maxDistance}
                   onChange={(e) => setMaxDistance(Number(e.target.value))}
@@ -439,7 +439,7 @@ export default function Marketplace() {
                 />
                 <div className="flex justify-between mt-1 text-xs text-slate-400">
                   <span>5 mi</span>
-                  <span>100 mi</span>
+                  <span>500 mi</span>
                 </div>
               </div>
             </div>
