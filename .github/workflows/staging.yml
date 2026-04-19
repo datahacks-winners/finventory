@@ -8,6 +8,10 @@ concurrency:
   group: staging-deploy
   cancel-in-progress: true
 
+permissions:
+  contents: write
+  actions: write
+
 env:
   NODE_VERSION: '20'
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
