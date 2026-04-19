@@ -1,0 +1,358 @@
+<!-- Finventory - Auth (Modern Editorial) / About -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&amp;family=Caveat:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#4e3e00",
+                    "outline": "#707881",
+                    "on-secondary-container": "#773e01",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#ebd6c9",
+                    "surface-container-high": "#f9e4d7",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#004a75",
+                    "surface-bright": "#fff8f5",
+                    "background": "#fff8f5",
+                    "inverse-surface": "#3a2e25",
+                    "tertiary": "#725c07",
+                    "on-primary-container": "#f7f9ff",
+                    "inverse-primary": "#95ccff",
+                    "surface-container-low": "#fff1e9",
+                    "on-surface-variant": "#404750",
+                    "secondary-fixed-dim": "#ffb77d",
+                    "on-background": "#241911",
+                    "on-primary-fixed": "#001d32",
+                    "surface-tint": "#00639a",
+                    "secondary-fixed": "#ffdcc3",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-tertiary-fixed": "#231b00",
+                    "tertiary-container": "#c5a952",
+                    "on-primary": "#ffffff",
+                    "surface": "#fff8f5",
+                    "tertiary-fixed": "#ffe085",
+                    "outline-variant": "#c0c7d1",
+                    "on-error": "#ffffff",
+                    "on-surface": "#241911",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#f3dfd1",
+                    "surface-variant": "#f3dfd1",
+                    "inverse-on-surface": "#ffede2",
+                    "primary-fixed-dim": "#95ccff",
+                    "primary": "#005f93",
+                    "surface-container": "#ffeadc",
+                    "primary-fixed": "#cde5ff",
+                    "secondary": "#8c4f14",
+                    "tertiary-fixed-dim": "#e2c46a",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#6e3900",
+                    "secondary-container": "#fdac6a",
+                    "primary-container": "#1e78b4",
+                    "on-secondary-fixed": "#2f1500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {},
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"],
+                    "script": ["Caveat"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .italic-accent-caveat { font-family: 'Caveat', cursive; }
+        .drop-cap::first-letter {
+            float: left;
+            font-size: 5.5rem;
+            line-height: 1;
+            padding-right: 0.75rem;
+            font-weight: 800;
+            color: #005f93;
+            font-family: 'Plus Jakarta Sans';
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,95,147,0.06)]">
+<div class="flex justify-between items-center px-12 py-5 w-full max-w-screen-2xl mx-auto">
+<a class="text-2xl font-bold text-sky-900 dark:text-sky-100 italic-accent-caveat tracking-[-0.02em]" href="/">Finventory</a>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] hover:scale-[1.02] transition-transform duration-300" href="#">Marketplace</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] hover:scale-[1.02] transition-transform duration-300" href="#">Suppliers</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-sky-800 font-['Plus_Jakarta_Sans'] tracking-[-0.02em] hover:scale-[1.02] transition-transform duration-300" href="#">Impact</a>
+<a class="text-sky-700 dark:text-sky-300 font-bold border-b-2 border-sky-700 pb-1 font-['Plus_Jakarta_Sans'] tracking-[-0.02em]" href="#">About</a>
+</div>
+<div class="flex items-center space-x-4">
+<button class="px-6 py-2 text-slate-600 font-medium hover:text-sky-800 transition-all">Log in</button>
+<button class="px-6 py-2 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold shadow-lg hover:scale-[1.02] transition-transform active:scale-95 duration-300">Sign up</button>
+</div>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative px-6 py-20 lg:py-32 overflow-hidden">
+<div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+<div class="z-10">
+<span class="font-script text-2xl text-primary mb-4 block">Since 2018</span>
+<h1 class="text-6xl lg:text-8xl font-extrabold tracking-[-0.04em] leading-[0.9] text-on-surface mb-8">
+                        Built by people <br/>who <span class="italic text-primary">love</span> the coast
+                    </h1>
+<p class="text-xl text-on-surface-variant max-w-lg leading-relaxed">
+                        We started Finventory to bridge the gap between small-scale coastal harvesters and the world's most discerning kitchens.
+                    </p>
+</div>
+<div class="relative grid grid-cols-12 gap-4">
+<div class="col-span-7 pt-12">
+<img class="rounded-lg shadow-2xl w-full h-80 object-cover hover:scale-[1.02] transition-transform duration-500" alt="a weathered wooden fishing boat docked at a quiet coastal harbor during the soft blue hour of dawn" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaGcmT4xkbM2CAh-0zHXdeKJ1TLklz7J6209T1RVTUfG4-cmZZY5yZ75mUC5OyWEP8uvYl0ZobGhASYnnnUb570svkaSwNrTtQiLNWOf8Zydz_w_yefpLOqQZps287Tqf_vaHrXwWmApe86W_WfuSgIs7nKsj7pEx43qtrmLNFQ80Gss2M5oEPsPMugcjXmGm2ESPhzEPF8b9J80B7f70kFDaxj1zqv9yFmhxiRpSybKzX7qkNBkjcp4bx8KxXAEnOt2unDYY6aTk"/>
+</div>
+<div class="col-span-5">
+<img class="rounded-lg shadow-xl w-full h-64 object-cover -mt-8 hover:scale-[1.02] transition-transform duration-500" alt="a professional chef in a clean white apron meticulously plating fresh oysters with delicate herbs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz3hPtKruK_-z519lqDTVb2Wr3vduGLQ5-fsdWKClyzVwVAOKq_9DMWMBvizD2cSBuPtrWNJ2uIAr8KFuy9q19wEGoJHrIjMwVsAfpYOmSd6PsN5A4MJBPxe8e4PBTgX-Qp1-uh8RQhRUw_2lesCiflFaX6KJF9yP0z9FYYuBoGl_PFR42elKXwH0Z79hgiSr7Y4rQNghYwYQZxP3oCwEMvvN4Izlmadwv4OscDECILqno149d898g06zF89hTe3rqVHQW0DEWQcY"/>
+</div>
+<div class="col-span-12 -mt-12 px-12">
+<img class="rounded-lg shadow-2xl w-full h-56 object-cover hover:scale-[1.02] transition-transform duration-500" alt="a vibrant coastal seafood market with baskets of fresh catch and locals browsing under warm afternoon sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUeexc2_XNI2-RyQiri6jxMIDcQwGP8lDKerPkRIHcQHwYrhIUah7RM4vcvxNu1RDvHBqRLxCGmOXE3yKM6zQMj1K_FzaO6Y8AQPIcDGc3lrTXsM5BO5kM5pBqQZLjwvOe0H_pq4SZ7h1oFYNQ5e7hWMtP8SXGhq7hj_l28RyCKyR7kf9SX5ZGWL9Eo_4hJ8OAoqIixZkC0h8MpPzF9PLfPl3bh5Dif3g3oLR8O0XBMXZK4Tbe0REQiurTDfOvzCUf2lHzjc"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Wave Divider -->
+<div class="w-full text-surface-container-low leading-[0]">
+<svg fill="currentColor" viewbox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+</svg>
+</div>
+<!-- Story Section -->
+<section class="bg-surface-container-low px-6 py-24">
+<div class="max-w-3xl mx-auto">
+<div class="prose prose-xl prose-slate">
+<p class="drop-cap text-on-surface-variant leading-relaxed mb-12">
+                        It began with a simple observation at a harbor in Maine. While local chefs were clamoring for the morning's catch, the fishermen were struggling with antiquated logistics that favored industrial-scale volume over artisan-scale quality. We saw a future where technology didn't replace the human touch, but protected it.
+                    </p>
+<div class="my-16 flex flex-col items-center">
+<blockquote class="font-script text-4xl text-primary text-center max-w-xl italic leading-tight">
+                            "The ocean doesn't have a clock. It has a rhythm. Our job is to listen to it and bring that honesty to every kitchen table."
+                        </blockquote>
+<cite class="mt-4 text-on-surface-variant font-bold uppercase tracking-widest text-xs">— Elias Thorne, Founder</cite>
+</div>
+<p class="text-on-surface-variant leading-relaxed mb-12">
+                        Finventory was born from the belief that transparency is the most important ingredient. By connecting the dots directly from boat to kitchen, we ensure that every piece of seafood has a story, a face, and a legacy. Our platform is more than a marketplace; it's a digital ecosystem built to sustain the maritime way of life for generations to come.
+                    </p>
+<div class="grid grid-cols-2 gap-8 my-16">
+<img class="rounded-lg shadow-lg rotate-1 hover:rotate-0 transition-transform duration-500" alt="extreme close-up of weathered hands mending a traditional hemp fishing net" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeq_X6W33dmjHEiMhKDzLLANmdrS37S43psr-cDeZoZU4ep6vUhhpvh__1KXCFYgYu2s3CzCBi2D5fYFbOjmww4iWwe5dWZ-aCik1GBhQI8i27Z8-SeX1o8M46HAiMyn9Ow58I10Mf6VSzs9jrHquiWvI2ub5HjU4X_0UQoaRtV_1RIAF3BxqwKIPobNsRUGE6oC8UeScKXb94vsnH6Tp4QYqKgw7y862HgmTJKtn0-LccVbUND3jIY9QWUkZ_IAS_Qx29HQ3n0wU"/>
+<img class="rounded-lg shadow-lg -rotate-2 hover:rotate-0 transition-transform duration-500" alt="a chef's hands delicately drizzling citrus oil over a perfectly seared scallop dish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5VQS1Y-VIiDuMEddI2UckpX9cup-s5bX7mbb53JlAeFKRMmW2CvtIDxjVAls4gCuVYmNRaF2RiBZ6-jQyJS4oerIPqX1j_tCALfdqi_IyZphVzYmmEdWaKn-UuiBVRdMK898BXvP3l9j7sksD5zDVV7CW1Sxx-TsHvtrZP3apEfmb3Fy9JLfOOWhOUif_NoNZJr1jUHvRcPBApf6tfqrdUkfOwHxiV2jpOUsl2Xfco8q8s9uh-6zVS4osJB5MyLnaW3bsB_eEZO4"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Values Section -->
+<section class="px-6 py-24 bg-surface">
+<div class="max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-16">
+<div>
+<span class="font-script text-2xl text-secondary mb-2 block">Our North Star</span>
+<h2 class="text-5xl font-extrabold tracking-tighter">Anchored in Values</h2>
+</div>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="p-8 bg-surface-container-lowest rounded-lg shadow-[0_20px_40px_rgba(0,95,147,0.06)] hover:translate-y-[-8px] transition-all duration-300">
+<div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container mb-6">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Traceability</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Every catch is tracked from the specific GPS coordinate to the final delivery signature.</p>
+</div>
+<div class="p-8 bg-surface-container-lowest rounded-lg shadow-[0_20px_40px_rgba(0,95,147,0.06)] hover:translate-y-[-8px] transition-all duration-300 lg:mt-8">
+<div class="w-12 h-12 bg-secondary-container rounded-full flex items-center justify-center text-on-secondary-container mb-6">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Fair pay</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">We cut out the middlemen to ensure harvesters take home 25% more than industry averages.</p>
+</div>
+<div class="p-8 bg-surface-container-lowest rounded-lg shadow-[0_20px_40px_rgba(0,95,147,0.06)] hover:translate-y-[-8px] transition-all duration-300">
+<div class="w-12 h-12 bg-tertiary-container rounded-full flex items-center justify-center text-on-tertiary-container mb-6">
+<span class="material-symbols-outlined">recycling</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Zero waste</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Intelligent forecasting ensures we only harvest what is needed, reducing bycatch waste to near zero.</p>
+</div>
+<div class="p-8 bg-surface-container-lowest rounded-lg shadow-[0_20px_40px_rgba(0,95,147,0.06)] hover:translate-y-[-8px] transition-all duration-300 lg:mt-8">
+<div class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container mb-6">
+<span class="material-symbols-outlined">waves</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Coastal community</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">We reinvest 5% of profits into coastal preservation and local harbor infrastructure.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Team Section -->
+<section class="px-6 py-24 bg-surface-container-low">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-20">
+<h2 class="text-5xl font-extrabold tracking-tighter mb-4">Meet the Crew</h2>
+<p class="text-on-surface-variant">The navigators behind the marketplace.</p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+<div class="group relative bg-white p-8 rounded-lg text-center shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+<div class="relative w-32 h-32 mx-auto mb-6">
+<img class="w-full h-full object-cover rounded-full" alt="portrait of a middle-aged man with kind eyes and a short beard wearing a blue linen shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkGmjH2-4wpMMdthks0GokGMClhhiRrwIXcPKeYQbcDHFyFOGd0WMyv85L9owBtc3BRD7O2QjEBkXW6RGr8wE70UiS9g4u4EsPsRdQKau7Pt3DBFAEfRltPpeQjN3ZF8zwEaSTpJawNjcKKCi2IwJKOHF6XY4Nk_6dzfoA66vO2zB3xZh3sizwqEttodQW0bfE1M25AZOICO0PS2t3FbTYX0fuaJ03Sw3EYQfzuhfm3DcWaAPymo-9pDgow7OPNzko-wESaOZgNRM"/>
+<div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full text-white p-4 text-xs font-medium">
+                                "Once spent a month on a research vessel in the Arctic."
+                            </div>
+</div>
+<h4 class="text-xl font-bold">Elias Thorne</h4>
+<p class="text-primary font-medium text-sm mb-1">Founder &amp; CEO</p>
+<p class="text-on-surface-variant text-xs italic">Home harbor: Portland, ME</p>
+</div>
+<div class="group relative bg-white p-8 rounded-lg text-center shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+<div class="relative w-32 h-32 mx-auto mb-6">
+<img class="w-full h-full object-cover rounded-full" alt="smiling woman with wavy brown hair wearing a cream-colored sweater outdoors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHuVL6s4Q1h9l-6ItBKwGNJHGfkRDoLSg-Eo1PDZWOuHiSzqb7jAXnVdaFp4De71XvxGsBKHaxg7skAwO0tDyBb_pW7rQBadW6CHIzAnPzuzyU1VOQszMHbq0kHOcP7G8XLDaQQkZyGtGf1YEP3oep-vx8PihbtpJFBPCAURCCFq7gXcdDwLSq_tXybkJ_9-RQkjMyiJLCtNDpcP-iwG9AqqAbvPbaWyeY-u3LQpaxlJYbVwGNfUj-HtiYdGbXLWcMfbOobZiY4Rs"/>
+<div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full text-white p-4 text-xs font-medium">
+                                "Collects vintage sea charts from the 1800s."
+                            </div>
+</div>
+<h4 class="text-xl font-bold">Sarah Chen</h4>
+<p class="text-primary font-medium text-sm mb-1">Operations Lead</p>
+<p class="text-on-surface-variant text-xs italic">Home harbor: Gloucester, MA</p>
+</div>
+<div class="group relative bg-white p-8 rounded-lg text-center shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+<div class="relative w-32 h-32 mx-auto mb-6">
+<img class="w-full h-full object-cover rounded-full" alt="young man with short dark hair and a warm smile wearing a grey polo shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxVkuPfquor5dnyItHUeq81liGPthCLyPnMnDdn--OCVl1sgWzIjh5kB_FvyrW3h7o5iydbUa9LYl8TfuU9ROlQ-As3N3OzoBute1c1pywL2u7X1UhNGoojfn_Bj_6J6rV2IqqROlUGpXto4hcGeXXQep5ua_1M9_L_d1jIy17xZxryxquGM3w7v9_5GlOJUHuI5PuPRax3XwXq-TJLyDnGsiuOYFeOa6WCn_wQWGzHnUldi6rpxPNMIUCWdOzizZ4y33rQtU8adc"/>
+<div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full text-white p-4 text-xs font-medium">
+                                "Champion oyster shucker (3rd place, 2021)."
+                            </div>
+</div>
+<h4 class="text-xl font-bold">Marcus Bell</h4>
+<p class="text-primary font-medium text-sm mb-1">Head of Logistics</p>
+<p class="text-on-surface-variant text-xs italic">Home harbor: New Bedford, MA</p>
+</div>
+<div class="group relative bg-white p-8 rounded-lg text-center shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+<div class="relative w-32 h-32 mx-auto mb-6">
+<img class="w-full h-full object-cover rounded-full" alt="professional woman with dark hair pulled back wearing a navy blazer and white blouse" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDyW7s5Gdjoebo4j58oR0uiulHf4NbPM9CzOwd7dzJTEDsF8qdXayh99AWbgj418eEw-X_SV7IKS5FRnQO3zrSWZrrHJbQcbbPmFOkHWuGZ7kBhC0iNv_wXuxr-cQeJdshy5guWf54j4Emr8NbDmcNTMklyP1-u0wQ1NSNkP4yXpnsM8TJXeotbJOls7yrxNEEWzK0clWuCwFWxijoQFIVRM4qFb4v61HW_WaOe61nnLv99NFX-sR6pRXqWbsWktO91CwYUkTk858"/>
+<div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full text-white p-4 text-xs font-medium">
+                                "Can identify any Atlantic fish by its scales."
+                            </div>
+</div>
+<h4 class="text-xl font-bold">Dr. Lena Voss</h4>
+<p class="text-primary font-medium text-sm mb-1">Sustainability Director</p>
+<p class="text-on-surface-variant text-xs italic">Home harbor: Woods Hole, MA</p>
+</div>
+<div class="group relative bg-white p-8 rounded-lg text-center shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+<div class="relative w-32 h-32 mx-auto mb-6">
+<img class="w-full h-full object-cover rounded-full" alt="man with a trimmed beard and stylish glasses wearing a charcoal button-down shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIte7qL8CKAABHv5Y4bqdZ1AJ8g6eknabi61oZ9TnJ_V8NXhTPASVyqHYOU8TPvUaReZqfaGeAOqioWqN5A4JfJpOu-60xxvrwVL5ZMoo3oiS_23641OlU79_oK8NRH6IAaL0xpenYQIcJoybXrehuL4mkBEL4dI1v1rvw7y16QwFiftBp5mUvkTPFeqcVx48vOH3MU7hrNrpzZgCkMlNHdpIoe_vDy3Z739oEyRtmkpZaOkrp6EE0ajbR62j8mmjynvXPmNRJH8"/>
+<div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full text-white p-4 text-xs font-medium">
+                                "Owns a restored 1974 wooden dory."
+                            </div>
+</div>
+<h4 class="text-xl font-bold">Julian Rossi</h4>
+<p class="text-primary font-medium text-sm mb-1">CTO</p>
+<p class="text-on-surface-variant text-xs italic">Home harbor: Narragansett, RI</p>
+</div>
+<div class="group relative bg-white p-8 rounded-lg text-center shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+<div class="relative w-32 h-32 mx-auto mb-6">
+<img class="w-full h-full object-cover rounded-full" alt="woman with red hair and freckles wearing a green raincoat in a misty coastal setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfOmsvAC6VbQRv4BsBiLRDWG56TPpZJnCjF9o5Q4zqDOQVaeyP1CHLDtaQ06g8fQpqUzGuM8-EQX_tsPFTiZg65ayvNIfz7vFb_gWUhM-STDQZ1csJwOfxkRNSwC_ndwzpvpirKmOCime_pkJRUmUP4bggPwynfCrQ7bFnQ5HCCpH2ZMeZWu-LvaIeEaZceWDRG1GN_oq1fWnaqXU2ecivyTChIwhVDEwZGPK8vwxuqr6Jljmr-YTrU8pc5DdRG4uTA8HreN7qcXU"/>
+<div class="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full text-white p-4 text-xs font-medium">
+                                "Speaks three languages and knows maritime law."
+                            </div>
+</div>
+<h4 class="text-xl font-bold">Clara Dun</h4>
+<p class="text-primary font-medium text-sm mb-1">Community Outreach</p>
+<p class="text-on-surface-variant text-xs italic">Home harbor: Rockport, MA</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA & Press Section -->
+<section class="px-6 py-32 bg-surface">
+<div class="max-w-7xl mx-auto">
+<div class="bg-tertiary-fixed rounded-xl p-12 lg:p-20 flex flex-col lg:flex-row items-center justify-between shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-10">
+<span class="material-symbols-outlined text-[10rem]">anchor</span>
+</div>
+<div class="z-10 text-center lg:text-left mb-12 lg:mb-0">
+<h2 class="text-4xl lg:text-6xl font-black text-on-tertiary-fixed leading-tight mb-6 tracking-tight">
+                            Ready to join <br/>the crew?
+                        </h2>
+<p class="text-on-tertiary-fixed-variant text-xl max-w-md">We're always looking for stewards of the sea and tech visionaries.</p>
+</div>
+<div class="z-10">
+<button class="bg-on-tertiary-fixed text-white px-10 py-5 rounded-full text-xl font-bold hover:scale-105 transition-transform shadow-lg">Come work with us</button>
+</div>
+</div>
+<div class="mt-24 text-center">
+<p class="text-outline-variant font-bold uppercase tracking-[0.2em] text-xs mb-10">As featured in</p>
+<div class="flex flex-wrap justify-center items-center gap-12 lg:gap-20 opacity-40 grayscale">
+<span class="text-2xl font-serif italic">The Daily Tide</span>
+<span class="text-2xl font-bold uppercase tracking-tighter">Ocean Quarterly</span>
+<span class="text-2xl font-script font-bold">Harbor Post</span>
+<span class="text-2xl font-sans font-extrabold">MARITIME</span>
+<span class="text-2xl font-serif tracking-widest">BEACON</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-900 dark:bg-black text-[#fff8f5] w-full relative">
+<div class="w-full text-slate-900 leading-[0]">
+<svg class="rotate-180 bg-surface" fill="currentColor" viewbox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg">
+<path d="M0,32L120,37.3C240,43,480,53,720,48C960,43,1200,21,1320,10.7L1440,0L1440,60L1320,60C1200,60,960,60,720,60C480,60,240,60,120,60L0,60Z"></path>
+</svg>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-7xl mx-auto font-['Plus_Jakarta_Sans'] tracking-tight">
+<div class="md:col-span-1">
+<h2 class="text-3xl font-black text-white mb-6">Finventory</h2>
+<p class="text-slate-400 leading-relaxed max-w-xs">Curating the ocean's bounty with precision, respect, and technological innovation.</p>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Explore</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 inline-block" href="#">Marketplace</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 inline-block" href="#">Suppliers</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 inline-block" href="#">Journal</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Impact</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 inline-block" href="#">Sustainability</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 inline-block" href="#">Impact Report</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 inline-block" href="#">Community</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Company</h4>
+<ul class="space-y-4">
+<li><a class="text-white font-medium hover:text-orange-50 transition-all hover:translate-x-1 inline-block" href="#">About</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 inline-block" href="#">Careers</a></li>
+<li><a class="text-slate-400 hover:text-orange-50 transition-all hover:translate-x-1 inline-block" href="#">Privacy</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-slate-800 px-12 py-8 text-center text-slate-500 text-sm">
+            © 2024 Finventory. Curating the ocean's bounty.
+        </div>
+</footer>
+</body></html>

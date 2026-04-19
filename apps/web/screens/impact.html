@@ -1,0 +1,324 @@
+<!-- Finventory - Home (Updated) / Impact Editorial -->
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Caveat:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#4e3e00",
+                    "outline": "#707881",
+                    "on-secondary-container": "#773e01",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#ebd6c9",
+                    "surface-container-high": "#f9e4d7",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#004a75",
+                    "surface-bright": "#fff8f5",
+                    "background": "#fff8f5",
+                    "inverse-surface": "#3a2e25",
+                    "tertiary": "#725c07",
+                    "on-primary-container": "#f7f9ff",
+                    "inverse-primary": "#95ccff",
+                    "surface-container-low": "#fff1e9",
+                    "on-surface-variant": "#404750",
+                    "secondary-fixed-dim": "#ffb77d",
+                    "on-background": "#241911",
+                    "on-primary-fixed": "#001d32",
+                    "surface-tint": "#00639a",
+                    "secondary-fixed": "#ffdcc3",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "on-tertiary-fixed": "#231b00",
+                    "tertiary-container": "#c5a952",
+                    "on-primary": "#ffffff",
+                    "surface": "#fff8f5",
+                    "tertiary-fixed": "#ffe085",
+                    "outline-variant": "#c0c7d1",
+                    "on-error": "#ffffff",
+                    "on-surface": "#241911",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#f3dfd1",
+                    "surface-variant": "#f3dfd1",
+                    "inverse-on-surface": "#ffede2",
+                    "primary-fixed-dim": "#95ccff",
+                    "primary": "#005f93",
+                    "surface-container": "#ffeadc",
+                    "primary-fixed": "#cde5ff",
+                    "secondary": "#8c4f14",
+                    "tertiary-fixed-dim": "#e2c46a",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#6e3900",
+                    "secondary-container": "#fdac6a",
+                    "primary-container": "#1e78b4",
+                    "on-secondary-fixed": "#2f1500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"],
+                    "accent": ["Caveat"]
+            }
+          },
+        },
+      }
+    </script>
+<style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .italic-accent-caveat {
+            font-family: 'Caveat', cursive;
+        }
+        .text-editorial {
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        .line-art-map {
+            background-image: url("data:image/svg+xml,%3Csvg width='800' height='450' viewBox='0 0 800 450' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M750,50 Q780,100 760,150 T730,250 T770,350 T740,400' fill='none' stroke='%23cbd5e1' stroke-width='1.5'/%3E%3Cpath d='M720,20 Q740,80 710,140 T680,240 T700,340 T670,420' fill='none' stroke='%23e2e8f0' stroke-width='1'/%3E%3Cpath d='M780,80 Q800,150 780,220 T760,320 T790,400' fill='none' stroke='%23f1f5f9' stroke-width='2'/%3E%3C/svg%3E");
+            background-position: right top;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<nav class="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-outline-variant/30">
+<div class="flex justify-between items-center px-12 py-5 w-full max-w-screen-2xl mx-auto">
+<a class="text-2xl font-bold text-primary italic-accent-caveat" href="#">Finventory</a>
+<div class="hidden md:flex gap-10 items-center">
+<a class="text-slate-600 hover:text-primary font-medium transition-all" href="#">Marketplace</a>
+<a class="text-slate-600 hover:text-primary font-medium transition-all" href="#">Suppliers</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Impact</a>
+<a class="text-slate-600 hover:text-primary font-medium transition-all" href="#">About</a>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-2.5 text-slate-700 font-medium hover:text-primary transition-colors">Log in</button>
+<button class="px-8 py-2.5 bg-primary text-white rounded-full font-bold shadow-md hover:bg-primary-container transition-all">Sign up</button>
+</div>
+</div>
+</nav>
+<main>
+<section class="relative min-h-[819px] flex flex-col justify-center overflow-hidden bg-slate-900 text-white">
+<div class="absolute inset-0 z-0">
+<img alt="Fishermen working on deck" class="w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXGiSpzMu24sR6o-OzVoND0MXkdB3zGhvPf1Nj1iveYKwiBECCg9SuToln5pokYCc7YCQtH99DxtEpa5Z2pE558jrsOHq7BhGhIdct2h9JUVcqVpwNICSKyM8OCcPmIG0hlcSKjyZDA0HhtevXsj2c5tkpRuxH3qhcVSNuLIgfuqaRXNgOm5ixQ_RdjzaI3E5_fGp1c0JYK1qyJmhY5KNugO_N-UvRLO2J175Oo9GSof1YlL55eJwFoicmHWYM_TuMbiODeFWtvRI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/50"></div>
+</div>
+<div class="relative z-10 px-12 max-w-7xl mx-auto w-full pt-20">
+<h1 class="text-5xl md:text-8xl font-black tracking-tighter mb-16 text-editorial max-w-4xl">
+                The Raw Data of <br/><span class="italic font-light serif text-primary-fixed">Ocean Stewardship.</span>
+</h1>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-white/20 pt-12">
+<div>
+<div class="text-5xl font-black text-primary-fixed mb-2">184,200 lb</div>
+<div class="text-sm font-bold uppercase tracking-[0.2em] text-slate-300">Rescued Surplus</div>
+</div>
+<div>
+<div class="text-5xl font-black text-secondary-fixed mb-2">92 Tons</div>
+<div class="text-sm font-bold uppercase tracking-[0.2em] text-slate-300">CO2 emissions avoided</div>
+</div>
+<div>
+<div class="text-5xl font-black text-tertiary-fixed mb-2">$420,000</div>
+<div class="text-sm font-bold uppercase tracking-[0.2em] text-slate-300">Direct Fisher Revenue</div>
+</div>
+</div>
+</div>
+</section>
+<section class="px-12 py-32 bg-white">
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="bg-surface-container-low p-10 rounded-2xl flex flex-col justify-between h-full border border-outline-variant/30">
+<div>
+<div class="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined">eco</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Ocean Conservation</h3>
+<p class="text-on-surface-variant leading-relaxed">By redirecting surplus catch before it hits landfills, we maintain the delicate nitrogen balance of coastal shelf ecosystems.</p>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/30">
+<span class="text-3xl font-black text-primary">82%</span>
+<span class="text-sm font-bold text-outline block mt-1">Efficiency Increase</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-10 rounded-2xl flex flex-col justify-between h-full border border-outline-variant/30">
+<div>
+<div class="w-12 h-12 bg-secondary/10 text-secondary rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined">distance</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Logistics Precision</h3>
+<p class="text-on-surface-variant leading-relaxed">Our routing algorithms eliminate cold-chain gaps, reducing the average transport distance by 314 miles per shipment.</p>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/30">
+<span class="text-3xl font-black text-secondary">314mi</span>
+<span class="text-sm font-bold text-outline block mt-1">Avg. Saved per Haul</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-10 rounded-2xl flex flex-col justify-between h-full border border-outline-variant/30">
+<div>
+<div class="w-12 h-12 bg-tertiary/10 text-tertiary rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Community Capital</h3>
+<p class="text-on-surface-variant leading-relaxed">Profit redirection back to independent fishers, ensuring the survival of heritage fishing fleets across New England.</p>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/30">
+<span class="text-3xl font-black text-tertiary">+14%</span>
+<span class="text-sm font-bold text-outline block mt-1">Net Margin Increase</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="px-12 py-32 bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+<div class="relative group">
+<img alt="Real fishing crew on deck" class="w-full h-[700px] object-cover rounded-2xl shadow-xl grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcmvF9s30TTJoN5-HpPIL4KGHUUy1QfNCK5BHF__VXUsL5qHtkT4a8ff7CGroWhwZhtRTahjXJlEIuBeZuif4LIDYb9oZs463UiC3LdGEhM20cw_08IE6gNjYZ4-Z7zZZTQr6WptmFEcwYqzmLvhr4uIb0QCBIIyzcw-E5wGjZLkTqjjGDliM2T93PZBiIEDBu5GMaGoRCHrA1rD0IAVTnl_fBcBrLZ-WP-X9PpWBK9Sdek_Ih3Dfg-4Vw0RSqj1HPo0YZtGqZJwU"/>
+<div class="absolute -bottom-8 -right-8 bg-slate-900 p-10 rounded-2xl text-white max-w-sm shadow-2xl">
+<p class="italic-accent-caveat text-3xl leading-snug mb-6">"This isn't just technology; it's a lifeline for those of us who live by the tide."</p>
+<div class="flex items-center gap-4">
+<div class="h-px w-8 bg-primary"></div>
+<p class="font-bold uppercase tracking-widest text-xs opacity-70">Mark Jansen, Crew Lead, Northern Star</p>
+</div>
+</div>
+</div>
+<div>
+<span class="text-primary font-bold uppercase tracking-[0.2em] text-sm mb-6 block">Journal Entry: Oct 2024</span>
+<h2 class="text-5xl font-black text-on-surface mb-8 tracking-tight leading-[1.1]">The Authenticity of the <br/>Daily Haul.</h2>
+<div class="space-y-6 text-xl text-on-surface-variant text-editorial font-medium">
+<p>We've moved away from the glossy depictions of 'maritime' to focus on the grit of the deck. Authenticity isn't a marketing buzzword for us—it's the data we track every single morning at 4:00 AM.</p>
+<p>Our impact is measured in cold hard metrics: the number of crates that didn't go to waste, the diesel not burned, and the checks that cleared for the families who have fished these waters for four generations.</p>
+</div>
+<div class="mt-12">
+<button class="flex items-center gap-4 text-primary font-bold text-lg group">
+                        View Raw Impact Data
+                        <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_right_alt</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section class="px-12 py-32 bg-white">
+<div class="max-w-7xl mx-auto text-center mb-16">
+<h2 class="text-4xl font-black text-on-surface mb-4">Harbor Distribution</h2>
+<p class="text-on-surface-variant font-medium max-w-xl mx-auto">Static point-of-presence mapping across our primary Atlantic hubs.</p>
+</div>
+<div class="max-w-5xl mx-auto aspect-[16/9] relative bg-slate-50 border border-slate-200 rounded-3xl overflow-hidden line-art-map shadow-sm">
+<div class="absolute top-[20%] right-[15%] flex flex-col items-center">
+<div class="w-3 h-3 bg-primary rounded-full mb-2"></div>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white/80 px-2 py-0.5 rounded">Gloucester</span>
+</div>
+<div class="absolute top-[35%] right-[18%] flex flex-col items-center">
+<div class="w-3 h-3 bg-secondary rounded-full mb-2"></div>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white/80 px-2 py-0.5 rounded">Portland</span>
+</div>
+<div class="absolute bottom-[25%] right-[22%] flex flex-col items-center">
+<div class="w-3 h-3 bg-tertiary rounded-full mb-2"></div>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white/80 px-2 py-0.5 rounded">Cape May</span>
+</div>
+<div class="absolute bottom-[10%] right-[30%] flex flex-col items-center">
+<div class="w-3 h-3 bg-primary rounded-full mb-2"></div>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white/80 px-2 py-0.5 rounded">Charleston</span>
+</div>
+<div class="absolute top-8 left-8">
+<div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">System Status</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-green-500 rounded-full"></div>
+<div class="text-sm font-medium text-slate-600">Active Monitoring</div>
+</div>
+</div>
+</div>
+</section>
+<section class="px-12 py-32 bg-surface-container-low">
+<div class="max-w-4xl mx-auto">
+<div class="text-center mb-16">
+<h3 class="text-3xl font-black text-on-surface mb-4">Methodology &amp; Veracity</h3>
+<p class="text-on-surface-variant font-medium">Transparent data auditing standards.</p>
+</div>
+<div class="space-y-4">
+<details class="group bg-white rounded-2xl border border-outline-variant/30 overflow-hidden" open="">
+<summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl hover:bg-slate-50 transition-colors list-none">
+                        Waste Calculation Standard
+                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-8 pb-8 text-on-surface-variant font-medium leading-relaxed">
+                        Redirection metrics are audited monthly against NOAA Seafood Waste Metrics v2.4. We track actual redistribution through the Finventory ledger, subtracting standard packaging decay and logistics-related loss factors.
+                    </div>
+</details>
+<details class="group bg-white rounded-2xl border border-outline-variant/30 overflow-hidden">
+<summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl hover:bg-slate-50 transition-colors list-none">
+                        Economic Equity Framework
+                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="px-8 pb-8 text-on-surface-variant font-medium leading-relaxed">
+                        Community capital metrics reflect the direct financial gains returned to vessel owners versus traditional regional auction house pricing. We prioritize transparency in transaction fees and regional floor pricing.
+                    </div>
+</details>
+</div>
+</div>
+</section>
+<section class="px-12 py-24 bg-white border-t border-outline-variant/20">
+<div class="max-w-7xl mx-auto">
+<p class="text-center text-outline font-bold uppercase tracking-widest text-xs mb-12">Collaborating with Authentic Coastal Stewards</p>
+<div class="flex flex-wrap justify-center items-center gap-16 opacity-40 grayscale">
+<span class="text-2xl font-black tracking-tighter">OCEANIC+</span>
+<span class="text-2xl font-black tracking-tighter">HARBOR.CO</span>
+<span class="text-2xl font-black tracking-tighter">TIDEWATER</span>
+<span class="text-2xl font-black tracking-tighter">MARITIME.A</span>
+<span class="text-2xl font-black tracking-tighter">ECO-PORT</span>
+</div>
+</div>
+</section>
+</main>
+<footer class="w-full relative bg-slate-900 text-white">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-7xl mx-auto">
+<div class="col-span-1 md:col-span-1">
+<a class="text-3xl font-black text-white block mb-6 italic-accent-caveat" href="#">Finventory</a>
+<p class="text-slate-400 font-medium">A ledger for the sea. Tracking surplus, saving livelihoods, and restoring ocean balance.</p>
+</div>
+<div>
+<h4 class="font-bold text-slate-500 mb-6 uppercase tracking-widest text-xs">Platform</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-300 hover:text-white transition-all" href="#">Marketplace</a></li>
+<li><a class="text-slate-300 hover:text-white transition-all" href="#">Suppliers</a></li>
+<li><a class="text-white font-bold" href="#">Impact Report</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-500 mb-6 uppercase tracking-widest text-xs">Resources</h4>
+<ul class="space-y-4">
+<li><a class="text-slate-300 hover:text-white transition-all" href="#">Sustainability</a></li>
+<li><a class="text-slate-300 hover:text-white transition-all" href="#">Journal</a></li>
+<li><a class="text-slate-300 hover:text-white transition-all" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-500 mb-6 uppercase tracking-widest text-xs">Contact</h4>
+<p class="text-slate-400 font-medium mb-4 text-sm">North Pier, 42nd Ave<br/>Portland, ME 04101</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">anchor</span>
+</a>
+<a class="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">waves</span>
+</a>
+</div>
+</div>
+</div>
+<div class="border-t border-white/5 py-8 text-center text-slate-600 text-xs tracking-widest uppercase">
+        © 2024 Finventory. Every crate counted.
+    </div>
+</footer>
+</body></html>
