@@ -5,13 +5,12 @@ export default function TempBinsChart({ className }: { className?: string }) {
   const chartRef = useRef<HTMLDivElement>(null)
   const [error, setError] = useState<string | null>(null)
   const viewRef = useRef<{ finalize: () => void; resize: () => void } | null>(null)
-
   useEffect(() => {
     if (!chartRef.current) return
 
     embed(chartRef.current, '/chart_temp_bins.json', {
       actions: false,
-      renderer: 'svg'
+      renderer: 'svg',
     }).then(result => {
       viewRef.current = result.view
       // Force resize after a brief delay to ensure container is measured

@@ -4,6 +4,7 @@ steps:
     args:
       - '-c'
       - |
+        echo "FIREBASE_API_KEY is set: $$FIREBASE_API_KEY"
         docker build \
           --build-arg VITE_FIREBASE_API_KEY="$$FIREBASE_API_KEY" \
           --build-arg VITE_FIREBASE_AUTH_DOMAIN="$$FIREBASE_AUTH_DOMAIN" \

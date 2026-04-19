@@ -249,7 +249,7 @@ export default function SupplierPortal() {
           >
             <p className="text-outline text-sm uppercase tracking-widest font-bold">{kpi.label}</p>
             <div className="flex items-baseline justify-between mt-2">
-              <span className="text-5xl font-black italic-accent-caveat text-primary">{kpi.value}</span>
+              <span className="text-5xl font-black font-satoshi text-primary">{kpi.value}</span>
               <span className="material-symbols-outlined text-primary-container">{kpi.icon}</span>
             </div>
             <div className="mt-4">

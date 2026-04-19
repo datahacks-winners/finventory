@@ -81,7 +81,7 @@ export default function Auth() {
     <div className="bg-[#FAF9F6] text-slate-900 min-h-screen flex flex-col font-body">
       {/* ── Navbar ── */}
       <nav className="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,95,147,0.06)]">
-        <div className="flex justify-between items-center px-6 lg:px-12 py-5 w-full max-w-screen-2xl mx-auto">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center px-6 lg:px-12 py-5 w-full max-w-screen-2xl mx-auto">
           <Link
             to="/"
             className="text-2xl font-bold text-sky-900 italic-accent-caveat tracking-[-0.02em]"
