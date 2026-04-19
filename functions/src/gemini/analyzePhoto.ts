@@ -74,7 +74,7 @@ Be conservative with grades. Only assign "sushi" if clearly premium quality.`
 
 export const analyzeFishPhoto = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com'],
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://web-eodwatsp5q-uc.a.run.app'],
     timeoutSeconds: 30,
     memory: '256MiB'
   },

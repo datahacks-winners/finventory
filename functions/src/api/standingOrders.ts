@@ -36,7 +36,7 @@ export interface CreateStandingOrderRequest {
  */
 export const createStandingOrder = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://web-eodwatsp5q-uc.a.run.app']
   },
   async (request) => {
     const data = request.data as CreateStandingOrderRequest
@@ -112,7 +112,7 @@ export const createStandingOrder = onCall(
  */
 export const updateStandingOrder = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://web-eodwatsp5q-uc.a.run.app']
   },
   async (request) => {
     if (!request.auth) {
@@ -163,7 +163,7 @@ export const updateStandingOrder = onCall(
  */
 export const deleteStandingOrder = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://web-eodwatsp5q-uc.a.run.app']
   },
   async (request) => {
     if (!request.auth) {
@@ -204,7 +204,7 @@ export const deleteStandingOrder = onCall(
  */
 export const getMyStandingOrders = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://web-eodwatsp5q-uc.a.run.app']
   },
   async (request) => {
     if (!request.auth) {

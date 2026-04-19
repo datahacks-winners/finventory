@@ -49,7 +49,7 @@ export interface Listing {
  */
 export const createListing = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://web-eodwatsp5q-uc.a.run.app']
   },
   async (request) => {
     const data = request.data as CreateListingRequest
@@ -168,7 +168,7 @@ export const createListing = onCall(
  */
 export const updateListing = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://web-eodwatsp5q-uc.a.run.app']
   },
   async (request) => {
     if (!request.auth) {
@@ -232,7 +232,7 @@ export const updateListing = onCall(
  */
 export const deleteListing = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com', 'https://web-eodwatsp5q-uc.a.run.app']
   },
   async (request) => {
     if (!request.auth) {

@@ -41,7 +41,7 @@ export interface Order {
  */
 export const createOrder = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: '*'
   },
   async (request) => {
     const data = request.data as CreateOrderRequest
@@ -158,7 +158,7 @@ export const createOrder = onCall(
  */
 export const confirmPickup = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: '*'
   },
   async (request) => {
     if (!request.auth) {
@@ -231,7 +231,7 @@ export const confirmPickup = onCall(
  */
 export const cancelOrder = onCall(
   {
-    cors: ['http://localhost:5173', 'http://localhost:3000', 'https://finventory.web.app', 'https://finventory.com']
+    cors: '*'
   },
   async (request) => {
     if (!request.auth) {
