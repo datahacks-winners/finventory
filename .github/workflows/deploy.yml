@@ -48,21 +48,31 @@ jobs:
 
       - run: npm ci
 
-      - name: Install and build functions
+      - name: Build Functions
         run: |
           cd functions
           npm install
           npm run build
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools@13.14.0
+      - name: Package Functions for Terraform
+        run: |
+          cd functions
+          zip -r ../terraform/function-source.zip lib/ package.json
 
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+      - name: Upload to GCS
+        uses: google-github-actions/auth@v2
         with:
-          args: deploy --only functions,firestore:rules,storage:rules --project finventory-dev
+          workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
+          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}'
+
+      - run: |
+          gcloud storage cp terraform/function-source.zip gs://${{ secrets.GCP_PROJECT_ID }}-function-sources/function-source.zip
+
+      - name: Trigger Terraform Apply
+        run: |
+          gh workflow run terraform-apply.yml --ref develop
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deployment Summary
         run: |
@@ -85,21 +95,31 @@ jobs:
 
       - run: npm ci
 
-      - name: Install and build functions
+      - name: Build Functions
         run: |
           cd functions
           npm install
           npm run build
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools@13.14.0
+      - name: Package Functions for Terraform
+        run: |
+          cd functions
+          zip -r ../terraform/function-source.zip lib/ package.json
 
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+      - name: Upload to GCS
+        uses: google-github-actions/auth@v2
         with:
-          args: deploy --only functions,firestore:rules,storage:rules --project finventory-prod
+          workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
+          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}'
+
+      - run: |
+          gcloud storage cp terraform/function-source.zip gs://${{ secrets.GCP_PROJECT_ID }}-function-sources/function-source.zip
+
+      - name: Trigger Terraform Apply
+        run: |
+          gh workflow run terraform-apply.yml --ref main
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deployment Summary
         run: |
