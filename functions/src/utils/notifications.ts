@@ -1,6 +1,5 @@
 import { getMessaging } from 'firebase-admin/messaging'
-import { FieldValue } from 'firebase-admin/firestore'
-import { db } from '../config.js'
+import { db, FieldValue } from '../config.js'
 
 const messaging = getMessaging()
 

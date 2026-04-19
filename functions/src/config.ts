@@ -6,6 +6,7 @@ admin.initializeApp()
 export const db = admin.firestore()
 export const auth = admin.auth()
 export const storage = admin.storage()
+export const FieldValue = admin.firestore.FieldValue
 
 // Backwards compatibility - lazy rtdb
 let _rtdb: admin.database.Database | null = null
