@@ -89,6 +89,8 @@ jobs:
             us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            VITE_UNSPLASH_ACCESS_KEY=${{ secrets.VITE_UNSPLASH_ACCESS_KEY_PROD }}
 
   deploy-cloud-run:
     name: Deploy to Cloud Run

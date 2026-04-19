@@ -3,12 +3,18 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Accept build arguments for secrets
+ARG VITE_UNSPLASH_ACCESS_KEY
+
 # Copy package files
 COPY package*.json ./
 RUN npm install
 
 # Copy source and build
 COPY . .
+
+# Build with env vars
+ENV VITE_UNSPLASH_ACCESS_KEY=$VITE_UNSPLASH_ACCESS_KEY
 RUN npm run build
 
 # Production stage - static file server
