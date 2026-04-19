@@ -4,7 +4,6 @@ import { PexelsImage } from '../components/PexelsImage'
 import { usePexelsBatch, usePexels } from '../hooks/usePexels'
 import { AnimatedNumber } from '../components/AnimatedNumber'
 import { useListings } from '../hooks/useListings'
-import type { ListingWithDistance } from '../services/listings'
 import { getFallbackUrl } from '../services/pexels'
 import { useMemo, useState, useRef } from 'react'
 import PhotoAnalysis from '../components/PhotoAnalysis'
@@ -22,88 +21,9 @@ const HOW_STEPS = [
   { n: '4', title: 'Impact', desc: 'Every transaction logs lbs saved & CO₂ avoided to your dashboard.' },
 ]
 
-// Fresh Catch Card - simplified version of Marketplace ListingCard
-function FreshCatchCard({ listing }: { listing: ListingWithDistance }) {
+// Fresh Catch Marquee - horizontal scrolling listings
+function FreshCatchMarquee() {
   const navigate = useNavigate()
-  const photo = listing.photos?.[0] || getFallbackUrl(listing.species.toLowerCase())
-  const hoursLeft = Math.floor((listing.expiresAt.toDate().getTime() - new Date().getTime()) / (1000 * 60 * 60))
-
-  const formatTimeLeft = () => {
-    if (hoursLeft < 1) return 'Expires soon'
-    if (hoursLeft < 24) return `${hoursLeft}h left`
-    return `${Math.floor(hoursLeft / 24)}d left`
-  }
-
-  return (
-    <div
-      onClick={() => navigate(`/marketplace/${listing.id}`)}
-      className="group relative rounded-2xl overflow-hidden cursor-pointer bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-    >
-      <div className="h-64 relative overflow-hidden">
-        <img
-          src={photo}
-          alt={`${listing.species} - ${listing.grade} grade`}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-        {/* Badges */}
-        <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
-          {listing.grade === 'sushi' && (
-            <span className="bg-blue-500 text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
-              <span className="material-symbols-outlined text-sm">restaurant</span>
-              Sushi
-            </span>
-          )}
-          {hoursLeft < 6 && (
-            <span className="bg-orange-500 text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg animate-pulse">
-              <span className="material-symbols-outlined text-sm">wb_twilight</span>
-              Sunset
-            </span>
-          )}
-        </div>
-
-        {/* Bottom content */}
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <div className="flex justify-between items-end">
-            <div>
-              <h3 className="text-white font-bold text-lg capitalize leading-tight">{listing.species}</h3>
-              <p className="text-white/80 text-sm">{listing.sellerName || 'Local Supplier'}</p>
-            </div>
-            <div className="text-right">
-              <p className="text-white font-black text-2xl">${listing.pricePerUnit.toFixed(0)}</p>
-              <p className="text-white/70 text-xs">/lb</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 mt-2 text-white/70 text-xs">
-            {listing.distance !== undefined && (
-              <span className="flex items-center gap-1">
-                <span className="material-symbols-outlined text-sm">location_on</span>
-                {listing.distance.toFixed(1)} mi
-              </span>
-            )}
-            <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">schedule</span>
-              {formatTimeLeft()}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Hover action */}
-      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
-        <button className="bg-white text-primary px-6 py-3 rounded-full font-bold shadow-xl transform scale-90 group-hover:scale-100 transition-transform flex items-center gap-2">
-          <span className="material-symbols-outlined">shopping_basket</span>
-          Claim
-        </button>
-      </div>
-    </div>
-  )
-}
-
-// Fresh Catch Section
-function FreshCatchSection() {
-  const _navigate = useNavigate()
   const filters = useMemo(() => ({
     species: [],
     grades: [],
@@ -118,67 +38,110 @@ function FreshCatchSection() {
 
   const { listings, loading } = useListings(filters, userLocation)
 
-  // Get featured listings (first 4, prioritizing fresh ones)
   const featured = useMemo(() => {
     return listings
       .sort((a, b) => a.expiresAt.toDate().getTime() - b.expiresAt.toDate().getTime())
-      .slice(0, 4)
+      .slice(0, 12)
   }, [listings])
 
-  if (loading) {
-    return (
-      <section className="py-20 bg-surface">
-        <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 text-center">
-          <div className="relative inline-block">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent" />
-            <span className="material-symbols-outlined text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse text-sm">
-              waves
-            </span>
-          </div>
-          <p className="text-outline mt-4">Loading fresh catches...</p>
-        </div>
-      </section>
-    )
-  }
-
-  if (featured.length === 0) {
+  if (loading || featured.length === 0) {
     return null
   }
 
+  // Double the listings for seamless infinite scroll
+  const doubledListings = [...featured, ...featured]
+
   return (
-    <section className="py-20 bg-surface">
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
-        <div className="flex items-center justify-between mb-8">
+    <section className="py-16 bg-surface overflow-hidden">
+      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12 mb-8">
+        <div className="flex items-center justify-between">
           <div>
             <span className="italic-accent-caveat text-primary text-3xl mb-2 block">fresh from the boats</span>
             <h2 className="text-4xl lg:text-5xl font-black text-on-background tracking-tight">
-              Today's Featured Catch
+              Today's Catch
             </h2>
           </div>
           <Link
             to="/marketplace"
-            className="hidden md:flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform"
+            className="hidden md:flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all"
           >
             Browse All
             <span className="material-symbols-outlined">arrow_forward</span>
           </Link>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featured.map((listing) => (
-            <FreshCatchCard key={listing.id} listing={listing} />
-          ))}
-        </div>
+      {/* Scrolling marquee container */}
+      <div className="relative">
+        {/* Left fade */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none" />
+        
+        {/* Right fade */}
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none" />
 
-        <div className="md:hidden mt-8 text-center">
-          <Link
-            to="/marketplace"
-            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-bold"
-          >
-            Browse All Catches
-            <span className="material-symbols-outlined">arrow_forward</span>
-          </Link>
+        {/* Scrolling track */}
+        <div className="flex gap-6 animate-marquee hover:[animation-play-state:paused]">
+          {doubledListings.map((listing, idx) => {
+            const photo = listing.photos?.[0] || getFallbackUrl(listing.species.toLowerCase())
+            const hoursLeft = Math.floor((listing.expiresAt.toDate().getTime() - new Date().getTime()) / (1000 * 60 * 60))
+            
+            return (
+              <div
+                key={`${listing.id}-${idx}`}
+                onClick={() => navigate(`/marketplace/${listing.id}`)}
+                className="flex-shrink-0 w-72 group cursor-pointer"
+              >
+                <div className="relative h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                  <img
+                    src={photo}
+                    alt={listing.species}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  
+                  {/* Badges */}
+                  <div className="absolute top-4 left-4 right-4 flex justify-between">
+                    {listing.grade === 'sushi' && (
+                      <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                        Sushi Grade
+                      </span>
+                    )}
+                    {hoursLeft < 6 && (
+                      <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg animate-pulse ml-auto">
+                        Sunset Deal
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Info overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <h3 className="text-white font-bold text-xl capitalize mb-1">{listing.species}</h3>
+                    <div className="flex items-center justify-between text-white/90">
+                      <span className="text-2xl font-black">${listing.pricePerUnit.toFixed(0)}<span className="text-sm font-normal">/lb</span></span>
+                      {listing.distance !== undefined && (
+                        <span className="text-sm flex items-center gap-1">
+                          <span className="material-symbols-outlined text-sm">location_on</span>
+                          {listing.distance.toFixed(1)} mi
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
+      </div>
+
+      {/* Mobile CTA */}
+      <div className="md:hidden mt-8 text-center px-6">
+        <Link
+          to="/marketplace"
+          className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-bold"
+        >
+          Browse All Catches
+          <span className="material-symbols-outlined">arrow_forward</span>
+        </Link>
       </div>
     </section>
   )
@@ -454,7 +417,7 @@ export default function Home() {
       </section>
 
       {/* ── Today's Fresh Catch ── */}
-      <FreshCatchSection />
+      <FreshCatchMarquee />
 
       {/* ── Snap & List ── */}
       <SnapAndListSection />
