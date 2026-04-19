@@ -10,6 +10,7 @@ interface PexelsImageProps {
   onError?: () => void
   lazy?: boolean
   sizes?: string
+  fallbackSrc?: string
 }
 
 export function PexelsImage({
@@ -21,13 +22,16 @@ export function PexelsImage({
   onError,
   lazy = true,
   sizes,
+  fallbackSrc,
 }: PexelsImageProps) {
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState(false)
+  const [currentSrc, setCurrentSrc] = useState(src)
 
   useEffect(() => {
     setLoaded(false)
     setError(false)
+    setCurrentSrc(src)
   }, [src])
 
   const handleLoad = () => {
@@ -36,8 +40,12 @@ export function PexelsImage({
   }
 
   const handleError = () => {
-    setError(true)
-    onError?.()
+    if (fallbackSrc && currentSrc !== fallbackSrc) {
+      setCurrentSrc(fallbackSrc)
+    } else {
+      setError(true)
+      onError?.()
+    }
   }
 
   if (error) {
@@ -59,7 +67,7 @@ export function PexelsImage({
         </div>
       )}
       <img
-        src={src}
+        src={currentSrc}
         alt={alt}
         className={`w-full h-full transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'} ${className}`}
         style={{ objectFit }}

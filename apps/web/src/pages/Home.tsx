@@ -7,6 +7,28 @@ import { useListings } from '../hooks/useListings'
 import { getFallbackUrl } from '../services/pexels'
 import { useMemo, useState, useEffect } from 'react'
 
+// Helper to sanitize photo URLs - replace known bad URLs with working fish images
+function sanitizePhotoUrl(url: string | undefined, _species: string): string | undefined {
+  if (!url) return undefined
+  
+  // List of known bad URLs (scuba divers, wrong food, 404s)
+  const badUrls = [
+    'photo-1544551763-46a013bb70d5', // scuba diver + fish
+    'photo-1534489719178-455e6f15f547', // 404
+    'photo-1565557623262-b51c2513a641', // Indian food
+    'photo-1599321955726-90481c1d4292', // 404
+    'photo-1551248429-40975aa4de74', // shrimp salad
+    'photo-1559737558-2f5a35f4523b', // cooked shrimp
+  ]
+  
+  const isBadUrl = badUrls.some(bad => url.includes(bad))
+  if (isBadUrl) {
+    return undefined // Let it fall back to the species-specific fallback
+  }
+  
+  return url
+}
+
 const WHY_CARDS = [
   { icon: 'set_meal', bg: '#0077B6', textClass: 'text-white', title: 'Rescue the catch', desc: 'List bycatch and unsold hauls in seconds. Move surplus before it spoils.' },
   { icon: 'location_on', bg: '#F4743B', textClass: 'text-white', title: 'Local, by design', desc: "Map-first discovery shows what's available within miles, not days." },
@@ -69,7 +91,10 @@ function FreshCatchGrid() {
         {/* Grid layout */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {featured.map((listing) => {
-            const photo = listing.photos?.[0] || getFallbackUrl(listing.species.toLowerCase())
+            const rawPhoto = listing.photos?.[0]
+            const sanitizedPhoto = sanitizePhotoUrl(rawPhoto, listing.species)
+            const fallbackPhoto = getFallbackUrl(listing.species.toLowerCase())
+            const photo = sanitizedPhoto || fallbackPhoto
             const hoursLeft = Math.floor((listing.expiresAt.toDate().getTime() - new Date().getTime()) / (1000 * 60 * 60))
             
             return (
@@ -79,8 +104,9 @@ function FreshCatchGrid() {
                 className="group cursor-pointer"
               >
                 <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                  <img
+                  <PexelsImage
                     src={photo}
+                    fallbackSrc={fallbackPhoto}
                     alt={listing.species}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
