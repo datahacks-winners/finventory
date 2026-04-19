@@ -9,20 +9,11 @@
 
 ## Required Secrets
 
-Configure these in **Settings > Secrets and variables > Actions**:
+Configure this in **Settings > Secrets and variables > Actions**:
 
 | Secret | Description | Required For |
 |--------|-------------|--------------|
-| `FIREBASE_TOKEN` | Firebase CLI authentication token | Firebase rules deploy |
-| `GCLOUD_AUTH_KEY` | GCP service account JSON key | Cloud Run deploy |
-
-### Getting FIREBASE_TOKEN
-
-```bash
-firebase login:ci
-```
-
-Copy the token and add it as a GitHub secret.
+| `GCLOUD_AUTH_KEY` | GCP service account JSON key | Cloud Run + Firebase rules deploy |
 
 ### Getting GCLOUD_AUTH_KEY
 
@@ -30,9 +21,12 @@ Copy the token and add it as a GitHub secret.
    - `Cloud Run Admin`
    - `Artifact Registry Writer`
    - `Service Account User`
+   - `Firebase Rules Admin` (for Firestore/Storage rules)
 
 2. Create and download a JSON key
 3. Add the entire JSON content as `GCLOUD_AUTH_KEY` secret
+
+The service account handles both Cloud Run deployment and Firebase rules deployment via Application Default Credentials (ADC).
 
 ## Environment Protection
 
