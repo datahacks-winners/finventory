@@ -46,7 +46,7 @@ export default function Impact() {
                     <AnimatedNumber
                       value={s.value}
                       suffix={s.suffix}
-                      prefix={s.prefix}
+                      prefix={(s as { prefix?: string }).prefix || ''}
                       decimals={s.decimals}
                       separator=","
                       duration={2.5}
