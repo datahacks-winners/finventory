@@ -13,15 +13,15 @@ describe('triggers logic', () => {
       const gradeOrder: Record<string, number> = { sushi: 3, A: 2, B: 1 };
 
       // sushi grade meets A requirement
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(gradeOrder.sushi >= gradeOrder.A).to.be.true;
 
       // A grade meets A requirement
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(gradeOrder.A >= gradeOrder.A).to.be.true;
 
       // B grade does NOT meet A requirement
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(gradeOrder.B >= gradeOrder.A).to.be.false;
     });
   });
@@ -54,31 +54,31 @@ describe('triggers logic', () => {
   describe('onListingUpdated - status transitions', () => {
     it('allows active to pending_pickup', () => {
       const valid = isValidStatusTransition('active', 'pending_pickup');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('allows active to sold', () => {
       const valid = isValidStatusTransition('active', 'sold');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('allows active to expired', () => {
       const valid = isValidStatusTransition('active', 'expired');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('prevents sold to active', () => {
       const valid = isValidStatusTransition('sold', 'active');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('prevents pending_pickup to active', () => {
       const valid = isValidStatusTransition('pending_pickup', 'active');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
   });
@@ -94,7 +94,7 @@ describe('triggers logic', () => {
       const now = Date.now();
       const createdAt48HoursAgo = now - (48 * 60 * 60 * 1000);
       const isExpired = (now - createdAt48HoursAgo) >= (48 * 60 * 60 * 1000);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isExpired).to.be.true;
     });
 
@@ -102,7 +102,7 @@ describe('triggers logic', () => {
       const now = Date.now();
       const createdAt1HourAgo = now - (60 * 60 * 1000);
       const isExpired = (now - createdAt1HourAgo) >= (48 * 60 * 60 * 1000);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isExpired).to.be.false;
     });
   });

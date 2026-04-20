@@ -87,7 +87,7 @@ describe('data structures and utilities', () => {
     it('returns undefined for missing nested property', () => {
       const obj = { a: { b: { c: 5 } } };
       const value = getNestedProperty(obj, 'a.b.d');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(value).to.be.undefined;
     });
   });
@@ -114,13 +114,13 @@ describe('data structures and utilities', () => {
 
     it('checks if date is in past', () => {
       const past = new Date(Date.now() - 100000);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isPast(past)).to.be.true;
     });
 
     it('checks if date is in future', () => {
       const future = new Date(Date.now() + 100000);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isFuture(future)).to.be.true;
     });
   });
@@ -144,9 +144,9 @@ describe('data structures and utilities', () => {
     });
 
     it('checks if number is in range', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(inRange(5, 1, 10)).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(inRange(0, 1, 10)).to.be.false;
     });
   });
@@ -187,81 +187,81 @@ describe('data structures and utilities', () => {
 
   describe('validation utilities', () => {
     it('checks if value is defined', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isDefined(null)).to.be.false;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isDefined(undefined)).to.be.false;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isDefined(0)).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isDefined('')).to.be.true;
     });
 
     it('checks if value is empty', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isEmpty('')).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isEmpty([])).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isEmpty({})).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isEmpty([1])).to.be.false;
     });
 
     it('checks if value is in range', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isInRange(5, [1, 2, 3, 4, 5])).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isInRange(6, [1, 2, 3, 4, 5])).to.be.false;
     });
 
     it('checks if all items match predicate', () => {
       const arr = [2, 4, 6, 8];
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(all(arr, n => n % 2 === 0)).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(all(arr, n => n > 5)).to.be.false;
     });
 
     it('checks if any item matches predicate', () => {
       const arr = [1, 2, 3, 4, 5];
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(any(arr, n => n > 4)).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(any(arr, n => n > 10)).to.be.false;
     });
   });
 
   describe('type checking utilities', () => {
     it('identifies arrays', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isArray([1, 2, 3])).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isArray('not an array')).to.be.false;
     });
 
     it('identifies plain objects', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isPlainObject({ a: 1 } as object)).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isPlainObject([1, 2] as object)).to.be.false;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(isPlainObject(null as any)).to.be.false;
     });
 
     it('identifies numbers', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isNumber(42)).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isNumber('42')).to.be.false;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isNumber(NaN)).to.be.false;
     });
 
     it('identifies strings', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isString('hello')).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isString(123)).to.be.false;
     });
   });

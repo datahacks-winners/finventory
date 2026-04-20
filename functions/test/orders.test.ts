@@ -6,19 +6,19 @@ describe('orders validation', () => {
   describe('validate quantity', () => {
     it('rejects zero quantity', () => {
       const valid = validateQuantity(0);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('rejects negative quantity', () => {
       const valid = validateQuantity(-1);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('accepts positive quantity', () => {
       const valid = validateQuantity(5);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
   });
@@ -28,27 +28,27 @@ describe('orders validation', () => {
 
     it('accepts pickup when delivery available', () => {
       const valid = validateDeliveryOption('pickup', listing);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('accepts delivery when available', () => {
       const valid = validateDeliveryOption('delivery', listing);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('rejects delivery when not available', () => {
       const listingNoDelivery = { deliveryAvailable: false };
       const valid = validateDeliveryOption('delivery', listingNoDelivery);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('accepts pickup when delivery not available', () => {
       const listingNoDelivery = { deliveryAvailable: false };
       const valid = validateDeliveryOption('pickup', listingNoDelivery);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
   });

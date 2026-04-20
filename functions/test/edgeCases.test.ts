@@ -4,19 +4,19 @@ describe('edge cases and validation', () => {
   describe('sushi grade validation', () => {
     it('requires certificate for sushi grade', () => {
       const hasCert = validateSushiGrade('sushi', 'CERT-123', new Date());
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(hasCert).to.be.true;
     });
 
     it('rejects sushi grade without certificate', () => {
       const hasCert = validateSushiGrade('sushi', undefined, undefined);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(hasCert).to.be.false;
     });
 
     it('allows other grades without certificate', () => {
       const hasCert = validateSushiGrade('A', undefined, undefined);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(hasCert).to.be.true;
     });
   });
@@ -25,7 +25,7 @@ describe('edge cases and validation', () => {
     it('accepts valid future certificate', () => {
       const futureDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
       const isValid = isCertificateValid(futureDate);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValid).to.be.true;
     });
 
@@ -33,14 +33,14 @@ describe('edge cases and validation', () => {
       const today = new Date();
       today.setHours(23, 59, 59, 999);
       const isValid = isCertificateValid(today);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValid).to.be.true;
     });
 
     it('rejects expired certificate', () => {
       const pastDate = new Date(Date.now() - 24 * 60 * 60 * 1000); // yesterday
       const isValid = isCertificateValid(pastDate);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValid).to.be.false;
     });
   });
@@ -58,19 +58,19 @@ describe('edge cases and validation', () => {
 
     it('prevents over-purchase', () => {
       const canPurchase = canPurchaseQuantity(5, 6);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(canPurchase).to.be.false;
     });
 
     it('allows partial purchase', () => {
       const canPurchase = canPurchaseQuantity(10, 3);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(canPurchase).to.be.true;
     });
 
     it('prevents zero quantity purchase', () => {
       const canPurchase = canPurchaseQuantity(10, 0);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(canPurchase).to.be.false;
     });
   });
@@ -105,13 +105,13 @@ describe('edge cases and validation', () => {
 
     it('validates status transition from active', () => {
       const valid = isValidStatusTransition('active', 'pending_pickup');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('blocks transition from sold back to active', () => {
       const valid = isValidStatusTransition('sold', 'active');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
   });
@@ -119,38 +119,38 @@ describe('edge cases and validation', () => {
   describe('location and distance', () => {
     it('accepts valid coordinates within bounds', () => {
       const valid = isValidCoordinates(37.7749, -122.4194);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('rejects latitude beyond 90 degrees', () => {
       const valid = isValidCoordinates(91, -122.4194);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('rejects latitude below -90 degrees', () => {
       const valid = isValidCoordinates(-91, -122.4194);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('rejects longitude beyond 180 degrees', () => {
       const valid = isValidCoordinates(37.7749, 181);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('rejects longitude below -180 degrees', () => {
       const valid = isValidCoordinates(37.7749, -181);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('accepts coordinates at boundaries', () => {
       const valid1 = isValidCoordinates(90, 180);
       const valid2 = isValidCoordinates(-90, -180);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid1 && valid2).to.be.true;
     });
   });
@@ -158,25 +158,25 @@ describe('edge cases and validation', () => {
   describe('delivery options', () => {
     it('allows pickup when listing supports it', () => {
       const valid = validateDeliveryOption('pickup', true);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('allows delivery when listing supports it', () => {
       const valid = validateDelivery('delivery', true, { street: '123 Main', city: 'SF', state: 'CA', zipCode: '94102' });
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('blocks delivery when listing does not support it', () => {
       const valid = validateDelivery('delivery', false, { street: '123 Main', city: 'SF', state: 'CA', zipCode: '94102' });
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('requires address for delivery', () => {
       const valid = validateDelivery('delivery', true, undefined);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
   });
@@ -200,9 +200,9 @@ describe('edge cases and validation', () => {
 
   describe('unit conversions', () => {
     it('recognizes valid units', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(['lb', 'kg'].includes('lb')).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(['lb', 'kg'].includes('kg')).to.be.true;
     });
 
@@ -239,25 +239,25 @@ describe('edge cases and validation', () => {
   describe('wildcard matching', () => {
     it('matches any species with wildcard', () => {
       const matches = matchesSpecies('*', 'salmon');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(matches).to.be.true;
     });
 
     it('matches exact species', () => {
       const matches = matchesSpecies('salmon', 'salmon');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(matches).to.be.true;
     });
 
     it('matches from list', () => {
       const matches = matchesSpecies(['salmon', 'tuna'], 'salmon');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(matches).to.be.true;
     });
 
     it('does not match different species', () => {
       const matches = matchesSpecies(['salmon', 'tuna'], 'cod');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(matches).to.be.false;
     });
   });

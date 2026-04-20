@@ -54,17 +54,17 @@ describe('notifications utilities', () => {
     const validTypes = ['standing_order_match', 'order_update', 'listing_update'];
 
     it('includes standing_order_match type', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(validTypes.includes('standing_order_match')).to.be.true;
     });
 
     it('includes order_update type', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(validTypes.includes('order_update')).to.be.true;
     });
 
     it('includes listing_update type', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(validTypes.includes('listing_update')).to.be.true;
     });
   });
@@ -89,13 +89,13 @@ describe('notifications utilities', () => {
   describe('FCM token validation', () => {
     it('recognizes valid token format', () => {
       const token = 'valid_token_here';
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(token.length > 0).to.be.true;
     });
 
     it('handles empty token array', () => {
       const tokens: string[] = [];
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(tokens.length === 0).to.be.true;
     });
 

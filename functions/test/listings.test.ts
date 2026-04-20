@@ -22,9 +22,9 @@ describe('createListing integration', () => {
 
   it('test environment is set up', async function() {
     // Verify test environment is ready
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+     
     expect(testEnv).to.exist;
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+     
     expect(adminFirestore).to.exist;
   });
 

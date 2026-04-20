@@ -4,25 +4,25 @@ describe('security and authorization', () => {
   describe('authentication checks', () => {
     it('rejects unauthenticated requests', () => {
       const authenticated = isAuthenticated(undefined);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(authenticated).to.be.false;
     });
 
     it('accepts authenticated requests', () => {
       const authenticated = isAuthenticated({ uid: 'user123' });
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(authenticated).to.be.true;
     });
 
     it('validates user ID matches authenticated user', () => {
       const valid = isUserIdMatch('user123', 'user123');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('rejects mismatched user IDs', () => {
       const valid = isUserIdMatch('user123', 'other-user');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
   });
@@ -30,19 +30,19 @@ describe('security and authorization', () => {
   describe('resource ownership', () => {
     it('allows owner to access resource', () => {
       const allowed = canAccessResource('user123', 'user123');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(allowed).to.be.true;
     });
 
     it('blocks non-owner from accessing resource', () => {
       const allowed = canAccessResource('user123', 'other-user');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(allowed).to.be.false;
     });
 
     it('allows admin to access any resource', () => {
       const allowed = canAccessResource('admin', 'user123', true);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(allowed).to.be.true;
     });
   });
@@ -61,7 +61,7 @@ describe('security and authorization', () => {
     it('handles SQL injection attempts', () => {
       const sanitized = sanitizeInput("'; DROP TABLE users; --");
       // Should escape or remove dangerous characters
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(sanitized.length > 0).to.be.true;
     });
 
@@ -85,7 +85,7 @@ describe('security and authorization', () => {
       for (let i = 0; i < 6; i++) {
         tracker.recordRequest('user123');
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(tracker.isRateLimited('user123')).to.be.true;
     });
 
@@ -104,23 +104,23 @@ describe('security and authorization', () => {
 
   describe('data validation rules', () => {
     it('validates email format', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidEmail('user@example.com')).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidEmail('invalid-email')).to.be.false;
     });
 
     it('validates phone number format', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidPhone('+1234567890')).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidPhone('123')).to.be.false;
     });
 
     it('validates zip code format', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidZipCode('12345')).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidZipCode('1234')).to.be.false;
     });
   });
@@ -128,19 +128,19 @@ describe('security and authorization', () => {
   describe('permission checks', () => {
     it('sellers can create listings', () => {
       const canCreate = canCreateListing({ role: 'seller' });
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(canCreate).to.be.true;
     });
 
     it('buyers can create orders', () => {
       const canCreate = canCreateOrder({ role: 'buyer' });
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(canCreate).to.be.true;
     });
 
     it('sellers cannot buy from themselves', () => {
       const canBuy = canBuyFromSeller('seller123', 'seller123');
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(canBuy).to.be.false;
     });
   });
@@ -149,7 +149,7 @@ describe('security and authorization', () => {
     it('removes sensitive data from logs', () => {
       const data = { email: 'user@example.com', password: 'secret123' };
       const sanitized = sanitizeForLogging(data);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(sanitized.password).to.be.undefined;
        
       expect(sanitized.email).to.not.equal('user@example.com');
@@ -170,9 +170,9 @@ describe('security and authorization', () => {
   describe('transaction integrity', () => {
     it('prevents double spending', () => {
       const inventory = new InventoryManager(10);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(inventory.reserve(5)).to.be.true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(inventory.reserve(6)).to.be.false; // Only 5 left
     });
 
@@ -190,7 +190,7 @@ describe('security and authorization', () => {
       const inventory = new InventoryManager(10);
       inventory.reserve(8);
       inventory.release(8);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(inventory.reserve(8)).to.be.true;
     });
   });

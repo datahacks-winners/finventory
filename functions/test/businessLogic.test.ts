@@ -52,25 +52,25 @@ describe('business logic calculations', () => {
   describe('order workflow states', () => {
     it('follows valid order lifecycle', () => {
       const states = ['pending', 'picked_up'];
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidOrderFlow(states)).to.be.true;
     });
 
     it('allows cancellation from pending', () => {
       const states = ['pending', 'cancelled'];
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidOrderFlow(states)).to.be.true;
     });
 
     it('blocks cancellation after pickup', () => {
       const states = ['picked_up', 'cancelled'];
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidOrderFlow(states)).to.be.false;
     });
 
     it('blocks duplicate states', () => {
       const states = ['pending', 'pending'];
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(isValidOrderFlow(states)).to.be.false;
     });
   });
@@ -177,26 +177,26 @@ describe('business logic calculations', () => {
     it('accepts valid photo URLs', () => {
       const urls = ['https://example.com/photo1.jpg', 'https://example.com/photo2.png'];
       const valid = validatePhotoUrls(urls);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('rejects empty photo array', () => {
       const valid = validatePhotoUrls([]);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
 
     it('requires at least one photo', () => {
       const valid = hasMinimumPhotos(['photo1.jpg']);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.true;
     });
 
     it('enforces max photo limit', () => {
       const photos = Array(11).fill('photo.jpg');
       const valid = hasMaxPhotos(photos, 10);
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+       
       expect(valid).to.be.false;
     });
   });
