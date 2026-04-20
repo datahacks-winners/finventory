@@ -55,3 +55,32 @@ tmp/
 
 # Git worktrees
 .worktrees/
+
+# Local Python env & caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Notebooks — track only runnable sources + README (regenerate artefacts locally)
+notebooks/**
+!notebooks/**/*.py
+!notebooks/**/*.ipynb
+!notebooks/README.md
+# Tracked artefact: 5-yr binned larvae–bottle table (export_species_binned_table.py)
+!notebooks/outputs/
+!notebooks/outputs/tables/
+!notebooks/outputs/tables/species_binned.csv
+
+# CalCOFI inference API — trained artefacts (generate via train_export_models.py)
+services/calcofi-api/models/*
+!services/calcofi-api/models/.gitkeep
+# Allow joblib + manifest in `gcloud builds submit` (default gcloudignore = .gitignore). Keep .pt out.
+!services/calcofi-api/models/*.joblib
+!services/calcofi-api/models/timesfm_manifest.json
+
+# CalCOFI / raw data — too large for git (see notebooks/README.md)
+data/
+

@@ -1,0 +1,16 @@
+{
+  "hf_model_id": "google/timesfm-2.5-200m-pytorch",
+  "forecast_config": {
+    "max_context": 1024,
+    "max_horizon": 256,
+    "normalize_inputs": true,
+    "use_continuous_quantile_head": true,
+    "force_flip_invariance": true,
+    "infer_is_positive": true,
+    "fix_quantile_crossing": true,
+    "per_core_batch_size": 8
+  },
+  "notes": "Exported from notebooks/timesfm_binned_forecast.py after compile(); weights match HF pretrained.",
+  "binned_span_years": 5,
+  "holdout_bins": 5
+}
