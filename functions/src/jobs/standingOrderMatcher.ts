@@ -57,7 +57,7 @@ export const matchStandingOrders = onSchedule(
         }
 
         // Check for match
-        const isMatch = checkMatch(listing, order)
+        const isMatch = checkMatch(listing as Listing, order as StandingOrder)
 
         if (isMatch) {
           await notifyStandingOrderMatch(

@@ -47,7 +47,7 @@ export const onListingCreated = onDocumentCreated('listings/{listingId}', async 
   }
 
   // Find matching standing orders
-  const matchingOrders = await findMatchingStandingOrders(listing)
+  const matchingOrders = await findMatchingStandingOrders(listing as Listing)
 
   // Notify matching buyers
   for (const order of matchingOrders) {
