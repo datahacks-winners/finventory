@@ -1,4 +1,4 @@
-name: Staging Deploy
+name: Staging Build
 
 on:
   push:
@@ -8,8 +8,14 @@ concurrency:
   group: staging-deploy
   cancel-in-progress: true
 
+permissions:
+  contents: write
+  actions: write
+
 env:
   NODE_VERSION: '20'
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_REGION: us-central1
 
 jobs:
   test:
@@ -28,14 +34,17 @@ jobs:
       - run: npm run lint
 
       - name: Type Check
-        run: npx tsc --noEmit || true
+        run: npx tsc --noEmit || echo "Type check failed, continuing..."
+        continue-on-error: true
 
       - name: Test Cloud Functions
         working-directory: ./functions
-        run: npm test
+        run: |
+          npm ci
+          npm test
 
-  build:
-    name: Build
+  build-functions:
+    name: Build Cloud Functions
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -46,96 +55,115 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - run: npm ci
-      - run: npm run build
-
       - name: Build Cloud Functions
         working-directory: ./functions
-        run: npm run build
-
-  deploy-firebase:
-    name: Deploy Firebase Rules
-    runs-on: ubuntu-latest
-    needs: [test, build]
-    environment: staging
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - run: npm ci
-
-      - name: Authenticate to GCP
-        id: auth
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCLOUD_AUTH_KEY }}
-
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools@13.14.0
-
-      - name: Deploy Firestore Rules
-        if: hashFiles('firestore.rules') != ''
-        run: firebase deploy --only firestore:rules --project finventory-dev
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
-      - name: Deploy Storage Rules
-        if: hashFiles('storage.rules') != ''
-        run: firebase deploy --only storage --project finventory-dev
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
-      - name: Deploy Firestore Indexes
-        if: hashFiles('firestore.indexes.json') != ''
-        run: firebase deploy --only firestore:indexes --project finventory-dev
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-
-  deploy-functions:
-    name: Deploy Cloud Functions (Staging)
-    runs-on: ubuntu-latest
-    needs: [test, build]
-    if: hashFiles('functions/package.json') != ''
-    environment: staging
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install and build functions
         run: |
-          cd functions
           npm ci
           npm run build
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools@13.14.0
+      - name: Package Functions for Terraform
+        working-directory: ./functions
+        run: zip -r ../terraform/function-source.zip lib/ package.json
 
-      - name: Deploy Cloud Functions
-        run: firebase deploy --only functions --project finventory-dev
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Upload to GCS
+        run: |
+          gcloud storage cp terraform/function-source.zip gs://${{ secrets.GCP_PROJECT_ID }}-function-sources/function-source.zip
+
+  build-web:
+    name: Build Web Container
+    runs-on: ubuntu-latest
+    needs: test
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate GCP_PROJECT_ID
+        run: |
+          if [ -z "${{ env.GCP_PROJECT_ID }}" ]; then
+            echo "ERROR: GCP_PROJECT_ID is not set (check secrets.GCP_PROJECT_ID)"
+            exit 1
+          fi
+          echo "Project ID: ${{ env.GCP_PROJECT_ID }}"
+
+      - name: Configure GCP credentials
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build and Push Web Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          push: true
+          tags: |
+            us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }}
+            us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VITE_PEXELS_API_KEY=${{ secrets.VITE_PEXELS_API_KEY }}
+            VITE_FIREBASE_API_KEY=${{ secrets.VITE_FIREBASE_API_KEY }}
+            VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+            VITE_FIREBASE_PROJECT_ID=${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+            VITE_FIREBASE_STORAGE_BUCKET=${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+            VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+            VITE_FIREBASE_APP_ID=${{ secrets.VITE_FIREBASE_APP_ID }}
+
+  deploy:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    needs: [build-functions, build-web]
+    environment:
+      name: staging
+      url: https://finventory-dev-web-k3lwkjv63a-uc.a.run.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy Web to Cloud Run
+        run: |
+          gcloud run deploy finventory-dev-web \
+            --image us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }} \
+            --region ${{ env.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars=NODE_ENV=staging
 
   notify:
-    name: Notify Deployment
+    name: Notify
     runs-on: ubuntu-latest
-    needs: [deploy-firebase, deploy-functions]
+    needs: [deploy]
     if: always()
     steps:
-      - name: Deployment Summary
+      - name: Summary
         run: |
-          echo "## Staging Deployment Complete" >> $GITHUB_STEP_SUMMARY
-          echo "- Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Deployments" >> $GITHUB_STEP_SUMMARY
-          echo "- Firebase rules deployed to finventory-dev" >> $GITHUB_STEP_SUMMARY
-          echo "- Cloud Functions deployed to finventory-dev" >> $GITHUB_STEP_SUMMARY
+          echo "## Staging Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "- Functions built" >> $GITHUB_STEP_SUMMARY
+          echo "- Web image: us-central1-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/web-images/web:${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Terraform will deploy all changes" >> $GITHUB_STEP_SUMMARY
+          echo "- URL: https://${{ env.GCP_PROJECT_ID }}-web.a.run.app" >> $GITHUB_STEP_SUMMARY

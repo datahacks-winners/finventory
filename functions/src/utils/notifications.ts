@@ -1,5 +1,7 @@
-import * as admin from 'firebase-admin'
-import { db } from '../config.js'
+import { getMessaging } from 'firebase-admin/messaging'
+import { db, FieldValue } from '../config.js'
+
+const messaging = getMessaging()
 
 export interface NotificationPayload {
   userId: string
@@ -25,7 +27,7 @@ export async function createNotification(
       body: payload.body,
       data: payload.data || {},
       read: false,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
+      createdAt: FieldValue.serverTimestamp()
     })
 
   return notificationRef.id
@@ -64,7 +66,7 @@ export async function sendPushNotification(
   }
 
   try {
-    const response = await admin.messaging().sendMulticast(message)
+    const response = await messaging.sendEachForMulticast(message)
 
     // Clean up invalid tokens
     if (response.failureCount > 0) {
@@ -77,7 +79,7 @@ export async function sendPushNotification(
 
       if (invalidTokens.length > 0) {
         await db.collection('users').doc(userId).update({
-          fcmTokens: admin.firestore.FieldValue.arrayRemove(...invalidTokens)
+          fcmTokens: FieldValue.arrayRemove(...invalidTokens)
         })
       }
     }

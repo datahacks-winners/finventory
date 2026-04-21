@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isUserAnonymous = auth().currentUser?.isAnonymous;
 
     if (isUserAnonymous) {
-      const credential = await AuthService.signInWithGoogle();
+      const credential = await AuthService.getGoogleCredential();
       await AuthService.linkAnonymousAccount('google', credential);
     } else {
       await AuthService.signInWithGoogle();
@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isUserAnonymous = auth().currentUser?.isAnonymous;
 
     if (isUserAnonymous) {
-      const credential = await AuthService.signInWithApple();
+      const credential = await AuthService.getAppleCredential();
       await AuthService.linkAnonymousAccount('apple', credential);
     } else {
       await AuthService.signInWithApple();
@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const linkAnonymousAccount = async (provider: string) => {
-    await AuthService.linkAnonymousAccount(provider as any);
+    await AuthService.linkAnonymousAccount(provider as 'email' | 'google' | 'apple');
   };
 
   const value: AuthContextType = {

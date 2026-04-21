@@ -12,6 +12,7 @@
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | System architecture, data flow, scaling |
 | [DEVELOPMENT.md](./DEVELOPMENT.md) | Local setup, coding conventions, debugging |
 | [API.md](./API.md) | REST API reference, endpoints, errors |
+| [CALCOFI_API.md](./CALCOFI_API.md) | CalCOFI ML inference API (TimeFM, XGBoost, Ridge) |
 | [MOBILE.md](./MOBILE.md) | React Native app structure, navigation |
 | [SECURITY.md](./SECURITY.md) | Auth, authorization, data protection |
 | [DEPLOYMENT.md](./DEPLOYMENT.md) | Deploy procedures, infrastructure |

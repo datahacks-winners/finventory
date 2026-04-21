@@ -38,17 +38,13 @@ export function subscribeToListings(
   userLocation: { latitude: number; longitude: number } | null,
   callback: (listings: ListingWithDistance[]) => void
 ): () => void {
-  let query = firestore()
+  // Base query - keep simple to avoid composite index requirements
+  const query = firestore()
     .collection('listings')
     .where('status', '==', 'active')
     .where('expiresAt', '>', firestore.FieldValue.serverTimestamp())
     .orderBy('expiresAt', 'asc')
     .limit(100);
-
-  // Apply grade filter if specified
-  if (filters.grades.length > 0 && filters.grades.length < 3) {
-    query = query.where('grade', 'in', filters.grades);
-  }
 
   const unsubscribe = query.onSnapshot(
     (snapshot) => {
@@ -57,7 +53,7 @@ export function subscribeToListings(
         ...doc.data(),
       })) as Listing[];
 
-      // Apply client-side filters
+      // Apply all filters client-side (avoids complex Firestore indexes)
       const filtered = applyClientFilters(listings, filters, userLocation);
       callback(filtered);
     },
@@ -71,7 +67,7 @@ export function subscribeToListings(
 }
 
 /**
- * Apply client-side filters (species, distance, price)
+ * Apply client-side filters (species, grades, distance, price)
  */
 function applyClientFilters(
   listings: Listing[],
@@ -80,6 +76,11 @@ function applyClientFilters(
 ): ListingWithDistance[] {
   return listings
     .filter((listing) => {
+      // Grade filter
+      if (filters.grades.length > 0 && !filters.grades.includes(listing.grade)) {
+        return false;
+      }
+
       // Species filter
       if (filters.species.length > 0 && !filters.species.includes(listing.species)) {
         return false;
@@ -120,6 +121,20 @@ function applyClientFilters(
         : 0,
     }))
     .sort((a, b) => a.distance - b.distance);
+}
+
+/**
+ * Fetch a single listing by Firestore document ID.
+ */
+export async function fetchListingById(listingId: string): Promise<Listing | null> {
+  try {
+    const doc = await firestore().collection('listings').doc(listingId).get();
+    if (!doc.exists) return null;
+    return { id: doc.id, ...doc.data() } as Listing;
+  } catch (err) {
+    console.error('Error fetching listing:', err);
+    return null;
+  }
 }
 
 /**

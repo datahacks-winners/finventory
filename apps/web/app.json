@@ -1,0 +1,12 @@
+{
+  "name": "finventory-web",
+  "env": {
+    "VITE_FIREBASE_API_KEY": "AIzaSyCXbA0zCeY-WSwjeYyS1Bz5S4xGK6tRs8",
+    "VITE_FIREBASE_AUTH_DOMAIN": "finventory-1776558252.firebaseapp.com",
+    "VITE_FIREBASE_PROJECT_ID": "finventory-1776558252",
+    "VITE_FIREBASE_STORAGE_BUCKET": "finventory-1776558252.firebasestorage.app",
+    "VITE_FIREBASE_MESSAGING_SENDER_ID": "593576627371",
+    "VITE_FIREBASE_APP_ID": "1:593576627371:web:c0646bfe36b391ac4dbbee",
+    "VITE_API_URL": "https://ragsearchhttp-593576627371.us-central1.run.app"
+  }
+}

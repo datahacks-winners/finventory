@@ -1,0 +1,31 @@
+{
+  "name": "finventory-functions-2nd-gen",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "build": "tsc",
+    "deploy": "gcloud functions deploy createListing --gen2 --runtime=nodejs20 --source=. --entry-point=createListing --trigger-http --allow-unauthenticated --region=us-central1 --set-env-vars=PROJECT_ID=finventory-gcp,REGION=us-central1",
+    "deploy:scheduled": "gcloud functions deploy matchStandingOrders --gen2 --runtime=nodejs20 --source=. --entry-point=matchStandingOrders --trigger-topic=match-standing-orders --region=us-central1 --set-env-vars=PROJECT_ID=finventory-gcp,REGION=us-central1",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^7.3.0",
+    "@google-cloud/functions-framework": "^3.3.0",
+    "@google-cloud/pubsub": "^4.0.0",
+    "@google-cloud/storage": "^7.7.0",
+    "google-auth-library": "^9.4.0",
+    "ngeohash": "^0.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/ngeohash": "^0.6.2",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": "20"
+  }
+}

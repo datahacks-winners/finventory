@@ -18,6 +18,11 @@ export {
   getMyStandingOrders
 } from './api/standingOrders.js'
 
+// Gemini AI Functions
+export { analyzeFishPhoto } from './gemini/analyzePhoto.js'
+export { ragSearch } from './gemini/ragSearch.js'
+export { ragSearchHttp } from './gemini/ragSearchHttp.js'
+
 // Firestore Triggers
 export {
   onListingCreated
@@ -35,3 +40,6 @@ export {
 export {
   matchStandingOrders
 } from './jobs/standingOrderMatcher.js'
+
+// CalCOFI ML Proxy
+export { calcofiProxy } from './calcofiProxy.js'

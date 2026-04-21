@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import SlopNavBot from './components/SlopNavBot'
 import Home from './pages/Home'
 import Marketplace from './pages/Marketplace'
 import CrateDetail from './pages/CrateDetail'
@@ -8,10 +10,37 @@ import SupplierPortal from './pages/SupplierPortal'
 import Impact from './pages/Impact'
 import About from './pages/About'
 import Auth from './pages/Auth'
+import MyOrders from './pages/MyOrders'
+import Checkout from './pages/Checkout'
+import { Component, type ReactNode } from 'react'
+
+// Error boundary to catch AuthProvider crashes
+class AuthErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+  
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+  
+  componentDidCatch(error: Error) {
+    console.warn('AuthProvider failed:', error.message)
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return <>{this.props.children}</>
+    }
+    return <>{this.props.children}</>
+  }
+}
 
 function AppRoutes() {
   const { pathname } = useLocation()
   const isAuth = pathname === '/auth'
+  const hideFooter = pathname === '/orders' || pathname.startsWith('/marketplace/')
 
   return (
     <div className="bg-surface text-on-surface font-body min-h-screen">
@@ -24,8 +53,10 @@ function AppRoutes() {
         <Route path="/impact" element={<Impact />} />
         <Route path="/about" element={<About />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/orders" element={<MyOrders />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
-      {!isAuth && <Footer />}
+      {!isAuth && !hideFooter && <Footer />}
     </div>
   )
 }
@@ -33,7 +64,12 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <SlopNavBot />
+      <AuthErrorBoundary>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </AuthErrorBoundary>
     </BrowserRouter>
   )
 }

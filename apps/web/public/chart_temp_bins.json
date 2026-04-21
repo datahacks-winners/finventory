@@ -1,0 +1,197 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
+  "width": 1200,
+  "height": 350,
+  "padding": 0,
+  "config": {
+    "view": {
+      "fill": "#f0ebe4",
+      "strokeWidth": 0
+    },
+    "axis": {
+      "domainColor": "#1b2b3a",
+      "grid": true,
+      "gridColor": "#1b2b3a",
+      "gridOpacity": 0.12,
+      "labelColor": "#1b2b3a",
+      "labelFontSize": 12,
+      "tickColor": "#1b2b3a",
+      "titleColor": "#1b2b3a",
+      "titleFontSize": 13,
+      "titleFontWeight": 600
+    }
+  },
+  "title": {
+    "text": "Egg Density Drops as Water Warms — All Species",
+    "color": "#1b2b3a",
+    "fontSize": 16,
+    "fontWeight": 700,
+    "anchor": "start",
+    "offset": 10,
+    "subtitle": "Mean log₁₀(eggs / 10 m²) per 1°C bin · shaded band = 95% CI · dot size = sample count",
+    "subtitleColor": "#5a7080",
+    "subtitleFontSize": 13
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "area",
+        "color": "#1a8fd1",
+        "opacity": 0.18
+      },
+      "encoding": {
+        "x": {
+          "axis": {
+            "format": ".0f",
+            "labelFontSize": 12
+          },
+          "field": "temp_bin",
+          "scale": {
+            "zero": false,
+            "nice": true
+          },
+          "title": "Surface Temperature (°C)",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "ci_lo",
+          "title": "",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "ci_hi"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "line",
+        "color": "#1a8fd1",
+        "point": false,
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "x": {
+          "axis": {
+            "format": ".0f",
+            "labelFontSize": 12
+          },
+          "field": "temp_bin",
+          "scale": {
+            "zero": false,
+            "nice": true
+          },
+          "title": "Surface Temperature (°C)",
+          "type": "quantitative"
+        },
+        "y": {
+          "axis": {
+            "labelFontSize": 12
+          },
+          "field": "mean_eggs",
+          "scale": {
+            "zero": false,
+            "nice": true
+          },
+          "title": "Mean log₁₀(eggs / 10 m²)",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "color": "#1a8fd1",
+        "filled": true,
+        "opacity": 1,
+        "stroke": "white",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "size": {
+          "field": "n",
+          "legend": null,
+          "scale": {
+            "range": [40, 150]
+          },
+          "type": "quantitative"
+        },
+        "x": {
+          "axis": {
+            "format": ".0f",
+            "labelFontSize": 12
+          },
+          "field": "temp_bin",
+          "scale": {
+            "zero": false,
+            "nice": true
+          },
+          "title": "Surface Temperature (°C)",
+          "type": "quantitative"
+        },
+        "y": {
+          "axis": {
+            "labelFontSize": 12
+          },
+          "field": "mean_eggs",
+          "scale": {
+            "zero": false,
+            "nice": true
+          },
+          "title": "Mean log₁₀(eggs / 10 m²)",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"temp_bin": 6.0, "trend": 2.20},
+          {"temp_bin": 26.0, "trend": 1.55}
+        ]
+      },
+      "mark": {
+        "type": "line",
+        "color": "#1b2b3a",
+        "opacity": 0.6,
+        "strokeDash": [6, 4],
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "temp_bin",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "trend",
+          "type": "quantitative"
+        }
+      }
+    }
+  ],
+  "data": {
+    "values": [
+      {"temp_bin": 6.0, "mean_eggs": 2.168, "sem": 0.426, "n": 6, "ci_lo": 1.332, "ci_hi": 3.004},
+      {"temp_bin": 7.0, "mean_eggs": 1.983, "sem": 0.305, "n": 11, "ci_lo": 1.385, "ci_hi": 2.581},
+      {"temp_bin": 8.0, "mean_eggs": 1.798, "sem": 0.184, "n": 17, "ci_lo": 1.438, "ci_hi": 2.158},
+      {"temp_bin": 9.0, "mean_eggs": 1.970, "sem": 0.119, "n": 97, "ci_lo": 1.737, "ci_hi": 2.203},
+      {"temp_bin": 10.0, "mean_eggs": 2.143, "sem": 0.054, "n": 177, "ci_lo": 2.037, "ci_hi": 2.249},
+      {"temp_bin": 11.0, "mean_eggs": 2.117, "sem": 0.041, "n": 451, "ci_lo": 2.037, "ci_hi": 2.197},
+      {"temp_bin": 12.0, "mean_eggs": 2.090, "sem": 0.029, "n": 725, "ci_lo": 2.034, "ci_hi": 2.146},
+      {"temp_bin": 13.0, "mean_eggs": 2.125, "sem": 0.030, "n": 726, "ci_lo": 2.066, "ci_hi": 2.184},
+      {"temp_bin": 14.0, "mean_eggs": 2.160, "sem": 0.032, "n": 727, "ci_lo": 2.098, "ci_hi": 2.222},
+      {"temp_bin": 15.0, "mean_eggs": 2.092, "sem": 0.038, "n": 519, "ci_lo": 2.018, "ci_hi": 2.166},
+      {"temp_bin": 16.0, "mean_eggs": 2.023, "sem": 0.045, "n": 311, "ci_lo": 1.935, "ci_hi": 2.112},
+      {"temp_bin": 17.0, "mean_eggs": 2.063, "sem": 0.059, "n": 221, "ci_lo": 1.947, "ci_hi": 2.179},
+      {"temp_bin": 18.0, "mean_eggs": 2.103, "sem": 0.073, "n": 132, "ci_lo": 1.961, "ci_hi": 2.245},
+      {"temp_bin": 19.0, "mean_eggs": 2.014, "sem": 0.099, "n": 88, "ci_lo": 1.820, "ci_hi": 2.208},
+      {"temp_bin": 20.0, "mean_eggs": 1.924, "sem": 0.127, "n": 44, "ci_lo": 1.676, "ci_hi": 2.172},
+      {"temp_bin": 21.0, "mean_eggs": 1.864, "sem": 0.150, "n": 34, "ci_lo": 1.570, "ci_hi": 2.158},
+      {"temp_bin": 22.0, "mean_eggs": 1.804, "sem": 0.174, "n": 25, "ci_lo": 1.464, "ci_hi": 2.144},
+      {"temp_bin": 23.0, "mean_eggs": 1.715, "sem": 0.209, "n": 19, "ci_lo": 1.305, "ci_hi": 2.125},
+      {"temp_bin": 24.0, "mean_eggs": 1.627, "sem": 0.245, "n": 13, "ci_lo": 1.146, "ci_hi": 2.108},
+      {"temp_bin": 25.0, "mean_eggs": 1.523, "sem": 0.336, "n": 9, "ci_lo": 0.864, "ci_hi": 2.182},
+      {"temp_bin": 26.0, "mean_eggs": 1.418, "sem": 0.427, "n": 5, "ci_lo": 0.581, "ci_hi": 2.256}
+    ]
+  }
+}

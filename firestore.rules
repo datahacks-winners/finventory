@@ -1,101 +1,76 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
     // Helper functions
     function isAuthenticated() {
       return request.auth != null;
+    }
+
+    function isSeller() {
+      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVendor == true;
+    }
+
+    function isBuyer() {
+      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isBuyer == true;
     }
 
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    function isSeller(listing) {
-      return isAuthenticated() && request.auth.uid == listing.data.sellerId;
+    function isSellerOwner(listingId) {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/listings/$(listingId)).data.sellerId == request.auth.uid;
     }
 
     // Users collection
     match /users/{userId} {
-      allow read: if isOwner(userId);
-      allow create: if isAuthenticated() && request.resource.data.id == request.auth.uid;
-      allow update: if isOwner(userId);
-      allow delete: if false;
+      // Allow read if authenticated
+      allow read: if isAuthenticated();
+      // Allow create/update if owner or new user
+      allow create, update: if isOwner(userId) ||
+        (isAuthenticated() && !exists(/databases/$(database)/documents/users/$(userId)));
     }
 
     // Listings collection
     match /listings/{listingId} {
-      allow read: if true;
-      allow create: if isAuthenticated() && request.resource.data.sellerId == request.auth.uid;
-      allow update: if isSeller(resource);
-      allow delete: if isSeller(resource);
+      // Anyone can read active listings
+      allow read: if resource.data.status == 'active' ||
+        isAuthenticated(); // Sellers see all their own listings in portal
+
+      // Sellers can create listings for themselves only
+      allow create: if isSeller() && request.auth.uid == request.resource.data.sellerId;
+
+      // Sellers can update/delete their own listings
+      allow update, delete: if isSeller() && isSellerOwner(listingId);
     }
 
     // Orders collection
     match /orders/{orderId} {
-      allow read: if request.auth.uid == resource.data.buyerId || resource.data.sellerId == request.auth.uid;
-      allow create: if isAuthenticated() && request.resource.data.buyerId == request.auth.uid;
-      allow update: if request.auth.uid == resource.data.sellerId
-                      || request.auth.uid == resource.data.buyerId;
-      allow delete: if false;
+      // Buyers see their own orders, Sellers see orders for their listings
+      allow read: if isAuthenticated() &&
+        (resource.data.buyerId == request.auth.uid ||
+         resource.data.sellerId == request.auth.uid);
+
+      // Buyers create orders, must include their ID
+      allow create: if isBuyer() && request.auth.uid == request.resource.data.buyerId;
+
+      // Buyers/sellers can update their own orders
+      allow update: if isAuthenticated() &&
+        (resource.data.buyerId == request.auth.uid ||
+         resource.data.sellerId == request.auth.uid);
     }
 
-    // Standing orders collection
-    match /standingOrders/{soId} {
-      allow read, write, delete: if isAuthenticated() && request.auth.uid == resource.data.buyerId;
-      allow create: if isAuthenticated() && request.resource.data.buyerId == request.auth.uid;
+    // Standing orders (buyer subscriptions)
+    match /standingOrders/{orderId} {
+      // Buyers see their own standing orders
+      allow read, write: if isBuyer() && isOwner(resource.data.buyerId);
     }
 
-    // Reviews collection
-    match /reviews/{reviewId} {
-      allow read: if true;
-      allow create: if isAuthenticated();
-      allow update: if request.auth.uid == resource.data.buyerId;
-      allow delete: if request.auth.uid == resource.data.buyerId;
-    }
-
-    // Messages collection
-    match /messages/{messageId} {
-      allow create: if isAuthenticated() && request.resource.data.senderId == request.auth.uid;
-      allow read: if isAuthenticated() && (resource.data.senderId == request.auth.uid
-                                            || resource.data.receiverId == request.auth.uid);
-      allow update: if false;
-      allow delete: if false;
-    }
-
-    // Favorites collection
-    match /favorites/{favId} {
-      allow read, write, delete: if isAuthenticated() && request.resource.data.buyerId == request.auth.uid;
-    }
-
-    // Sushi certificates collection
-    match /sushiCertificates/{certId} {
-      allow read: if true;
-      allow create: if isAuthenticated() && request.resource.data.sellerId == request.auth.uid;
-      allow update: if request.auth.uid == resource.data.sellerId;
-      allow delete: if request.auth.uid == resource.data.sellerId;
-    }
-
-    // Transactions collection
-    match /transactions/{txnId} {
-      allow read: if isAuthenticated();
-      allow create, update: if false; // Cloud Functions only
-    }
-
-    // Geo index - Cloud Functions write only
-    match /geoIndex/{docId} {
-      allow read: if true;
-      allow write: if false;
-    }
-
-    // Subcollections
-    match /users/{userId}/notifications/{notificationId} {
-      allow read, write: if isOwner(userId);
-    }
-
-    match /listings/{listingId}/views/{viewId} {
-      allow read: if true;
-      allow create: if isAuthenticated();
-      allow update, delete: if false;
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

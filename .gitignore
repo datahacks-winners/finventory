@@ -9,6 +9,7 @@ node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.build
 
 # Build outputs
 dist/
@@ -16,6 +17,7 @@ build/
 .next/
 out/
 *.tsbuildinfo
+functions/lib/
 
 # Firebase
 .firebase/
@@ -28,6 +30,8 @@ gcp-state.json
 terraform.tfstate
 terraform.tfstate.*
 .terraform/
+terraform/*.tfstate
+terraform/errored.tfstate
 
 # IDE
 .vscode/
@@ -40,6 +44,7 @@ terraform.tfstate.*
 # Testing
 coverage/
 .nyc_output/
+test-results/
 
 # Logs
 logs/
@@ -55,3 +60,6 @@ tmp/
 
 # Git worktrees
 .worktrees/
+
+# Firebase Functions compiled output
+functions/lib/
