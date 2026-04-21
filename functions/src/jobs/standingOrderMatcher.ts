@@ -3,6 +3,7 @@ import * as admin from 'firebase-admin'
 import { db } from '../config.js'
 import { distanceInMiles } from '../utils/geohash.js'
 import { notifyStandingOrderMatch } from '../utils/notifications.js'
+import type { Listing } from '../api/listings.js'
 
 /**
  * Scheduled function - runs every 5 minutes
@@ -56,7 +57,7 @@ export const matchStandingOrders = onSchedule(
         }
 
         // Check for match
-        const isMatch = checkMatch(listing, order)
+        const isMatch = checkMatch(listing as Listing, order as StandingOrder)
 
         if (isMatch) {
           await notifyStandingOrderMatch(

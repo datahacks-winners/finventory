@@ -3,6 +3,7 @@ import * as admin from 'firebase-admin'
 import { db, rtdb } from '../config.js'
 import { distanceInMiles } from '../utils/geohash.js'
 import { notifyStandingOrderMatch } from '../utils/notifications.js'
+import type { Listing } from '../api/listings.js'
 
 /**
  * Triggered when a new listing is created
@@ -24,7 +25,7 @@ export const onListingCreated = onDocumentCreated('listings/{listingId}', async 
   })
 
   // Find matching standing orders
-  const matchingOrders = await findMatchingStandingOrders(listing)
+  const matchingOrders = await findMatchingStandingOrders(listing as Listing)
 
   // Notify matching buyers
   for (const order of matchingOrders) {
